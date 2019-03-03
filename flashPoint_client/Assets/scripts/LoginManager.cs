@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SocketIO;
 using System;
+//using GameObjects;
 using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour {
@@ -14,9 +15,19 @@ public class LoginManager : MonoBehaviour {
 
 	void Start ()
 	{
-		Debug.Log(socket);
+
 		StartCoroutine(ConnectToServer());
 		socket.On("USER_CONNECTED", OnUserConnected );
+		
+		//----------------------just for testing, probably should create game in other scenes
+		Game new_game = new Game(3,DifficultyLevel.Easy);
+		Dictionary<String, Fireman> fireManManager = new_game.getFiremanManager();
+
+		foreach(KeyValuePair<string, Fireman> entry in fireManManager)
+		{
+			Debug.Log(entry.Value.name);
+		}
+		//-------------------------------------------------------
 
 	}
 
