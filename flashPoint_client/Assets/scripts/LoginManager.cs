@@ -58,9 +58,11 @@ public class LoginManager : MonoBehaviour {
 	{
 		Debug.Log("login button clicked");
 		Debug.Log(username.text);
+
+		StaticInfo.name = username.text;
 		
 		Dictionary<String, String> user = new Dictionary<string, string>();
-		user["name"] = username.text;
+		user["name"] = StaticInfo.name;
 		socket.Emit("Login",new JSONObject(user));
 	}
 
@@ -69,8 +71,10 @@ public class LoginManager : MonoBehaviour {
 		Debug.Log("Sign up button clicked");
 		Debug.Log(username.text);
 		
+		StaticInfo.name = username.text;
+		
 		Dictionary<String, String> user = new Dictionary<string, string>();
-		user["name"] = username.text;
+		user["name"] = StaticInfo.name;
 		user["password"] = "666";
 		socket.Emit("Signup", new JSONObject(user));
 	}

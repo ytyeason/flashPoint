@@ -23,29 +23,21 @@ public class LobbyManager : MonoBehaviour {
         socket.On("USER_CONNECTED", OnUserConnected );
         socket.On("CREATE_ROOM_SUCCESS", CreateRoomSucessful );
         socket.On("LOAD_ROOM_SUCCESS", LOADRoomSucessful );
-		
-        //----------------------just for testing, probably should create game in other scenes
-        Game new_game = new Game(3,DifficultyLevel.Easy);
-        Dictionary<String, Fireman> fireManManager = new_game.getFiremanManager();
-
-        foreach(KeyValuePair<string, Fireman> entry in fireManManager)
-        {
-            Debug.Log(entry.Value.name);
-        }
-        //-------------------------------------------------------
 
     }
 
     void CreateRoomSucessful(SocketIOEvent obj)//change scene
     {
         Debug.Log("create room successful");
-        SceneManager.LoadScene("DragDrop");
+        //SceneManager.LoadScene("DragDrop"); skpped for now
+        SceneManager.LoadScene("gameSetUp");
     }
 
     void LOADRoomSucessful(SocketIOEvent obj)
     {
         Debug.Log("load room successful");
-        SceneManager.LoadScene("DragDrop");
+        //SceneManager.LoadScene("DragDrop");
+        SceneManager.LoadScene("Room");
     }
 
     IEnumerator ConnectToServer()
@@ -56,10 +48,6 @@ public class LobbyManager : MonoBehaviour {
 		
         yield return new WaitForSeconds(0.5f);
 		
-        Dictionary<string, string> data = new Dictionary<string,string>();
-        //data['name'] = 'eason';
-		
-        //socket.Emit("PLAY");
     }
 
     void OnUserConnected (SocketIOEvent obj)
@@ -71,9 +59,12 @@ public class LobbyManager : MonoBehaviour {
     {
         Debug.Log("LOAD button clicked");
         Debug.Log(roomNumber.text);
+
+        StaticInfo.roomNumber = roomNumber.text;
 		
         Dictionary<String, String> room = new Dictionary<string, string>();
-        room["room"] = roomNumber.text;
+        room["room"] = StaticInfo.roomNumber;
+        room["name"] = StaticInfo.name;
         socket.Emit("LOAD_ROOM",new JSONObject(room));
     }
     
@@ -81,9 +72,12 @@ public class LobbyManager : MonoBehaviour {
     {
         Debug.Log("create button clicked");
         Debug.Log(roomNumber.text);
+        
+        StaticInfo.roomNumber = roomNumber.text;
 		
         Dictionary<String, String> room = new Dictionary<string, string>();
-        room["room"] = roomNumber.text;
+        room["room"] = StaticInfo.roomNumber;
+        room["name"] = StaticInfo.name;
         socket.Emit("CREATE_ROOM",new JSONObject(room));
     }
 

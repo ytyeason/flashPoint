@@ -37,16 +37,36 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     socket.on('LOAD_ROOM', function(data){
       console.log(data);
+      console.log(Games[data['room']]["participants"]);
       if(Games[data['room']]!=undefined){
+        Games[data['room']]["participants"].push(data['name']);
+        console.log(Games);
         socket.emit('LOAD_ROOM_SUCCESS',{status: "True"} );
       }
     });
 
     socket.on('CREATE_ROOM', function(data){
-      console.log(data);
+
       var room_number = data['room'];
-      Games[room_number] = {"participants": "YES"}//participants need to be changed to a list
+      Games[room_number] = {"participants": [data['name']], "Owner": data['name']}//participants need to be changed to a list
+      console.log(Games);
       socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
+    });
+
+    socket.on('gameSetUp', function(data){
+      console.log("gameSetUp");
+      var room_number = data['room'];
+      var level = data['level'];
+      var numberOfPlayer = data['numberOfPlayer'];
+      Games[room_number]["level"] = level;
+      Games[room_number]["numberOfPlayer"] = numberOfPlayer;
+      console.log(Games[room_number]);
+      socket.emit('gameSetUp_SUCCESS',{status: "True"} );
+    });
+
+    socket.on('startGame', function(data){
+      console.log("startGame");
+      socket.emit('startGame_SUCCESS',Games);
     });
 
     socket.on('PLAY', function (data){

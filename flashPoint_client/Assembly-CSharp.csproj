@@ -66,8 +66,14 @@
     <Compile Include="Assets\AssetsResources\Supercyan Character Pack Free Sample\Scripts\CameraLogic.cs" />
     <Compile Include="Assets\AssetsResources\Supercyan Character Pack Free Sample\Scripts\Demo.cs" />
     <Compile Include="Assets\AssetsResources\Supercyan Character Pack Free Sample\Scripts\SimpleCharacterControl.cs" />
+    <Compile Include="Assets\scripts\ActiveStateToggler.cs" />
+    <Compile Include="Assets\scripts\ApplicationManager.cs" />
+    <Compile Include="Assets\scripts\ChangeColor.cs" />
     <Compile Include="Assets\scripts\ClickableTile.cs" />
     <Compile Include="Assets\scripts\CustomButtonEvent.cs" />
+    <Compile Include="Assets\scripts\DragMe.cs" />
+    <Compile Include="Assets\scripts\DragPanel.cs" />
+    <Compile Include="Assets\scripts\DropMe.cs" />
     <Compile Include="Assets\scripts\GameObjects\Colors.cs" />
     <Compile Include="Assets\scripts\GameObjects\DifficultyLevel.cs" />
     <Compile Include="Assets\scripts\GameObjects\Door.cs" />
@@ -85,15 +91,22 @@
     <Compile Include="Assets\scripts\GameObjects\Space.cs" />
     <Compile Include="Assets\scripts\GameObjects\SpaceKind.cs" />
     <Compile Include="Assets\scripts\GameObjects\SpaceStatus.cs" />
+    <Compile Include="Assets\scripts\GameObjects\StaticInfo.cs" />
     <Compile Include="Assets\scripts\GameObjects\Victim.cs" />
     <Compile Include="Assets\scripts\GameObjects\VictimStatus.cs" />
     <Compile Include="Assets\scripts\GameObjects\Wall.cs" />
     <Compile Include="Assets\scripts\GameObjects\WallStatus.cs" />
+    <Compile Include="Assets\scripts\gameSetUpManager.cs" />
     <Compile Include="Assets\scripts\JoyStickerController.cs" />
     <Compile Include="Assets\scripts\LobbyManager.cs" />
     <Compile Include="Assets\scripts\LoginManager.cs" />
     <Compile Include="Assets\scripts\LoginPanelController.cs" />
+    <Compile Include="Assets\scripts\PanelManager.cs" />
     <Compile Include="Assets\scripts\Player.cs" />
+    <Compile Include="Assets\scripts\ResizePanel.cs" />
+    <Compile Include="Assets\scripts\RoomManager.cs" />
+    <Compile Include="Assets\scripts\ScrollDetailTexture.cs" />
+    <Compile Include="Assets\scripts\ShowSliderValue.cs" />
     <Compile Include="Assets\scripts\TileMap.cs" />
     <Compile Include="Assets\scripts\TileType.cs" />
     <Compile Include="Assets\scripts\TiltWindow.cs" />
@@ -179,7 +192,10 @@
     <Compile Include="Assets\SocketIO\WebsocketSharp\WebSocketStream.cs" />
     <None Include="Assets\SocketIO\JSONObject\readme.txt" />
     <None Include="Assets\AssetsResources\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
+    <None Include="Assets\Fonts\Jupiter\LICENSE.txt" />
+    <None Include="Assets\Textures and Sprites\SF UI\Background\LICENSE.txt" />
     <None Include="Assets\SocketIO\Readme.txt" />
+    <None Include="Assets\Materials\UI-Default-No-Alpha.shader" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>/Users/eason/Desktop/flashPoint/flashPoint_client/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>

@@ -43,9 +43,23 @@
             </e>
           </e>
         </e>
+        <e p="Fonts" t="Include">
+          <e p="Jupiter" t="Include">
+            <e p="LICENSE.txt" t="Include" />
+          </e>
+        </e>
+        <e p="Materials" t="Include">
+          <e p="UI-Default-No-Alpha.shader" t="Include" />
+        </e>
         <e p="Scripts" t="Include">
+          <e p="ActiveStateToggler.cs" t="Include" />
+          <e p="ApplicationManager.cs" t="Include" />
+          <e p="ChangeColor.cs" t="Include" />
           <e p="ClickableTile.cs" t="Include" />
           <e p="CustomButtonEvent.cs" t="Include" />
+          <e p="DragMe.cs" t="Include" />
+          <e p="DragPanel.cs" t="Include" />
+          <e p="DropMe.cs" t="Include" />
           <e p="GameObjects" t="Include">
             <e p="Colors.cs" t="Include" />
             <e p="DifficultyLevel.cs" t="Include" />
@@ -64,16 +78,23 @@
             <e p="Space.cs" t="Include" />
             <e p="SpaceKind.cs" t="Include" />
             <e p="SpaceStatus.cs" t="Include" />
+            <e p="StaticInfo.cs" t="Include" />
             <e p="Victim.cs" t="Include" />
             <e p="VictimStatus.cs" t="Include" />
             <e p="Wall.cs" t="Include" />
             <e p="WallStatus.cs" t="Include" />
           </e>
+          <e p="gameSetUpManager.cs" t="Include" />
           <e p="JoyStickerController.cs" t="Include" />
           <e p="LobbyManager.cs" t="Include" />
           <e p="LoginManager.cs" t="Include" />
           <e p="LoginPanelController.cs" t="Include" />
+          <e p="PanelManager.cs" t="Include" />
           <e p="Player.cs" t="Include" />
+          <e p="ResizePanel.cs" t="Include" />
+          <e p="RoomManager.cs" t="Include" />
+          <e p="ScrollDetailTexture.cs" t="Include" />
+          <e p="ShowSliderValue.cs" t="Include" />
           <e p="TileMap.cs" t="Include" />
           <e p="TileType.cs" t="Include" />
           <e p="TiltWindow.cs" t="Include" />
@@ -179,6 +200,13 @@
             <e p="WebSocketFrame.cs" t="Include" />
             <e p="WebSocketState.cs" t="Include" />
             <e p="WebSocketStream.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Textures and Sprites" t="Include">
+          <e p="SF UI" t="Include">
+            <e p="Background" t="Include">
+              <e p="LICENSE.txt" t="Include" />
+            </e>
           </e>
         </e>
       </e>
