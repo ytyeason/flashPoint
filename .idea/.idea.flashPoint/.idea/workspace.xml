@@ -11,11 +11,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="LoginManager.cs" pinned="false" current-in-tab="false">
+      <file leaf-file-name="LoginManager.cs" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/flashPoint_client/Assets/scripts/LoginManager.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="34" column="5" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
+            <state relative-caret-position="780">
+              <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
               <folding>
                 <marker date="1550717316458" expanded="true" signature="6:168" ph="..." />
                 <marker date="1550717316458" expanded="true" signature="212:983" ph="{...}" />
@@ -29,10 +29,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TileMap.cs" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TileMap.cs" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/flashPoint_client/Assets/scripts/TileMap.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1125">
+            <state relative-caret-position="885">
               <caret line="75" column="43" lean-forward="true" selection-start-line="75" selection-start-column="43" selection-end-line="75" selection-end-column="43" />
             </state>
           </provider>
@@ -106,9 +106,10 @@
       <path value="$PROJECT_DIR$/server/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds">
+    <option name="y" value="323" />
     <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="height" value="828" />
   </component>
   <component name="ProjectView">
     <navigator currentView="SolutionExplorer" proportions="" version="1">
@@ -132,18 +133,6 @@
               <item name="flashPoint" type="6f407253:SolutionExplorerNodeFileSystem" />
               <item name="flashPoint_client" type="6f407253:SolutionExplorerNodeFileSystem" />
               <item name="Assets" type="6f407253:SolutionExplorerNodeFileSystem" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="flashPoint" type="6f407253:SolutionExplorerNodeFileSystem" />
-              <item name="flashPoint_client" type="6f407253:SolutionExplorerNodeFileSystem" />
-              <item name="Assets" type="6f407253:SolutionExplorerNodeFileSystem" />
-              <item name="scripts" type="6f407253:SolutionExplorerNodeFileSystem" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="flashPoint" type="6f407253:SolutionExplorerNodeFileSystem" />
-              <item name="server" type="6f407253:SolutionExplorerNodeFileSystem" />
             </path>
           </expand>
           <select />
@@ -187,12 +176,12 @@
       <option name="presentableId" value="Default" />
       <updated>1550631999028</updated>
       <workItem from="1550632001580" duration="1377000" />
-      <workItem from="1550635117800" duration="7615000" />
+      <workItem from="1550635117800" duration="8463000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="8992000" />
+    <option name="totallyTimeSpent" value="9840000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -204,8 +193,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="323" width="1440" height="828" extended-state="0" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="right" id="Errors In Solution" order="3" />
@@ -214,7 +202,7 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32969698" />
+      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.37209302" />
       <window_info anchor="bottom" id="NuGet" order="7" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2532189" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
@@ -250,22 +238,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/flashPoint_client/Assets/scripts/LoginManager.cs">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="34" column="5" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
-          <folding>
-            <marker date="1550717316458" expanded="true" signature="6:168" ph="..." />
-            <marker date="1550717316458" expanded="true" signature="212:983" ph="{...}" />
-            <marker date="1550717316458" expanded="true" signature="288:402" ph="{...}" />
-            <marker date="1550717316458" expanded="true" signature="434:685" ph="{...}" />
-            <marker date="1550717316458" expanded="true" signature="629:682" ph="/* data['name'] = 'eason'; ... */" />
-            <marker date="1550717316458" expanded="true" signature="728:781" ph="{...}" />
-            <marker date="1550717316458" expanded="true" signature="808:879" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/flashPoint_client/Assets/scripts/TiltWindow.cs">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -295,8 +267,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/flashPoint_client/Assets/scripts/TileMap.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1125">
+        <state relative-caret-position="885">
           <caret line="75" column="43" lean-forward="true" selection-start-line="75" selection-start-column="43" selection-end-line="75" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/flashPoint_client/Assets/scripts/LoginManager.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="780">
+          <caret line="52" lean-forward="true" selection-start-line="52" selection-end-line="52" />
+          <folding>
+            <marker date="1550717316458" expanded="true" signature="6:168" ph="..." />
+            <marker date="1550717316458" expanded="true" signature="212:983" ph="{...}" />
+            <marker date="1550717316458" expanded="true" signature="288:402" ph="{...}" />
+            <marker date="1550717316458" expanded="true" signature="434:685" ph="{...}" />
+            <marker date="1550717316458" expanded="true" signature="629:682" ph="/* data['name'] = 'eason'; ... */" />
+            <marker date="1550717316458" expanded="true" signature="728:781" ph="{...}" />
+            <marker date="1550717316458" expanded="true" signature="808:879" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>

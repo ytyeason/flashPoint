@@ -70,6 +70,7 @@
             <e p="WallStatus.cs" t="Include" />
           </e>
           <e p="JoyStickerController.cs" t="Include" />
+          <e p="LobbyManager.cs" t="Include" />
           <e p="LoginManager.cs" t="Include" />
           <e p="LoginPanelController.cs" t="Include" />
           <e p="Player.cs" t="Include" />
@@ -185,7 +186,9 @@
       <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
     </e>
     <e p="$USER_HOME$/Library/Caches/Rider2018.1/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_flashPoint_client.-1301861428.00" t="ExcludeRecursive" />
   </component>

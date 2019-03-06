@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SocketIO;
 using System;
+using UnityEngine.SceneManagement;
 //using GameObjects;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ public class LoginManager : MonoBehaviour {
 
 		StartCoroutine(ConnectToServer());
 		socket.On("USER_CONNECTED", OnUserConnected );
+		socket.On("LoginSucessful", LoginSucessful );
 		
 		//----------------------just for testing, probably should create game in other scenes
 		Game new_game = new Game(3,DifficultyLevel.Easy);
@@ -31,6 +33,12 @@ public class LoginManager : MonoBehaviour {
 
 	}
 
+	void LoginSucessful(SocketIOEvent obj)//change scene
+	{
+		Debug.Log("login successful");
+		SceneManager.LoadScene("Lobby");
+	}
+
 	IEnumerator ConnectToServer()
 	{
 		yield return new WaitForSeconds(0.5f);
@@ -39,10 +47,6 @@ public class LoginManager : MonoBehaviour {
 		
 		yield return new WaitForSeconds(0.5f);
 		
-		Dictionary<string, string> data = new Dictionary<string,string>();
-		//data['name'] = 'eason';
-		
-		//socket.Emit("PLAY");
 	}
 
 	void OnUserConnected (SocketIOEvent obj)
@@ -54,12 +58,21 @@ public class LoginManager : MonoBehaviour {
 	{
 		Debug.Log("login button clicked");
 		Debug.Log(username.text);
+		
+		Dictionary<String, String> user = new Dictionary<string, string>();
+		user["name"] = username.text;
+		socket.Emit("Login",new JSONObject(user));
 	}
 
 	public void SignUpClick()
 	{
 		Debug.Log("Sign up button clicked");
 		Debug.Log(username.text);
+		
+		Dictionary<String, String> user = new Dictionary<string, string>();
+		user["name"] = username.text;
+		user["password"] = "666";
+		socket.Emit("Signup", new JSONObject(user));
 	}
 
 }

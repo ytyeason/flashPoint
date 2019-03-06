@@ -7,6 +7,10 @@ var shortId 		= require('shortid');
 
 app.set('port', process.env.PORT || 3000);
 
+var Users = {};
+
+var Games = {};
+
 var clients	= [];
 
 io.on('connection', function (socket) {//default event for client connect to server
@@ -14,23 +18,35 @@ io.on('connection', function (socket) {//default event for client connect to ser
     var currentUser;
 
     socket.on('USER_CONNECT', function (){
-
         console.log('Users Connected ');
-        for (var i = 0; i < clients.length; i++) {
+    });
 
+    socket.on('Signup', function (data){
+        Users[data['name']] = data['password'];
+        console.log(Users);
+    });
 
-            socket.emit('USER_CONNECTED',{
+    socket.on('Login', function (data){
+        var name = data['name'];
+        console.log(name);
+        var p = Users[name];
+        if(p!=undefined){
+          socket.emit('LoginSucessful',{status: "True"} );
+        }
+    });
 
-                name:clients[i].name,
-                id:clients[i].id,
-                position:clients[i].position
+    socket.on('LOAD_ROOM', function(data){
+      console.log(data);
+      if(Games[data['room']]!=undefined){
+        socket.emit('LOAD_ROOM_SUCCESS',{status: "True"} );
+      }
+    });
 
-            });
-
-            console.log('User name '+clients[i].name+' is connected..');
-
-        };
-
+    socket.on('CREATE_ROOM', function(data){
+      console.log(data);
+      var room_number = data['room'];
+      Games[room_number] = {"participants": "YES"}//participants need to be changed to a list
+      socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
     });
 
     socket.on('PLAY', function (data){

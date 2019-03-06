@@ -90,6 +90,7 @@
     <Compile Include="Assets\scripts\GameObjects\Wall.cs" />
     <Compile Include="Assets\scripts\GameObjects\WallStatus.cs" />
     <Compile Include="Assets\scripts\JoyStickerController.cs" />
+    <Compile Include="Assets\scripts\LobbyManager.cs" />
     <Compile Include="Assets\scripts\LoginManager.cs" />
     <Compile Include="Assets\scripts\LoginPanelController.cs" />
     <Compile Include="Assets\scripts\Player.cs" />
