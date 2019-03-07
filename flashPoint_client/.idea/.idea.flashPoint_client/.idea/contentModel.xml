@@ -55,12 +55,12 @@
           <e p="ActiveStateToggler.cs" t="Include" />
           <e p="ApplicationManager.cs" t="Include" />
           <e p="ChangeColor.cs" t="Include" />
-          <e p="ClickableTile.cs" t="Include" />
           <e p="CustomButtonEvent.cs" t="Include" />
           <e p="DragMe.cs" t="Include" />
           <e p="DragPanel.cs" t="Include" />
           <e p="DropMe.cs" t="Include" />
           <e p="GameObjects" t="Include">
+            <e p="ClickableTile.cs" t="Include" />
             <e p="Colors.cs" t="Include" />
             <e p="DifficultyLevel.cs" t="Include" />
             <e p="Door.cs" t="Include" />
@@ -79,10 +79,14 @@
             <e p="SpaceKind.cs" t="Include" />
             <e p="SpaceStatus.cs" t="Include" />
             <e p="StaticInfo.cs" t="Include" />
+            <e p="TileMap.cs" t="Include" />
+            <e p="TileType.cs" t="Include" />
             <e p="Victim.cs" t="Include" />
             <e p="VictimStatus.cs" t="Include" />
             <e p="Wall.cs" t="Include" />
+            <e p="WallManager.cs" t="Include" />
             <e p="WallStatus.cs" t="Include" />
+            <e p="WallType.cs" t="Include" />
           </e>
           <e p="gameSetUpManager.cs" t="Include" />
           <e p="JoyStickerController.cs" t="Include" />
@@ -95,8 +99,6 @@
           <e p="RoomManager.cs" t="Include" />
           <e p="ScrollDetailTexture.cs" t="Include" />
           <e p="ShowSliderValue.cs" t="Include" />
-          <e p="TileMap.cs" t="Include" />
-          <e p="TileType.cs" t="Include" />
           <e p="TiltWindow.cs" t="Include" />
         </e>
         <e p="SocketIO" t="Include">

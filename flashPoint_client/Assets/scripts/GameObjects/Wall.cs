@@ -1,10 +1,16 @@
-﻿
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Wall:EdgeObstacle
+public class Wall: MonoBehaviour
 {
     private WallStatus status;
+    public int x;
+    public int z;
+    public WallManager wallManager;
+    public int id;
 
-    public Wall (int id):base(id)
+    public Wall (int id)
     {
         this.id = id;
     }
@@ -17,5 +23,11 @@ public class Wall:EdgeObstacle
     public WallStatus GetStatus()
     {
         return status;
+    }
+    
+    void OnMouseUp() {
+	
+		
+        Debug.Log("Clicked x: " + x + ", z: " + z);
     }
 }

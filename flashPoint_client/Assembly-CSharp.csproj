@@ -69,11 +69,11 @@
     <Compile Include="Assets\scripts\ActiveStateToggler.cs" />
     <Compile Include="Assets\scripts\ApplicationManager.cs" />
     <Compile Include="Assets\scripts\ChangeColor.cs" />
-    <Compile Include="Assets\scripts\ClickableTile.cs" />
     <Compile Include="Assets\scripts\CustomButtonEvent.cs" />
     <Compile Include="Assets\scripts\DragMe.cs" />
     <Compile Include="Assets\scripts\DragPanel.cs" />
     <Compile Include="Assets\scripts\DropMe.cs" />
+    <Compile Include="Assets\scripts\GameObjects\ClickableTile.cs" />
     <Compile Include="Assets\scripts\GameObjects\Colors.cs" />
     <Compile Include="Assets\scripts\GameObjects\DifficultyLevel.cs" />
     <Compile Include="Assets\scripts\GameObjects\Door.cs" />
@@ -92,10 +92,14 @@
     <Compile Include="Assets\scripts\GameObjects\SpaceKind.cs" />
     <Compile Include="Assets\scripts\GameObjects\SpaceStatus.cs" />
     <Compile Include="Assets\scripts\GameObjects\StaticInfo.cs" />
+    <Compile Include="Assets\scripts\GameObjects\TileMap.cs" />
+    <Compile Include="Assets\scripts\GameObjects\TileType.cs" />
     <Compile Include="Assets\scripts\GameObjects\Victim.cs" />
     <Compile Include="Assets\scripts\GameObjects\VictimStatus.cs" />
     <Compile Include="Assets\scripts\GameObjects\Wall.cs" />
+    <Compile Include="Assets\scripts\GameObjects\WallManager.cs" />
     <Compile Include="Assets\scripts\GameObjects\WallStatus.cs" />
+    <Compile Include="Assets\scripts\GameObjects\WallType.cs" />
     <Compile Include="Assets\scripts\gameSetUpManager.cs" />
     <Compile Include="Assets\scripts\JoyStickerController.cs" />
     <Compile Include="Assets\scripts\LobbyManager.cs" />
@@ -107,8 +111,6 @@
     <Compile Include="Assets\scripts\RoomManager.cs" />
     <Compile Include="Assets\scripts\ScrollDetailTexture.cs" />
     <Compile Include="Assets\scripts\ShowSliderValue.cs" />
-    <Compile Include="Assets\scripts\TileMap.cs" />
-    <Compile Include="Assets\scripts\TileType.cs" />
     <Compile Include="Assets\scripts\TiltWindow.cs" />
     <Compile Include="Assets\SocketIO\JSONObject\JSONObject.cs" />
     <Compile Include="Assets\SocketIO\JSONObject\JSONTemplates.cs" />
