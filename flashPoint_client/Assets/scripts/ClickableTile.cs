@@ -8,10 +8,26 @@ public class ClickableTile : MonoBehaviour {
 	public int tileX;
 	public int tileZ;
 	public TileMap map;
+	public TileType type;
 
 	// Occurs when we click the mouse:
 	void OnMouseUp() {
-        map.MoveSelectedUnitTo(tileX, tileZ);
-        Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
+        
+		Debug.Log(this);
+		
+		int x = tileX / 5;
+		int z = tileZ / 5;
+
+		if (map.tiles[x,z]==1)
+		{
+			map.buildNewTile(x,z,0);
+		}
+		else
+		{
+			map.MoveSelectedUnitTo(tileX, tileZ);
+		}
+	
+		
+        //Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
     }
 }

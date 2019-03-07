@@ -2367,7 +2367,7 @@ MonoBehaviour:
   strings: []
   tileTypes:
   - name: Normal
-    tileVisualPrefab: {fileID: 1692560670680642, guid: 65b50fd75561fdb45a89cbf18ba3ed71,
+    tileVisualPrefab: {fileID: 1899577080576674, guid: 0290d3a6b4a471244a4e1947028f52a5,
       type: 2}
     isWalkable: 1
   - name: Fire
