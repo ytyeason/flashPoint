@@ -96,7 +96,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0, z: -10}
 --- !u!114 &114083980673731826
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,5 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   z: 0
-  wallManager: {fileID: 0}
-  id: 0
+  wallMap: {fileID: 0}
+  type:
+    name: 
+    wallVisualPrefab: {fileID: 0}

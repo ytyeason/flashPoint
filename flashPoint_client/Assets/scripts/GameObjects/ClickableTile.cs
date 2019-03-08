@@ -12,13 +12,14 @@ public class ClickableTile : MonoBehaviour {
 
 	// Occurs when we click the mouse:
 	void OnMouseUp() {
-        
-		Debug.Log(this);
-		
-		int x = tileX / 5;
-		int z = tileZ / 5;
 
-		if (map.tiles[x,z]==1)
+		Debug.Log(this);
+
+        int x = tileX / 5;
+		int z = tileZ / 5;
+        Debug.Log("Clicked " + map.tiles[x, z]);
+
+        if (map.tiles[x,z]==1)
 		{
 			map.buildNewTile(x,z,0);
 		}

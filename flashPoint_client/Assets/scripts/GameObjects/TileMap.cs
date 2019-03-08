@@ -42,9 +42,10 @@ public class TileMap : MonoBehaviour {
 		// Initialize our map tiles to be normal or fire
 		for(int x = 0; x < mapSizeX; x++) {
 			for(int z = 0; z < mapSizeZ; z++) {
-				tiles[x,z] = 0;
+				tiles[x,z] = 1;
 			}
 		}
+
 	}
 
 	// Use GameObject.Instantiate to 'spawn' the TileType objects into the world

@@ -110,5 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   z: 0
-  wallManager: {fileID: 0}
-  id: 0
+  wallMap: {fileID: 0}
+  type:
+    name: 
+    wallVisualPrefab: {fileID: 0}
