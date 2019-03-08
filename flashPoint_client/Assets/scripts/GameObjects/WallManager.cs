@@ -32,8 +32,8 @@ public class WallManager: MonoBehaviour
         defaultHorizontalWalls.Add(new int[] { 1, 4 });
         defaultHorizontalWalls.Add(new int[] { 1, 5 });
 
-        defaultVerticalWalls.Add(new int[] {1,1});
-        defaultVerticalWalls.Add(new int[] {1,2});
+        defaultVerticalWalls.Add(new int[] { 1, 1 });
+        defaultVerticalWalls.Add(new int[] { 1, 2 });
         defaultVerticalWalls.Add(new int[] { 1, 5 });
 
     }
@@ -113,7 +113,7 @@ public class WallManager: MonoBehaviour
             GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
             
             Wall w = go.GetComponent<Wall>();
-            Debug.Log(w);
+            //Debug.Log(w);
             // Assign the variables as needed
             w.x = hWall[0]*5;
             w.z = hWall[1]*5;
@@ -130,7 +130,7 @@ public class WallManager: MonoBehaviour
             GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
             
             Wall w = go.GetComponent<Wall>();
-            Debug.Log(w);
+            //Debug.Log(w);
             // Assign the variables as needed
             w.x = vWall[0]*5;
             w.z = vWall[1]*5;

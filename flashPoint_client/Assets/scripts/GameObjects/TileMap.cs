@@ -6,7 +6,9 @@ using System.Linq;
 
 public class TileMap : MonoBehaviour {
 
-   public GameObject selectedUnit;
+   //public Fireman selectedUnit2;
+	public Fireman selectedUnit;
+	
 
 	// Dimensions of our map
 	readonly int mapSizeX = 10;
@@ -32,6 +34,8 @@ public class TileMap : MonoBehaviour {
 		GenerateMapData();
 		// Display them in the game world
 		GenerateMapVisual();
+
+		GenerateFiremanVisual();
 	}
 
 	// Populate the data structure
@@ -71,6 +75,14 @@ public class TileMap : MonoBehaviour {
 		}
 	}
 
+	void GenerateFiremanVisual()
+	{
+		for (int x = 0; x < 4; x++)
+		{
+			GameObject go = (GameObject) Instantiate( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
+		}
+	}
+
 	public void buildNewTile(int x, int z, int type)
 	{
 		Debug.Log(tileStores.Keys);
@@ -98,12 +110,16 @@ public class TileMap : MonoBehaviour {
 				ct.type = tt;
 
 				tileStores[key] = go;
+				
+				
+				
 			}
 		}
 		
 	}
 	
     public void MoveSelectedUnitTo(int x, int z) {
-        selectedUnit.transform.position = new Vector3(x, 0.2f, z);
+        //selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
+	    selectedUnit.move(x,z);
     }
 }

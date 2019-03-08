@@ -69,12 +69,14 @@
             <e p="FalseAlarm.cs" t="Include" />
             <e p="Fireman.cs" t="Include" />
             <e p="Game.cs" t="Include" />
+            <e p="GameManager.cs" t="Include" />
             <e p="GamePlayer.cs" t="Include" />
             <e p="GameStatus.cs" t="Include" />
             <e p="GameUnit.cs" t="Include" />
             <e p="PlayerStatus.cs" t="Include" />
             <e p="POI.cs" t="Include" />
             <e p="POIStatus.cs" t="Include" />
+            <e p="RootObject.cs" t="Include" />
             <e p="Space.cs" t="Include" />
             <e p="SpaceKind.cs" t="Include" />
             <e p="SpaceStatus.cs" t="Include" />

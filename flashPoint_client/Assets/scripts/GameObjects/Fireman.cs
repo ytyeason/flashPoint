@@ -6,9 +6,11 @@ using SocketIO;
 using System;
 
 
-public class Fireman
+public class Fireman: MonoBehaviour
 {
-    public String name = "undefined";
+    public GameObject s;
+    
+    public String name = "eason";
 
     public Colors color = Colors.White;//default to white
 
@@ -25,6 +27,12 @@ public class Fireman
     public void setAP(int ap)
     {
         AP = ap;
+    }
+
+    public void move(int x, int z)
+    {
+        Debug.Log("moving");
+        s.transform.position = new Vector3(x, 0.2f, z);
     }
 
         

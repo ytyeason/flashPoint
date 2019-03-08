@@ -13,7 +13,7 @@ public class ClickableTile : MonoBehaviour {
 	// Occurs when we click the mouse:
 	void OnMouseUp() {
 
-		Debug.Log(this);
+		//Debug.Log(this);
 
         int x = tileX / 5;
 		int z = tileZ / 5;

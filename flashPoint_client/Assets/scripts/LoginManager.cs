@@ -21,6 +21,7 @@ public class LoginManager : MonoBehaviour {
 		socket.On("USER_CONNECTED", OnUserConnected );
 		socket.On("LoginSucessful", LoginSucessful );
 		
+		/*
 		//----------------------just for testing, probably should create game in other scenes
 		Game new_game = new Game(3,DifficultyLevel.Easy);
 		Dictionary<String, Fireman> fireManManager = new_game.getFiremanManager();
@@ -30,7 +31,7 @@ public class LoginManager : MonoBehaviour {
 			Debug.Log(entry.Value.name);
 		}
 		//-------------------------------------------------------
-
+		*/
 	}
 
 	void LoginSucessful(SocketIOEvent obj)//change scene

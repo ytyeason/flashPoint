@@ -30,10 +30,13 @@ public class Game {
 
     public DifficultyLevel level = DifficultyLevel.Easy;
     
-    public Game(int num, DifficultyLevel level)
+    public List<String> participants = new List<string>();
+    
+    public Game(int num, DifficultyLevel level, List<String> participants)
     {
         numOfDesiredPlayer = num;
         this.level = level;
+        this.participants = participants;
         
         Debug.Log("new Game created!");
         Fireman f1 = new Fireman("f1",Colors.Blue);
@@ -60,6 +63,6 @@ public class Game {
     }
     
     //todo: a lot of methods left to be added in M5
-
+    
 
 }
