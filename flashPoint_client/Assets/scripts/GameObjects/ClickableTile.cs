@@ -17,7 +17,6 @@ public class ClickableTile : MonoBehaviour {
 
         int x = tileX / 5;
 		int z = tileZ / 5;
-        Debug.Log("Clicked " + map.tiles[x, z]);
 
         if (map.tiles[x,z]==1)
 		{

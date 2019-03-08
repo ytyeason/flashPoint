@@ -8,7 +8,7 @@ public class Wall : MonoBehaviour
     public int x;
     public int z;
     public WallManager wallMap;
-    public WallType type;
+    public int type;
 
     // Occurs when we click the mouse:
     void OnMouseUp()
@@ -16,16 +16,16 @@ public class Wall : MonoBehaviour
         int wallX = x / 5;
         int wallZ = z / 5;
 
-        Debug.Log("Clicked " + wallMap.walls[wallX, wallZ]);
+        Debug.Log("Clicked type: " + type);
 
-        if (wallMap.walls[wallX, wallZ]==0)
+        if (type==0)
         {
-            wallMap.BreakWall(wallX, wallZ, 0);
+            wallMap.BreakWall(wallX, wallZ, 2, 1);
         }
 
-        if (wallMap.walls[wallX, wallZ]== 1)
+        if (type== 1)
         {
-            wallMap.BreakWall(wallX, wallZ, 1);
+            wallMap.BreakWall(wallX, wallZ, 3, 0);
         }
 
 

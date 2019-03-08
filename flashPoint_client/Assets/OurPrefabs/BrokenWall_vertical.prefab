@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1707290558386096}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -35.92092, y: 84.07031, z: -1.0740709}
-  m_LocalScale: {x: 5, y: 8, z: 0.3}
+  m_LocalScale: {x: 5, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -110,5 +110,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   z: 0
-  wallManager: {fileID: 0}
-  id: 0
+  wallMap: {fileID: 0}
+  type: 0
