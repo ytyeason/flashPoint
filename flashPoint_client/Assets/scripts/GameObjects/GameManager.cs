@@ -24,10 +24,12 @@ public class GameManager: MonoBehaviour
     
     void Start()
     {
-        fireman = new Fireman("eason", Colors.Blue, firemanObject);
+        fireman = new Fireman("eason", Colors.Blue, firemanObject, 0, 0);
         wallManager = new WallManager(wallTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
-        
+
+		// Sanity check:
+		//Debug.Log("Fireman (x,z): (" + fireman.currentX + ", " + fireman.currentZ + ")");
     }
 
     public GameObject instantiateObject(GameObject w, Vector3 v, Quaternion q)

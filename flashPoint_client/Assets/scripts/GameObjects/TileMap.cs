@@ -133,7 +133,9 @@ public class TileMap  {
 	}
 	
     public void MoveSelectedUnitTo(int x, int z) {
-        //selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
-	    selectedUnit.move(x,z);
-    }
+		//selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
+
+		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
+		selectedUnit.move(x, z);
+	}
 }
