@@ -6,7 +6,7 @@ using SocketIO;
 using System;
 
 
-public class Fireman: MonoBehaviour
+public class Fireman
 {
     public GameObject s;
     
@@ -18,10 +18,11 @@ public class Fireman: MonoBehaviour
 
     public int FreeAP = 4;
 
-    public Fireman(String name, Colors color)
+    public Fireman(String name, Colors color, GameObject s)
     {
         this.name = name;
         this.color = color;
+        this.s = s;
     }
 
     public void setAP(int ap)

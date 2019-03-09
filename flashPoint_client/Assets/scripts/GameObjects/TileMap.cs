@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 
-public class TileMap : MonoBehaviour {
+public class TileMap  {
 
    //public Fireman selectedUnit2;
 	public Fireman selectedUnit;
@@ -23,12 +23,13 @@ public class TileMap : MonoBehaviour {
     public string[] strings;
 	// Array of possible tiles:
 	public TileType[] tileTypes;
+	public GameManager gm;
 
 	// Array populated by 
 	public int[,] tiles;
 
 
-	void Start() {
+	void StartTileMap() {
 
 		// Generate the TileTypes and ClickableTiles
 		GenerateMapData();
@@ -36,6 +37,15 @@ public class TileMap : MonoBehaviour {
 		GenerateMapVisual();
 
 		GenerateFiremanVisual();
+	}
+
+	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit)
+	{
+		this.tileTypes = tileTypes;
+		this.gm = gm;
+		this.selectedUnit = selectedUnit;
+		
+		StartTileMap();
 	}
 
 	// Populate the data structure
@@ -57,8 +67,9 @@ public class TileMap : MonoBehaviour {
 		for(int x=0; x < mapSizeX; x++) {
 			for(int z=0; z < mapSizeZ; z++) {
 				TileType tt = tileTypes[ tiles[x,z] ];
-				GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
-
+				//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
+				GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x * 5, 0, z * 5), Quaternion.identity);
+				
 				// Connect a ClickableTile to each TileType
 				ClickableTile ct = go.GetComponent<ClickableTile>();
 				// Assign the variables as needed
@@ -79,7 +90,8 @@ public class TileMap : MonoBehaviour {
 	{
 		for (int x = 0; x < 4; x++)
 		{
-			GameObject go = (GameObject) Instantiate( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
+			//GameObject go = (GameObject) Instantiate( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
+			GameObject go = gm.instantiateObject( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
 		}
 	}
 
@@ -94,12 +106,14 @@ public class TileMap : MonoBehaviour {
 			if (key[0] == x && key[1] == z)
 			{
 				GameObject old = tileStores[key];
-				Destroy(old);
+				//Destroy(old);
+				gm.DestroyObject(old);
 		
 				Debug.Log("Building new tile");
 				tiles[x, z] = type;
 				TileType tt = tileTypes[ tiles[x,z] ];
-				GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
+				//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
+				GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
 
 				// Connect a ClickableTile to each TileType
 				ClickableTile ct = go.GetComponent<ClickableTile>();

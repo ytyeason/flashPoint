@@ -10,13 +10,34 @@ using System;
 
 public class GameManager: MonoBehaviour
 {
+    public GameObject firemanObject;
+    public TileType[] tileTypes;
+    public WallType[] wallTypes;
+    
+    
     public JSONObject game_info = StaticInfo.game_info;
     private List<Game> games = new List<Game>();
+
+    public WallManager wallManager;
+    private TileMap tileMap;
+    private Fireman fireman;
     
     void Start()
     {
+        fireman = new Fireman("eason", Colors.Blue, firemanObject);
+        wallManager = new WallManager(wallTypes,this);
+        tileMap = new TileMap(tileTypes,this, fireman);
         
-        
-        
+    }
+
+    public GameObject instantiateObject(GameObject w, Vector3 v, Quaternion q)
+    {
+        GameObject objectW = (GameObject)Instantiate(w, v, q);
+        return objectW;
+    }
+
+    public void DestroyObject(GameObject w)
+    {
+        Destroy(w);
     }
 }

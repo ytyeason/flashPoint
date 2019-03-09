@@ -1762,7 +1762,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 534669902}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 8, y: 45, z: 20}
+  m_LocalPosition: {x: -1.2, y: 45, z: 17.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1919,7 +1919,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 581000371}
-  - component: {fileID: 581000370}
   m_Layer: 0
   m_Name: MapManager
   m_TagString: Untagged
@@ -1927,28 +1926,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &581000370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 581000369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17e53bdf18646d4419fd2078f074e385, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectedUnit: {fileID: 1042671115}
-  strings: []
-  tileTypes:
-  - name: Normal
-    tileVisualPrefab: {fileID: 1899577080576674, guid: 0290d3a6b4a471244a4e1947028f52a5,
-      type: 2}
-    isWalkable: 1
-  - name: Fire
-    tileVisualPrefab: {fileID: 1692560670680642, guid: 65b50fd75561fdb45a89cbf18ba3ed71,
-      type: 2}
-    isWalkable: 1
 --- !u!4 &581000371
 Transform:
   m_ObjectHideFlags: 0
@@ -2216,7 +2193,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 747820039}
-  - component: {fileID: 747820038}
   m_Layer: 0
   m_Name: WallManager
   m_TagString: Untagged
@@ -2224,30 +2200,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &747820038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 747820037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36e454967fb94ea8a88929a9b5d34331, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallTypes:
-  - name: horizontal
-    wallVisualPrefab: {fileID: 1481323579043098, guid: 485fefd6c39714a95933ba00a7ba5fc4,
-      type: 2}
-  - name: vertical
-    wallVisualPrefab: {fileID: 1730225405979292, guid: fc0147655d64b40b2bd170fd75fa41ed,
-      type: 2}
-  - name: horizontal_broken
-    wallVisualPrefab: {fileID: 1560110503990988, guid: d851a5f6310e84d578ddfdadf58dcf2a,
-      type: 2}
-  - name: vertical_broken
-    wallVisualPrefab: {fileID: 1707290558386096, guid: 71dacbf7fa1784710bdfc8b1426699f3,
-      type: 2}
 --- !u!4 &747820039
 Transform:
   m_ObjectHideFlags: 0
@@ -2661,7 +2613,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1042671116}
-  - component: {fileID: 1042671115}
   m_Layer: 0
   m_Name: Fireman
   m_TagString: Untagged
@@ -2669,22 +2620,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1042671115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1042671114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 156b6541028f46dd93fca11f68f2805c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  s: {fileID: 1847778216}
-  name: 
-  color: 0
-  AP: 0
-  FreeAP: 0
 --- !u!4 &1042671116
 Transform:
   m_ObjectHideFlags: 0
@@ -4552,6 +4487,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b85cc1eef4f4db5a810c75d52524dcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firemanObject: {fileID: 1847778216}
+  tileTypes:
+  - name: Normal
+    tileVisualPrefab: {fileID: 1899577080576674, guid: 0290d3a6b4a471244a4e1947028f52a5,
+      type: 2}
+    isWalkable: 1
+  - name: Fire
+    tileVisualPrefab: {fileID: 1692560670680642, guid: 65b50fd75561fdb45a89cbf18ba3ed71,
+      type: 2}
+    isWalkable: 1
+  wallTypes:
+  - name: horizontal
+    wallVisualPrefab: {fileID: 1481323579043098, guid: 485fefd6c39714a95933ba00a7ba5fc4,
+      type: 2}
+  - name: vertical
+    wallVisualPrefab: {fileID: 1730225405979292, guid: fc0147655d64b40b2bd170fd75fa41ed,
+      type: 2}
+  - name: horizontal_broken
+    wallVisualPrefab: {fileID: 1560110503990988, guid: d851a5f6310e84d578ddfdadf58dcf2a,
+      type: 2}
+  - name: vertical_broken
+    wallVisualPrefab: {fileID: 1707290558386096, guid: 71dacbf7fa1784710bdfc8b1426699f3,
+      type: 2}
 --- !u!4 &2108558123
 Transform:
   m_ObjectHideFlags: 0

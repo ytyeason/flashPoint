@@ -8,9 +8,6 @@ using System;
 
 public class Game {
     
-    private Dictionary<String, Fireman> fireman_manager = new Dictionary<string, Fireman>();
-    
-    private Dictionary<String, GamePlayer> player_manager = new Dictionary<string, GamePlayer>();
     
     private ArrayList VictimManager = new ArrayList();
     
@@ -38,6 +35,8 @@ public class Game {
         this.level = level;
         this.participants = participants;
         
+        /*
+        
         Debug.Log("new Game created!");
         Fireman f1 = new Fireman("f1",Colors.Blue);
         Fireman f2 = new Fireman("f2", Colors.Red);
@@ -50,6 +49,8 @@ public class Game {
         GamePlayer p1 = new GamePlayer("p1" ,"666", PlayerStatus.Available, f1);
         GamePlayer p2 = new GamePlayer("p2" ,"666", PlayerStatus.Available, f2);
         GamePlayer p3 = new GamePlayer("p3" ,"666", PlayerStatus.Available, f3);
+        
+        */
     }
 
     public Dictionary<String,Fireman> getFiremanManager()
