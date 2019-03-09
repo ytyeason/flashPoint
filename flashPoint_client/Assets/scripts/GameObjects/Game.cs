@@ -36,9 +36,9 @@ public class Game {
         this.level = level;
         
         Debug.Log("new Game created!");
-        Fireman f1 = new Fireman("f1",Colors.Blue);
-        Fireman f2 = new Fireman("f2", Colors.Red);
-        Fireman f3 = new Fireman("f3",Colors.Yellow);
+        Fireman f1 = new Fireman("f1",Colors.Blue, this, 0, 0);
+        Fireman f2 = new Fireman("f2", Colors.Red, this, 0, 1);
+        Fireman f3 = new Fireman("f3",Colors.Yellow, this, 0, 2);
 
         fireman_manager["f1"] = f1;
         fireman_manager["f2"] = f2;
@@ -58,8 +58,12 @@ public class Game {
     {
         return player_manager;
     }
-    
-    //todo: a lot of methods left to be added in M5
+
+	public Dictionary<int, Space> getSpaceManager()
+	{
+		return SpaceManager;
+	}
+	//todo: a lot of methods left to be added in M5
 
 
 }

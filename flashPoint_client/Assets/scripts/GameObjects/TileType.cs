@@ -10,5 +10,6 @@ public class TileType {
 	// Will be used to figure out what material (specifically which 'prefab') will be used in-game
 	public GameObject tileVisualPrefab;
     public bool isWalkable = true;
+	public SpaceStatus spStat = SpaceStatus.Safe;		// Default
 
 }

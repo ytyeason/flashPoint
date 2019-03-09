@@ -12,6 +12,7 @@ public class Space
     
     private Dictionary<int, Wall> WallList = new Dictionary<int, Wall>();
     private Dictionary<int, Door> DoorList = new Dictionary<int, Door>();
+	private List<Space> neighbours = new List<Space>();
 
     public Space(int id, SpaceKind kind, int x, int y, SpaceStatus status)
     {
@@ -21,8 +22,12 @@ public class Space
         this.yPOS = y;
         this.status = status;
     }
-    
-    //more method in M5 to be added
-    
-    
+
+	public void addNeighbours(List<Space> in_neighbours){
+		neighbours = in_neighbours;
+	}
+
+	//more method in M5 to be added
+
+
 }

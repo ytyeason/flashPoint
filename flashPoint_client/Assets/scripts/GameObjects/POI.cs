@@ -1,7 +1,8 @@
 ﻿
 public class POI : GameUnit
 {
-    public POIStatus kind;
+    public POIStatus stat;
+	public POIKind type;
 
     public POI()
     {
