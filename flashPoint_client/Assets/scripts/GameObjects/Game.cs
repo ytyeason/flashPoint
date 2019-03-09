@@ -8,6 +8,9 @@ using System;
 
 public class Game {
     
+    private Dictionary<String, Fireman> fireman_manager = new Dictionary<string, Fireman>();
+    
+    private Dictionary<String, GamePlayer> player_manager = new Dictionary<string, GamePlayer>();
     
     private ArrayList VictimManager = new ArrayList();
     
