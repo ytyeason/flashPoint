@@ -20,7 +20,7 @@ public class GameManager: MonoBehaviour
 
     public WallManager wallManager;
     private TileMap tileMap;
-    private Fireman fireman;
+    public Fireman fireman;
     
     void Start()
     {

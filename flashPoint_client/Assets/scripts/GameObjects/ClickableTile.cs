@@ -9,7 +9,6 @@ public class ClickableTile : MonoBehaviour {
 	public int tileZ;
 	public TileMap map;
 	public TileType type;
-	public SpaceStatus spaceState = SpaceStatus.Safe;
 
 	// Occurs when we click the mouse:
 	void OnMouseUp() {
@@ -19,13 +18,19 @@ public class ClickableTile : MonoBehaviour {
         int x = tileX / 5;
 		int z = tileZ / 5;
 
-        if (map.tiles[x,z]==1)
+        if (map.tiles[x,z]!=0)
 		{
-			map.buildNewTile(x,z,0);
+			// Extinguish the fire or smoke:
+			int result = map.selectedUnit.extinguishFire(map.tiles[x, z]);
+			if( result == -1)
+				Debug.Log("Not enough AP to extinguish the fire");
+			else
+				map.buildNewTile(x, z, result);
 		}
 		else
 		{
-			map.MoveSelectedUnitTo(tileX, tileZ);
+			// Move to selected tile (only if tile is normal)
+			map.MoveSelectedUnitTo(tileX, tileZ, 0);
 		}
 	
 		

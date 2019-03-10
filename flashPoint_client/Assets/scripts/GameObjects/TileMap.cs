@@ -18,9 +18,9 @@ public class TileMap  {
 	//public Unit selectedUnit;
 	
 	public Dictionary<int[],GameObject> tileStores = new Dictionary<int[], GameObject>();
+	//public Dictionary<int[], ClickableTile> clickTileStores = new Dictionary<int[], ClickableTile>();
 
-
-    public string[] strings;
+	public string[] strings;
 	// Array of possible tiles:
 	public TileType[] tileTypes;
 	public GameManager gm;
@@ -56,7 +56,10 @@ public class TileMap  {
 		// Initialize our map tiles to be normal or fire
 		for(int x = 0; x < mapSizeX; x++) {
 			for(int z = 0; z < mapSizeZ; z++) {
-				tiles[x,z] = 1;
+				/*
+				if (x == 1 && z == 1) tiles[x, z] = 1;		// One as 'Smoke' for testing
+				else //*/ 
+					tiles[x,z] = 2;						// 2 -> code for Fire
 			}
 		}
 
@@ -82,6 +85,7 @@ public class TileMap  {
 				p[0] = x;
 				p[1] = z;
 				tileStores[p] = go;
+				//clickTileStores[p] = ct;
 			}
 		}
 	}
@@ -121,21 +125,22 @@ public class TileMap  {
 				ct.tileX = x*5;
 				ct.tileZ = z*5;
 				ct.map = this;
-				ct.type = tt;
+				ct.type = tt;	// Change type to reflect new state
+				
+				//Debug.Log("(DEBUG) TileMap.buildNewTile(" + x + ", " + z + ")'s spaceState is: " + ct.spaceState);
 
+				// Store appropriate GameObjects into their respective dictionaries
 				tileStores[key] = go;
-				
-				
-				
+				//clickTileStores[key] = ct;
 			}
 		}
 		
 	}
 	
-    public void MoveSelectedUnitTo(int x, int z) {
+    public void MoveSelectedUnitTo(int x, int z, int in_status ) {
 		//selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
 
 		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
-		selectedUnit.move(x, z);
+		selectedUnit.tryMove(x, z, in_status);
 	}
 }
