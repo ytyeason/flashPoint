@@ -21,13 +21,15 @@ public class GameManager: MonoBehaviour
 
     public WallManager wallManager;
     private TileMap tileMap;
-    private Fireman fireman;
 
     private JSONObject room;
     private JSONObject participants;
     private String level;
     private String numberOfPlayer;
     private Dictionary<String, JSONObject> players = new Dictionary<string, JSONObject>();
+
+    public Fireman fireman;
+
     
     void Start()
     {

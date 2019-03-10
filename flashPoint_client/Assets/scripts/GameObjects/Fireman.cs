@@ -12,14 +12,17 @@ public class Fireman
 
 	public int currentX;
 	public int currentZ;
+	public Boolean debugMode = true;		// Toggle this for more descriptive Debug.Log() output
 
     public String name = "eason";
 
     public Colors color = Colors.White;//default to white
 
-    public int AP = 4;//whatever the initial value is
+    public int AP = 5;//whatever the initial value is
 
-    public int FreeAP = 4;
+    public int FreeAP = 10;
+
+	public Boolean carryingVictim = false;
 
     public Fireman(String name, Colors color, GameObject s, int in_x, int in_z, int AP)
     {
@@ -37,26 +40,80 @@ public class Fireman
         AP = ap;
     }
 
-    public void move(int x, int z)
-    {
-		// Debug:
-		/*
-		Debug.Log("Input: " + x + ", " + z);
-		Debug.Log("selectedUnit: " + currentX + ", " + currentZ);
-		*/
+	// Pre-condition via ClickableTiles: in_status != 0
+	public int extinguishFire(int in_status)
+	{
+		if (debugMode) Debug.Log("Running extuinguishFire(" + in_status + ")");
 
-		if( FreeAP > 0) {
+		// AP check
+		if (FreeAP < 1)
+		{
+			if (debugMode) Debug.Log("AP unchanged: " + FreeAP);
+			return -1;
+		}
+		else // Fire -> Smoke || Smoke -> Normal: 1 AP
+		{
+			FreeAP -= 1;
+			if (debugMode) Debug.Log("Changed extFire: AP is now: " + FreeAP);
+			return (in_status - 1);
+		}
+	}
+
+	public Boolean chopWall()
+	{
+		if (FreeAP >= 2)
+		{
+			FreeAP -= 2;
+			if (debugMode) Debug.Log("AP is now: " + FreeAP);
+			return true;
+		}
+		else
+		{
+			Debug.Log("No AP left to chop the Wall!");
+			return false;
+		}
+	}
+
+	public void tryMove(int x, int z, int in_status)//int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
+    {
+		// FreeAP must be positive
+		if ( FreeAP > 0) {
+			// Validate tile
 			if (x >= 0 && z >= 0)
 			{
 				if (x == currentX - 5 || x == currentX + 5 || x == currentX)
 				{
 					if (z == currentZ - 5 || z == currentZ + 5 || z == currentZ)
 					{
-						FreeAP--;
-						Debug.Log("AP is now: " + FreeAP);
-						currentX = x;
-						currentZ = z;
-						s.transform.position = new Vector3(x, 0.2f, z);
+						//ClickableTile cur_ct = ct_table[ct_key];
+						//Debug.Log("(DEBUG) tryMove(" + x + ", " + z + ")'s spaceState is: " + in_status);
+
+
+						// Now that chosen ClickableTile is valid, check AP constraints:
+						if ( in_status != 2 && FreeAP >= 1 && !carryingVictim) // Safe
+						{
+							FreeAP--;
+							String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
+							Debug.Log("AP is now: " + FreeAP + condition);
+							move(x, z);
+						}
+						else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
+						{
+							FreeAP-=2;
+							String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
+							Debug.Log("AP is now: " + FreeAP + condition);
+							move(x, z);
+						}
+						else if (in_status != 2 && carryingVictim && FreeAP >= 2)
+						{
+							FreeAP -= 2;
+							String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
+							Debug.Log("AP is now: " + FreeAP + condition);
+							move(x, z);
+						}
+						else{
+							Debug.Log("Need more than " + FreeAP + " to move to target tile (" + x + ", " + z +")");
+						}
 					}
 					else
 						Debug.Log("MoveSelectedUnitTo(z): Fireman can move at most one z-unit at a time.");
@@ -75,5 +132,14 @@ public class Fireman
 		}
 	}
 
-        
+	// Once move is validated the following, unconditionally succesful, move is called
+	public void move(int x, int z)
+	{
+		currentX = x;
+		currentZ = z;
+		s.transform.position = new Vector3(x, 0.2f, z);
+	}
+
+
+
 }

@@ -50,75 +50,74 @@ public class WallManager
     public void BreakWall(int x, int z, int type, int horizontal)
     {
 
-        if (horizontal == 1)//we're breaking a hwall
-        {
-            List<int[]> keyList = new List<int[]>(hwallStores.Keys);
+		if( gm.fireman.chopWall() )
+		{
+			if (horizontal == 1)//we're breaking a hwall
+			{
+				List<int[]> keyList = new List<int[]>(hwallStores.Keys);
 
-            foreach (var key in keyList)
-            {
-                if (key[0] == x && key[1] == z)
-                {
-                    
-                   // Debug.Log("Breaking the wall");
-                    
-                    GameObject old = hwallStores[key];                 
-                    //Destroy(old);
-                    gm.DestroyObject(old);
-                    
-                    WallType wt = wallTypes[type];
-                    //GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5, 0, z * 5-2), Quaternion.identity);
-                    GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x * 5, 0, z * 5-2), Quaternion.identity);       
-                    
-                    Wall w = objectW.GetComponent<Wall>();
-                    w.x = x * 5;
-                    w.z = z * 5;
-                    w.type = type;
-                    w.wallMap = this;
-                
-                    int[] k = new int[2];
-                    k[0] = x;
-                    k[1] = z;
-                    hwallStores[k] = objectW;
-                    
-                }
-            }
-        }
-        else
-        {
-            List<int[]> keyList = new List<int[]>(vwallStores.Keys);
+				foreach (var key in keyList)
+				{
+					if (key[0] == x && key[1] == z)
+					{
+						Debug.Log("Breaking the wall");
 
-            foreach (var key in keyList)
-            {
-                if (key[0] == x && key[1] == z)
-                {
-                    
-                    //Debug.Log("Breaking the wall");
-                    
-                    GameObject old = vwallStores[key];                 
-                    //Destroy(old);
-                    gm.DestroyObject(old);
-                    
-                    WallType wt = wallTypes[type];
-                    //GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5-2, 0, z * 5), Quaternion.Euler(0,90,0));
-                    GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x * 5-2, 0, z * 5), Quaternion.Euler(0,90,0)); 
-                    
-                    Wall w = objectW.GetComponent<Wall>();
-                    w.x = x * 5;
-                    w.z = z * 5;
-                    w.type = type;
-                    w.wallMap = this;
-                
-                    int[] k = new int[2];
-                    k[0] = x;
-                    k[1] = z;
-                    vwallStores[k] = objectW;
-                    
-                }
-            }
-        }
+						GameObject old = hwallStores[key];
+						//Destroy(old);
+						gm.DestroyObject(old);
 
-        
-    }
+						WallType wt = wallTypes[type];
+						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5, 0, z * 5-2), Quaternion.identity);
+						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x * 5, 0, z * 5 - 2), Quaternion.identity);
+
+						Wall w = objectW.GetComponent<Wall>();
+						w.x = x * 5;
+						w.z = z * 5;
+						w.type = type;
+						w.wallMap = this;
+
+						int[] k = new int[2];
+						k[0] = x;
+						k[1] = z;
+						hwallStores[k] = objectW;
+					}
+				}
+			}
+			else
+			{
+				List<int[]> keyList = new List<int[]>(vwallStores.Keys);
+
+				foreach (var key in keyList)
+				{
+					if (key[0] == x && key[1] == z)
+					{
+
+						Debug.Log("Breaking the wall");
+
+						GameObject old = vwallStores[key];
+						//Destroy(old);
+						gm.DestroyObject(old);
+
+						WallType wt = wallTypes[type];
+						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5-2, 0, z * 5), Quaternion.Euler(0,90,0));
+						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x * 5 - 2, 0, z * 5), Quaternion.Euler(0, 90, 0));
+
+						Wall w = objectW.GetComponent<Wall>();
+						w.x = x * 5;
+						w.z = z * 5;
+						w.type = type;
+						w.wallMap = this;
+
+						int[] k = new int[2];
+						k[0] = x;
+						k[1] = z;
+						vwallStores[k] = objectW;
+
+					}
+				}
+			}
+		}
+
 
     void GenerateMapVisual() {
         
