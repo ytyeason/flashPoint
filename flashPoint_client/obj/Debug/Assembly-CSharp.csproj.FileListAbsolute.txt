@@ -253,3 +253,7 @@
 /Users/yunxichen/flashPoint/flashPoint_client/obj/Debug/Assembly-CSharp.csproj.CopyComplete
 /Users/yunxichen/flashPoint/flashPoint_client/obj/Debug/Assembly-CSharp.dll
 /Users/yunxichen/flashPoint/flashPoint_client/obj/Debug/Assembly-CSharp.pdb
+/Users/eason/Desktop/flashPoint/flashPoint_client/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache
+/Users/eason/Desktop/flashPoint/flashPoint_client/obj/Debug/Assembly-CSharp.csproj.CoreCompileInputs.cache
+/Users/eason/Desktop/flashPoint/flashPoint_client/obj/Debug/Assembly-CSharp.dll
+/Users/eason/Desktop/flashPoint/flashPoint_client/obj/Debug/Assembly-CSharp.pdb
