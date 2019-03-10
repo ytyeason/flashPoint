@@ -24,32 +24,62 @@ public class GameManager: MonoBehaviour
     private Fireman fireman;
 
     private JSONObject room;
-    private String participants;
-    private JSONObject level;
-    private JSONObject numberOfPlayer;
+    private JSONObject participants;
+    private String level;
+    private String numberOfPlayer;
+    private Dictionary<String, JSONObject> players = new Dictionary<string, JSONObject>();
     
     void Start()
     {
         if (game_info != null) 
         {
             room = game_info[StaticInfo.roomNumber];
-            participants = room["participants"].ToString();
-            participants = participants.Substring(1, participants.Length - 2);//remove [ and ]
-            level = room["level"];
-            numberOfPlayer = room["numberOfPlayer"];
-            List<string> p = participants.Split(',').ToList();
+            participants = room["participants"];
+            level = room["level"].ToString();
+            numberOfPlayer = room["numberOfPlayer"].ToString();
+
+            List<string> p = participants.keys;
             foreach (var v in p)
             {
-                Debug.Log(v.Substring(1, v.Length - 2));
+                //Debug.Log(participants[v]);
+                var o = participants[v];
+                players[v] = o;
+                Debug.Log(players[v]);
             }
-
         }
-        /*
-        fireman = new Fireman("eason", Colors.Blue, firemanObject);
+
+        fireman = initializeFireman();
         wallManager = new WallManager(wallTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
-        */
 
+
+    }
+
+    public Fireman initializeFireman()
+    {
+        var location = players[StaticInfo.name]["Location"].ToString();
+        location = location.Substring(1, location.Length - 2);
+        Debug.Log(location);
+        if (location.Equals("Top"))
+        {
+            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 25, 35, ap);
+        }
+        else if (location.Equals("Left"))
+        {
+            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 0, 15, ap);
+        }
+        else if (location.Equals("Right"))
+        {
+            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 45, 15, ap);
+        }
+        else
+        {
+            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 25, 0, ap);
+        }
     }
 
     public GameObject instantiateObject(GameObject w, Vector3 v, Quaternion q)

@@ -18,6 +18,7 @@ public class RoomManager : MonoBehaviour {
         StartCoroutine(ConnectToServer());
         socket.On("USER_CONNECTED", OnUserConnected );
         socket.On("startGame_SUCCESS", startGame_SUCCESS );
+        socket.On("LocationSetUp_SUCCESS", LocationSetUp_SUCCESS);
 
     }
 
@@ -27,6 +28,11 @@ public class RoomManager : MonoBehaviour {
         Debug.Log(obj.data);
         StaticInfo.game_info = obj.data;
         SceneManager.LoadScene("FlashpointUIDemo");
+    }
+
+    void LocationSetUp_SUCCESS(SocketIOEvent obj)
+    {
+        Debug.Log("set Location successful");
     }
 
     IEnumerator ConnectToServer()
@@ -52,6 +58,54 @@ public class RoomManager : MonoBehaviour {
         startGame["name"] = StaticInfo.name;
         
         socket.Emit("startGame",new JSONObject(startGame));
+    }
+
+    public void RightClicked()
+    {
+        Debug.Log("Right Clicked");
+        StaticInfo.Location = "Right";
+        Dictionary<String, String> Right = new Dictionary<string, string>();
+        Right["room"] = StaticInfo.roomNumber;
+        Right["name"] = StaticInfo.name;
+        Right["Location"] = StaticInfo.Location;
+
+        socket.Emit("Location", new JSONObject(Right));
+    }
+
+    public void LeftClicked()
+    {
+        Debug.Log("Left Clicked");
+        StaticInfo.Location = "Left";
+        Dictionary<String, String> Left = new Dictionary<string, string>();
+        Left["room"] = StaticInfo.roomNumber;
+        Left["name"] = StaticInfo.name;
+        Left["Location"] = StaticInfo.Location;
+
+        socket.Emit("Location", new JSONObject(Left));
+    }
+
+    public void TopClicked()
+    {
+        Debug.Log("Top Clicked");
+        StaticInfo.Location = "Top";
+        Dictionary<String, String> Top = new Dictionary<string, string>();
+        Top["room"] = StaticInfo.roomNumber;
+        Top["name"] = StaticInfo.name;
+        Top["Location"] = StaticInfo.Location;
+
+        socket.Emit("Location", new JSONObject(Top));
+    }
+
+    public void BottomClicked()
+    {
+        Debug.Log("Bottom Clicked");
+        StaticInfo.Location = "Bottom";
+        Dictionary<String, String> Bottom = new Dictionary<string, string>();
+        Bottom["room"] = StaticInfo.roomNumber;
+        Bottom["name"] = StaticInfo.name;
+        Bottom["Location"] = StaticInfo.Location;
+
+        socket.Emit("Location", new JSONObject(Bottom));
     }
 
 }

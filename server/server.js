@@ -39,7 +39,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
       console.log(data);
       console.log(Games[data['room']]["participants"]);
       if(Games[data['room']]!=undefined){
-        Games[data['room']]["participants"].push(data['name']);
+
+        var name = data['name'];
+        Games[data['room']]["participants"][name]={"Location": "Top", "AP":5};
         console.log(Games);
         socket.emit('LOAD_ROOM_SUCCESS',{status: "True"} );
       }
@@ -48,7 +50,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on('CREATE_ROOM', function(data){
 
       var room_number = data['room'];
-      Games[room_number] = {"participants": [data['name']], "Owner": data['name']}//participants need to be changed to a list
+      var name = data['name'];
+      Games[room_number] = {"participants":  {[name] :{"Location": "Top", "AP":5}} , "Owner": data['name']}//participants need to be changed to a list
       console.log(Games);
       socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
     });
@@ -106,6 +109,17 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(currentUser.name+" Move to "+currentUser.position);
 
 
+    });
+
+    socket.on('Location', function (data) {
+        var room_number = data['room'];
+        var Location = data['Location'];
+        var name = data['name'];
+
+        var participants = Games[room_number]["participants"];
+        participants[name]["Location"] = Location;
+        console.log(Games[room_number]);
+        socket.emit('LocationSetUp_SUCCESS',{status: "True"} );
     });
 
 

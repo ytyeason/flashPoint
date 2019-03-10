@@ -21,13 +21,15 @@ public class Fireman
 
     public int FreeAP = 4;
 
-    public Fireman(String name, Colors color, GameObject s, int in_x, int in_z)
+    public Fireman(String name, Colors color, GameObject s, int in_x, int in_z, int AP)
     {
         this.name = name;
         this.color = color;
         this.s = s;
 		this.currentX = in_x;
 		this.currentZ = in_z;
+        this.AP = AP;
+        this.FreeAP = AP;
     }
 
     public void setAP(int ap)

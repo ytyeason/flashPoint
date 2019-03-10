@@ -93,7 +93,8 @@ public class TileMap  {
 			//GameObject go = (GameObject) Instantiate( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
 			GameObject go = gm.instantiateObject( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
 		}
-	}
+        selectedUnit.move(selectedUnit.currentX, selectedUnit.currentZ);
+    }
 
 	public void buildNewTile(int x, int z, int type)
 	{
