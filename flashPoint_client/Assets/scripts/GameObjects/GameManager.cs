@@ -44,12 +44,12 @@ public class GameManager: MonoBehaviour
             }
 
         }
+        /*
         fireman = new Fireman("eason", Colors.Blue, firemanObject);
         wallManager = new WallManager(wallTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
-        
-        
-        
+        */
+
     }
 
     public GameObject instantiateObject(GameObject w, Vector3 v, Quaternion q)

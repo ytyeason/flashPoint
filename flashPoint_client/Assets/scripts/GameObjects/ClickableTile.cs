@@ -9,6 +9,7 @@ public class ClickableTile : MonoBehaviour {
 	public int tileZ;
 	public TileMap map;
 	public TileType type;
+	public SpaceStatus spaceState = SpaceStatus.Safe;
 
 	// Occurs when we click the mouse:
 	void OnMouseUp() {
