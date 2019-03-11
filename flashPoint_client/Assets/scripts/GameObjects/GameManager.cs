@@ -50,7 +50,7 @@ public class GameManager: MonoBehaviour
                 //Debug.Log(participants[v]);
                 var o = participants[v];
                 players[v] = o;
-                Debug.Log(players[v]);
+                //Debug.Log(players[v]);
             }
         }
 
@@ -58,11 +58,31 @@ public class GameManager: MonoBehaviour
         wallManager = new WallManager(wallTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
 
+        tileMap.GenerateFiremanVisual(players);
+        registerNewFireman(fireman);
+
     }
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
     {
         Debug.Log("Location update successful");
+
+        //update with latest objects
+        room = obj.data[StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            Debug.Log(v);
+            Debug.Log(players[v]);
+        }
+        tileMap.UpdateFiremanVisual(players);
+        
     }
 
     IEnumerator ConnectToServer()
@@ -79,14 +99,21 @@ public class GameManager: MonoBehaviour
     {
         var location = players[StaticInfo.name]["Location"].ToString();
         location = location.Substring(1, location.Length - 2);
-        Debug.Log(location);
+        //Debug.Log(location);
         var cord = location.Split(',');
         int x = Convert.ToInt32(cord[0]);
         int z = Convert.ToInt32(cord[1]);
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-        return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, x, z, ap, this);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, x, z, ap, this);
 
+        return f;
+    }
+
+    public void registerNewFireman(Fireman f)
+    {
+        Debug.Log("let other user know a new fireman has been created");
+        UpdateLocation(f.currentX, f.currentZ);//let other user know a new fireman has been created
     }
 
     public GameObject instantiateObject(GameObject w, Vector3 v, Quaternion q)

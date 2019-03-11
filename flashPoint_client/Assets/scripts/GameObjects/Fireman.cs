@@ -12,7 +12,7 @@ public class Fireman
 
 	public int currentX;
 	public int currentZ;
-	public Boolean debugMode = true;		// Toggle this for more descriptive Debug.Log() output
+	public Boolean debugMode = false;		// Toggle this for more descriptive Debug.Log() output
 
     public String name = "eason";
 
@@ -72,7 +72,7 @@ public class Fireman
 		}
 		else
 		{
-			Debug.Log("No AP left to chop the Wall!");
+			//Debug.Log("No AP left to chop the Wall!");
 			return false;
 		}
 	}
@@ -86,55 +86,61 @@ public class Fireman
 			{
 				if (x == currentX - 5 || x == currentX + 5 || x == currentX)
 				{
-					if (z == currentZ - 5 || z == currentZ + 5 || z == currentZ)
-					{
-						//ClickableTile cur_ct = ct_table[ct_key];
-						//Debug.Log("(DEBUG) tryMove(" + x + ", " + z + ")'s spaceState is: " + in_status);
+                    if (z == currentZ - 5 || z == currentZ + 5 || z == currentZ)
+                    {
+                        //ClickableTile cur_ct = ct_table[ct_key];
+                        //Debug.Log("(DEBUG) tryMove(" + x + ", " + z + ")'s spaceState is: " + in_status);
 
 
-						// Now that chosen ClickableTile is valid, check AP constraints:
-						if ( in_status != 2 && FreeAP >= 1 && !carryingVictim) // Safe
-						{
-							FreeAP--;
-							String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
-							Debug.Log("AP is now: " + FreeAP + condition);
-							move(x, z);
-                            gm.UpdateLocation(x,z);
-						}
-						else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
-						{
-							FreeAP-=2;
-							String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
-							Debug.Log("AP is now: " + FreeAP + condition);
-							move(x, z);
-                            gm.UpdateLocation(x,z);
+                        // Now that chosen ClickableTile is valid, check AP constraints:
+                        if (in_status != 2 && FreeAP >= 1 && !carryingVictim) // Safe
+                        {
+                            FreeAP--;
+                            String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
+                            //Debug.Log("AP is now: " + FreeAP + condition);
+                            move(x, z);
+                            gm.UpdateLocation(x, z);
                         }
-						else if (in_status != 2 && carryingVictim && FreeAP >= 2)
-						{
-							FreeAP -= 2;
-							String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
-							Debug.Log("AP is now: " + FreeAP + condition);
-							move(x, z);
-                            gm.UpdateLocation(x,z);
+                        else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
+                        {
+                            FreeAP -= 2;
+                            String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
+                            //Debug.Log("AP is now: " + FreeAP + condition);
+                            move(x, z);
+                            gm.UpdateLocation(x, z);
                         }
-						else{
-							Debug.Log("Need more than " + FreeAP + " to move to target tile (" + x + ", " + z +")");
-						}
-					}
-					else
-						Debug.Log("MoveSelectedUnitTo(z): Fireman can move at most one z-unit at a time.");
-				}
-				else
-					Debug.Log("MoveSelectedUnitTo(x): Fireman can move at most one x-unit at a time.");
-			}
+                        else if (in_status != 2 && carryingVictim && FreeAP >= 2)
+                        {
+                            FreeAP -= 2;
+                            String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
+                            //Debug.Log("AP is now: " + FreeAP + condition);
+                            move(x, z);
+                            gm.UpdateLocation(x, z);
+                        }
+                        else
+                        {
+                            //Debug.Log("Need more than " + FreeAP + " to move to target tile (" + x + ", " + z +")");
+                        }
+                    }
+                    else
+                    {
+                        //Debug.Log("MoveSelectedUnitTo(z): Fireman can move at most one z-unit at a time.");
+                    }
+                }
+                else
+                {
+                    //Debug.Log("MoveSelectedUnitTo(x): Fireman can move at most one x-unit at a time.");
+
+                }
+            }
 			else
 			{
-				Debug.Log("MoveSelectedUnitTo(" + x + ", " + z + "): x & z have to be non-negative.");
+				//Debug.Log("MoveSelectedUnitTo(" + x + ", " + z + "): x & z have to be non-negative.");
 			}
 		}
 		else
 		{
-			Debug.Log("Fireman.move(" + x + ", " + z + "): FreeAP must be positive to move.");
+			//Debug.Log("Fireman.move(" + x + ", " + z + "): FreeAP must be positive to move.");
 		}
 	}
 

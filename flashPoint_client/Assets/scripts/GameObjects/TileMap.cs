@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+using System.Text.RegularExpressions;
+using SocketIO;
+using System;
+
 
 public class TileMap  {
 
@@ -18,7 +22,8 @@ public class TileMap  {
 	//public Unit selectedUnit;
 	
 	public Dictionary<int[],GameObject> tileStores = new Dictionary<int[], GameObject>();
-	//public Dictionary<int[], ClickableTile> clickTileStores = new Dictionary<int[], ClickableTile>();
+    //public Dictionary<int[], ClickableTile> clickTileStores = new Dictionary<int[], ClickableTile>();
+    public Dictionary<String, GameObject> firemanSores = new Dictionary<string, GameObject>();
 
 	public string[] strings;
 	// Array of possible tiles:
@@ -36,7 +41,6 @@ public class TileMap  {
 		// Display them in the game world
 		GenerateMapVisual();
 
-		GenerateFiremanVisual();
 	}
 
 	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit)
@@ -90,19 +94,65 @@ public class TileMap  {
 		}
 	}
 
-	void GenerateFiremanVisual()
+	public void GenerateFiremanVisual(Dictionary<String, JSONObject> players)
 	{
-		for (int x = 0; x < 4; x++)
-		{
-			//GameObject go = (GameObject) Instantiate( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
-			GameObject go = gm.instantiateObject( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
-		}
+        //Debug.Log("in GenerateFiremanVisual");
+        List<String> names = new List<string>(players.Keys);
+        foreach(var name in names)
+        {
+            //Debug.Log("ppppppppppppppp: "+name);
+            if (!name.Equals(StaticInfo.name))
+            {
+                var location = players[name]["Location"].ToString();
+                location = location.Substring(1, location.Length - 2);
+                var cord = location.Split(',');
+                int x = Convert.ToInt32(cord[0]);
+                int z = Convert.ToInt32(cord[1]);
+                GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x, 0, z), Quaternion.identity);
+                firemanSores[name] = go;
+            }
+        }
+        firemanSores[StaticInfo.name] = selectedUnit.s;
+
         selectedUnit.move(selectedUnit.currentX, selectedUnit.currentZ);
     }
 
-	public void buildNewTile(int x, int z, int type)
+    public void UpdateFiremanVisual(Dictionary<String, JSONObject> p)
+    {
+        Debug.Log("In update fireman visual");
+        List<String> names = new List<string>(p.Keys);
+        foreach (var name in names)
+        {
+            Debug.Log("updating fireman : " + name);
+
+            var location = p[name]["Location"].ToString();
+            location = location.Substring(1, location.Length - 2);
+            var cord = location.Split(',');
+            int x = Convert.ToInt32(cord[0]);
+            int z = Convert.ToInt32(cord[1]);
+
+
+            if (firemanSores.ContainsKey(name))
+            {
+                var f = firemanSores[name];
+                f.transform.position = new Vector3(x, 0.2f, z);
+                firemanSores[name] = f;
+            }
+            else
+            {
+                Debug.Log("Register new fireman in firemanStore");
+                GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x, 0, z), Quaternion.identity);
+                firemanSores[name] = go;
+            }
+
+           
+
+        }
+    }
+
+    public void buildNewTile(int x, int z, int type)
 	{
-		Debug.Log(tileStores.Keys);
+		//Debug.Log(tileStores.Keys);
 		
 		List<int[]> keyList = new List<int[]>(tileStores.Keys);
 
@@ -114,7 +164,7 @@ public class TileMap  {
 				//Destroy(old);
 				gm.DestroyObject(old);
 		
-				Debug.Log("Building new tile");
+				//Debug.Log("Building new tile");
 				tiles[x, z] = type;
 				TileType tt = tileTypes[ tiles[x,z] ];
 				//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );

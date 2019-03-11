@@ -139,7 +139,6 @@ d6644373a29f7539fce7c7b7990268dc Assembly-CSharp.dll:.GunShoot
 b152264b755ec819936a9a8967572c2e Assembly-CSharp.dll:.LobbyManager
 56a4dd72a972b95458ebf75afb224a57 Assembly-CSharp.dll:.DecalDestroyer
 379f2ce8c5013484aed181543b6877d4 Assembly-CSharp.dll:.JoyStickerController
-382b8ef512fa8d6108723a01b57af65b UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsEventTracker
 d22c788799ee45d8676254eccf20e8b8 UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
 350002622c79e1481e16ac72897d455c Assembly-CSharp.dll:.TiltWindow
 f58314b8bf8ddb9487ecf1dc187038a6 com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.PostProcessEffectSettings
@@ -210,7 +209,7 @@ b85727743a4bfba9a1cc52395d0cca61 Assembly-CSharp.dll:.ClickableTile
 2f48983e1e4572bcddd752423f7dbea2 Assembly-CSharp.dll:.ScrollDetailTexture
 e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
 c4a72730071176daa41a23296e1896bd Assembly-CSharp.dll:.Wall
-1528abc61081d2a60482a836a9a83774 Assembly-CSharp.dll:.GameManager
+7d6aefa736e045bf57337ba1c9c0ced7 Assembly-CSharp.dll:.GameManager
 2cd695620a4f2b3b74fd912c83d1e86c Assembly-CSharp.dll:.Player
 c1791db8df7a6d30dc3a3e487bced78b com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.PostProcessVolume
 7a1ff18e15d0a860ac99542974a3cbd5 com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.Grain
