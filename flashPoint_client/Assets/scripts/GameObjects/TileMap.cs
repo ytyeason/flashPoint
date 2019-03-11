@@ -158,9 +158,13 @@ public class TileMap  {
 
     public void buildNewTile(int x, int z, int type)
 	{
-		//Debug.Log(tileStores.Keys);
-		
-		List<int[]> keyList = new List<int[]>(tileStores.Keys);
+        //Debug.Log(tileStores.Keys);
+        Debug.Log("Building new tile");
+        Debug.Log(x);
+        Debug.Log(z);
+        Debug.Log(type);
+
+        List<int[]> keyList = new List<int[]>(tileStores.Keys);
 
 		foreach (var key in keyList)
 		{
@@ -191,6 +195,8 @@ public class TileMap  {
 				//clickTileStores[key] = ct;
 			}
 		}
+
+
 		
 	}
 	

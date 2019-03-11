@@ -24,8 +24,13 @@ public class ClickableTile : MonoBehaviour {
 			int result = map.selectedUnit.extinguishFire(map.tiles[x, z]);
 			if( result == -1)
 				Debug.Log("Not enough AP to extinguish the fire");
-			else
-				map.buildNewTile(x, z, result);
+            else
+            {
+                map.buildNewTile(x, z, result);
+                //broadcast new tile
+                map.gm.UpdateTile(x, z, result);
+            }
+           
 		}
 		else
 		{

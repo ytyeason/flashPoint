@@ -32,11 +32,12 @@ public class GameManager: MonoBehaviour
 
     public Fireman fireman;
 
-    
+
     void Start()
     {
         StartCoroutine(ConnectToServer());
         socket.On("LocationUpdate_SUCCESS", LocationUpdate_SUCCESS);
+        socket.On("TileUpdate_Success", TileUpdate_Success);
 
         if (game_info != null) 
         {
@@ -62,6 +63,21 @@ public class GameManager: MonoBehaviour
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
 
+    }
+
+    void TileUpdate_Success(SocketIOEvent obj)
+    {
+        Debug.Log("tile update successful");
+        var x = Convert.ToInt32(obj.data["x"].ToString());
+        var z = Convert.ToInt32(obj.data["z"].ToString());
+        var type = Convert.ToInt32(obj.data["type"].ToString());
+
+        Debug.Log(x);
+        Debug.Log(z);
+        Debug.Log(type);
+        Debug.Log(obj.data);
+
+        tileMap.buildNewTile(x,z,type);
     }
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
@@ -139,5 +155,16 @@ public class GameManager: MonoBehaviour
         update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
 
         socket.Emit("Location", new JSONObject(update));
+    }
+
+    public void UpdateTile(int x, int z, int type)
+    {
+        Debug.Log("Update tile");
+        Dictionary<String, string> updateTile = new Dictionary<string, string>();
+        updateTile["x"] = x.ToString();
+        updateTile["z"] = z.ToString();
+        updateTile["type"] = type.ToString();
+
+        socket.Emit("UpdateTile", new JSONObject(updateTile));
     }
 }
