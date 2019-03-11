@@ -65,7 +65,7 @@ public class GameManager: MonoBehaviour
         if (location.Equals("Top"))
         {
             int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 25, 35, ap);
+            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 0, 0, 1000000);
         }
         else if (location.Equals("Left"))
         {
