@@ -12,6 +12,7 @@ using System.Linq;
 
 public class GameManager: MonoBehaviour
 {
+    public SocketIOComponent socket;
     public GameObject firemanObject;
     public TileType[] tileTypes;
     public WallType[] wallTypes;
@@ -33,6 +34,9 @@ public class GameManager: MonoBehaviour
     
     void Start()
     {
+        StartCoroutine(ConnectToServer());
+        socket.On("LocationUpdate_SUCCESS", LocationUpdate_SUCCESS);
+
         if (game_info != null) 
         {
             room = game_info[StaticInfo.roomNumber];
@@ -54,6 +58,20 @@ public class GameManager: MonoBehaviour
         wallManager = new WallManager(wallTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
 
+    }
+
+    void LocationUpdate_SUCCESS(SocketIOEvent obj)
+    {
+        Debug.Log("Location update successful");
+    }
+
+    IEnumerator ConnectToServer()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        socket.Emit("USER_CONNECT");
+
+        yield return new WaitForSeconds(0.5f);
 
     }
 
@@ -62,26 +80,13 @@ public class GameManager: MonoBehaviour
         var location = players[StaticInfo.name]["Location"].ToString();
         location = location.Substring(1, location.Length - 2);
         Debug.Log(location);
-        if (location.Equals("Top"))
-        {
-            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 25, 35, ap);
-        }
-        else if (location.Equals("Left"))
-        {
-            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 0, 15, ap);
-        }
-        else if (location.Equals("Right"))
-        {
-            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 45, 15, ap);
-        }
-        else
-        {
-            int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-            return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, 25, 0, ap);
-        }
+        var cord = location.Split(',');
+        int x = Convert.ToInt32(cord[0]);
+        int z = Convert.ToInt32(cord[1]);
+
+        int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+        return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, x, z, ap, this);
+
     }
 
     public GameObject instantiateObject(GameObject w, Vector3 v, Quaternion q)
@@ -93,5 +98,17 @@ public class GameManager: MonoBehaviour
     public void DestroyObject(GameObject w)
     {
         Destroy(w);
+    }
+
+    public void UpdateLocation(int x, int z)
+    {
+        Debug.Log("Update Location");
+        StaticInfo.Location = new int[] { x, z };
+        Dictionary<String, String> update = new Dictionary<string, string>();
+        update["room"] = StaticInfo.roomNumber;
+        update["name"] = StaticInfo.name;
+        update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
+
+        socket.Emit("Location", new JSONObject(update));
     }
 }

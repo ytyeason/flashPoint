@@ -63,11 +63,11 @@ public class RoomManager : MonoBehaviour {
     public void RightClicked()
     {
         Debug.Log("Right Clicked");
-        StaticInfo.Location = "Right";
+        StaticInfo.Location = new int[] { 45, 15 };
         Dictionary<String, String> Right = new Dictionary<string, string>();
         Right["room"] = StaticInfo.roomNumber;
         Right["name"] = StaticInfo.name;
-        Right["Location"] = StaticInfo.Location;
+        Right["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
 
         socket.Emit("Location", new JSONObject(Right));
     }
@@ -75,11 +75,12 @@ public class RoomManager : MonoBehaviour {
     public void LeftClicked()
     {
         Debug.Log("Left Clicked");
-        StaticInfo.Location = "Left";
+        StaticInfo.Location = new int[] { 0, 15 }; 
         Dictionary<String, String> Left = new Dictionary<string, string>();
         Left["room"] = StaticInfo.roomNumber;
         Left["name"] = StaticInfo.name;
-        Left["Location"] = StaticInfo.Location;
+        Left["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
+        //Debug.Log(Left["Location"]);
 
         socket.Emit("Location", new JSONObject(Left));
     }
@@ -87,11 +88,11 @@ public class RoomManager : MonoBehaviour {
     public void TopClicked()
     {
         Debug.Log("Top Clicked");
-        StaticInfo.Location = "Top";
+        StaticInfo.Location = new int[] { 25, 35 };
         Dictionary<String, String> Top = new Dictionary<string, string>();
         Top["room"] = StaticInfo.roomNumber;
         Top["name"] = StaticInfo.name;
-        Top["Location"] = StaticInfo.Location;
+        Top["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
 
         socket.Emit("Location", new JSONObject(Top));
     }
@@ -99,11 +100,11 @@ public class RoomManager : MonoBehaviour {
     public void BottomClicked()
     {
         Debug.Log("Bottom Clicked");
-        StaticInfo.Location = "Bottom";
+        StaticInfo.Location = new int[] { 25, 0 };
         Dictionary<String, String> Bottom = new Dictionary<string, string>();
         Bottom["room"] = StaticInfo.roomNumber;
         Bottom["name"] = StaticInfo.name;
-        Bottom["Location"] = StaticInfo.Location;
+        Bottom["Location"] = StaticInfo.Location[0] + ","+StaticInfo.Location[1];
 
         socket.Emit("Location", new JSONObject(Bottom));
     }
