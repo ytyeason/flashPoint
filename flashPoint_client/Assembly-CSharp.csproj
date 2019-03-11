@@ -87,6 +87,7 @@
     <Compile Include="Assets\scripts\GameObjects\EdgeObstacle.cs" />
     <Compile Include="Assets\scripts\GameObjects\FalseAlarm.cs" />
     <Compile Include="Assets\scripts\GameObjects\Fireman.cs" />
+    <Compile Include="Assets\scripts\GameObjects\firemanplusvictim.cs" />
     <Compile Include="Assets\scripts\GameObjects\Game.cs" />
     <Compile Include="Assets\scripts\GameObjects\GameManager.cs" />
     <Compile Include="Assets\scripts\GameObjects\GamePlayer.cs" />

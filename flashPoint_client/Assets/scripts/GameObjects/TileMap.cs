@@ -33,6 +33,8 @@ public class TileMap  {
 	// Array populated by 
 	public int[,] tiles;
 
+    public GameObject gmo;
+
 
 	void StartTileMap() {
 
@@ -110,11 +112,15 @@ public class TileMap  {
                 int z = Convert.ToInt32(cord[1]);
                 GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x, 0, z), Quaternion.identity);
                 firemanSores[name] = go;
+                if (x == 5)
+                {
+                    gmo = go;
+                }
             }
         }
         firemanSores[StaticInfo.name] = selectedUnit.s;
 
-        selectedUnit.move(selectedUnit.currentX, selectedUnit.currentZ);
+        selectedUnit.move(selectedUnit.currentX, selectedUnit.currentZ,gmo);
     }
 
     public void UpdateFiremanVisual(Dictionary<String, JSONObject> p)
@@ -192,6 +198,6 @@ public class TileMap  {
 		//selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
 
 		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
-		selectedUnit.tryMove(x, z, in_status);
+		selectedUnit.tryMove(x, z, in_status,gmo);
 	}
 }

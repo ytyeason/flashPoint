@@ -77,7 +77,7 @@ public class Fireman
 		}
 	}
 
-	public void tryMove(int x, int z, int in_status)//int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
+	public void tryMove(int x, int z, int in_status,GameObject gmo)//int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
     {
 		// FreeAP must be positive
 		if ( FreeAP > 0) {
@@ -86,35 +86,43 @@ public class Fireman
 			{
 				if (x == currentX - 5 || x == currentX + 5 || x == currentX)
 				{
-                    if (z == currentZ - 5 || z == currentZ + 5 || z == currentZ)
-                    {
-                        //ClickableTile cur_ct = ct_table[ct_key];
-                        //Debug.Log("(DEBUG) tryMove(" + x + ", " + z + ")'s spaceState is: " + in_status);
+					if (z == currentZ - 5 || z == currentZ + 5 || z == currentZ)
+					{
+						//ClickableTile cur_ct = ct_table[ct_key];
+						//Debug.Log("(DEBUG) tryMove(" + x + ", " + z + ")'s spaceState is: " + in_status);
 
 
-                        // Now that chosen ClickableTile is valid, check AP constraints:
-                        if (in_status != 2 && FreeAP >= 1 && !carryingVictim) // Safe
-                        {
-                            FreeAP--;
-                            String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
-                            //Debug.Log("AP is now: " + FreeAP + condition);
-                            move(x, z);
-                            gm.UpdateLocation(x, z);
+						// Now that chosen ClickableTile is valid, check AP constraints:
+						if ( in_status != 2 && FreeAP >= 1 && !carryingVictim) // Safe
+						{
+							FreeAP--;
+							String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
+							Debug.Log("AP is now: " + FreeAP + condition);
+							move(x, z,gmo);
+                            gm.UpdateLocation(x,z);
+						}
+						else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
+						{
+							FreeAP-=2;
+							String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
+							Debug.Log("AP is now: " + FreeAP + condition);
+							move(x, z,gmo);
+                            gm.UpdateLocation(x,z);
                         }
-                        else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
-                        {
-                            FreeAP -= 2;
-                            String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
-                            //Debug.Log("AP is now: " + FreeAP + condition);
-                            move(x, z);
-                            gm.UpdateLocation(x, z);
+						else if (in_status != 2 && carryingVictim && FreeAP >= 2)
+						{
+							FreeAP -= 2;
+							String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
+							Debug.Log("AP is now: " + FreeAP + condition);
+							move(x, z,gmo);
+                            gm.UpdateLocation(x,z);
                         }
                         else if (in_status != 2 && carryingVictim && FreeAP >= 2)
                         {
                             FreeAP -= 2;
                             String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
                             //Debug.Log("AP is now: " + FreeAP + condition);
-                            move(x, z);
+                            move(x, z, gmo);
                             gm.UpdateLocation(x, z);
                         }
                         else
@@ -145,12 +153,19 @@ public class Fireman
 	}
 
 	// Once move is validated the following, unconditionally succesful, move is called
-	public void move(int x, int z)
+	public void move(int x, int z, GameObject gmo)
 	{
 		currentX = x;
 		currentZ = z;
 		s.transform.position = new Vector3(x, 0.2f, z);
-	}
+        if(x==5 && z == 5)
+        {
+            firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, s, currentX, currentZ);
+            GameManager gmm = new GameManager();
+            gmm.DestroyObject(gmo);
+            gmm.DestroyObject(gmm.firemanObject);
+        }
+    }
 
 
 

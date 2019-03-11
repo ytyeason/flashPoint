@@ -16,6 +16,7 @@ public class GameManager: MonoBehaviour
     public GameObject firemanObject;
     public TileType[] tileTypes;
     public WallType[] wallTypes;
+
     
     
     public JSONObject game_info = StaticInfo.game_info;
@@ -100,6 +101,7 @@ public class GameManager: MonoBehaviour
         var location = players[StaticInfo.name]["Location"].ToString();
         location = location.Substring(1, location.Length - 2);
         //Debug.Log(location);
+
         var cord = location.Split(',');
         int x = Convert.ToInt32(cord[0]);
         int z = Convert.ToInt32(cord[1]);
