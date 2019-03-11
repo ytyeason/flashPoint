@@ -68,16 +68,18 @@ public class GameManager: MonoBehaviour
     void TileUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("tile update successful");
-        var x = Convert.ToInt32(obj.data["x"].ToString());
-        var z = Convert.ToInt32(obj.data["z"].ToString());
-        var type = Convert.ToInt32(obj.data["type"].ToString());
+        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
 
-        Debug.Log(x);
-        Debug.Log(z);
-        Debug.Log(type);
-        Debug.Log(obj.data);
+        //Debug.Log(x);
+        //Debug.Log(z);
+        //Debug.Log(type);
+        Debug.Log(obj.data.ToDictionary()["x"]);
+        Debug.Log(obj.data.ToDictionary()["z"]);
+        Debug.Log(obj.data.ToDictionary()["type"]);
 
-        tileMap.buildNewTile(x,z,type);
+        tileMap.buildNewTile(x, z,type);
     }
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
