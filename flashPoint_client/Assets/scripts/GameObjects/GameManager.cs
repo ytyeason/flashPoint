@@ -16,6 +16,7 @@ public class GameManager: MonoBehaviour
     public GameObject firemanObject;
     public TileType[] tileTypes;
     public WallType[] wallTypes;
+
     
     
     public JSONObject game_info = StaticInfo.game_info;
@@ -82,11 +83,11 @@ public class GameManager: MonoBehaviour
         Debug.Log(location);
 
         var cord = location.Split(',');
-        int x = Convert.ToInt32(cord[0]);
-        int z = Convert.ToInt32(cord[1]);
+        int x = Convert.ToInt32(0);
+        int z = Convert.ToInt32(5);
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-        return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, x, z, ap, this);
+        return new Fireman(StaticInfo.name, Colors.Blue, firemanObject, x, z, 100000, this);
 
     }
 

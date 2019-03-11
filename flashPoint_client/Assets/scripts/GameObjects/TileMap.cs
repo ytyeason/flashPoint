@@ -28,6 +28,8 @@ public class TileMap  {
 	// Array populated by 
 	public int[,] tiles;
 
+    public GameObject gmo;
+
 
 	void StartTileMap() {
 
@@ -96,9 +98,12 @@ public class TileMap  {
 		{
 			//GameObject go = (GameObject) Instantiate( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
 			GameObject go = gm.instantiateObject( selectedUnit.s, new Vector3(x*5, 0, x*5), Quaternion.identity );
-		}
-        selectedUnit.move(selectedUnit.currentX, selectedUnit.currentZ);
-    }
+            if (x == 1)
+            {
+                gmo = go;
+            }
+        }
+	}
 
 	public void buildNewTile(int x, int z, int type)
 	{
@@ -142,6 +147,6 @@ public class TileMap  {
 		//selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
 
 		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
-		selectedUnit.tryMove(x, z, in_status);
+		selectedUnit.tryMove(x, z, in_status,gmo);
 	}
 }
