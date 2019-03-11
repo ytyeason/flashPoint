@@ -24,7 +24,9 @@ public class Fireman
 
 	public Boolean carryingVictim = false;
 
-    public Fireman(String name, Colors color, GameObject s, int in_x, int in_z, int AP)
+    public GameManager gm;
+
+    public Fireman(String name, Colors color, GameObject s, int in_x, int in_z, int AP, GameManager gm)
     {
         this.name = name;
         this.color = color;
@@ -33,6 +35,7 @@ public class Fireman
 		this.currentZ = in_z;
         this.AP = AP;
         this.FreeAP = AP;
+        this.gm = gm;
     }
 
     public void setAP(int ap)
@@ -96,6 +99,7 @@ public class Fireman
 							String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
 							move(x, z);
+                            gm.UpdateLocation(x,z);
 						}
 						else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
 						{
@@ -103,14 +107,16 @@ public class Fireman
 							String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
 							move(x, z);
-						}
+                            gm.UpdateLocation(x,z);
+                        }
 						else if (in_status != 2 && carryingVictim && FreeAP >= 2)
 						{
 							FreeAP -= 2;
 							String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
 							move(x, z);
-						}
+                            gm.UpdateLocation(x,z);
+                        }
 						else{
 							Debug.Log("Need more than " + FreeAP + " to move to target tile (" + x + ", " + z +")");
 						}

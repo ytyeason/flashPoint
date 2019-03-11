@@ -9,5 +9,5 @@ public static class StaticInfo
     public static String numberOfPlayer;
     public static String level;
     public static JSONObject game_info;
-    public static String Location;
+    public static int[] Location;
 }
