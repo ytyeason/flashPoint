@@ -207,7 +207,7 @@ b85727743a4bfba9a1cc52395d0cca61 Assembly-CSharp.dll:.ClickableTile
 2f48983e1e4572bcddd752423f7dbea2 Assembly-CSharp.dll:.ScrollDetailTexture
 e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
 c4a72730071176daa41a23296e1896bd Assembly-CSharp.dll:.Wall
-7d6aefa736e045bf57337ba1c9c0ced7 Assembly-CSharp.dll:.GameManager
+dc1dfde1acb475006a3f8235ba6ddc53 Assembly-CSharp.dll:.GameManager
 2cd695620a4f2b3b74fd912c83d1e86c Assembly-CSharp.dll:.Player
 c1791db8df7a6d30dc3a3e487bced78b com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.PostProcessVolume
 7a1ff18e15d0a860ac99542974a3cbd5 com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.Grain

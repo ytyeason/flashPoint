@@ -32,6 +32,8 @@ public class GameManager: MonoBehaviour
 
     public Fireman fireman;
 
+    public Boolean isMyTurn = false;
+
 
     void Start()
     {
@@ -129,6 +131,17 @@ public class GameManager: MonoBehaviour
     void checkingTurn_Success(SocketIOEvent obj)
     {
         //accept value here
+        var result = obj.data.ToDictionary()["status"];
+        Debug.Log(result);
+
+        if (result.Equals("True"))
+        {
+            isMyTurn = true;
+        }
+        else
+        {
+            isMyTurn = false;
+        }
     }
 
     IEnumerator ConnectToServer()
@@ -212,6 +225,16 @@ public class GameManager: MonoBehaviour
     public void EndTurn()
     {
         Debug.Log("Ending Turn");
+        checkTurn();
+        //do stuff here...
+        if (isMyTurn)
+        {
+            changeTurn();
+        }
+        else
+        {
+            Debug.Log("This not your turn! Don't click end turn!");
+        }
     }
 
     public void checkTurn()
@@ -222,5 +245,15 @@ public class GameManager: MonoBehaviour
         checkingTurn["name"] = StaticInfo.name;
 
         socket.Emit("checkingTurn", new JSONObject(checkingTurn));
+    }
+
+    public void changeTurn()
+    {
+        Debug.Log("changing turn");
+        Dictionary<String, String> changingTurn = new Dictionary<string, string>();
+        changingTurn["room"] = StaticInfo.roomNumber;
+        changingTurn["name"] = StaticInfo.name;
+
+        socket.Emit("changingTurn", new JSONObject(changingTurn));
     }
 }
