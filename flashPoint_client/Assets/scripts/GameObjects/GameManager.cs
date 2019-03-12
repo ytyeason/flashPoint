@@ -39,6 +39,7 @@ public class GameManager: MonoBehaviour
         socket.On("LocationUpdate_SUCCESS", LocationUpdate_SUCCESS);
         socket.On("TileUpdate_Success", TileUpdate_Success);
         socket.On("WallUpdate_Success", WallUpdate_Success);
+        socket.On("checkingTurn_Success", checkingTurn_Success);
 
         if (game_info != null) 
         {
@@ -125,6 +126,11 @@ public class GameManager: MonoBehaviour
         
     }
 
+    void checkingTurn_Success(SocketIOEvent obj)
+    {
+        //accept value here
+    }
+
     IEnumerator ConnectToServer()
     {
         yield return new WaitForSeconds(0.5f);
@@ -201,5 +207,20 @@ public class GameManager: MonoBehaviour
         updateWall["horizontal"] = horizontal.ToString();
 
         socket.Emit("UpdateWall", new JSONObject(updateWall));
+    }
+
+    public void EndTurn()
+    {
+        Debug.Log("Ending Turn");
+    }
+
+    public void checkTurn()
+    {
+        Debug.Log("checking turn");
+        Dictionary<String, String> checkingTurn = new Dictionary<string, string>();
+        checkingTurn["room"] = StaticInfo.roomNumber;
+        checkingTurn["name"] = StaticInfo.name;
+
+        socket.Emit("checkingTurn", new JSONObject(checkingTurn));
     }
 }

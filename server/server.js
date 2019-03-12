@@ -51,7 +51,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       var room_number = data['room'];
       var name = data['name'];
-      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":500}} , "Owner": data['name']}//participants need to be changed to a list
+      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":500}} , "Owner": data['name'], "Turn": data['name']}//participants need to be changed to a list
       console.log(Games);
       socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
     });
@@ -147,6 +147,21 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(horizontal);
         socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal});
     });
+
+    socket.on('checkingTurn',function(data){
+      var room_number = data['room'];
+      var name = data['name'];
+
+      console.log(Games['room']);
+      console.log(Games['room']['Turn']);
+      var turn_name = Games['room']['Turn'];
+      if(turn_name.localeCompare(name)==0){
+        socket.emit('checkingTurn_Success', {status: "True"});
+      }else{
+        socket.emit('checkingTurn_Success', {status: "False"});
+      }
+      
+    })
 
 
 });
