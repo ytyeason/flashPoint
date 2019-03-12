@@ -38,6 +38,7 @@ public class GameManager: MonoBehaviour
         StartCoroutine(ConnectToServer());
         socket.On("LocationUpdate_SUCCESS", LocationUpdate_SUCCESS);
         socket.On("TileUpdate_Success", TileUpdate_Success);
+        socket.On("WallUpdate_Success", WallUpdate_Success);
 
         if (game_info != null) 
         {
@@ -63,6 +64,26 @@ public class GameManager: MonoBehaviour
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
 
+    }
+
+    void WallUpdate_Success(SocketIOEvent obj)
+    {
+        Debug.Log("tile update successful");
+        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
+        var horizontal = Convert.ToInt32(obj.data.ToDictionary()["horizontal"]);
+
+        //Debug.Log(x);
+        //Debug.Log(z);
+        //Debug.Log(type);
+        Debug.Log(obj.data);
+        Debug.Log(obj.data.ToDictionary()["x"]);
+        Debug.Log(obj.data.ToDictionary()["z"]);
+        Debug.Log(obj.data.ToDictionary()["type"]);
+        Debug.Log(obj.data.ToDictionary()["horizontal"]);
+
+        wallManager.BreakWall(x, z, type,horizontal);
     }
 
     void TileUpdate_Success(SocketIOEvent obj)
@@ -168,5 +189,17 @@ public class GameManager: MonoBehaviour
         updateTile["type"] = type.ToString();
 
         socket.Emit("UpdateTile", new JSONObject(updateTile));
+    }
+
+    public void UpdateWall(int x, int z, int type, int horizontal)
+    {
+        Debug.Log("Update wall");
+        Dictionary<String, string> updateWall = new Dictionary<string, string>();
+        updateWall["x"] = x.ToString();
+        updateWall["z"] = z.ToString();
+        updateWall["type"] = type.ToString();
+        updateWall["horizontal"] = horizontal.ToString();
+
+        socket.Emit("UpdateWall", new JSONObject(updateWall));
     }
 }

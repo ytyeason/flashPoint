@@ -135,6 +135,19 @@ io.on('connection', function (socket) {//default event for client connect to ser
         socket.broadcast.emit('TileUpdate_Success', {"x":x, "z":z, "type":type});
     });
 
+    socket.on('UpdateWall',function(data){
+        console.log("Updating wall");
+        var x = data['x'];
+        var z = data['z'];
+        var type = data['type'];
+        var horizontal = data["horizontal"];
+        console.log(x);
+        console.log(z);
+        console.log(type);
+        console.log(horizontal);
+        socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal});
+    });
+
 
 });
 

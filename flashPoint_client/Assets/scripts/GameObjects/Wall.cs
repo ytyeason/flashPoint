@@ -21,11 +21,13 @@ public class Wall : MonoBehaviour
         if (type==0)
         {
             wallMap.BreakWall(wallX, wallZ, 2, 1);
+            wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
         }
 
         if (type== 1)
         {
             wallMap.BreakWall(wallX, wallZ, 3, 0);
+            wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
         }
 
 

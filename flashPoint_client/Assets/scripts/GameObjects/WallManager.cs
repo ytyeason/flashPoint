@@ -49,7 +49,7 @@ public class WallManager
 
     public void BreakWall(int x, int z, int type, int horizontal)
     {
-
+        Debug.Log("Breaking the wall");
         if (gm.fireman.chopWall())
         {
             if (horizontal == 1)//we're breaking a hwall
