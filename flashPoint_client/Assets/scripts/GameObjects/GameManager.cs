@@ -15,14 +15,16 @@ public class GameManager: MonoBehaviour
     public SocketIOComponent socket;
     public GameObject firemanObject;
     public TileType[] tileTypes;
+    public DoorType[] doorTypes;
     public WallType[] wallTypes;
 
-    
-    
+
+
     public JSONObject game_info = StaticInfo.game_info;
 
     public WallManager wallManager;
     private TileMap tileMap;
+    public DoorManager doorManager;
 
     private JSONObject room;
     private JSONObject participants;
@@ -40,7 +42,7 @@ public class GameManager: MonoBehaviour
         socket.On("TileUpdate_Success", TileUpdate_Success);
         socket.On("WallUpdate_Success", WallUpdate_Success);
 
-        if (game_info != null) 
+        if (game_info != null)
         {
             room = game_info[StaticInfo.roomNumber];
             participants = room["participants"];
@@ -59,6 +61,7 @@ public class GameManager: MonoBehaviour
 
         fireman = initializeFireman();
         wallManager = new WallManager(wallTypes,this);
+        doorManager = new DoorManager(doorTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
 
         tileMap.GenerateFiremanVisual(players);
@@ -122,7 +125,7 @@ public class GameManager: MonoBehaviour
             Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
-        
+
     }
 
     IEnumerator ConnectToServer()

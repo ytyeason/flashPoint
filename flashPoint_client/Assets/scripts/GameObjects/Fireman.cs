@@ -77,6 +77,21 @@ public class Fireman
 		}
 	}
 
+  public Boolean changeDoor()
+  {
+    if (FreeAP >= 2)
+    {
+      FreeAP -= 2;
+      if (debugMode) Debug.Log("AP is now: " + FreeAP);
+      return true;
+    }
+    else
+    {
+      //Debug.Log("No AP left to chop the Wall!");
+      return false;
+    }
+  }
+
 	public void tryMove(int x, int z, int in_status,GameObject gmo)//int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
     {
 		// FreeAP must be positive

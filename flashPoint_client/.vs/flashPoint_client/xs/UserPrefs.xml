@@ -1,14 +1,16 @@
 ﻿<Properties StartupConfiguration="{C66E6263-DE53-3EE2-D967-81111BCC85E4}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/GameObjects/GameManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/GameObjects/Door.cs.meta">
     <Files>
       <File FileName="Assets/scripts/GameObjects/TileMap.cs" Line="105" Column="51" />
-      <File FileName="Assets/scripts/GameObjects/Fireman.cs" Line="128" Column="29" />
-      <File FileName="Assets/scripts/GameObjects/GameManager.cs" Line="102" Column="63" />
+      <File FileName="Assets/scripts/GameObjects/Fireman.cs" Line="5" Column="16" />
+      <File FileName="Assets/scripts/GameObjects/GameManager.cs" Line="102" Column="1" />
       <File FileName="Assets/scripts/GameObjects/WallManager.cs" Line="25" Column="29" />
       <File FileName="Assets/scripts/GameObjects/ClickableTile.cs" Line="1" Column="1" />
       <File FileName="Assets/scripts/GameObjects/Wall.cs" Line="14" Column="21" />
       <File FileName="Assets/scripts/RoomManager.cs" Line="29" Column="29" />
       <File FileName="Assets/scripts/GameObjects/StaticInfo.cs" Line="13" Column="2" />
+      <File FileName="Assets/scripts/GameObjects/Door.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/GameObjects/Door.cs.meta" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -24,11 +24,25 @@ public class Wall : MonoBehaviour
             wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
         }
 
-        if (type== 1)
+        if (type==1)
         {
             wallMap.BreakWall(wallX, wallZ, 3, 0);
             wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
         }
+
+        if (type==2)
+        {
+            wallMap.BreakWall(wallX, wallZ, 4, 1);
+            wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
+        }
+
+        if (type==3)
+        {
+            wallMap.BreakWall(wallX, wallZ, 5, 0);
+            wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
+        }
+
+
 
 
         //Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
@@ -61,10 +75,10 @@ public class Wall: MonoBehaviour
     {
         return status;
     }
-    
+
     void OnMouseUp() {
-	
-		
+
+
         Debug.Log("Clicked x: " + x + ", z: " + z);
     }
 }*/

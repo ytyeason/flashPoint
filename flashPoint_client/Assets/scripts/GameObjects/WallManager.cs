@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.Text.RegularExpressions;
+using System.Linq;
+
 
 public class WallManager
 {
@@ -36,14 +39,69 @@ public class WallManager
     void PopulateWalls()
     {
         defaultHorizontalWalls.Add(new int[] { 1, 1 });
-        defaultHorizontalWalls.Add(new int[] { 1, 2 });
+        defaultHorizontalWalls.Add(new int[] { 2, 1 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 4, 1 });
+        defaultHorizontalWalls.Add(new int[] { 5, 1 });
+        defaultHorizontalWalls.Add(new int[] { 6, 1 });
+        defaultHorizontalWalls.Add(new int[] { 7, 1 });
+        defaultHorizontalWalls.Add(new int[] { 8, 1 });
+
         defaultHorizontalWalls.Add(new int[] { 1, 3 });
-        defaultHorizontalWalls.Add(new int[] { 1, 4 });
+        defaultHorizontalWalls.Add(new int[] { 2, 3 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 4, 3 });
+        defaultHorizontalWalls.Add(new int[] { 5, 3 });
+        //
+
+        defaultHorizontalWalls.Add(new int[] { 4, 4 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 6, 4 });
+        defaultHorizontalWalls.Add(new int[] { 7, 4 });
+        defaultHorizontalWalls.Add(new int[] { 8, 4 });
+
         defaultHorizontalWalls.Add(new int[] { 1, 5 });
+        defaultHorizontalWalls.Add(new int[] { 2, 5 });
+
+        defaultHorizontalWalls.Add(new int[] { 4, 6 });
+        defaultHorizontalWalls.Add(new int[] { 5, 6 });
+
+        defaultHorizontalWalls.Add(new int[] { 1, 7 });
+        defaultHorizontalWalls.Add(new int[] { 2, 7 });
+        defaultHorizontalWalls.Add(new int[] { 3, 7 });
+        defaultHorizontalWalls.Add(new int[] { 4, 7 });
+        defaultHorizontalWalls.Add(new int[] { 5, 7 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 7, 7 });
+        defaultHorizontalWalls.Add(new int[] { 8, 7 });
 
         defaultVerticalWalls.Add(new int[] { 1, 1 });
         defaultVerticalWalls.Add(new int[] { 1, 2 });
+        defaultVerticalWalls.Add(new int[] { 1, 3 });
+        //
         defaultVerticalWalls.Add(new int[] { 1, 5 });
+        defaultVerticalWalls.Add(new int[] { 1, 6 });
+
+        defaultVerticalWalls.Add(new int[] { 4, 1 });
+        defaultVerticalWalls.Add(new int[] { 4, 2 });
+        defaultVerticalWalls.Add(new int[] { 4, 4 });
+        defaultVerticalWalls.Add(new int[] { 4, 5 });
+        defaultVerticalWalls.Add(new int[] { 4, 6 });
+
+        //
+        defaultVerticalWalls.Add(new int[] { 6, 5 });
+        defaultVerticalWalls.Add(new int[] { 6, 6 });
+
+        defaultVerticalWalls.Add(new int[] { 7, 1 });
+        defaultVerticalWalls.Add(new int[] { 7, 2 });
+        defaultVerticalWalls.Add(new int[] { 7, 3 });
+
+        defaultVerticalWalls.Add(new int[] { 9, 1 });
+        defaultVerticalWalls.Add(new int[] { 9, 2 });
+        //
+        defaultVerticalWalls.Add(new int[] { 9, 4 });
+        defaultVerticalWalls.Add(new int[] { 9, 5 });
+        defaultVerticalWalls.Add(new int[] { 9, 6 });
 
     }
 
