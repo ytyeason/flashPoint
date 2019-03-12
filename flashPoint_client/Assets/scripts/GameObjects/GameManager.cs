@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using SocketIO;
 using System;
 using System.Linq;
+using UnityEngine.UI;
 
 //using Newtonsoft.Json;
 //using System.Web.Script.Serialization;
@@ -36,9 +37,33 @@ public class GameManager: MonoBehaviour
 
     public Boolean isMyTurn = false;
 
+    //for Notification
+    [SerializeField]
+    List<Notification> notifications=new List<Notification>();
+    public GameObject notificationPanel, notificationText;
+
+    public void sendNotification(string msg){
+        if(notifications.Count>10){
+            Destroy(notifications[0].textObject.gameObject);
+            notifications.Remove(notifications[0]);
+        }
+        Notification notification=new Notification();
+        notification.msg=msg;
+        GameObject newText=(GameObject)Instantiate(notificationText,notificationPanel.transform);
+        notification.textObject=newText.GetComponent<Text>();
+        notification.textObject.text=notification.msg;
+
+        notifications.Add(notification);
+    }
+
 
     void Start()
     {
+
+        for(int i=0;i<5;i++){
+            sendNotification("test"+i);
+        }
+        
         StartCoroutine(ConnectToServer());
         socket.On("LocationUpdate_SUCCESS", LocationUpdate_SUCCESS);
         socket.On("TileUpdate_Success", TileUpdate_Success);
@@ -259,4 +284,10 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("changingTurn", new JSONObject(changingTurn));
     }
+}
+
+[System.Serializable]
+public class Notification{
+    public string msg;
+    public Text textObject;
 }
