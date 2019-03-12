@@ -42,6 +42,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
         var name = data['name'];
         Games[data['room']]["participants"][name]={"Location": "0,0", "AP":500};
+        Games[data['room']]["participants_in_order"].push(name);
         console.log(Games);
         socket.emit('LOAD_ROOM_SUCCESS',{status: "True"} );
       }
@@ -51,7 +52,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       var room_number = data['room'];
       var name = data['name'];
-      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":500}} , "Owner": data['name'], "Turn": data['name']}//participants need to be changed to a list
+      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":500}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
       console.log(Games);
       socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
     });
@@ -152,16 +153,39 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room_number = data['room'];
       var name = data['name'];
 
-      console.log(Games['room']);
-      console.log(Games['room']['Turn']);
-      var turn_name = Games['room']['Turn'];
+      console.log(Games[room_number]);
+      // console.log(Games[room_number]['Turn']);
+      var turn_name = Games[room_number]['Turn'];
       if(turn_name.localeCompare(name)==0){
-        socket.emit('checkingTurn_Success', {status: "True"});
+        socket.emit('checkingTurn_Success', {"status": "True"});
       }else{
-        socket.emit('checkingTurn_Success', {status: "False"});
+        socket.emit('checkingTurn_Success', {"status": "False"});
       }
-      
-    })
+
+    });
+
+    socket.on('changingTurn', function(data){
+        var room_number = data['room'];
+        var name = data['name'];
+
+        console.log(Games[room_number]);
+        // console.log(Games[room_number]['Turn']);
+        var turn_name = Games[room_number]['Turn'];
+        if(turn_name.localeCompare(name)==0){//name matches
+            var participants_in_order = Games[room_number]["participants_in_order"];
+            var index = participants_in_order.indexOf(turn_name);
+            if(index == participants_in_order.length-1){
+              index = 0;
+            }else{
+              index = index+1;
+            }
+            Games[room_number]['Turn'] = participants_in_order[index];
+            console.log(Games[room_number]['Turn'])
+        }else{
+          console.log("name doesn't match in changing turn")
+          socket.emit('changingTurn_Success', {"status": "False"});
+        }
+    });
 
 
 });
