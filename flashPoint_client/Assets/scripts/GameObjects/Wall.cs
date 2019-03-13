@@ -13,37 +13,41 @@ public class Wall : MonoBehaviour
     // Occurs when we click the mouse:
     void OnMouseUp()
     {
-        int wallX = x / 5;
-        int wallZ = z / 5;
-
-        Debug.Log("Clicked type: " + type);
-
-        if (type==0)
+        if (wallMap.gm.isMyTurn)
         {
-            wallMap.BreakWall(wallX, wallZ, 2, 1);
-            wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
-        }
+            int wallX = x / 5;
+            int wallZ = z / 5;
 
-        if (type==1)
+            Debug.Log("Clicked type: " + type);
+
+            if (type == 0)
+            {
+                wallMap.BreakWall(wallX, wallZ, 2, 1);
+                wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
+            }
+
+            if (type == 1)
+            {
+                wallMap.BreakWall(wallX, wallZ, 3, 0);
+                wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
+            }
+
+            if (type == 2)
+            {
+                wallMap.BreakWall(wallX, wallZ, 4, 1);
+                wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
+            }
+
+            if (type == 3)
+            {
+                wallMap.BreakWall(wallX, wallZ, 5, 0);
+                wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
+            }
+        }
+        else
         {
-            wallMap.BreakWall(wallX, wallZ, 3, 0);
-            wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
+            Debug.Log("Not my turn, dont click");
         }
-
-        if (type==2)
-        {
-            wallMap.BreakWall(wallX, wallZ, 4, 1);
-            wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
-        }
-
-        if (type==3)
-        {
-            wallMap.BreakWall(wallX, wallZ, 5, 0);
-            wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
-        }
-
-
-
 
         //Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
     }

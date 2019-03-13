@@ -45,6 +45,7 @@ public class GameManager: MonoBehaviour
         socket.On("WallUpdate_Success", WallUpdate_Success);
         socket.On("checkingTurn_Success", checkingTurn_Success);
         socket.On("changingTurn_Success", changingTurn_Success);
+        socket.On("isMyTurnUpdate", isMyTurnUpdate);
 
         if (game_info != null)
         {
@@ -70,6 +71,7 @@ public class GameManager: MonoBehaviour
 
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
+        checkTurn();//initialize isMyTurn varaible at start
 
     }
 
@@ -150,14 +152,35 @@ public class GameManager: MonoBehaviour
 
     void changingTurn_Success(SocketIOEvent obj)
     {
-        var result = obj.data.ToDictionary()["status"];
-        Debug.Log(result);
+        Debug.Log("in changingTurn_Success");
+        var name = obj.data.ToDictionary()["Turn"];
+        Debug.Log(name);
 
-        if (result.Equals("False"))
+        if (name.Equals(StaticInfo.name))
+        {
+            isMyTurn = true;
+        }
+        else
         {
             isMyTurn = false;
         }
-        
+
+    }
+
+    void isMyTurnUpdate(SocketIOEvent obj)
+    {
+        Debug.Log("in isMyTurnUpdate");
+        var name = obj.data.ToDictionary()["Turn"];
+        Debug.Log(name);
+
+        if (name.Equals(StaticInfo.name))
+        {
+            isMyTurn = true;
+        }
+        else
+        {
+            isMyTurn = false;
+        }
     }
 
     IEnumerator ConnectToServer()

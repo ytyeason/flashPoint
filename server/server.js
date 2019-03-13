@@ -181,7 +181,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
             }
             Games[room_number]['Turn'] = participants_in_order[index];
             console.log(Games[room_number]['Turn']);
-            socket.emit("changingTurn_Success", {"status": "False"});//change isMyTurn to False in frontend
+            socket.emit("changingTurn_Success", {"Turn": Games[room_number]['Turn']});//change isMyTurn to False in frontend
+            socket.broadcast.emit("isMyTurnUpdate", {"Turn": Games[room_number]['Turn']});
         }else{
             console.log("name doesn't match in changing turn")
             socket.emit('changingTurn_Success', {"status": "True"});//keep isMyTurn unchanged

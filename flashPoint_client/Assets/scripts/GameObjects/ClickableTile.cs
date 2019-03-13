@@ -13,32 +13,41 @@ public class ClickableTile : MonoBehaviour {
 	// Occurs when we click the mouse:
 	void OnMouseUp() {
 
-		//Debug.Log(this);
+        if (map.gm.isMyTurn)
+        {
+            //Debug.Log(this);
 
-        int x = tileX / 5;
-		int z = tileZ / 5;
+            int x = tileX / 5;
+            int z = tileZ / 5;
 
-        if (map.tiles[x,z]!=0)
-		{
-			// Extinguish the fire or smoke:
-			int result = map.selectedUnit.extinguishFire(map.tiles[x, z]);
-			if( result == -1)
-				Debug.Log("Not enough AP to extinguish the fire");
+            if (map.tiles[x, z] != 0)
+            {
+                // Extinguish the fire or smoke:
+                int result = map.selectedUnit.extinguishFire(map.tiles[x, z]);
+                if (result == -1)
+                    Debug.Log("Not enough AP to extinguish the fire");
+                else
+                {
+                    map.buildNewTile(x, z, result);
+                    //broadcast new tile
+                    map.gm.UpdateTile(x, z, result);
+                }
+
+            }
             else
             {
-                map.buildNewTile(x, z, result);
-                //broadcast new tile
-                map.gm.UpdateTile(x, z, result);
+                // Move to selected tile (only if tile is normal)
+                map.MoveSelectedUnitTo(tileX, tileZ, 0);
             }
-           
-		}
-		else
-		{
-			// Move to selected tile (only if tile is normal)
-			map.MoveSelectedUnitTo(tileX, tileZ, 0);
-		}
-	
-		
-        //Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
+
+
+            //Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
+        }
+        else
+        {
+            Debug.Log("Not my turn, dont click");
+        }
+
+
     }
 }
