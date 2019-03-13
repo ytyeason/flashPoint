@@ -57,6 +57,7 @@ public class DoorManager
                     if (key[0] == x && key[1] == z)
                     {
                         Debug.Log("Open the door");
+                        gm.sendNotification("Open the door");
 
                         GameObject old = hdoorStores[key];
                         //Destroy(old);

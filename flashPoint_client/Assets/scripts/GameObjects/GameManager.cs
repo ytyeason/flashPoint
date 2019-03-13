@@ -43,13 +43,24 @@ public class GameManager: MonoBehaviour
     public GameObject notificationPanel, notificationText;
 
     public void sendNotification(string msg){
+        Dictionary<string, string> message = new Dictionary<string, string>();
+        message["player"]="player";
+        message["text"]=msg;
+        socket.Emit("Notify",new JSONObject(message));
+    }
+
+    public void receiveNotification(SocketIOEvent obj){
+        string msg=obj.data.ToDictionary()["text"];
+        string player=obj.data.ToDictionary()["player"];
+
         if(notifications.Count>10){
             Destroy(notifications[0].textObject.gameObject);
             notifications.Remove(notifications[0]);
         }
+
         Notification notification=new Notification();
-        notification.msg=msg;
-        GameObject newText=(GameObject)Instantiate(notificationText,notificationPanel.transform);
+        notification.msg=player+" "+msg;
+        GameObject newText=Instantiate(notificationText,notificationPanel.transform);
         notification.textObject=newText.GetComponent<Text>();
         notification.textObject.text=notification.msg;
 
@@ -60,15 +71,12 @@ public class GameManager: MonoBehaviour
     void Start()
     {
 
-        for(int i=0;i<5;i++){
-            sendNotification("test"+i);
-        }
-        
         StartCoroutine(ConnectToServer());
         socket.On("LocationUpdate_SUCCESS", LocationUpdate_SUCCESS);
         socket.On("TileUpdate_Success", TileUpdate_Success);
         socket.On("WallUpdate_Success", WallUpdate_Success);
         socket.On("checkingTurn_Success", checkingTurn_Success);
+        socket.On("Receive_Notification",receiveNotification);
 
         if (game_info != null)
         {
@@ -100,6 +108,7 @@ public class GameManager: MonoBehaviour
     void WallUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("tile update successful");
+        // sendNotification("tile update successful");
         var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
         var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
         var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
