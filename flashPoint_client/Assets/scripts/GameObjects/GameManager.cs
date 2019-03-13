@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using SocketIO;
 using System;
 using System.Linq;
+using UnityEngine.UI;
 
 //using Newtonsoft.Json;
 //using System.Web.Script.Serialization;
@@ -36,6 +37,10 @@ public class GameManager: MonoBehaviour
 
     public Boolean isMyTurn = false;
 
+    public List<String> chatLog = new List<string>();
+
+    public Text chat;
+
 
     void Start()
     {
@@ -46,6 +51,7 @@ public class GameManager: MonoBehaviour
         socket.On("checkingTurn_Success", checkingTurn_Success);
         socket.On("changingTurn_Success", changingTurn_Success);
         socket.On("isMyTurnUpdate", isMyTurnUpdate);
+        socket.On("sendChat_Success", sendChat_Success);
 
         if (game_info != null)
         {
@@ -183,6 +189,18 @@ public class GameManager: MonoBehaviour
         }
     }
 
+    void sendChat_Success(SocketIOEvent obj)
+    {
+        Debug.Log("in sendChat_Success");
+
+        var name = obj.data.ToDictionary()["name"];
+        var chat = obj.data.ToDictionary()["chat"];
+
+        var chatString = name + " : " + chat;
+        Debug.Log(chatString);
+        chatLog.Add(chatString);
+    }
+
     IEnumerator ConnectToServer()
     {
         yield return new WaitForSeconds(0.5f);
@@ -297,4 +315,18 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("changingTurn", new JSONObject(changingTurn));
     }
+
+    public void SendChat()
+    {
+        Debug.Log(chat.text);
+        Dictionary<String, String> sendChat = new Dictionary<string, string>();
+        sendChat["name"] = StaticInfo.name;
+        sendChat["chat"] = chat.text;
+
+        var chatString = StaticInfo.name + " : " + chat.text;
+        chatLog.Add(chatString);
+
+        socket.Emit("sendChat", new JSONObject(sendChat));
+    }
+
 }

@@ -189,6 +189,13 @@ io.on('connection', function (socket) {//default event for client connect to ser
         }
     });
 
+    socket.on('sendChat', function(data){
+      var name = data['name'];
+      var chat = data['chat'];
+
+      socket.broadcast.emit('sendChat_Success', {"name": name, "chat": chat});
+    });
+
 
 });
 
