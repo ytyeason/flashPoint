@@ -52,6 +52,7 @@ public class GameManager: MonoBehaviour
         socket.On("changingTurn_Success", changingTurn_Success);
         socket.On("isMyTurnUpdate", isMyTurnUpdate);
         socket.On("sendChat_Success", sendChat_Success);
+        socket.On("DoorUpdate_Success", DoorUpdate_Success);
 
         if (game_info != null)
         {
@@ -83,7 +84,7 @@ public class GameManager: MonoBehaviour
 
     void WallUpdate_Success(SocketIOEvent obj)
     {
-        Debug.Log("tile update successful");
+        Debug.Log("wall update successful");
         var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
         var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
         var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
@@ -99,6 +100,26 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["horizontal"]);
 
         wallManager.BreakWall(x, z, type,horizontal);
+    }
+
+    void DoorUpdate_Success(SocketIOEvent obj)
+    {
+        Debug.Log("door update successful");
+        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
+        var toType = Convert.ToInt32(obj.data.ToDictionary()["toType"]);
+
+        //Debug.Log(x);
+        //Debug.Log(z);
+        //Debug.Log(type);
+        Debug.Log(obj.data);
+        Debug.Log(obj.data.ToDictionary()["x"]);
+        Debug.Log(obj.data.ToDictionary()["z"]);
+        Debug.Log(obj.data.ToDictionary()["type"]);
+        Debug.Log(obj.data.ToDictionary()["toType"]);
+
+        doorManager.ChangeDoor(x, z, toType, type);
     }
 
     void TileUpdate_Success(SocketIOEvent obj)
@@ -277,6 +298,18 @@ public class GameManager: MonoBehaviour
         updateWall["horizontal"] = horizontal.ToString();
 
         socket.Emit("UpdateWall", new JSONObject(updateWall));
+    }
+
+    public void UpdateDoor(int x, int z, int toType, int type)
+    {
+        Debug.Log("Update door");
+        Dictionary<String, string> updateDoor = new Dictionary<string, string>();
+        updateDoor["x"] = x.ToString();
+        updateDoor["z"] = z.ToString();
+        updateDoor["toType"] = toType.ToString();
+        updateDoor["type"] = type.ToString();
+
+        socket.Emit("UpdateDoor", new JSONObject(updateDoor));
     }
 
     public void EndTurn()

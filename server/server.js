@@ -149,6 +149,19 @@ io.on('connection', function (socket) {//default event for client connect to ser
         socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal});
     });
 
+    socket.on('UpdateDoor',function(data){
+        console.log("Updating door");
+        var x = data['x'];
+        var z = data['z'];
+        var type = data['type'];
+        var toType = data["toType"];
+        console.log(x);
+        console.log(z);
+        console.log(type);
+        console.log(toType);
+        socket.broadcast.emit('DoorUpdate_Success', {"x":x, "z":z, "type":type, "toType":toType});
+    });
+
     socket.on('checkingTurn',function(data){
       var room_number = data['room'];
       var name = data['name'];
