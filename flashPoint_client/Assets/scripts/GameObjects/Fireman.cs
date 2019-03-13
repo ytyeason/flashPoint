@@ -12,7 +12,7 @@ public class Fireman
 
 	public int currentX;
 	public int currentZ;
-	public Boolean debugMode = false;		// Toggle this for more descriptive Debug.Log() output
+	public Boolean debugMode = true;		// Toggle this for more descriptive Debug.Log() output
 
     public String name = "eason";
 
@@ -42,6 +42,28 @@ public class Fireman
     {
         AP = ap;
     }
+
+	// Fireman's method call from Door.cs
+	public Boolean changeDoor(int doorX, int doorZ)
+	{
+		// If debugMode is enabled, better reporting is enabled
+		if (debugMode) Debug.Log("Running extuinguishFire(" + doorX + ", " + doorZ + ")");
+
+		// AP check
+		if (FreeAP < 1)
+		{
+			if (debugMode) Debug.Log("ToggleDoor() failed, AP unchanged: " + FreeAP);
+			return false;
+		}
+		// toggleDoor()
+		else
+		{
+			FreeAP -= 1;
+			if (debugMode) Debug.Log("Changed (toggleDoor): AP is now: " + FreeAP);
+			return true;
+		}
+	}
+
 
 	// Pre-condition via ClickableTiles: in_status != 0
 	public int extinguishFire(int in_status)
@@ -76,22 +98,7 @@ public class Fireman
 			return false;
 		}
 	}
-
-  public Boolean changeDoor()
-  {
-    if (FreeAP >= 2)
-    {
-      FreeAP -= 2;
-      if (debugMode) Debug.Log("AP is now: " + FreeAP);
-      return true;
-    }
-    else
-    {
-      //Debug.Log("No AP left to chop the Wall!");
-      return false;
-    }
-  }
-
+	
 	public void tryMove(int x, int z, int in_status,GameObject gmo)//int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
     {
 		// FreeAP must be positive
