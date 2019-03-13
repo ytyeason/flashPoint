@@ -44,6 +44,7 @@ public class GameManager: MonoBehaviour
         socket.On("TileUpdate_Success", TileUpdate_Success);
         socket.On("WallUpdate_Success", WallUpdate_Success);
         socket.On("checkingTurn_Success", checkingTurn_Success);
+        socket.On("changingTurn_Success", changingTurn_Success);
 
         if (game_info != null)
         {
@@ -147,6 +148,18 @@ public class GameManager: MonoBehaviour
         }
     }
 
+    void changingTurn_Success(SocketIOEvent obj)
+    {
+        var result = obj.data.ToDictionary()["status"];
+        Debug.Log(result);
+
+        if (result.Equals("False"))
+        {
+            isMyTurn = false;
+        }
+        
+    }
+
     IEnumerator ConnectToServer()
     {
         yield return new WaitForSeconds(0.5f);
@@ -230,14 +243,15 @@ public class GameManager: MonoBehaviour
         Debug.Log("Ending Turn");
         checkTurn();
         //do stuff here...
-        if (isMyTurn)
-        {
+
+        //if (isMyTurn)
+        //{
             changeTurn();
-        }
-        else
-        {
-            Debug.Log("This not your turn! Don't click end turn!");
-        }
+        //}
+        //else
+        //{
+        //    Debug.Log("This not your turn! Don't click end turn!");
+        //}
     }
 
     public void checkTurn()
@@ -248,6 +262,7 @@ public class GameManager: MonoBehaviour
         checkingTurn["name"] = StaticInfo.name;
 
         socket.Emit("checkingTurn", new JSONObject(checkingTurn));
+        //System.Threading.Thread.Sleep(2000);
     }
 
     public void changeTurn()

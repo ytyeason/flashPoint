@@ -176,9 +176,9 @@ public class Fireman
         if(x==5 && z == 5)
         {
             firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, s, currentX, currentZ);
-            GameManager gmm = new GameManager();
-            gmm.DestroyObject(gmo);
-            gmm.DestroyObject(gmm.firemanObject);
+
+            gm.DestroyObject(gmo);
+            gm.DestroyObject(gm.firemanObject);
         }
     }
 

@@ -153,7 +153,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room_number = data['room'];
       var name = data['name'];
 
-      console.log(Games[room_number]);
+      //console.log(Games[room_number]);
       // console.log(Games[room_number]['Turn']);
       var turn_name = Games[room_number]['Turn'];
       if(turn_name.localeCompare(name)==0){
@@ -180,10 +180,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
               index = index+1;
             }
             Games[room_number]['Turn'] = participants_in_order[index];
-            console.log(Games[room_number]['Turn'])
+            console.log(Games[room_number]['Turn']);
+            socket.emit("changingTurn_Success", {"status": "False"});//change isMyTurn to False in frontend
         }else{
-          console.log("name doesn't match in changing turn")
-          socket.emit('changingTurn_Success', {"status": "False"});
+            console.log("name doesn't match in changing turn")
+            socket.emit('changingTurn_Success', {"status": "True"});//keep isMyTurn unchanged
         }
     });
 
