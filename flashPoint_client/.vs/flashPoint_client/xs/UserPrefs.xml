@@ -2,17 +2,17 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/GameObjects/Door.cs">
     <Files>
       <File FileName="Assets/scripts/GameObjects/TileMap.cs" Line="194" Column="26" />
-      <File FileName="Assets/scripts/GameObjects/Fireman.cs" Line="80" Column="28" />
-      <File FileName="Assets/scripts/GameObjects/GameManager.cs" Line="277" Column="53" />
+      <File FileName="Assets/scripts/GameObjects/Fireman.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/GameObjects/GameManager.cs" Line="122" Column="51" />
       <File FileName="Assets/scripts/GameObjects/WallManager.cs" Line="10" Column="2" />
       <File FileName="Assets/scripts/GameObjects/ClickableTile.cs" Line="48" Column="50" />
       <File FileName="Assets/scripts/GameObjects/Wall.cs" Line="26" Column="59" />
       <File FileName="Assets/scripts/RoomManager.cs" Line="29" Column="29" />
       <File FileName="Assets/scripts/GameObjects/StaticInfo.cs" Line="13" Column="2" />
       <File FileName="Assets/scripts/JoyStickerController.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/GameObjects/firemanplusvictim.cs" Line="1" Column="1" />
-      <File FileName="Assets/scripts/GameObjects/Door.cs" Line="29" Column="14" />
-      <File FileName="Assets/scripts/GameObjects/DoorManager.cs" Line="35" Column="56" />
+      <File FileName="Assets/scripts/GameObjects/firemanplusvictim.cs" Line="24" Column="5" />
+      <File FileName="Assets/scripts/GameObjects/Door.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/GameObjects/DoorManager.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -34,9 +34,7 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/eason/Desktop/flashPoint/flashPoint_client/Assets/scripts/GameObjects/GameManager.cs" relfile="Assets/scripts/GameObjects/GameManager.cs" line="54" column="55" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

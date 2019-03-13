@@ -19,8 +19,9 @@ public class Door : MonoBehaviour
             int doorZ = z / 5;
 
             Debug.Log("Clicked type: " + type);
+			Debug.Log("doorX: " + doorX + ", doorZ: " + doorZ);
 
-            if (type == 0)
+			if (type == 0)
             {
                 doorMap.ChangeDoor(doorX, doorZ, 2, 0);
                 doorMap.gm.UpdateDoor(doorX, doorZ, 2, 0);

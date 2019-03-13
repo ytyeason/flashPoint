@@ -46,7 +46,7 @@ public class DoorManager
 
     public void ChangeDoor(int x, int z, int toType, int type)
     {
-        if (gm.fireman.changeDoor())
+        if (gm.fireman.changeDoor(x * 5, z * 5))
         {
             if (type == 0)//we're opening a hwall
             {
