@@ -49,9 +49,10 @@ public class GameManager: MonoBehaviour
         socket.Emit("Notify",new JSONObject(message));
     }
 
-    public void receiveNotification(SocketIOEvent obj){
-        string msg=obj.data.ToDictionary()["text"];
-        string player=obj.data.ToDictionary()["player"];
+    void receiveNotification(SocketIOEvent obj){
+        
+        string msg=Convert.ToString(obj.data.ToDictionary()["text"]);
+        string player=Convert.ToString(obj.data.ToDictionary()["player"]);
 
         if(notifications.Count>10){
             Destroy(notifications[0].textObject.gameObject);
@@ -59,14 +60,13 @@ public class GameManager: MonoBehaviour
         }
 
         Notification notification=new Notification();
-        notification.msg=player+" "+msg;
+        notification.msg=player+": "+msg;
         GameObject newText=Instantiate(notificationText,notificationPanel.transform);
         notification.textObject=newText.GetComponent<Text>();
         notification.textObject.text=notification.msg;
 
         notifications.Add(notification);
     }
-
 
     void Start()
     {
@@ -108,7 +108,7 @@ public class GameManager: MonoBehaviour
     void WallUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("tile update successful");
-        // sendNotification("tile update successful");
+        sendNotification("wall update successful");
         var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
         var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
         var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
@@ -142,6 +142,8 @@ public class GameManager: MonoBehaviour
 
         tileMap.buildNewTile(x, z,type);
     }
+    
+    
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
     {
@@ -250,6 +252,7 @@ public class GameManager: MonoBehaviour
     public void UpdateWall(int x, int z, int type, int horizontal)
     {
         Debug.Log("Update wall");
+        // sendNotification("Update wall");
         Dictionary<String, string> updateWall = new Dictionary<string, string>();
         updateWall["x"] = x.ToString();
         updateWall["z"] = z.ToString();

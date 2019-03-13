@@ -190,7 +190,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on("Notify", function(data){
       var player=data['player'];
       var text=data['text'];
-      socket.broadcast.emit("Receive_Notification",{"player":player,"text":text});
+      console.log(player+" "+text);
+      io.sockets.emit("Receive_Notification",{"player":player,"text":text});
     });
 
 

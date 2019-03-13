@@ -107,7 +107,7 @@ public class WallManager
 
     public void BreakWall(int x, int z, int type, int horizontal)
     {
-        Debug.Log("Breaking the wall");
+        // Debug.Log("Breaking the wall");
         if (gm.fireman.chopWall())
         {
             if (horizontal == 1)//we're breaking a hwall
@@ -118,7 +118,8 @@ public class WallManager
                 {
                     if (key[0] == x && key[1] == z)
                     {
-                        Debug.Log("Breaking the wall");
+                        // Debug.Log("Breaking the wall");
+                        gm.sendNotification("Breaking the wall");
 
                         GameObject old = hwallStores[key];
                         //Destroy(old);
@@ -150,7 +151,8 @@ public class WallManager
                     if (key[0] == x && key[1] == z)
                     {
 
-                        Debug.Log("Breaking the wall");
+                        // Debug.Log("Breaking the wall");
+                        gm.sendNotification("Breaking the wall");
 
                         GameObject old = vwallStores[key];
                         //Destroy(old);

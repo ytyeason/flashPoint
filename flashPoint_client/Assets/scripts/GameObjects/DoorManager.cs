@@ -90,6 +90,7 @@ public class DoorManager
                     {
 
                         Debug.Log("Open the door");
+                        gm.sendNotification("Open the door");
 
                         GameObject old = vdoorStores[key];
                         //Destroy(old);
