@@ -342,9 +342,8 @@ public class GameManager: MonoBehaviour
     {
         Debug.Log("Ending Turn");
 
-		// advanceFire testing!
-		fireManager.advanceFire(mapSizeX - 2, mapSizeZ - 1);
-		// TODO Remove ^ ^ ^
+		// advanceFire, n.b parameters only matter for testing
+		fireManager.advanceFire(mapSizeX - 2, mapSizeZ - 1, false);
 		Debug.Log("Finished advFire");
 		// return;
 

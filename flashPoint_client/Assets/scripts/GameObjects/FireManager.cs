@@ -22,20 +22,19 @@ public class FireManager : MonoBehaviour
 		this.tileMap = in_tileMap;  //initFireTileStores(in_tileMap);
 		this.mapSizeX = in_X;
 		this.mapSizeZ = in_Z;
-		//this.rng = new Random();
 	}
 
-	public void advanceFire(int in_x, int in_z)
+	public void advanceFire(int in_x, int in_z, bool isATest)
 	{
+		
+
 		// Places the new Smoke marker (n.b. might be 'more' than Smoke due to rule interactions)
-		//Debug.Log("NewFire running:");
-		//newFire(in_x, in_z);
+		if( debugMode ) Debug.Log("NewFire running:");
+		newFire(in_x, in_z, isATest);
 
-
-		Debug.Log("flashover:");
 		// Flashover step:
+		if (debugMode) Debug.Log("flashover:");
 		flashover();
-
 	}
 
 	public void flashover()
@@ -137,11 +136,11 @@ public class FireManager : MonoBehaviour
 
 
 	// Begin phase 1 of advanceFire: placing the new Smoke marker
-	public void newFire(int in_x, int in_z)
+	public void newFire(int in_x, int in_z, bool isATest)
 	{
 		// Coordinate to place the new Smoke marker
-		int rng_X = in_x;	//UnityEngine.Random.Range(0, mapSizeX - 1);
-		int rng_Z = in_z;	//UnityEngine.Random.Range(0, mapSizeZ - 1);
+		int rng_X = (isATest) ? in_x : UnityEngine.Random.Range(0, mapSizeX - 1);
+		int rng_Z = (isATest) ? in_z : UnityEngine.Random.Range(0, mapSizeZ - 1);
 		int current_type = tileMap.tiles[rng_X, rng_Z];
 		if (debugMode) Debug.Log("Type is: " + current_type);
 		
@@ -225,12 +224,6 @@ public class FireManager : MonoBehaviour
 			tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
 			return;
 		}
-
-
-
-
-
-
 
 		// We reach here if the tile should simply have a Smoke marker
 		tileMap.buildNewTile(rng_X, rng_Z, 1);
