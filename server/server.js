@@ -209,6 +209,13 @@ io.on('connection', function (socket) {//default event for client connect to ser
       socket.broadcast.emit('sendChat_Success', {"name": name, "chat": chat});
     });
 
+    socket.on('sendNotification',function(data){
+      var name=data['name'];
+      var text=data['text'];
+      console.log(name+" "+text);
+      io.sockets.emit('sendNotification_Success',{"name":name,"text":text});
+    });
+
 
 });
 

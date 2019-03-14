@@ -1,6 +1,6 @@
 OSXStandalone
 PlayerPath?
-/Users/eason/Desktop/sample.app
+/Users/apple/Desktop/Desktop - MacBookBro/Undergraduate/McGill University/Study/U4/Fall/COMP 361/Project/eason/flashPoint/01.app
 SceneListBegin?
 Assets/Scenes/FirstUI.unity
 Assets/Scenes/Lobby.unity
@@ -180,6 +180,7 @@ fc061f3ae8a876c0687e86378d4a447c UnityEngine.Networking.dll:UnityEngine.Networki
 ffa33c85a00f83be514aa40495f1cae2 Assembly-CSharp.dll:.DragMe
 72a8523b432c0a5317826b7a9e0a0e79 Unity.TextMeshPro.dll:TMPro.PackageResourceImporterWindow
 e53cc67d84060d628c7f03fc725766d8 Unity.TextMeshPro.dll:TMPro.TMP_FontAsset
+2dcce9fb55f08f2aa3cdbb8115361c81 Assembly-CSharp.dll:.FireManager
 392c5b921098bd4c139d9146d0efa6d7 Unity.TextMeshPro.dll:TMPro.TMP_Settings
 ddcae71b3f91386237efd012a9eef2be UnityEngine.TestRunner.dll:UnityEngine.TestTools.EnumerableSetUpTearDownCommandState
 486cd95c82d8305219c352c06b776e1f UnityEngine.TestRunner.dll:UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
@@ -211,7 +212,7 @@ b85727743a4bfba9a1cc52395d0cca61 Assembly-CSharp.dll:.ClickableTile
 2f48983e1e4572bcddd752423f7dbea2 Assembly-CSharp.dll:.ScrollDetailTexture
 e04611b8715e6833d2bd7010fc6be10b Unity.TextMeshPro.dll:TMPro.TMP_StyleSheet
 c4a72730071176daa41a23296e1896bd Assembly-CSharp.dll:.Wall
-df7aca27d7cab1cccba832e46df558d8 Assembly-CSharp.dll:.GameManager
+6358df07d02b7aab34b6f7f9d15e201d Assembly-CSharp.dll:.GameManager
 2cd695620a4f2b3b74fd912c83d1e86c Assembly-CSharp.dll:.Player
 c1791db8df7a6d30dc3a3e487bced78b com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.PostProcessVolume
 7a1ff18e15d0a860ac99542974a3cbd5 com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.Grain
@@ -222,3 +223,5 @@ c1791db8df7a6d30dc3a3e487bced78b com.unity.postprocessing.Runtime.dll:UnityEngin
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.ApplicationManager
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.TestSocketIO
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.ChangeColor
+382b8ef512fa8d6108723a01b57af65b UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsEventTracker
+cecf74a4a014467f492fa5579fb4b397 Facebook.Unity.Settings.dll:Facebook.Unity.Settings.FacebookSettings

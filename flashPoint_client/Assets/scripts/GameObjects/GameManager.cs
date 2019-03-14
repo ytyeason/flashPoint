@@ -39,7 +39,8 @@ public class GameManager: MonoBehaviour
 
     public Boolean isMyTurn = false;
 
-    public List<String> chatLog = new List<string>();
+    public List<Notification> chatLog = new List<Notification>();
+    public GameObject notificationPanel, notificationText;
 
     public Text chat;
 
@@ -55,6 +56,7 @@ public class GameManager: MonoBehaviour
         socket.On("isMyTurnUpdate", isMyTurnUpdate);
         socket.On("sendChat_Success", sendChat_Success);
         socket.On("DoorUpdate_Success", DoorUpdate_Success);
+        socket.On("sendNotification_Success",sendNotification_SUCCESS);
 
         if (game_info != null)
         {
@@ -206,6 +208,7 @@ public class GameManager: MonoBehaviour
         if (name.Equals(StaticInfo.name))
         {
             isMyTurn = true;
+            sendNotification(". It's your turn.");
         }
         else
         {
@@ -221,8 +224,20 @@ public class GameManager: MonoBehaviour
         var chat = obj.data.ToDictionary()["chat"];
 
         var chatString = name + " : " + chat;
+        if(chatLog.Count>10){
+            Destroy(chatLog[0].textObject.gameObject);
+            chatLog.Remove(chatLog[0]);
+        }
+
+        Notification notification=new Notification();
+        notification.msg=chatString;
+        GameObject newText=Instantiate(notificationText,notificationPanel.transform);
+        notification.textObject=newText.GetComponent<Text>();
+        notification.textObject.text=notification.msg;
+
+        chatLog.Add(notification);
         Debug.Log(chatString);
-        chatLog.Add(chatString);
+        // chatLog.Add(chatString);
     }
 
     IEnumerator ConnectToServer()
@@ -323,7 +338,7 @@ public class GameManager: MonoBehaviour
 		fireManager.advanceFire();
 		// TODO Remove ^ ^ ^
 		Debug.Log("Finished advFire");
-		return;
+		// return;
 
 		checkTurn();
         //do stuff here...
@@ -367,9 +382,53 @@ public class GameManager: MonoBehaviour
         sendChat["chat"] = chat.text;
 
         var chatString = StaticInfo.name + " : " + chat.text;
-        chatLog.Add(chatString);
+        if(chatLog.Count>20){
+            Destroy(chatLog[0].textObject.gameObject);
+            chatLog.Remove(chatLog[0]);
+        }
+
+        Notification notification=new Notification();
+        notification.msg=chatString;
+        GameObject newText=Instantiate(notificationText,notificationPanel.transform);
+        notification.textObject=newText.GetComponent<Text>();
+        notification.textObject.text=notification.msg;
+
+        chatLog.Add(notification);
+        // chatLog.Add(chatString);
 
         socket.Emit("sendChat", new JSONObject(sendChat));
     }
 
+    public void sendNotification(string msg){
+        Dictionary<string, string> message = new Dictionary<string, string>();
+        message["name"]=StaticInfo.name;
+        message["text"]=msg;
+        socket.Emit("sendNotification",new JSONObject(message));
+    }
+
+    void sendNotification_SUCCESS(SocketIOEvent obj){
+        var name = obj.data.ToDictionary()["name"];
+        var text = obj.data.ToDictionary()["text"];
+
+        var chatString = name + " " + text;
+        if(chatLog.Count>20){
+            Destroy(chatLog[0].textObject.gameObject);
+            chatLog.Remove(chatLog[0]);
+        }
+
+        Notification notification=new Notification();
+        notification.msg=chatString;
+        GameObject newText=Instantiate(notificationText,notificationPanel.transform);
+        notification.textObject=newText.GetComponent<Text>();
+        notification.textObject.text=notification.msg;
+
+        chatLog.Add(notification);
+        Debug.Log(chatString);
+    }
+
+}
+
+public class Notification{
+    public string msg;
+    public Text textObject;
 }
