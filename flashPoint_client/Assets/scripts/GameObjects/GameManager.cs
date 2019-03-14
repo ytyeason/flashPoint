@@ -44,6 +44,8 @@ public class GameManager: MonoBehaviour
 
     public Text chat;
 
+    public Text nameAP;
+
 
     void Start()
     {
@@ -81,10 +83,16 @@ public class GameManager: MonoBehaviour
         tileMap = new TileMap(tileTypes,this, fireman);
 		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
 
+        displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"]));
+
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
         checkTurn();//initialize isMyTurn varaible at start
 
+    }
+
+    public void displayAP(int ap){
+        nameAP.text=StaticInfo.name+" has "+ap+" AP";
     }
 
     void WallUpdate_Success(SocketIOEvent obj)
