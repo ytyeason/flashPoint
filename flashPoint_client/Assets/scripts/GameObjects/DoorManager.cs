@@ -220,4 +220,38 @@ public class DoorManager
     }
 
 
+	// Added to interface with FireManager.cs:
+	public bool checkIfHDoor(int x, int z)
+	{
+
+		List<int[]> keyList = new List<int[]>(hdoorStores.Keys);
+
+		foreach (var key in keyList)
+		{
+			if (key[0] == x && key[1] == z)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public bool checkIfVDoor(int x, int z)
+	{
+
+		List<int[]> keyList = new List<int[]>(vdoorStores.Keys);
+
+		foreach (var key in keyList)
+		{
+			if (key[0] == x && key[1] == z)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
 }

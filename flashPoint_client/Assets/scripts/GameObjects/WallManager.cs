@@ -216,5 +216,37 @@ public class WallManager
 
         }
 
+	public bool checkIfHWall(int x, int z)
+	{
 
-    }
+		List<int[]> keyList = new List<int[]>(hwallStores.Keys);
+
+		foreach (var key in keyList)
+		{
+			if (key[0] == x && key[1] == z)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public bool checkIfVWall(int x, int z)
+	{
+
+		List<int[]> keyList = new List<int[]>(vwallStores.Keys);
+
+		foreach (var key in keyList)
+		{
+			if (key[0] == x && key[1] == z)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+}

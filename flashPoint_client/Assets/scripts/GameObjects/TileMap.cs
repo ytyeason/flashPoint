@@ -62,8 +62,11 @@ public class TileMap  {
 		// Initialize our map tiles to be normal or fire
 		for(int x = 0; x < mapSizeX; x++) {
 			for(int z = 0; z < mapSizeZ; z++) {
-				/*
-				if (x == 1 && z == 1) tiles[x, z] = 1;		// One as 'Smoke' for testing
+				//* Make Smoke tiles for Testing
+				if (x == 2 && z == 2) tiles[x, z] = 1;
+				else if (x == 2 && z == 1) tiles[x, z] = 1;
+				else if (x == 1 && z == 2) tiles[x, z] = 1;
+				else if (x == 0 && z == 0) tiles[x, z] = 1;
 				else //*/ 
 					tiles[x,z] = 2;						// 2 -> code for Fire
 			}

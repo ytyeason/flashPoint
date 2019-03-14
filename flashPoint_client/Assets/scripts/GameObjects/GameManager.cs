@@ -18,7 +18,8 @@ public class GameManager: MonoBehaviour
     public TileType[] tileTypes;
     public DoorType[] doorTypes;
     public WallType[] wallTypes;
-
+	public int mapSizeX = 10;
+	public int mapSizeZ = 8;
 
 
     public JSONObject game_info = StaticInfo.game_info;
@@ -26,6 +27,7 @@ public class GameManager: MonoBehaviour
     public WallManager wallManager;
     private TileMap tileMap;
     public DoorManager doorManager;
+	public FireManager fireManager;
 
     private JSONObject room;
     private JSONObject participants;
@@ -75,6 +77,7 @@ public class GameManager: MonoBehaviour
         wallManager = new WallManager(wallTypes,this);
         doorManager = new DoorManager(doorTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
+		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
 
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
@@ -315,12 +318,19 @@ public class GameManager: MonoBehaviour
     public void EndTurn()
     {
         Debug.Log("Ending Turn");
-        checkTurn();
+
+		// advanceFire testing!
+		fireManager.advanceFire();
+		// TODO Remove ^ ^ ^
+		Debug.Log("Finished advFire");
+		return;
+
+		checkTurn();
         //do stuff here...
 
         //if (isMyTurn)
         //{
-            changeTurn();
+			changeTurn();
         //}
         //else
         //{
