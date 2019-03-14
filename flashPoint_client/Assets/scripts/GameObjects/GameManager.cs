@@ -42,9 +42,6 @@ public class GameManager: MonoBehaviour
     public List<Notification> chatLog = new List<Notification>();
     public GameObject notificationPanel, notificationText;
 
-    public Text nameAP;
-    // public Notification nAP;
-
     public Text chat;
 
 
@@ -87,11 +84,7 @@ public class GameManager: MonoBehaviour
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
         checkTurn();//initialize isMyTurn varaible at start
-        displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"]));
-    }
 
-    public void displayAP(int ap){
-        nameAP.text=StaticInfo.name+" has "+ap.ToString()+" AP";
     }
 
     void WallUpdate_Success(SocketIOEvent obj)
