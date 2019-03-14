@@ -34,6 +34,9 @@ public class TileMap  {
 	public int[,] tiles;
 
     public GameObject gmo;
+    	GameObject goo; 
+	GameObject goo1; 
+	GameObject goo2; 
 
 
 	void StartTileMap() {
@@ -42,6 +45,10 @@ public class TileMap  {
 		GenerateMapData();
 		// Display them in the game world
 		GenerateMapVisual();
+		goo=gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 5), Quaternion.identity);
+		goo1=gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 15), Quaternion.identity);
+		goo2=gm.instantiateObject(selectedUnit.s, new Vector3(40, 0, 30), Quaternion.identity);
+		
 
 	}
 
@@ -221,6 +228,6 @@ public class TileMap  {
 		//selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
 
 		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
-		selectedUnit.tryMove(x, z, in_status,gmo);
+		selectedUnit.tryMove(x, z, in_status,goo);
 	}
 }

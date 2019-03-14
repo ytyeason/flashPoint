@@ -45,6 +45,61 @@ public class WallManager
 
 	}
 
+	public int HorizontalWall(int x, int z)
+    {
+        List<int[]> keyList = new List<int[]>(hwallStores.Keys);
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return hwallStores[key].GetComponent<Wall>().type;
+            } } return -1;
+    }
+
+    public int VerticalWall(int x, int z)
+    {
+        List<int[]> keyList = new List<int[]>(vwallStores.Keys);
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return vwallStores[key].GetComponent<Wall>().type;
+            }
+        }
+        return -1;
+    }
+
+    public bool isHorizontalWall(int x,int z)
+    {
+        List<int[]> keyList = new List<int[]>(hwallStores.Keys);
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z&& hwallStores[key].GetComponent<Wall>().type!=2)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool isVeritcalWall(int x, int z)
+    {
+        List<int[]> keyList = new List<int[]>(vwallStores.Keys );
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z && vwallStores[key].GetComponent<Wall>().type != 2)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 	public WallManager(WallType[] wallTypes, GameManager gm)
 	{
 		this.wallTypes = wallTypes;
@@ -58,7 +113,7 @@ public class WallManager
 		defaultHorizontalWalls.Add(new int[] { 2, 1 });
 		//
 		defaultHorizontalWalls.Add(new int[] { 4, 1 });
-		defaultHorizontalWalls.Add(new int[] { 5, 1 });
+		defaultHorizontalWalls.Add(new int[] { 3, 1 });
 		defaultHorizontalWalls.Add(new int[] { 6, 1 });
 		defaultHorizontalWalls.Add(new int[] { 7, 1 });
 		defaultHorizontalWalls.Add(new int[] { 8, 1 });
@@ -93,7 +148,7 @@ public class WallManager
 
 		defaultVerticalWalls.Add(new int[] { 1, 1 });
 		defaultVerticalWalls.Add(new int[] { 1, 2 });
-		defaultVerticalWalls.Add(new int[] { 1, 3 });
+		defaultVerticalWalls.Add(new int[] { 1, 4 });
 		//
 		defaultVerticalWalls.Add(new int[] { 1, 5 });
 		defaultVerticalWalls.Add(new int[] { 1, 6 });

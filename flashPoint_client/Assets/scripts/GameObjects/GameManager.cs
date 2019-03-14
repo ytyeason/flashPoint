@@ -15,6 +15,7 @@ public class GameManager: MonoBehaviour
 {
     public SocketIOComponent socket;
     public GameObject firemanObject;
+    public GameObject firemanplusObject;
     public TileType[] tileTypes;
     public DoorType[] doorTypes;
     public WallType[] wallTypes;
@@ -269,7 +270,8 @@ public class GameManager: MonoBehaviour
         int z = Convert.ToInt32(cord[1]);
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, x, z, ap, this);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this);
+
 
         return f;
     }

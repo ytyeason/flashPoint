@@ -30,15 +30,74 @@ public class DoorManager
 		StartDoorManager();
 	}
 
+
+public int HorizontalDoor(int x, int z)
+    {
+        List<int[]> keyList = new List<int[]>(hdoorStores.Keys);
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return hdoorStores[key].GetComponent<Door>().type;
+            }
+        }
+        return -1;
+    }
+
+    public int VerticalDoor(int x, int z)
+    {
+        List<int[]> keyList = new List<int[]>(vdoorStores.Keys);
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return vdoorStores[key].GetComponent<Door>().type;
+            }
+        }
+        return -1;
+    }
+
+    public bool isVerticalDoor(int x, int z)
+    {
+        List<int[]> keyList = new List<int[]>(vdoorStores.Keys);
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool isHorizontalDoor(int x, int z)
+    {
+        List<int[]> keyList = new List<int[]>(hdoorStores.Keys);
+
+        foreach (var key in keyList)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
 	void PopulateDoors()
 	{
-		defaultHorizontalDoors.Add(new int[] { 3, 1 });
+		defaultHorizontalDoors.Add(new int[] { 5, 1 });
 		defaultHorizontalDoors.Add(new int[] { 3, 3 });
 		defaultHorizontalDoors.Add(new int[] { 6, 3 });
 		defaultHorizontalDoors.Add(new int[] { 5, 4 });
 		defaultHorizontalDoors.Add(new int[] { 6, 7 });
 
-		defaultVerticalDoors.Add(new int[] { 1, 4 });
+		defaultVerticalDoors.Add(new int[] { 1, 3 });
 		defaultVerticalDoors.Add(new int[] { 6, 4 });
 		defaultVerticalDoors.Add(new int[] { 9, 3 });
 

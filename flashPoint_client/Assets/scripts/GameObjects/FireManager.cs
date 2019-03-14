@@ -134,6 +134,214 @@ public class FireManager : MonoBehaviour
 		}
 	}
 
+public void keepGoingUp(int rng_X, int rng_Z)
+    {
+                tileMap.buildNewTile(rng_X, rng_Z, 2);
+                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
+        {
+            //TOP 
+
+            //if this is wall
+            if (gm.wallManager.isHorizontalWall(rng_X, rng_Z))
+            {
+                int type = gm.wallManager.HorizontalWall(rng_X, rng_Z);
+                type += 2;
+                if (type == 2 || type == 4)
+
+                {
+                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1);
+                    gm.UpdateWall(rng_X, rng_Z, type, 1); // horizontal
+                }
+
+
+            }
+            //if this is door 
+            else if (gm.doorManager.isHorizontalDoor(rng_X, rng_Z))
+                {
+                int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z);
+                type += 4;
+                if (type == 4)
+
+                {
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 1);
+                    gm.UpdateDoor(rng_X, rng_Z, type, 1);// horizontal
+                }
+
+            }
+            //nothing or smoke
+            else if (tileMap.tiles[rng_X, rng_Z + 1] == 0 || tileMap.tiles[rng_X, rng_Z + 1] == 1)
+            {
+                tileMap.buildNewTile(rng_X, rng_Z+1, 2);
+                tileMap.gm.UpdateTile(rng_X, rng_Z+1, 2);
+            }
+            else
+            {
+                //recursion function 
+                keepGoingUp(rng_X, rng_Z + 1);
+            }
+
+
+
+        }
+    }
+
+
+    public void keepGoingLeft(int rng_X, int rng_Z)
+    {
+                tileMap.buildNewTile(rng_X, rng_Z, 2);
+                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
+        {
+            //TOP 
+
+            //if this is wall
+            if (gm.wallManager.isVeritcalWall(rng_X, rng_Z))
+            {
+                int type = gm.wallManager.VerticalWall(rng_X, rng_Z);
+                type += 2;
+                if (type == 2 || type == 4)
+
+                {
+                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1);
+                    gm.UpdateWall(rng_X, rng_Z, type, 1); // 
+                }
+
+
+            }
+            //if this is door 
+            else if (gm.doorManager.isVerticalDoor(rng_X, rng_Z))
+                {
+                int type = gm.doorManager.VerticalDoor(rng_X, rng_Z);
+                type += 4;
+                if (type == 4)
+
+                {
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 1);
+                    gm.UpdateDoor(rng_X, rng_Z, type, 1);// horizontal
+                }
+
+            }
+            //nothing or smoke
+            else if (tileMap.tiles[rng_X-1, rng_Z ] == 0 || tileMap.tiles[rng_X-1, rng_Z ] == 1)
+            {
+                tileMap.buildNewTile(rng_X-1, rng_Z, 2);
+                tileMap.gm.UpdateTile(rng_X-1, rng_Z, 2);
+            }
+            else
+            {
+                //recursion function 
+                keepGoingLeft(rng_X-1, rng_Z );
+            }
+
+
+
+        }
+    }
+
+    public void keepGoingright(int rng_X, int rng_Z)
+    {
+                tileMap.buildNewTile(rng_X, rng_Z, 2);
+                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
+        {
+            //TOP 
+
+            //if this is wall
+            if (gm.wallManager.isVeritcalWall(rng_X+1, rng_Z))
+            {
+                int type = gm.wallManager.VerticalWall(rng_X+1, rng_Z);
+                type += 2;
+                if (type == 2 || type == 4)
+
+                {
+                    gm.wallManager.BreakWall(rng_X+1, rng_Z, type, 1);
+                    gm.UpdateWall(rng_X+1, rng_Z, type, 1); // 
+                }
+
+
+            }
+            //if this is door 
+            else if (gm.doorManager.isVerticalDoor(rng_X+1, rng_Z))
+                {
+                int type = gm.doorManager.VerticalDoor(rng_X+1, rng_Z);
+                type += 4;
+                if (type == 4)
+
+                {
+                    gm.doorManager.ChangeDoor(rng_X+1, rng_Z, type, 1);
+                    gm.UpdateDoor(rng_X+1, rng_Z, type, 1);// horizontal
+                }
+
+            }
+            //nothing or smoke
+            else if (tileMap.tiles[rng_X+1, rng_Z ] == 0 || tileMap.tiles[rng_X+1, rng_Z ] == 1)
+            {
+                tileMap.buildNewTile(rng_X+1, rng_Z, 2);
+                tileMap.gm.UpdateTile(rng_X+1, rng_Z, 2);
+            }
+            else
+            {
+                //recursion function 
+                keepGoingUp(rng_X +1, rng_Z);
+            }
+
+
+
+        }
+    }
+
+
+    public void keepGoingDown(int rng_X, int rng_Z)
+    {
+        tileMap.buildNewTile(rng_X, rng_Z, 2);
+                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
+        {
+            //TOP 
+
+            //if this is wall
+            if (gm.wallManager.isHorizontalWall(rng_X , rng_Z-1))
+            {
+                int type = gm.wallManager.HorizontalWall(rng_X , rng_Z-1);
+                type += 2;
+                if (type == 2 || type == 4)
+
+                {
+                    gm.wallManager.BreakWall(rng_X, rng_Z-1, type, 1);
+                    gm.UpdateWall(rng_X, rng_Z-1, type, 1); // 
+                }
+
+
+            }
+            //if this is door 
+            else if (gm.doorManager.isHorizontalDoor(rng_X , rng_Z-1))
+                {
+                int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z-1);
+                type += 4;
+                if (type == 4)
+
+                {
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z-1, type, 1);
+                    gm.UpdateDoor(rng_X, rng_Z-1, type, 1);// horizontal
+                }
+
+            }
+            //nothing or smoke
+            else if (tileMap.tiles[rng_X , rng_Z-1] == 0 || tileMap.tiles[rng_X , rng_Z-1] == 1)
+            {
+                tileMap.buildNewTile(rng_X, rng_Z-1, 2);
+                tileMap.gm.UpdateTile(rng_X, rng_Z-1, 2);
+            }
+            else
+            {
+                //recursion function 
+
+                keepGoingUp(rng_X , rng_Z-1);
+            }
+
+        }
+    }
 
 	// Begin phase 1 of advanceFire: placing the new Smoke marker
 	public void newFire(int in_x, int in_z, bool isATest)
@@ -165,6 +373,15 @@ public class FireManager : MonoBehaviour
 		else if (current_type == 2)
 		{
 			// Trigger explosion
+			// call four directions
+            keepGoingUp(rng_X, rng_Z);
+            keepGoingDown(rng_X, rng_Z);
+            keepGoingLeft(rng_X, rng_Z);
+            keepGoingright(rng_X, rng_Z);
+
+             tileMap.buildNewTile(rng_X, rng_Z, 2);
+                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+
 			return;
 		}
 

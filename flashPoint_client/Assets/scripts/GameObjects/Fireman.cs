@@ -9,7 +9,9 @@ using System;
 public class Fireman
 {
     public GameObject s;
-
+    public GameObject fireandvictim;
+    public TileMap map;
+    public TileType[] tileTypes;
 	public int currentX;
 	public int currentZ;
 	public Boolean debugMode = true;		// Toggle this for more descriptive Debug.Log() output
@@ -26,17 +28,19 @@ public class Fireman
 
     public GameManager gm;
 
-    public Fireman(String name, Colors color, GameObject s, int in_x, int in_z, int AP, GameManager gm)
+ public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
     {
         this.name = name;
         this.color = color;
-        this.s = s;
+        this.s=s;
+        this.fireandvictim = firemanplusvictim;
 		this.currentX = in_x;
 		this.currentZ = in_z;
         this.AP = AP;
         this.FreeAP = AP;
         this.gm = gm;
     }
+
 
     public void setAP(int ap)
     {
@@ -183,13 +187,13 @@ public class Fireman
 		s.transform.position = new Vector3(x, 0.2f, z);
         if(x==5 && z == 5)
         {
-            firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, s, currentX, currentZ);
+            firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, fireandvictim, currentX, currentZ);
+            GameManager gmm = new GameManager();
+            gmm.DestroyObject(gmo);
+            
+            s=gmm.instantiateObject(firemanandvictim.s, new Vector3(5, 0, 5), Quaternion.identity);
 
-            gm.DestroyObject(gmo);
-            gm.DestroyObject(gm.firemanObject);
         }
     }
-
-
 
 }
