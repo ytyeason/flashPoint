@@ -4,53 +4,57 @@ using System.Collections;
 public class Wall : MonoBehaviour
 {
 
-    // Variables to track our things
-    public int x;
-    public int z;
-    public WallManager wallMap;
-    public int type;
+	// Variables to track our things
+	public int x;
+	public int z;
+	public WallManager wallMap;
+	public int type;
 
-    // Occurs when we click the mouse:
-    void OnMouseUp()
-    {
-        if (wallMap.gm.isMyTurn)
-        {
-            int wallX = x / 5;
-            int wallZ = z / 5;
+	// Occurs when we click the mouse:
+	void OnMouseUp()
+	{
+		if (wallMap.gm.isMyTurn)
+		{
+			int wallX = x / 5;
+			int wallZ = z / 5;
 
-            Debug.Log("Clicked type: " + type);
+			Debug.Log("Clicked type: " + type);
 
-            if (type == 0)
-            {
-                wallMap.BreakWall(wallX, wallZ, 2, 1);
-                wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
-            }
+			if (type == 0) // Horizontal normal
+			{
+				Debug.Log("Wall coord (x, z):  " + x + "," + z);
+				wallMap.BreakWall(wallX, wallZ, 2, 1);
+				wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
+			}
 
-            if (type == 1)
-            {
-                wallMap.BreakWall(wallX, wallZ, 3, 0);
-                wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
-            }
+			if (type == 1) // Vertical normal
+			{
+				Debug.Log("Wall coord (x, z):  " + x + "," + z);
+				wallMap.BreakWall(wallX, wallZ, 3, 0);
+				wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
+			}
 
-            if (type == 2)
-            {
-                wallMap.BreakWall(wallX, wallZ, 4, 1);
-                wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
-            }
+			if (type == 2) // Horizontal damaged
+			{
+				wallMap.BreakWall(wallX, wallZ, 4, 1);
+				wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
+			}
 
-            if (type == 3)
-            {
-                wallMap.BreakWall(wallX, wallZ, 5, 0);
-                wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
-            }
-        }
-        else
-        {
-            Debug.Log("Not my turn, dont click");
-        }
+			if (type == 3) // Vertical damaged
+			{
+				wallMap.BreakWall(wallX, wallZ, 5, 0);
+				wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
+			}
+			//		4 -> Horizontal destroyed
+			//		5 -> Vertical destroyed
+		}
+		else
+		{
+			Debug.Log("Not my turn, dont click");
+		}
 
-        //Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
-    }
+		//Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);
+	}
 }
 
 /*using System.Collections;

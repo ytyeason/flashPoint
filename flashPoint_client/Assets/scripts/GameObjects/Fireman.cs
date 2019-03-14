@@ -40,7 +40,8 @@ public class Fireman
 
     public void setAP(int ap)
     {
-        AP = ap;
+        FreeAP = ap;
+		gm.displayAP(FreeAP);
     }
 
 	// Fireman's method call from Door.cs
@@ -58,7 +59,7 @@ public class Fireman
 		// toggleDoor()
 		else
 		{
-			FreeAP -= 1;
+			setAP(FreeAP - 1);
 			if (debugMode) Debug.Log("Changed (toggleDoor): AP is now: " + FreeAP);
 			return true;
 		}
@@ -78,7 +79,7 @@ public class Fireman
 		}
 		else // Fire -> Smoke || Smoke -> Normal: 1 AP
 		{
-			FreeAP -= 1;
+			setAP(FreeAP - 1);
 			if (debugMode) Debug.Log("Changed extFire: AP is now: " + FreeAP);
 			return (in_status - 1);
 		}
@@ -88,7 +89,7 @@ public class Fireman
 	{
 		if (FreeAP >= 2)
 		{
-			FreeAP -= 2;
+			setAP(FreeAP - 2);
 			if (debugMode) Debug.Log("AP is now: " + FreeAP);
 			return true;
 		}
@@ -117,7 +118,7 @@ public class Fireman
 						// Now that chosen ClickableTile is valid, check AP constraints:
 						if ( in_status != 2 && FreeAP >= 1 && !carryingVictim) // Safe
 						{
-							FreeAP--;
+							setAP(FreeAP - 1);
 							String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
 							move(x, z,gmo);
@@ -125,7 +126,7 @@ public class Fireman
 						}
 						else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
 						{
-							FreeAP-=2;
+							setAP(FreeAP - 2);
 							String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
 							move(x, z,gmo);
@@ -133,7 +134,7 @@ public class Fireman
                         }
 						else if (in_status != 2 && carryingVictim && FreeAP >= 2)
 						{
-							FreeAP -= 2;
+							setAP(FreeAP - 2);
 							String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
 							move(x, z,gmo);
@@ -141,7 +142,7 @@ public class Fireman
                         }
                         else if (in_status != 2 && carryingVictim && FreeAP >= 2)
                         {
-                            FreeAP -= 2;
+                            setAP(FreeAP - 2);
                             String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
                             //Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z, gmo);
