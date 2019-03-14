@@ -62,16 +62,27 @@ public class TileMap  {
 		// Initialize our map tiles to be normal or fire
 		for(int x = 0; x < mapSizeX; x++) {
 			for(int z = 0; z < mapSizeZ; z++) {
-				//* Make Smoke tiles for Testing
-				if (x == mapSizeX - 1 && z == mapSizeZ - 1) tiles[x, z] = 0;
+				// Family fire setup:
+				if (x == 2 && z == 5) tiles[x, z] = 2;
+				else if (x == 3 && z == 5) tiles[x, z] = 2;
+				else if (x == 2 && z == 4) tiles[x, z] = 2;
+				else if (x == 3 && z == 4) tiles[x, z] = 2;
+				else if (x == 4 && z == 4) tiles[x, z] = 2;
+				else if (x == 5 && z == 4) tiles[x, z] = 2;
+				else if (x == 4 && z == 3) tiles[x, z] = 2;
+				else if (x == 6 && z == 2) tiles[x, z] = 2;
+				else if (x == 6 && z == 1) tiles[x, z] = 2;
+				else if (x == 7 && z == 2) tiles[x, z] = 2;
+				/* Make Smoke tiles for Testing
 				else if (x == mapSizeX - 2 && z == mapSizeZ - 1) tiles[x, z] = 0;
 				else if (x == mapSizeX - 3 && z == mapSizeZ - 1) tiles[x, z] = 0;
 				else if (x == mapSizeX - 4 && z == mapSizeZ - 1) tiles[x, z] = 0;
-				//else if (x == 2 && z == 1) tiles[x, z] = 1;
-				//else if (x == 1 && z == 2) tiles[x, z] = 1;
-				else if (x == 0 && z == 0) tiles[x, z] = 1;
+				else if (x == 0 && z == 0) tiles[x, z] = 0;
+				//*/
+				else if (x == 2 && z == 3) tiles[x, z] = 1;
+				else if (x == 1 && z == 4) tiles[x, z] = 1;
 				else //*/ 
-					tiles[x,z] = 2;						// 2 -> code for Fire
+					tiles[x, z] = 0;		// 2 -> code for Fire
 			}
 		}
 
