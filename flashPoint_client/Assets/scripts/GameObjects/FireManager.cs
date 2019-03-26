@@ -7,8 +7,8 @@ public class FireManager : MonoBehaviour
 {
 
 	//private Random rng;
-	private int mapSizeX;
-	private int mapSizeZ;
+	private int mapSizeX; // Should be 10
+	private int mapSizeZ; // Should be 8
 	public GameManager gm;
 	public TileMap tileMap;
 	public Boolean debugMode = true;        // Toggle this for more descriptive Debug.Log() output
@@ -24,10 +24,9 @@ public class FireManager : MonoBehaviour
 		this.mapSizeZ = in_Z;
 	}
 
+	// Pseudo-controller function called by GameManager when turn is changed
 	public void advanceFire(int in_x, int in_z, bool isATest)
 	{
-		
-
 		// Places the new Smoke marker (n.b. might be 'more' than Smoke due to rule interactions)
 		if( debugMode ) Debug.Log("NewFire running:");
 		newFire(in_x, in_z, isATest);
@@ -35,8 +34,93 @@ public class FireManager : MonoBehaviour
 		// Flashover step:
 		if (debugMode) Debug.Log("flashover:");
 		flashover();
+		
+		// Remove victims in fire & knockdown Firemen
+		if (debugMode) Debug.Log("knockDown:");
+		knockDown();
+		
+		// Final step
+		if (debugMode) Debug.Log("extOutFire:");
+		extOutFire();
+		
 	}
 
+
+	// Victims and POIs in spaces with Fire markers are 'Lost'
+	/*	A Firefighter is Knocked Down when Fire advances into their space; this could be from an explosion or being
+	 *	in a Smoke filled space that ignites. A Firefighter that is knocked down needs to go to the Ambulance to
+	 *	recover. When a Knock Down happens, take the Firefighter from its space and place it on the closest
+	 *	(as the crow flies) Ambulance Parking Spot outside the building. If two Parking Spots are equally distant,
+	 *	choose one.
+	 *	
+	 *	Ambulance coords are (mapSizeX - 1, 3) & (mapSizeX - 1, 4)
+	 */
+	public void knockDown()
+	{
+		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
+		{
+			for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
+			{
+				if (tileMap.tiles[x_elem, z_elem] == 2 &&
+					tileMap.selectedUnit.currentX == (x_elem * 5) && tileMap.selectedUnit.currentZ == (z_elem * 5))
+				{
+					Debug.Log("Reached knockdown");	
+
+					// If firefighter is on the tile knock them out: send them to lower ambulance unit
+					if(z_elem <= 3)
+					{
+						tileMap.selectedUnit.s.transform.position = new Vector3(45, 0.2f, 15);
+					}
+					else
+					{
+						tileMap.selectedUnit.s.transform.position = new Vector3(45, 0.2f, 20);
+					}
+				}
+			}
+		}
+	}
+
+
+	// Called to "Remove any Fire markers that were placed outside of the building"
+	public void extOutFire()
+	{
+		// Extinguish fires above and below the house
+		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
+		{
+			if (tileMap.tiles[x_elem, 0] == 2)	// Bottom row is on Fire
+			{
+				Debug.Log("Extinguishing fire on (" + x_elem + ",0)");
+				tileMap.buildNewTile(x_elem, 0, 0);
+				tileMap.gm.UpdateTile(x_elem, 0, 0);
+			}
+			if(tileMap.tiles[x_elem, mapSizeZ - 1] == 2) // Top row is on fire
+			{
+				Debug.Log("Extinguishing fire on (" + x_elem + "," + (mapSizeZ - 1) + ")");
+				tileMap.buildNewTile(x_elem, mapSizeZ - 1, 0);
+				tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 0);
+			}
+		}
+
+		// Extinguish fires on the left and right of the house
+		for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
+		{
+			if (tileMap.tiles[0, z_elem] == 2)  // Bottom row is on Fire
+			{
+				Debug.Log("Extinguishing fire on (0," + z_elem + ")");
+				tileMap.buildNewTile(0, z_elem, 0);
+				tileMap.gm.UpdateTile(0, z_elem, 0);
+			}
+			if (tileMap.tiles[mapSizeX - 1, z_elem] == 2) // Top row is on fire
+			{
+				Debug.Log("Extinguishing fire on (" + (mapSizeX - 1) + "," + z_elem + ")");
+				tileMap.buildNewTile(mapSizeX - 1, z_elem, 0);
+				tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 0);
+			}
+		}
+	}
+
+
+	// Called when flashover is triggered
 	public void flashover()
 	{
 		bool canLeft = false;
@@ -134,7 +218,8 @@ public class FireManager : MonoBehaviour
 		}
 	}
 
-public void keepGoingUp(int rng_X, int rng_Z)
+	// Recursive function to propagate shockwave upwards
+	public void keepGoingUp(int rng_X, int rng_Z)
     {
                 tileMap.buildNewTile(rng_X, rng_Z, 2);
                 tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
@@ -150,7 +235,7 @@ public void keepGoingUp(int rng_X, int rng_Z)
                 if (type == 2 || type == 4)
 
                 {
-                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1);
+                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1, true);
                     gm.UpdateWall(rng_X, rng_Z, type, 1); // horizontal
                 }
 
@@ -186,8 +271,8 @@ public void keepGoingUp(int rng_X, int rng_Z)
         }
     }
 
-
-    public void keepGoingLeft(int rng_X, int rng_Z)
+	// Recursive function to propagate shockwave leftwards
+	public void keepGoingLeft(int rng_X, int rng_Z)
     {
                 tileMap.buildNewTile(rng_X, rng_Z, 2);
                 tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
@@ -203,7 +288,7 @@ public void keepGoingUp(int rng_X, int rng_Z)
                 if (type == 2 || type == 4)
 
                 {
-                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1);
+                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1, true);
                     gm.UpdateWall(rng_X, rng_Z, type, 1); // 
                 }
 
@@ -239,7 +324,8 @@ public void keepGoingUp(int rng_X, int rng_Z)
         }
     }
 
-    public void keepGoingright(int rng_X, int rng_Z)
+	// Recursive function to propagate shockwave rightwards
+	public void keepGoingRight(int rng_X, int rng_Z)
     {
                 tileMap.buildNewTile(rng_X, rng_Z, 2);
                 tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
@@ -255,7 +341,7 @@ public void keepGoingUp(int rng_X, int rng_Z)
                 if (type == 2 || type == 4)
 
                 {
-                    gm.wallManager.BreakWall(rng_X+1, rng_Z, type, 1);
+                    gm.wallManager.BreakWall(rng_X+1, rng_Z, type, 1, true);
                     gm.UpdateWall(rng_X+1, rng_Z, type, 1); // 
                 }
 
@@ -282,8 +368,8 @@ public void keepGoingUp(int rng_X, int rng_Z)
             }
             else
             {
-                //recursion function 
-                keepGoingUp(rng_X +1, rng_Z);
+				//recursion function 
+				keepGoingRight(rng_X +1, rng_Z);
             }
 
 
@@ -291,7 +377,7 @@ public void keepGoingUp(int rng_X, int rng_Z)
         }
     }
 
-
+	// Recursive function to propagate shockwave downwards
     public void keepGoingDown(int rng_X, int rng_Z)
     {
         tileMap.buildNewTile(rng_X, rng_Z, 2);
@@ -308,7 +394,7 @@ public void keepGoingUp(int rng_X, int rng_Z)
                 if (type == 2 || type == 4)
 
                 {
-                    gm.wallManager.BreakWall(rng_X, rng_Z-1, type, 1);
+                    gm.wallManager.BreakWall(rng_X, rng_Z-1, type, 1, true);
                     gm.UpdateWall(rng_X, rng_Z-1, type, 1); // 
                 }
 
@@ -335,9 +421,9 @@ public void keepGoingUp(int rng_X, int rng_Z)
             }
             else
             {
-                //recursion function 
+				//recursion function 
 
-                keepGoingUp(rng_X , rng_Z-1);
+				keepGoingDown(rng_X , rng_Z-1);
             }
 
         }
@@ -372,15 +458,14 @@ public void keepGoingUp(int rng_X, int rng_Z)
 		}
 		else if (current_type == 2)
 		{
-			// Trigger explosion
-			// call four directions
+			// Trigger explosion in all four directions
             keepGoingUp(rng_X, rng_Z);
             keepGoingDown(rng_X, rng_Z);
             keepGoingLeft(rng_X, rng_Z);
-            keepGoingright(rng_X, rng_Z);
+            keepGoingRight(rng_X, rng_Z);
 
-             tileMap.buildNewTile(rng_X, rng_Z, 2);
-                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+            tileMap.buildNewTile(rng_X, rng_Z, 2);
+            tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
 
 			return;
 		}

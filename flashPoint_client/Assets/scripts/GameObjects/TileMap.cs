@@ -34,9 +34,9 @@ public class TileMap  {
 	public int[,] tiles;
 
     public GameObject gmo;
-    	GameObject goo; 
-	GameObject goo1; 
-	GameObject goo2; 
+	public GameObject goo;
+	public GameObject goo1;
+	public GameObject goo2; 
 
 
 	void StartTileMap() {
@@ -45,11 +45,9 @@ public class TileMap  {
 		GenerateMapData();
 		// Display them in the game world
 		GenerateMapVisual();
-		goo=gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 5), Quaternion.identity);
-		goo1=gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 15), Quaternion.identity);
-		goo2=gm.instantiateObject(selectedUnit.s, new Vector3(40, 0, 30), Quaternion.identity);
-		
-
+		goo  = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 5), Quaternion.identity);
+		goo1 = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 15), Quaternion.identity);
+		goo2 = gm.instantiateObject(selectedUnit.s, new Vector3(40, 0, 30), Quaternion.identity);
 	}
 
 	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit)
@@ -85,9 +83,12 @@ public class TileMap  {
 				else if (x == mapSizeX - 3 && z == mapSizeZ - 1) tiles[x, z] = 0;
 				else if (x == mapSizeX - 4 && z == mapSizeZ - 1) tiles[x, z] = 0;
 				else if (x == 0 && z == 0) tiles[x, z] = 0;
+				
+				else if (x == 1 && z == 0) tiles[x, z] = 2;
+				else if (x == 1 && z == mapSizeZ - 1) tiles[x, z] = 2;
+				else if (x == 0 && z == 1) tiles[x, z] = 2;
+				else if (x == mapSizeX - 1 && z == 1) tiles[x, z] = 2;
 				//*/
-				else if (x == 2 && z == 3) tiles[x, z] = 1;
-				else if (x == 1 && z == 4) tiles[x, z] = 1;
 				else //*/ 
 					tiles[x, z] = 0;		// 2 -> code for Fire
 			}
@@ -136,15 +137,14 @@ public class TileMap  {
                 int z = Convert.ToInt32(cord[1]);
                 GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x, 0, z), Quaternion.identity);
                 firemanSores[name] = go;
-                if (x == 5)
+                if (x == 5)					// TODO: Why is this here?
                 {
                     gmo = go;
                 }
             }
         }
         firemanSores[StaticInfo.name] = selectedUnit.s;
-
-        selectedUnit.move(selectedUnit.currentX, selectedUnit.currentZ,gmo);
+        selectedUnit.move(selectedUnit.currentX, selectedUnit.currentZ, gmo);
     }
 
     public void UpdateFiremanVisual(Dictionary<String, JSONObject> p)
@@ -183,10 +183,10 @@ public class TileMap  {
     public void buildNewTile(int x, int z, int type)
 	{
         //Debug.Log(tileStores.Keys);
-        Debug.Log("Building new tile");
-        Debug.Log(x);
-        Debug.Log(z);
-        Debug.Log(type);
+        //Debug.Log("Building new tile");
+        //Debug.Log(x);
+        //Debug.Log(z);
+        //Debug.Log(type);
 
         List<int[]> keyList = new List<int[]>(tileStores.Keys);
 
@@ -228,6 +228,6 @@ public class TileMap  {
 		//selectedUnit2.transform.position = new Vector3(x, 0.2f, z);
 
 		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
-		selectedUnit.tryMove(x, z, in_status,goo);
+		selectedUnit.tryMove(x, z, in_status, goo);
 	}
 }

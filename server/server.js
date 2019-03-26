@@ -41,7 +41,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       if(Games[data['room']]!=undefined){
 
         var name = data['name'];
-        Games[data['room']]["participants"][name]={"Location": "0,0", "AP":500};
+        Games[data['room']]["participants"][name]={"Location": "0,0", "AP":4};
         Games[data['room']]["participants_in_order"].push(name);
         console.log(Games);
         socket.emit('LOAD_ROOM_SUCCESS',{status: "True"} );
@@ -52,7 +52,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       var room_number = data['room'];
       var name = data['name'];
-      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":500}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
+      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
       console.log(Games);
       socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
     });
