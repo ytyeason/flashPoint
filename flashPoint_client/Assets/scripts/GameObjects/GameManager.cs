@@ -84,7 +84,7 @@ public class GameManager: MonoBehaviour
         tileMap = new TileMap(tileTypes,this, fireman);
 		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
 
-        displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"]));
+        displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()));
 
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
