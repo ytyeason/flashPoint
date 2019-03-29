@@ -13,7 +13,9 @@ public class Hazmat : MonoBehaviour
 
         Debug.Log("MOUSE UP HAZMAT");
         
-        if(hazmatManager.gm)
+        if(true){
+            
+        }
             if(status==HazmatStatus.HotSpot){
                 return;
             }else{
