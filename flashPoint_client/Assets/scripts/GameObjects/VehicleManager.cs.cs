@@ -18,7 +18,7 @@ public class VehicleManager : MonoBehaviour {
 	{
 	//	PopulateVehicles();
 
-		GenerateVehicleVisual(0,9,2,3);
+		GenerateVehicleVisual(0,9,5,4);
 
 	}
 	/*
