@@ -31,8 +31,10 @@ public class gameSetUpManager : MonoBehaviour {
         Debug.Log("gameSetUp successful");
         if(level=="Family"){
             SceneManager.LoadScene("Room");
+            // Debug.Log("Family board");
         }else{
             SceneManager.LoadScene("DragDrop");
+            // Debug.Log("Not family");
         }
         
     }
