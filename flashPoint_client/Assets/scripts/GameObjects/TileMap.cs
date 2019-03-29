@@ -22,12 +22,14 @@ public class TileMap  {
 	//public Unit selectedUnit;
 	
 	public Dictionary<int[],GameObject> tileStores = new Dictionary<int[], GameObject>();
+
     //public Dictionary<int[], ClickableTile> clickTileStores = new Dictionary<int[], ClickableTile>();
     public Dictionary<String, GameObject> firemanSores = new Dictionary<string, GameObject>();
 
 	public string[] strings;
 	// Array of possible tiles:
 	public TileType[] tileTypes;
+	public VehicleType[] vehicleTypes;
 	public GameManager gm;
 
 	// Array populated by 
@@ -39,6 +41,7 @@ public class TileMap  {
 	public GameObject goo2; 
 
 
+
 	void StartTileMap() {
 
 		// Generate the TileTypes and ClickableTiles
@@ -48,6 +51,9 @@ public class TileMap  {
 		goo  = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 5), Quaternion.identity);
 		goo1 = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 15), Quaternion.identity);
 		goo2 = gm.instantiateObject(selectedUnit.s, new Vector3(40, 0, 30), Quaternion.identity);
+
+		
+
 	}
 
 	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit)

@@ -16,9 +16,11 @@ public class GameManager: MonoBehaviour
     public SocketIOComponent socket;
     public GameObject firemanObject;
     public GameObject firemanplusObject;
+    public GameObject clickableVehicle;
     public TileType[] tileTypes;
     public DoorType[] doorTypes;
     public WallType[] wallTypes;
+    public VehicleType[] vehicleTypes;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
 	public int damaged_wall_num = 0;
@@ -27,6 +29,7 @@ public class GameManager: MonoBehaviour
 	public JSONObject game_info = StaticInfo.game_info;
 
     public WallManager wallManager;
+    public VehicleManager vehicleManager;
     private TileMap tileMap;
     public DoorManager doorManager;
 	public FireManager fireManager;
@@ -82,10 +85,12 @@ public class GameManager: MonoBehaviour
         fireman = initializeFireman();
         wallManager = new WallManager(wallTypes,this);
         doorManager = new DoorManager(doorTypes,this);
+        vehicleManager = new VehicleManager(vehicleTypes,this);
         tileMap = new TileMap(tileTypes,this, fireman);
 		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
 
         displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()));
+        vehicleManager.StartvehicleManager();
 
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);

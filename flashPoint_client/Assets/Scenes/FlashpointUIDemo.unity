@@ -6818,6 +6818,7 @@ MonoBehaviour:
   socket: {fileID: 1363472030}
   firemanObject: {fileID: 1847778216}
   firemanplusObject: {fileID: 0}
+  clickableVehicle: {fileID: 0}
   tileTypes:
   - name: Normal
     tileVisualPrefab: {fileID: 1899577080576674, guid: 0290d3a6b4a471244a4e1947028f52a5,
@@ -6869,10 +6870,18 @@ MonoBehaviour:
   - name: vertical_broken
     wallVisualPrefab: {fileID: 1707290558386096, guid: 71dacbf7fa1784710bdfc8b1426699f3,
       type: 2}
+  vehicleTypes:
+  - name: engine
+    vehicleVisualPrefab: {fileID: 1318894427531334, guid: 47d25c36e4e2a48b0a5ffdefafba5db3,
+      type: 2}
+  - name: ambulance
+    vehicleVisualPrefab: {fileID: 1948638692939156, guid: a2e7004922a6a449793f1cc7f95e8cd3,
+      type: 2}
   mapSizeX: 10
   mapSizeZ: 8
   damaged_wall_num: 0
   rescued_vict_num: 0
+  vehicleManager: {fileID: 0}
   fireManager: {fileID: 0}
   isMyTurn: 0
   notificationPanel: {fileID: 2144112879}
@@ -7059,7 +7068,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000056266785, y: 215.40001}
+  m_AnchoredPosition: {x: -0.0000371933, y: 215.40001}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881
