@@ -65,7 +65,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       Games[room_number]["level"] = level;
       Games[room_number]["numberOfPlayer"] = numberOfPlayer;
       console.log(Games[room_number]);
-      socket.emit('gameSetUp_SUCCESS',{status: "True"} );
+      socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
     });
 
     socket.on('startGame', function(data){

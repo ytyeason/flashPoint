@@ -28,7 +28,11 @@ public class Game {
 
     public int numOfDesiredPlayer;
 
-    public DifficultyLevel level = DifficultyLevel.Easy;
+    public int numOfHazmat;
+
+    public int numOfExplosion;
+
+    public DifficultyLevel level = DifficultyLevel.Family;
     
     public List<String> participants = new List<string>();
     
@@ -37,6 +41,20 @@ public class Game {
         numOfDesiredPlayer = num;
         this.level = level;
         this.participants = participants;
+
+        // switch(this.level){
+        //     case DifficultyLevel.Family:
+        //         this.numOfHazmat=0;
+        //         this.numOfExplosion=3;
+        //     case DifficultyLevel.Recruit:
+        //         this.numOfHazmat=3;
+        //     case DifficultyLevel.Veteran:
+        //         this.numOfHazmat=4;
+        //         this.numOfExplosion=3;
+        //     case DifficultyLevel.Heroic:
+        //         this.numOfHazmat=5;
+        //         this.numOfExplosion=4;
+        // }
         
         /*
         
