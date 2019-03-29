@@ -88,6 +88,9 @@
      <Compile Include="Assets\scripts\GameObjects\GamePlayer.cs" />
      <Compile Include="Assets\scripts\GameObjects\GameStatus.cs" />
      <Compile Include="Assets\scripts\GameObjects\GameUnit.cs" />
+     <Compile Include="Assets\scripts\GameObjects\Hazmat.cs" />
+     <Compile Include="Assets\scripts\GameObjects\HazmatManager.cs" />
+     <Compile Include="Assets\scripts\GameObjects\HazmatStatus.cs" />
      <Compile Include="Assets\scripts\GameObjects\playerInfo.cs" />
      <Compile Include="Assets\scripts\GameObjects\PlayerStatus.cs" />
      <Compile Include="Assets\scripts\GameObjects\POI.cs" />
