@@ -27,8 +27,14 @@ public class gameSetUpManager : MonoBehaviour {
 
     void gameSetUpSucessful(SocketIOEvent obj)//change scene
     {
+        var level = obj.data.ToDictionary()["level"];
         Debug.Log("gameSetUp successful");
-        SceneManager.LoadScene("Room");
+        if(level=="Family"){
+            SceneManager.LoadScene("Room");
+        }else{
+            SceneManager.LoadScene("DragDrop");
+        }
+        
     }
 
     IEnumerator ConnectToServer()

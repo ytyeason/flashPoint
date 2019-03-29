@@ -1,6 +1,8 @@
 ﻿
 public enum DifficultyLevel
 {
-    Difficult,
-    Easy
+    Family,
+    Recruit,
+    Veteran,
+    Heroic
 }
