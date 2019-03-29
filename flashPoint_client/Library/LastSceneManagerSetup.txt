@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/FirstUI.unity
+- path: Assets/Scenes/DragDrop.unity
   isLoaded: 1
   isActive: 1
