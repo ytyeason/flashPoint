@@ -13,6 +13,8 @@ var Games = {};
 
 var clients	= [];
 
+var selectRoles=[];
+
 io.on('connection', function (socket) {//default event for client connect to server
 
     var currentUser;
@@ -214,6 +216,20 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var text=data['text'];
       console.log(name+" "+text);
       io.sockets.emit('sendNotification_Success',{"name":name,"text":text});
+    });
+
+    socket.on('SelectRole', function(data){
+      var role=data['role'];
+      var result='true';
+      console.log(role);
+      if(selectRoles.includes(role)||role==""){
+        result='false';
+      }else{
+        result='true';
+        selectRoles.push(role);
+      }
+      socket.emit('selectRole_SUCCESS',{'result':result,'role':role});
+
     });
 
 

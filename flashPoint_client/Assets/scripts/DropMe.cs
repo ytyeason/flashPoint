@@ -26,6 +26,7 @@ public class DropMe : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointe
 		Sprite dropSprite = GetDropSprite (data);
 		if (dropSprite != null)
 			receivingImage.overrideSprite = dropSprite;
+			Debug.Log(receivingImage.overrideSprite.name);
 	}
 
 	public void OnPointerEnter(PointerEventData data)
