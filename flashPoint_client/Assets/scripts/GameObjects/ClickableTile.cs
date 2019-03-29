@@ -12,8 +12,8 @@ public class ClickableTile : MonoBehaviour {
 
 	// Occurs when we click the mouse:
 	void OnMouseUp() {
-
-        if (map.gm.isMyTurn)
+		Debug.Log("MOUSE UP CLICKABLE TILE");
+		if (map.gm.isMyTurn)
         {
             //Debug.Log(this);
 

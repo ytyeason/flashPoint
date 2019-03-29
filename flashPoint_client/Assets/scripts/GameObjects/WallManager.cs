@@ -23,6 +23,7 @@ public static class hasComponent
 
 public class WallManager
 {
+	
 
 	readonly int wallMapSizeX = 10;
 	readonly int wallMapSizeZ = 8;
@@ -176,12 +177,18 @@ public class WallManager
 
 	}
 
-	public void BreakWall(int x, int z, int type, int horizontal)
+	public void BreakWall(int x, int z, int type, int horizontal, bool explosionIsBreaking)
 	{
-		Debug.Log("Breaking the wall");
-		if (gm.fireman.chopWall())
+		Debug.Log("Trying to break the wall (" + x + "," + z +")");
+
+		/*	We only call chopWall() if we see that this wall ISNT being damaged from an explosion.
+		 *	This is done so as to avoid explosions reducing AP (from damaging walls)
+		 */
+		bool can_break = (explosionIsBreaking) ? explosionIsBreaking : gm.fireman.chopWall();
+
+		if (can_break)
 		{
-			if (horizontal == 1)//we're breaking a hwall
+			if (horizontal == 1) //we're breaking a hwall
 			{
 				List<int[]> keyList = new List<int[]>(hwallStores.Keys);
 
@@ -194,6 +201,7 @@ public class WallManager
 						GameObject old = hwallStores[key];
 						//Destroy(old);
 						gm.DestroyObject(old);
+						gm.damaged_wall_num++;		// Increment the GUI counter to represent # of damaged walls
 
 						WallType wt = wallTypes[type];
 						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5, 0, z * 5-2), Quaternion.identity);
@@ -214,7 +222,7 @@ public class WallManager
 					}
 				}
 			}
-			else
+			else  // we're breaking a vwall
 			{
 				List<int[]> keyList = new List<int[]>(vwallStores.Keys);
 
@@ -228,6 +236,7 @@ public class WallManager
 						GameObject old = vwallStores[key];
 						//Destroy(old);
 						gm.DestroyObject(old);
+						gm.damaged_wall_num++;     // Increment the GUI counter to represent # of damaged walls
 
 						WallType wt = wallTypes[type];
 						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5-2, 0, z * 5), Quaternion.Euler(0,90,0));

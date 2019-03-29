@@ -1,6 +1,6 @@
 OSXStandalone
 PlayerPath?
-/Users/yunxichen/Downloads/nnn.app
+C:/Users/origamiswan162/Desktop/DemoFolder.app
 SceneListBegin?
 Assets/Scenes/FirstUI.unity
 Assets/Scenes/Lobby.unity
@@ -67,6 +67,8 @@ e90403eeda069970e0b9de1533de13a6 UnityEngine.UI.dll:UnityEngine.UI.ToggleGroup
 16da51d1b62ef6d4ee1849350434023b UnityEngine.UI.dll:UnityEngine.UI.VerticalLayoutGroup
 88d7d4231f4e98130c285a8556f9964e com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.DepthOfField
 50b0b141074b216c8b53b1bd467f73c9 Unity.TextMeshPro.dll:TMPro.TMP_InputField
+486cd95c82d8305219c352c06b776e1f UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
+486cd95c82d8305219c352c06b776e1f UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
 53cefe5d98cadefbab750835e70b89c0 UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
 486cd95c82d8305219c352c06b776e1f UnityEngine.UI.dll:UnityEngine.EventSystems.BaseInput
 da2091a04d360891450faf16cdf621f1 UnityEngine.UI.dll:UnityEngine.UI.Button
@@ -141,7 +143,6 @@ d6644373a29f7539fce7c7b7990268dc Assembly-CSharp.dll:.GunShoot
 b152264b755ec819936a9a8967572c2e Assembly-CSharp.dll:.LobbyManager
 56a4dd72a972b95458ebf75afb224a57 Assembly-CSharp.dll:.DecalDestroyer
 379f2ce8c5013484aed181543b6877d4 Assembly-CSharp.dll:.JoyStickerController
-382b8ef512fa8d6108723a01b57af65b UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsEventTracker
 d22c788799ee45d8676254eccf20e8b8 UnityEngine.Analytics.dll:UnityEngine.Analytics.AnalyticsTracker
 350002622c79e1481e16ac72897d455c Assembly-CSharp.dll:.TiltWindow
 f58314b8bf8ddb9487ecf1dc187038a6 com.unity.postprocessing.Runtime.dll:UnityEngine.Rendering.PostProcessing.PostProcessEffectSettings
@@ -225,3 +226,4 @@ c1791db8df7a6d30dc3a3e487bced78b com.unity.postprocessing.Runtime.dll:UnityEngin
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.ApplicationManager
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.TestSocketIO
 486cd95c82d8305219c352c06b776e1f Assembly-CSharp.dll:.ChangeColor
+486cd95c82d8305219c352c06b776e1f UnityEngine.Purchasing.dll:UnityEngine.Purchasing.AsyncUtil

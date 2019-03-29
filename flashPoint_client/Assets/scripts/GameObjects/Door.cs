@@ -15,6 +15,7 @@ public class Door : MonoBehaviour
 	// Occurs when we click the mouse:
 	void OnMouseUp()
 	{
+		Debug.Log("MOUSE UP DOOR");
 		if (doorMap.gm.isMyTurn)
 		{
 			int doorX = x / 5;

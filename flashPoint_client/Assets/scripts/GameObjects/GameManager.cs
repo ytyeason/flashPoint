@@ -21,9 +21,10 @@ public class GameManager: MonoBehaviour
     public WallType[] wallTypes;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
+	public int damaged_wall_num = 0;
+	public int rescued_vict_num = 0;
 
-
-    public JSONObject game_info = StaticInfo.game_info;
+	public JSONObject game_info = StaticInfo.game_info;
 
     public WallManager wallManager;
     private TileMap tileMap;
@@ -88,12 +89,12 @@ public class GameManager: MonoBehaviour
 
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
-        checkTurn();//initialize isMyTurn varaible at start
+        checkTurn();	//initialize isMyTurn variable at start
 
     }
 
     public void displayAP(int ap){
-        nameAP.text=StaticInfo.name+" has "+ap+" AP";
+        nameAP.text= StaticInfo.name + " has " + fireman.FreeAP + " AP" ;
     }
 
     void WallUpdate_Success(SocketIOEvent obj)
@@ -113,10 +114,11 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["type"]);
         Debug.Log(obj.data.ToDictionary()["horizontal"]);
 
-        wallManager.BreakWall(x, z, type,horizontal);
-    }
+		// Bottom is temporarily commented out:
+		//wallManager.BreakWall(x, z, type, horizontal, false);
+	}
 
-    void DoorUpdate_Success(SocketIOEvent obj)
+	void DoorUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("door update successful");
         var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
@@ -150,7 +152,8 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["z"]);
         Debug.Log(obj.data.ToDictionary()["type"]);
 
-        tileMap.buildNewTile(x, z,type);
+		// Bottom is temporarily commented out:
+		// tileMap.buildNewTile(x, z,type);
     }
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
@@ -200,11 +203,14 @@ public class GameManager: MonoBehaviour
         if (name.Equals(StaticInfo.name))
         {
             isMyTurn = true;
-        }
+			Debug.Log("It is now your turn! Refreshing AP");
+			fireman.refreshAP();
+		}
         else
         {
             isMyTurn = false;
-        }
+			Debug.Log("It is now someone else's turn!");
+		}
 
     }
 
@@ -270,6 +276,7 @@ public class GameManager: MonoBehaviour
         int z = Convert.ToInt32(cord[1]);
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap);
         Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this);
 
 
@@ -345,9 +352,11 @@ public class GameManager: MonoBehaviour
         Debug.Log("Ending Turn");
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(mapSizeX - 2, mapSizeZ - 1, false);
-		Debug.Log("Finished advFire");
-		// return;
+		fireManager.advanceFire(1, 4, false);
+		Debug.Log("Finished advFire, redistributing AP");
+		
+
+
 
 		checkTurn();
         //do stuff here...

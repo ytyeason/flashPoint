@@ -14,21 +14,22 @@ public class Fireman
     public TileType[] tileTypes;
 	public int currentX;
 	public int currentZ;
-	public Boolean debugMode = true;		// Toggle this for more descriptive Debug.Log() output
+	public Boolean debugMode = true;        // Toggle this for more descriptive Debug.Log() output
+	private static int REFRESH_AP = 4;
 
     public String name = "eason";
 
     public Colors color = Colors.White;//default to white
 
-    public int AP = 5;//whatever the initial value is
+    public int AP = REFRESH_AP;	//whatever the initial value is
 
-    public int FreeAP = 10;
+    public int FreeAP = REFRESH_AP;
 
-	public Boolean carryingVictim = false;
+	public bool carryingVictim = false;
 
     public GameManager gm;
 
- public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
+	public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
     {
         this.name = name;
         this.color = color;
@@ -42,11 +43,36 @@ public class Fireman
     }
 
 
-    public void setAP(int ap)
+    public void setAP(int in_ap)
     {
-        FreeAP = ap;
+        FreeAP = in_ap;
 		gm.displayAP(FreeAP);
     }
+
+	// Refresh AP while rolling over unused AP (a maximum of 4)
+	public void refreshAP() 
+	{
+		Debug.Log("EOT AP: " + FreeAP);
+		int rollover_AP;
+
+		// Had AP from a previous turn
+		if (FreeAP > 4)
+		{
+			// Stores values between 0 and 4 which are allowed to be rolled-over
+			rollover_AP = 4;
+		}
+		// No rollover (i.e. FreeAP < 4
+		else
+		{
+			rollover_AP = FreeAP % 5;
+		}
+
+		// Change AP
+		setAP(REFRESH_AP + rollover_AP);
+		Debug.Log("Rolling over: " + rollover_AP);
+		Debug.Log("Total AP for new turn is: " + FreeAP);
+	}
+
 
 	// Fireman's method call from Door.cs
 	public Boolean changeDoor(int doorX, int doorZ)
@@ -99,12 +125,12 @@ public class Fireman
 		}
 		else
 		{
-			//Debug.Log("No AP left to chop the Wall!");
+			if (debugMode) Debug.Log("No AP left to chop the Wall!");
 			return false;
 		}
 	}
 	
-	public void tryMove(int x, int z, int in_status,GameObject gmo)//int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
+	public void tryMove(int x, int z, int in_status, GameObject gmo) //int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
     {
 		// FreeAP must be positive
 		if ( FreeAP > 0) {
@@ -125,7 +151,7 @@ public class Fireman
 							setAP(FreeAP - 1);
 							String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
-							move(x, z,gmo);
+							move(x, z, gmo);
                             gm.UpdateLocation(x,z);
 						}
 						else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
@@ -133,7 +159,7 @@ public class Fireman
 							setAP(FreeAP - 2);
 							String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
-							move(x, z,gmo);
+							move(x, z, gmo);
                             gm.UpdateLocation(x,z);
                         }
 						else if (in_status != 2 && carryingVictim && FreeAP >= 2)
@@ -141,7 +167,7 @@ public class Fireman
 							setAP(FreeAP - 2);
 							String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
 							Debug.Log("AP is now: " + FreeAP + condition);
-							move(x, z,gmo);
+							move(x, z, gmo);
                             gm.UpdateLocation(x,z);
                         }
                         else if (in_status != 2 && carryingVictim && FreeAP >= 2)
@@ -179,21 +205,46 @@ public class Fireman
 		}
 	}
 
+	// Check if x & z coordinates place fireman outside
+	public bool checkOutside(int x_coord, int z_coord)
+	{
+		if(	(x_coord == 0 || (x_coord / 5) == map.gm.mapSizeX - 1) &&
+			(z_coord == 0 || (z_coord / 5) == map.gm.mapSizeZ - 1))
+		{
+			Debug.Log("x, z : " + x_coord + ", " + z_coord);
+			return true;
+		}
+
+		return false;
+	}
+
+
 	// Once move is validated the following, unconditionally succesful, move is called
 	public void move(int x, int z, GameObject gmo)
 	{
 		currentX = x;
 		currentZ = z;
 		s.transform.position = new Vector3(x, 0.2f, z);
+		//Debug.Log("x, y is outside: " + checkOutside(x, z));
+
         if(x==5 && z == 5)
         {
-            firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, fireandvictim, currentX, currentZ);
-            GameManager gmm = new GameManager();
-            gmm.DestroyObject(gmo);
+			//firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, fireandvictim, currentX, currentZ);
+			Debug.Log("You are now carrying the victim!");
+			carryingVictim = true;
+			//GameManager gmm = new GameManager();
+            gm.DestroyObject(gmo);
             
-            s=gmm.instantiateObject(firemanandvictim.s, new Vector3(5, 0, 5), Quaternion.identity);
-
+            //s = gmm.instantiateObject(firemanandvictim.s, new Vector3(5, 0, 5), Quaternion.identity);
         }
-    }
 
+		// Check if fireman is outside & carrying a victim 
+		if(carryingVictim && checkOutside(x, z) == true)
+		{
+			// Rescue the victim
+			gm.rescued_vict_num++;
+
+			Debug.Log("The victim has been rescued!");
+		}
+    }
 }
