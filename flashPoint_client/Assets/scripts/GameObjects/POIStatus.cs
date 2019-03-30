@@ -3,5 +3,7 @@
 public enum POIStatus
 {
     Hidden,
-    Revealed
+    Revealed,
+    Treated,
+    Removed,
 }

@@ -1,20 +1,47 @@
-﻿
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public class POI : GameUnit
 {
-    public POIStatus kind;
+    public POIType type;
+    public POIStatus status;
 
-    public POI()
+    public POIManager pm;
+
+    public GameObject Prefab;
+
+    public POI(POIType type,POIManager pm)
     {
-        
+        this.type = type;
+        this.status = POIStatus.Hidden;
+        this.pm = pm;
+        if (status == POIStatus.Hidden)
+        {
+            Prefab = pm.gm.poiPrefabs[0];
+        }else if (status == POIStatus.Revealed&&type==POIType.Victim)
+        {
+            Prefab = pm.gm.poiPrefabs[1];
+        }else if(status==POIStatus.Treated && type == POIType.Victim)
+        {
+            Prefab = pm.gm.poiPrefabs[2];
+        }
     }
 
-    public bool reveal()
+    public void setStatus(POIStatus status)
     {
-        return false;
-    }
-
-    public bool removeFromBoard()
-    {
-        return false;
+        this.status = status;
+        if (status == POIStatus.Hidden)
+        {
+            Prefab = pm.gm.poiPrefabs[0];
+        }
+        else if (status == POIStatus.Revealed && type == POIType.Victim)
+        {
+            Prefab = pm.gm.poiPrefabs[1];
+        }
+        else if (status == POIStatus.Treated && type == POIType.Victim)
+        {
+            Prefab = pm.gm.poiPrefabs[2];
+        }
     }
 }

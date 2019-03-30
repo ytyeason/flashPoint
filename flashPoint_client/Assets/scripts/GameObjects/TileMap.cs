@@ -48,9 +48,9 @@ public class TileMap  {
 		GenerateMapData();
 		// Display them in the game world
 		GenerateMapVisual();
-		goo  = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 5), Quaternion.identity);
-		goo1 = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 15), Quaternion.identity);
-		goo2 = gm.instantiateObject(selectedUnit.s, new Vector3(40, 0, 30), Quaternion.identity);
+		//goo  = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 5), Quaternion.identity);
+		//goo1 = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 15), Quaternion.identity);
+		//goo2 = gm.instantiateObject(selectedUnit.s, new Vector3(40, 0, 30), Quaternion.identity);
 
 		
 
