@@ -267,20 +267,23 @@ public class Fireman
     {
         if (role.Equals(Role.Generalist)){
             FreeAP = 5;
-            role = "Generalist";
+            // role = "Generalist";
+			this.role=role;
         }
 
-        if (role.Equals(Role.ImagingTech)
+        if (role.Equals(Role.ImagingTech))
         {
             FreeAP = 4;
-            role = "imagingTech";
+            // role = "imagingTech";
+			this.role=role;
         }
 
         if (role.Equals(Role.CAFS))
         {
             FreeAP = 3;
             freeExtinguishAp = 3;
-            role = "CAFSfighter";
+            // role = "CAFSfighter";
+			this.role=role;
         }
 
 
