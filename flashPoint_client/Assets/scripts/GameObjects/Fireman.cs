@@ -29,7 +29,16 @@ public class Fireman
 
     public GameManager gm;
 
-	public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
+
+    public int freeExtinguishAp = 3;
+
+    public int freeMovementAp = 3;
+
+    public Role role = StaticInfo.role;
+
+    public String level = StaticInfo.level;
+
+    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
     {
         this.name = name;
         this.color = color;
@@ -40,6 +49,11 @@ public class Fireman
         this.AP = AP;
         this.FreeAP = AP;
         this.gm = gm;
+
+        if (string.Equals(level, "Experienced"))
+        {
+            setRole(role);
+        }
     }
 
 
@@ -247,4 +261,52 @@ public class Fireman
 			Debug.Log("The victim has been rescued!");
 		}
     }
+
+
+    public void setRole(Role role)
+    {
+        if (role.Equals(Role.Generalist)){
+            FreeAP = 5;
+            // role = "Generalist";
+			this.role=role;
+        }
+
+        if (role.Equals(Role.ImagingTech))
+        {
+            FreeAP = 4;
+            // role = "imagingTech";
+			this.role=role;
+        }
+
+        if (role.Equals(Role.CAFS))
+        {
+            FreeAP = 3;
+            freeExtinguishAp = 3;
+            // role = "CAFSfighter";
+			this.role=role;
+        }
+
+
+
+
+    }
+
+    public void flipPOI(int x, int z)
+    {
+
+    }
+
+
+    public void removeHazamet()
+    {
+
+    }
+
+    public void extinFireForFirefighter()
+    {
+
+    }
+
+
+
 }
