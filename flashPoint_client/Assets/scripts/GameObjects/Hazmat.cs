@@ -17,7 +17,7 @@ public class Hazmat
     public void setHazmatStatus(HazmatStatus status){
         this.status=status;
         if(status==HazmatStatus.HotSpot){
-            prefab==hm.gm.hazPrefabs[1];
+            prefab=hm.gm.hazPrefabs[1];
         }
     }
 
