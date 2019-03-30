@@ -24,6 +24,7 @@ public class GameManager: MonoBehaviour
     public WallType[] wallTypes;
  //   public VehicleType[] vehicleTypes;
     public GameObject[] poiPrefabs;
+    public GameObject[] hazPrefabs;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
 	public int damaged_wall_num = 0;
@@ -37,6 +38,7 @@ public class GameManager: MonoBehaviour
     public DoorManager doorManager;
 	public FireManager fireManager;
     public POIManager pOIManager;
+    public HazmatManager hazmatManager;
 
     private JSONObject room;
     private JSONObject participants;
@@ -96,6 +98,7 @@ public class GameManager: MonoBehaviour
         tileMap = new TileMap(tileTypes,this, fireman, enG, amB);
 		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
         pOIManager = new POIManager(this);
+        hazmatManager=new HazmatManager(this);
 
         displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()));
      //   vehicleManager.StartvehicleManager();

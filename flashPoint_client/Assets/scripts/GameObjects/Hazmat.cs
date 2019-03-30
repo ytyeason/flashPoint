@@ -1,26 +1,25 @@
 using UnityEngine;
 using System.Collections;
 
-public class Hazmat : MonoBehaviour
+public class Hazmat
 {
-    public HazmatManager hazmatManager;
-    public int x;
-    public int y;
+    public HazmatManager hm;
 
     public HazmatStatus status=HazmatStatus.Hazmat;
 
-    void OnMouseUp(){
+    public GameObject prefab;
 
-        Debug.Log("MOUSE UP HAZMAT");
-        
-        if(true){
-            
-        }
-            if(status==HazmatStatus.HotSpot){
-                return;
-            }else{
-                
-            }
-
+    public Hazmat(HazmatManager hm){
+        this.hm=hm;
+        this.prefab=hm.gm.hazPrefabs[0];
     }
+
+    public void setHazmatStatus(HazmatStatus status){
+        this.status=status;
+        if(status==HazmatStatus.HotSpot){
+            prefab==hm.gm.hazPrefabs[1];
+        }
+    }
+
+    
 }
