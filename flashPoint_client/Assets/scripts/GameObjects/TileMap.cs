@@ -29,8 +29,10 @@ public class TileMap  {
 	public string[] strings;
 	// Array of possible tiles:
 	public TileType[] tileTypes;
-	public VehicleType[] vehicleTypes;
+	//public VehicleType[] vehicleTypes;
 	public GameManager gm;
+	public Engine engine;
+	public Ambulance ambulance;
 
 	// Array populated by 
 	public int[,] tiles;
@@ -56,11 +58,13 @@ public class TileMap  {
 
 	}
 
-	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit)
+	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit, Engine enG, Ambulance amB)
 	{
 		this.tileTypes = tileTypes;
 		this.gm = gm;
 		this.selectedUnit = selectedUnit;
+		this.engine = enG;
+		this.ambulance = amB;
 		
 		StartTileMap();
 	}
@@ -244,5 +248,13 @@ public class TileMap  {
 
 		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
 		selectedUnit.tryMove(x, z, in_status, goo);
+	}
+
+		public void MoveAmbulanceTo(int x, int z) {
+	//	if (x==9&& z==6)
+	//	{
+			ambulance.moveToAmbStationTwo();
+	//	}
+		
 	}
 }

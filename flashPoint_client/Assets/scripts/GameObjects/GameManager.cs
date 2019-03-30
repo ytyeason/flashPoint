@@ -16,11 +16,13 @@ public class GameManager: MonoBehaviour
     public SocketIOComponent socket;
     public GameObject firemanObject;
     public GameObject firemanplusObject;
-    public GameObject clickableVehicle;
+    public GameObject ambulance;
+    public GameObject engine;
+  //  public GameObject clickableVehicle;
     public TileType[] tileTypes;
     public DoorType[] doorTypes;
     public WallType[] wallTypes;
-    public VehicleType[] vehicleTypes;
+ //   public VehicleType[] vehicleTypes;
     public GameObject[] poiPrefabs;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
@@ -30,7 +32,7 @@ public class GameManager: MonoBehaviour
 	public JSONObject game_info = StaticInfo.game_info;
 
     public WallManager wallManager;
-    public VehicleManager vehicleManager;
+ //   public VehicleManager vehicleManager;
     private TileMap tileMap;
     public DoorManager doorManager;
 	public FireManager fireManager;
@@ -41,7 +43,8 @@ public class GameManager: MonoBehaviour
     private String level;
     private String numberOfPlayer;
     private Dictionary<String, JSONObject> players = new Dictionary<string, JSONObject>();
-
+    public Ambulance amB;
+    public Engine enG;
     public Fireman fireman;
 
     public Boolean isMyTurn = false;
@@ -85,15 +88,17 @@ public class GameManager: MonoBehaviour
         }
 
         fireman = initializeFireman();
+        amB = initializeAmbulance();
+        enG = initializeEngine();
         wallManager = new WallManager(wallTypes,this);
         doorManager = new DoorManager(doorTypes,this);
-        vehicleManager = new VehicleManager(vehicleTypes,this);
-        tileMap = new TileMap(tileTypes,this, fireman);
+    //    vehicleManager = new VehicleManager(vehicleTypes,this);
+        tileMap = new TileMap(tileTypes,this, fireman, enG, amB);
 		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
         pOIManager = new POIManager(this);
 
         displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()));
-        vehicleManager.StartvehicleManager();
+     //   vehicleManager.StartvehicleManager();
 
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
@@ -289,6 +294,20 @@ public class GameManager: MonoBehaviour
 
 
         return f;
+    }
+
+    public Ambulance initializeAmbulance()
+    {
+        Ambulance amb = new Ambulance(ambulance, 9, 4, this);
+
+        return amb;
+    }
+
+    public Engine initializeEngine()
+    {
+        Engine eng = new Engine(engine, 0, 5, this);
+
+        return eng;
     }
 
     public void registerNewFireman(Fireman f)

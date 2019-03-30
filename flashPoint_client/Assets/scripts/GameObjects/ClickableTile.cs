@@ -4,23 +4,38 @@ using UnityEngine;
 
 public class ClickableTile : MonoBehaviour {
 
-	// Variables to track our things
-	public int tileX;
-	public int tileZ;
-	public TileMap map;
-	public TileType type;
+    // Variables to track our things
+    public int tileX;
+    public int tileZ;
+    public TileMap map;
+    public TileType type;
 
-	// Occurs when we click the mouse:
-	void OnMouseUp() {
-		Debug.Log("MOUSE UP CLICKABLE TILE");
-		if (map.gm.isMyTurn)
+    // Occurs when we click the mouse:
+    void OnMouseUp() {
+        Debug.Log("MOUSE UP CLICKABLE TILE");
+        if (map.gm.isMyTurn)
         {
             //Debug.Log(this);
 
             int x = tileX / 5;
             int z = tileZ / 5;
 
-            if (map.tiles[x, z] != 0)
+            // if (x==9&&z==4)
+            // {
+            //     List<int[]> keyList = new List<int[]>(vm.vehicleStores.Keys);
+            //     foreach (var key in keyList)
+            //     {
+            //         if (key[0] == 9 && key[1] == 4)
+            //         {
+            //             Debug.Log("Destroy the old object");
+
+            //             GameObject am = vm.vehicleStores[key]; 
+            //             am.transform.Translate(new Vector3(0, 0, 1)*Time.deltaTime);
+            //         }
+            //     }
+            // }
+
+            if (map.tiles[x, z] != 0&&map.tiles[x, z] != 3&&map.tiles[x, z] != 4)
             {
                 // Extinguish the fire or smoke:
                 int result = map.selectedUnit.extinguishFire(map.tiles[x, z]);
@@ -32,7 +47,12 @@ public class ClickableTile : MonoBehaviour {
                     //broadcast new tile
                     map.gm.UpdateTile(x, z, result);
                 }
+                map.MoveAmbulanceTo(9, 6);
 
+            }
+            else if (map.tiles[x, z] != 4 && x==9 && z==6)
+            {
+                map.MoveAmbulanceTo(9, 6);
             }
             else
             {
