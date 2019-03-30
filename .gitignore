@@ -1,8 +1,8 @@
-flashPoint_client/[Ll]ibrary/
-flashPoint_client/[Tt]emp/
-flashPoint_client/[Oo]bj/
-flashPoint_client/[Bb]uild/
-flashPoint_client/[Bb]uilds/
+flashPoint_client/Library/
+flashPoint_client/Temp/
+flashPoint_client/Obj/
+flashPoint_client/Build/
+flashPoint_client/Builds/
 Assets/AssetStoreTools*
 
 # Visual Studio cache directory
