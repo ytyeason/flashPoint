@@ -53,6 +53,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\AssetsResources\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
+     <Compile Include="Assets\AssetsResources\EffectExamples\Shared\Scripts\ExtinguishableFire.cs" />
+     <Compile Include="Assets\AssetsResources\EffectExamples\Shared\Scripts\GunAim.cs" />
+     <Compile Include="Assets\AssetsResources\EffectExamples\Shared\Scripts\GunShoot.cs" />
+     <Compile Include="Assets\AssetsResources\EffectExamples\Shared\Scripts\ParticleCollision.cs" />
+     <Compile Include="Assets\AssetsResources\EffectExamples\Shared\Scripts\ParticleExamples.cs" />
+     <Compile Include="Assets\AssetsResources\EffectExamples\Shared\Scripts\ParticleMenu.cs" />
+     <Compile Include="Assets\AssetsResources\EffectExamples\TutorialInfo\Scripts\Readme.cs" />
      <Compile Include="Assets\AssetsResources\Supercyan Character Pack Free Sample\Scripts\CameraLogic.cs" />
      <Compile Include="Assets\AssetsResources\Supercyan Character Pack Free Sample\Scripts\Demo.cs" />
      <Compile Include="Assets\AssetsResources\Supercyan Character Pack Free Sample\Scripts\SimpleCharacterControl.cs" />
@@ -197,6 +205,7 @@
      <Compile Include="Assets\SocketIO\WebsocketSharp\WebSocketStream.cs" />
      <Compile Include="Assets\verti.cs" />
      <None Include="Assets\SocketIO\JSONObject\readme.txt" />
+     <None Include="Assets\AssetsResources\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
      <None Include="Assets\SocketIO\Readme.txt" />
      <None Include="Assets\Materials\UI-Default-No-Alpha.shader" />
  <Reference Include="UnityEditor.StandardEvents">

@@ -90,13 +90,21 @@ public class TileMap  {
 				else if (x == 7 && z == 2) tiles[x, z] = 2;
 				// parking spots
 				else if (x == 7 && z == 7) tiles[x, z] = 3;
+				else if (x == 8 && z == 7) tiles[x, z] = 3;
 				else if (x == 5 && z == 7) tiles[x, z] = 4;
+				else if (x == 4 && z == 7) tiles[x, z] = 4;
 				else if (x == 0 && z == 3) tiles[x, z] = 4;
+				else if (x == 0 && z == 2) tiles[x, z] = 4;
 				else if (x == 0 && z == 5) tiles[x, z] = 3;
+				else if (x == 0 && z == 6) tiles[x, z] = 3;
 				else if (x == 9 && z == 2) tiles[x, z] = 3;
+				else if (x == 9 && z == 1) tiles[x, z] = 3;
 				else if (x == 9 && z == 4) tiles[x, z] = 4;
+				else if (x == 9 && z == 5) tiles[x, z] = 4;
 				else if (x == 2 && z == 0) tiles[x, z] = 3;
+				else if (x == 1 && z == 0) tiles[x, z] = 3;
 				else if (x == 4 && z == 0) tiles[x, z] = 4;
+				else if (x == 5 && z == 0) tiles[x, z] = 4;
 				/* Make Smoke tiles for Testing
 				else if (x == mapSizeX - 2 && z == mapSizeZ - 1) tiles[x, z] = 0;
 				else if (x == mapSizeX - 3 && z == mapSizeZ - 1) tiles[x, z] = 0;
@@ -250,11 +258,8 @@ public class TileMap  {
 		selectedUnit.tryMove(x, z, in_status, goo);
 	}
 
-		public void MoveAmbulanceTo(int x, int z) {
-	//	if (x==9&& z==6)
-	//	{
+	public void MoveAmbulanceTo() {
+
 			ambulance.moveToAmbStationTwo();
-	//	}
-		
 	}
 }

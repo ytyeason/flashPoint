@@ -251,37 +251,76 @@ public int HorizontalDoor(int x, int z)
 
 		foreach (var hDoor in defaultHorizontalDoors)
 		{
-			DoorType dt = doorTypes[0];
-			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
-			GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(hDoor[0] * 5, 0, hDoor[1] * 5 - 2), Quaternion.identity);
+			if ((hDoor[0] == 5&&hDoor[1] == 1)||(hDoor[0] == 6&&hDoor[1] == 7))
+			{
+				DoorType dt = doorTypes[2];
+				//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
+				GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(hDoor[0] * 5 - 2, 0, hDoor[1] * 5 - 2), Quaternion.identity);
 
-			Door d = go.GetComponent<Door>();
-			//Debug.Log(w);
-			// Assign the variables as needed
-			d.x = hDoor[0] * 5;
-			d.z = hDoor[1] * 5;
-			d.doorMap = this;
-			d.type = 0;
+				Door d = go.GetComponent<Door>();
+				//Debug.Log(w);
+				// Assign the variables as needed
+				d.x = hDoor[0] * 5;
+				d.z = hDoor[1] * 5;
+				d.doorMap = this;
+				d.type = 2;
+				hdoorStores[hDoor] = go;
+			}
+			else
+			{
+				DoorType dt = doorTypes[0];
+				//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
+				GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(hDoor[0] * 5, 0, hDoor[1] * 5 - 2), Quaternion.identity);
 
-			hdoorStores[hDoor] = go;
+				Door d = go.GetComponent<Door>();
+				//Debug.Log(w);
+				// Assign the variables as needed
+				d.x = hDoor[0] * 5;
+				d.z = hDoor[1] * 5;
+				d.doorMap = this;
+				d.type = 0;
+				hdoorStores[hDoor] = go;
+			}
+			
 		}
 
 		foreach (var vDoor in defaultVerticalDoors)
 		{
-			DoorType dt = doorTypes[1];
-			Debug.Log(dt);
-			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
-			GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(vDoor[0] * 5 - 2, 0, vDoor[1] * 5), Quaternion.Euler(0, 90, 0));
+			if ((vDoor[0] == 1&&vDoor[1] == 3)||(vDoor[0] == 9&&vDoor[1] == 3))
+			{
+				DoorType dt = doorTypes[3];
+				Debug.Log(dt);
+				//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
+				GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(vDoor[0] * 5 - 2, 0, vDoor[1] * 5 - 2), Quaternion.Euler(0, 90, 0));
 
-			Door d = go.GetComponent<Door>();
-			//Debug.Log(w);
-			// Assign the variables as needed
-			d.x = vDoor[0] * 5;
-			d.z = vDoor[1] * 5;
-			d.doorMap = this;
-			d.type = 1;
+				Door d = go.GetComponent<Door>();
+				//Debug.Log(w);
+				// Assign the variables as needed
+				d.x = vDoor[0] * 5;
+				d.z = vDoor[1] * 5;
+				d.doorMap = this;
+				d.type = 3;
 
-			vdoorStores[vDoor] = go;
+				vdoorStores[vDoor] = go;
+			}
+			else
+			{
+				DoorType dt = doorTypes[1];
+				Debug.Log(dt);
+				//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
+				GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(vDoor[0] * 5 - 2, 0, vDoor[1] * 5), Quaternion.Euler(0, 90, 0));
+
+				Door d = go.GetComponent<Door>();
+				//Debug.Log(w);
+				// Assign the variables as needed
+				d.x = vDoor[0] * 5;
+				d.z = vDoor[1] * 5;
+				d.doorMap = this;
+				d.type = 1;
+
+				vdoorStores[vDoor] = go;
+			}
+			
 		}
 
 	}

@@ -47,12 +47,11 @@ public class ClickableTile : MonoBehaviour {
                     //broadcast new tile
                     map.gm.UpdateTile(x, z, result);
                 }
-                map.MoveAmbulanceTo(9, 6);
 
             }
-            else if (map.tiles[x, z] != 4 && x==9 && z==6)
+            else if (map.tiles[x, z] == 4 && x==9 && z==4)
             {
-                map.MoveAmbulanceTo(9, 6);
+                map.MoveAmbulanceTo();
             }
             else
             {
