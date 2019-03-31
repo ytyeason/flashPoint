@@ -12,4 +12,7 @@ public static class StaticInfo
     public static int[] Location;
 
     public static Role role;
+
+    public static String numOfHazmat;
+    public static String numOfHotspot;
 }

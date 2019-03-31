@@ -64,8 +64,12 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room_number = data['room'];
       var level = data['level'];
       var numberOfPlayer = data['numberOfPlayer'];
+      var numberOfHazmat=data['numberOfHazmat'];
+      var numberOfHotspot=data['numberOfHotspot'];
       Games[room_number]["level"] = level;
       Games[room_number]["numberOfPlayer"] = numberOfPlayer;
+      Games[room_number]["numberOfHazmat"]=numberOfHazmat;
+      Games[room_number]["numberOfHotspot"]=numberOfHotspot;
       console.log(Games[room_number]+level);
       socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
     });

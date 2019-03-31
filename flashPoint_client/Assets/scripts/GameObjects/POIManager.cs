@@ -49,10 +49,18 @@ public class POIManager{
         {
             int randX = rand.Next(1, 9);
             int randZ = rand.Next(1, 7);
+            int[] key = new int[] { randX, randZ };
+            while (placedPOI.ContainsKey(key) || placedPOI.ContainsKey(key) || gm.tileMap.tiles[randX, randZ] == 2)
+            {
+                randX = rand.Next(1, 9);
+                randZ = rand.Next(1, 7);
+                key[0] = randX;
+                key[1] = randZ;
+            }
             int randIndex = rand.Next(0, poi.Count);
             POI p = poi[randIndex];
             placedPOI.Add(new int[] { randX, randZ },p);
-            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX - 1.25), posY, (float)((double)randZ + 1.25)), Quaternion.identity);
+            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*5 - 1.25), posY, (float)((double)randZ*5 + 1.25)), Quaternion.identity);
             poiLookup.Add(new int[] { randX, randZ }, go);
             poi.Remove(p);
         }
@@ -97,7 +105,7 @@ public class POIManager{
         }
         else
         {
-            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x - 1.25), posY, (float)((double)z + 1.25)), Quaternion.identity);
+            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*5 - 1.25), posY, (float)((double)z*5 + 1.25)), Quaternion.identity);
         }
     }
 
@@ -110,6 +118,6 @@ public class POIManager{
             p.setStatus(POIStatus.Treated);
         }
         gm.DestroyObject(poiLookup[key]);
-        GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x - 1.25), posY, (float)((double)z + 1.25)), Quaternion.identity);
+        GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*5 - 1.25), posY, (float)((double)z*5 + 1.25)), Quaternion.identity);
     }
 }

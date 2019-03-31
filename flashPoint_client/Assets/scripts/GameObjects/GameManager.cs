@@ -34,7 +34,7 @@ public class GameManager: MonoBehaviour
 
     public WallManager wallManager;
  //   public VehicleManager vehicleManager;
-    private TileMap tileMap;
+    public TileMap tileMap;
     public DoorManager doorManager;
 	public FireManager fireManager;
     public POIManager pOIManager;
