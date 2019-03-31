@@ -81,8 +81,8 @@ public class gameSetUpManager : MonoBehaviour {
                 if (readyP && readyHot)
                 {
                     confirm.SetActive(true);
-                    error.SetActive(false);
                 }
+                error.SetActive(false);
             }
         }
         else
@@ -110,8 +110,8 @@ public class gameSetUpManager : MonoBehaviour {
                 if (readyP && readyHot)
                 {
                     confirm.SetActive(true);
-                    errorP.SetActive(false);
                 }
+                errorP.SetActive(false);
             }
         }
         else
