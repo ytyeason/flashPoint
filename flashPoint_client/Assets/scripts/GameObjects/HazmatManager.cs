@@ -124,9 +124,9 @@ public class HazmatManager{
         }
     }
 
-    public void explosion(int x, int y)
+    public void explosion(int x, int z)
     {
-        int[] key = new int[] { x, y };
+        int[] key = new int[] { x, z };
         Hazmat h = new Hazmat(this, HazmatStatus.HotSpot);
         placedHotspot.Add(key, h);
         gm.instantiateObject(h.prefab, new Vector3((float)(x * 5 + 1.25), posY, (float)(z * 5 - 1.25)), Quaternion.identity);

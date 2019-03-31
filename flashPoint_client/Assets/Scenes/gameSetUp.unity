@@ -2049,7 +2049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2934,8 +2934,8 @@ MonoBehaviour:
   input1: {fileID: 497418232}
   numOfHotspot: {fileID: 2005122099}
   error: {fileID: 223369128}
-  confirm: {fileID: 0}
-  errorP: {fileID: 0}
+  confirm: {fileID: 2105876259}
+  errorP: {fileID: 2012442446}
 --- !u!4 &1518166299
 Transform:
   m_ObjectHideFlags: 0
