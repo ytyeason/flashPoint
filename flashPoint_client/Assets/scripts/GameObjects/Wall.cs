@@ -16,8 +16,8 @@ public class Wall : MonoBehaviour
 		Debug.Log("MOUSE UP WALL");
 		if (wallMap.gm.isMyTurn)
 		{
-			int wallX = x / 5;
-			int wallZ = z / 5;
+			int wallX = x / 6;
+			int wallZ = z / 6;
 
 			Debug.Log("Clicked type: " + type);
 

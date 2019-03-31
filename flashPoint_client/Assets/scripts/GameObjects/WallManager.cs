@@ -204,12 +204,12 @@ public class WallManager
 						gm.damaged_wall_num++;		// Increment the GUI counter to represent # of damaged walls
 
 						WallType wt = wallTypes[type];
-						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5, 0, z * 5-2), Quaternion.identity);
-						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x * 5, 0, z * 5 - 2), Quaternion.identity);
+						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x *6, 0, z *6-2), Quaternion.identity);
+						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x *6, 2, z *6 - 3), Quaternion.identity);
 
 						Wall w = objectW.GetComponent<Wall>();
-						w.x = x * 5;
-						w.z = z * 5;
+						w.x = x *6;
+						w.z = z *6;
 						w.type = type;
 						w.wallMap = this;
 
@@ -239,12 +239,12 @@ public class WallManager
 						gm.damaged_wall_num++;     // Increment the GUI counter to represent # of damaged walls
 
 						WallType wt = wallTypes[type];
-						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x * 5-2, 0, z * 5), Quaternion.Euler(0,90,0));
-						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x * 5 - 2, 0, z * 5), Quaternion.Euler(0, 90, 0));
+						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x *6-2, 0, z *6), Quaternion.Euler(0,90,0));
+						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x *6 - 3, 2, z *6), Quaternion.Euler(0, 90, 0));
 
 						Wall w = objectW.GetComponent<Wall>();
-						w.x = x * 5;
-						w.z = z * 5;
+						w.x = x *6;
+						w.z = z *6;
 						w.type = type;
 						w.wallMap = this;
 
@@ -268,13 +268,13 @@ public class WallManager
 		{
 			WallType wt = wallTypes[0];
 			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
-			GameObject go = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(hWall[0] * 5, 0, hWall[1] * 5 - 2), Quaternion.identity);
+			GameObject go = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(hWall[0] *6, 2, hWall[1] *6 - 3), Quaternion.identity);
 
 			Wall w = go.GetComponent<Wall>();
 			//Debug.Log(w);
 			// Assign the variables as needed
-			w.x = hWall[0] * 5;
-			w.z = hWall[1] * 5;
+			w.x = hWall[0] *6;
+			w.z = hWall[1] *6;
 			w.wallMap = this;
 			w.type = 0;
 
@@ -286,13 +286,13 @@ public class WallManager
 			WallType wt = wallTypes[1];
 			Debug.Log(wt);
 			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
-			GameObject go = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(vWall[0] * 5 - 2, 0, vWall[1] * 5), Quaternion.Euler(0, 90, 0));
+			GameObject go = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(vWall[0] *6 - 3, 2, vWall[1] *6), Quaternion.Euler(0, 90, 0));
 
 			Wall w = go.GetComponent<Wall>();
 			//Debug.Log(w);
 			// Assign the variables as needed
-			w.x = vWall[0] * 5;
-			w.z = vWall[1] * 5;
+			w.x = vWall[0] *6;
+			w.z = vWall[1] *6;
 			w.wallMap = this;
 			w.type = 1;
 
