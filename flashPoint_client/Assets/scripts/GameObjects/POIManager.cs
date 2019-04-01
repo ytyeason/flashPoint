@@ -60,9 +60,7 @@ public class POIManager{
             int randIndex = rand.Next(0, poi.Count);
             POI p = poi[randIndex];
             placedPOI.Add(new int[] { randX, randZ },p);
-            
-            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*6 - 1.25), posY, (float)((double)randZ*6 + 1.25)), Quaternion.identity);
-            go.transform.Rotate(90, 0, 0, UnityEngine.Space.Self);
+            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*6 - 1.5), posY, (float)((double)randZ*6 + 1.5)), Quaternion.identity);
             poiLookup.Add(new int[] { randX, randZ }, go);
             poi.Remove(p);
         }
@@ -107,7 +105,7 @@ public class POIManager{
         }
         else
         {
-            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.25), posY, (float)((double)z*6 + 1.25)), Quaternion.identity);
+            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
         }
     }
 
@@ -120,6 +118,6 @@ public class POIManager{
             p.setStatus(POIStatus.Treated);
         }
         gm.DestroyObject(poiLookup[key]);
-        GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.25), posY, (float)((double)z*6 + 1.25)), Quaternion.identity);
+        GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
     }
 }

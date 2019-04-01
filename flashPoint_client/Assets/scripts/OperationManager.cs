@@ -35,7 +35,6 @@ public class OperationManager : MonoBehaviour
 
     void getPossibleOps()
     {
-        int[] key = new int[] { x, z };
 
         int currentX = gm.tileMap.selectedUnit.currentX;
         int currentZ = gm.tileMap.selectedUnit.currentZ;
@@ -49,33 +48,213 @@ public class OperationManager : MonoBehaviour
         }
         else if (diffX + diffZ == 1) // neighbor tile (fire, move)
         {
-
+            Boolean extingFire = false;
+            Boolean extingsmoke = false;
             // check obstable (wall/closed door)
             if (currentX - x == 0)// same column, check above and below
             {
                 if (currentZ < z) // below the target
                 {
-                    if (gm.wallManager.hwallStores.ContainsKey(key)&&gm.wallManager.hwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    int[] key = new int[] { x, z };
+                    if (gm.wallManager.hwallStores.ContainsKey(key) && gm.wallManager.hwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
                     {
-                        if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
+                        if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2) 
                         {
-                            Operation op = new Operation(this, OperationType.ExtingSmoke);
+                            extingsmoke = true;
                         }
 
                         if (gm.tileMap.tiles[x, z] == 2)
                         {
-                            Operation op = new Operation(this, OperationType.ExtingFire);
+                            extingFire = true;
+                        }
+                    }
+                }
+                else // above the target
+                {
+                    int[] key = new int[] { currentX, currentZ };
+                    if (gm.wallManager.hwallStores.ContainsKey(key) && gm.wallManager.hwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    {
+                        if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
+                        {
+                            extingsmoke = true;
+                        }
+
+                        if (gm.tileMap.tiles[x, z] == 2)
+                        {
+                            extingFire = true;
+                        }
+                    }
+                }
+            }
+            else if (currentZ == z) // same row, check right and left
+            {
+                if (currentX < x) // left of the target
+                {
+                    int[] key = new int[] { x, z };
+                    if (gm.wallManager.hwallStores.ContainsKey(key) && gm.wallManager.hwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    {
+                        if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
+                        {
+                            extingsmoke = true;
+                        }
+
+                        if (gm.tileMap.tiles[x, z] == 2)
+                        {
+                            extingFire = true;
+                        }
+                    }
+                }
+                else // right to the target
+                {
+                    int[] key = new int[] { currentX, currentZ };
+                    if (gm.wallManager.hwallStores.ContainsKey(key) && gm.wallManager.hwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    {
+                        if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
+                        {
+                            extingsmoke = true;
+                        }
+
+                        if (gm.tileMap.tiles[x, z] == 2)
+                        {
+                            extingFire = true;
                         }
                     }
                 }
             }
 
+            // check for AP
 
+            if (gm.tileMap.selectedUnit.role == Role.Paramedic || gm.tileMap.selectedUnit.role == Role.RescueSpec) // paramedic and rescue spec: double AP
+            {
+                if (extingsmoke&&gm.tileMap.selectedUnit.FreeAP>=2)
+                {
+                    Operation op = new Operation(this, OperationType.ExtingSmoke);
+                    possibleOp.Add(op);
+                }
+                if (extingFire && gm.tileMap.selectedUnit.FreeAP >= 4)
+                {
+                    Operation op = new Operation(this, OperationType.ExtingFire);
+                    possibleOp.Add(op);
+                }
+            }
+            else if (gm.tileMap.selectedUnit.role == Role.CAFS) // cafs
+            {
+                if(extingsmoke && (gm.tileMap.selectedUnit.FreeAP+ gm.tileMap.selectedUnit.remainingSpecAp) >= 1)
+                {
+                    Operation op = new Operation(this, OperationType.ExtingSmoke);
+                    possibleOp.Add(op);
+                }
+                if (extingFire && (gm.tileMap.selectedUnit.FreeAP + gm.tileMap.selectedUnit.remainingSpecAp) >= 2)
+                {
+                    Operation op = new Operation(this, OperationType.ExtingFire);
+                    possibleOp.Add(op);
+                }
 
-            
-        }else // not neighboring 
+            }
+            else
+            {
+                if (extingsmoke && gm.tileMap.selectedUnit.FreeAP >= 1)
+                {
+                    Operation op = new Operation(this, OperationType.ExtingSmoke);
+                    possibleOp.Add(op);
+                }
+                if (extingFire && gm.tileMap.selectedUnit.FreeAP >= 2)
+                {
+                    Operation op = new Operation(this, OperationType.ExtingFire);
+                    possibleOp.Add(op);
+                }
+            }
+
+            //----for move
+            Boolean moveTo = false;
+            int[] keyM = new int[2];
+            if (currentX == x) // same column
+            {
+                if (currentZ < z) // below the target
+                {
+                    keyM[0] = x;
+                    keyM[1] = z;
+                }
+                else // above
+                {
+                    keyM[0] = currentX;
+                    keyM[1] = currentZ;
+                }
+            }
+            else // same row
+            {
+                if (currentX < x) // left
+                {
+                    keyM[0] = x;
+                    keyM[1] = z;
+                }
+                else
+                {
+                    keyM[0] = currentX;
+                    keyM[1] = currentZ;
+                }
+            }
+            if (gm.wallManager.hwallStores.ContainsKey(keyM) && gm.wallManager.hwallStores[keyM].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+            {
+                Fireman fireman = gm.tileMap.selectedUnit;
+                if (fireman.role == Role.RescueSpec)
+                {
+                    if (extingFire && fireman.FreeAP + fireman.remainingSpecAp >= 2)
+                    {
+                        Operation op = new Operation(this, OperationType.Move);
+                        possibleOp.Add(op);
+                    }else if (!extingFire && fireman.FreeAP + fireman.remainingSpecAp == 1)
+                    {
+                        Operation op = new Operation(this, OperationType.Move);
+                        possibleOp.Add(op);
+                    }
+                }
+                else
+                {
+                    if(extingFire && fireman.FreeAP >= 2)
+                    {
+                        Operation op = new Operation(this, OperationType.Move);
+                        possibleOp.Add(op);
+                    }else if (!extingFire && fireman.FreeAP == 1)
+                    {
+                        Operation op = new Operation(this, OperationType.Move);
+                        possibleOp.Add(op);
+                    }
+                }
+            }
+
+        }
+        else // not neighboring 
         {
+            int[] key = new int[] { x, z };
+            Fireman fireman = gm.tileMap.selectedUnit;
+            if (fireman.role == Role.ImagingTech&&fireman.FreeAP>=1&&gm.pOIManager.placedPOI.ContainsKey(key)&&gm.pOIManager.placedPOI[key].status==POIStatus.Hidden)
+            {
+                Operation op = new Operation(this, OperationType.Imaging);
+                possibleOp.Add(op);
+            }
 
+            if (fireman.role == Role.Captain)
+            {
+                foreach(JSONObject o in gm.players.Values)
+                {
+                    if (o["Location"] .Equals( x + "," + z))
+                    {
+                        Operation op = new Operation(this, OperationType.Command);
+                        possibleOp.Add(op);
+                    }
+                }
+            }
+
+            if (gm.tileMap.tiles[x, z] == 3)
+            {
+
+            }
+
+            if (gm.tileMap.tiles[x, z] == 4)
+            {
+
+            }
         }
 
 

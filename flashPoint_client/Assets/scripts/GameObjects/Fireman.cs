@@ -29,6 +29,8 @@ public class Fireman
 
     public int specialtyAP = 0;
 
+    public int remainingSpecAp = 0;
+
 	public bool carryingVictim = false;
 
     public GameManager gm;
@@ -88,6 +90,7 @@ public class Fireman
 		// Change AP
 		setAP(AP + rollover_AP);
         savedAP = rollover_AP;
+        remainingSpecAp = specialtyAP;
 		Debug.Log("Rolling over: " + rollover_AP);
 		Debug.Log("Total AP for new turn is: " + FreeAP);
 	}

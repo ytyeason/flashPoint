@@ -44,7 +44,7 @@ public class GameManager: MonoBehaviour
     private JSONObject participants;
     private String level;
     private String numberOfPlayer;
-    private Dictionary<String, JSONObject> players = new Dictionary<string, JSONObject>();
+    public Dictionary<String, JSONObject> players = new Dictionary<string, JSONObject>();
     public Ambulance amB;
     public Engine enG;
     public Fireman fireman;
@@ -293,7 +293,7 @@ public class GameManager: MonoBehaviour
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
 		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap);
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this,pOIManager,hazmatManager);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this);
 
 
         return f;

@@ -15,8 +15,6 @@ public class HazmatManager{
     private System.Random rand = new System.Random();
     private float posY=-10;
 
-    public int removedHazmat = 0;
-
     public int numOfHazmat = 0; // default to 0 for Family
     public int additionalHotspot = 0;
 
@@ -92,7 +90,7 @@ public class HazmatManager{
 
         Hazmat h = new Hazmat(this,status);
         placedHazmat.Add(key, h);
-        GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(randX*5 + 1.25), posY, (float)(randZ*5 - 1.25)), Quaternion.identity);
+        GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(randX*6 + 1.5), posY, (float)(randZ*6 - 1.5)), Quaternion.identity);
         if (h.status == HazmatStatus.Hazmat)
         {
             lookUp.Add(key, go);
@@ -110,7 +108,7 @@ public class HazmatManager{
             lookUp.Remove(key);
             gm.DestroyObject(lookUp[key]);
             placedHotspot.Add(key, h);
-            gm.instantiateObject(h.prefab, new Vector3((float)(x * 5 + 1.25), posY, (float)(z * 5 - 1.25)), Quaternion.identity);
+            gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
         }
     }
 
@@ -131,19 +129,7 @@ public class HazmatManager{
         int[] key = new int[] { x, z };
         Hazmat h = new Hazmat(this, HazmatStatus.HotSpot);
         placedHotspot.Add(key, h);
-        gm.instantiateObject(h.prefab, new Vector3((float)(x * 5 + 1.25), posY, (float)(z * 5 - 1.25)), Quaternion.identity);
-    }
-
-    public void removeHazmat(int x,int z)
-    {
-        int[] key = new int[] { x, z };
-
-        if (placedHazmat.ContainsKey(key))
-        {
-            placedHazmat.Remove(key);
-        }
-        gm.DestroyObject(lookUp[key]);
-        removedHazmat++;
+        gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
     }
 
 }
