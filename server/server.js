@@ -61,6 +61,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     socket.on('gameSetUp', function(data){
       console.log("gameSetUp");
+      selectRoles=[];
       var room_number = data['room'];
       var level = data['level'];
       var numberOfPlayer = data['numberOfPlayer'];
@@ -122,9 +123,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room_number = data['room'];
         var Location = data['Location'];
         var name = data['name'];
+        var role=data['role'];
 
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
+        participants[name]["Role"]=role;
         console.log(Games[room_number]);
         socket.emit('LocationSetUp_SUCCESS',{status: "True"} );
 
@@ -226,6 +229,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var role=data['role'];
       var result='true';
       console.log(role);
+      console.log(selectRoles);
       if(selectRoles.includes(role)||role==""){
         result='false';
       }else{

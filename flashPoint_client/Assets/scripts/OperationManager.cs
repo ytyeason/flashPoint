@@ -39,6 +39,8 @@ public class OperationManager
     public void selectTile(int x, int z)
     {
         DestroyAll();
+        opPanel.SetActive(false);
+        Debug.Log(buttons.Count);
 
         this.x = x;
         this.z = z;
@@ -661,9 +663,15 @@ public class OperationManager
 
     void DestroyAll() {
         //opPanel.SetActive(false);
-        foreach (Button b in buttons) {
-            gm.DestroyButton(b);
-        }
+        Debug.Log("destroying");
+        //for(int i = 0; i < gm.options.Count; i++) {
+        //    foreach(Button b in gm.options[i].GetComponentsInChildren<Button>()) {
+        //        gm.DestroyButton(b);
+        //        Debug.Log(b);
+        //    }
+        //}
+        gm.DestroyButtons();
+        buttons.RemoveRange(0, buttons.Count);
     }
 }
 

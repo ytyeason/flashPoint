@@ -110,7 +110,8 @@ public class GameManager: MonoBehaviour
         hazmatManager=new HazmatManager(this);
 
 
-        displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+        //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+        displayAP();
      //   vehicleManager.StartvehicleManager();
 
         tileMap.GenerateFiremanVisual(players);
@@ -119,20 +120,32 @@ public class GameManager: MonoBehaviour
 
     }
 
-    public void displayAP(int ap, int sp){
-        nameAP.text= StaticInfo.name + " has " + fireman.FreeAP + " AP" ;
-        if (StaticInfo.role == Role.Captain)
+    public void displayAP(){
+        Debug.Log(fireman);
+        nameAP.text= StaticInfo.name + " : " + fireman.FreeAP + " AP" ;
+        if (fireman.role == Role.Captain)
         {
-            nameAP.text += " and " + sp + " Command AP";
+            nameAP.text += "\n"+ nameLengthSpace() + fireman.remainingSpecAp + " Command AP";
         }
-        if (StaticInfo.role == Role.CAFS)
+        if (fireman.role == Role.CAFS)
         {
-            nameAP.text += " and " + sp + " Extinguish AP";
+            nameAP.text += "\n" + nameLengthSpace() + fireman.remainingSpecAp + " Extinguish AP";
         }
-        if (StaticInfo.role == Role.RescueSpec)
+        if (fireman.role == Role.RescueSpec)
         {
-            nameAP.text += " and " + sp + " Movement AP";
+            nameAP.text += "\n" + nameLengthSpace() + fireman.remainingSpecAp + " Movement AP";
         }
+    }
+
+    String nameLengthSpace()
+    {
+        string s = "";
+
+        for(int i = 0; i < StaticInfo.name.Length;i++)
+        {
+            s += " ";
+        }
+        return s;
     }
 
 
@@ -316,8 +329,7 @@ public class GameManager: MonoBehaviour
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
 		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap);
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this);
-
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role);
 
         return f;
     }
@@ -355,9 +367,15 @@ public class GameManager: MonoBehaviour
         return button;
     }
 
-    public void DestroyButton(Button b)
+    public void DestroyButtons()
     {
-        Destroy(b);
+        for(int i = 0; i < options.Count; i++)
+        {
+            for(int j = 0; j < options[i].transform.childCount; j++)
+            {
+                Destroy(options[i].transform.GetChild(j).gameObject);
+            }
+        }
     }
 
     public void cancel()
@@ -379,6 +397,7 @@ public class GameManager: MonoBehaviour
         update["room"] = StaticInfo.roomNumber;
         update["name"] = StaticInfo.name;
         update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
+        update["role"] = ((int)StaticInfo.role).ToString();
 
         socket.Emit("Location", new JSONObject(update));
     }

@@ -50,7 +50,7 @@ public class Fireman
 
     public String level = StaticInfo.level;
 
-    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
+    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm, Role role)
     {
         this.name = name;
         this.color = color;
@@ -58,27 +58,29 @@ public class Fireman
         this.fireandvictim = firemanplusvictim;
 		this.currentX = in_x;
 		this.currentZ = in_z;
-        this.AP = AP;
-        this.FreeAP = AP+savedAP+specialtyAP;
         this.gm = gm;
+        setRole(role);
+        this.FreeAP = AP + savedAP;
+        this.remainingSpecAp = this.specialtyAP;
 
-        if (string.Equals(level, "Experienced"))
-        {
-            setRole(role);
-        }
+
+        //if (string.Equals(level, "Experienced"))
+        //{
+        //    setRole(role);
+        //}
     }
 
 
     public void setAP(int in_ap)
     {
         FreeAP = in_ap;
-		gm.displayAP(FreeAP,remainingSpecAp);
+		gm.displayAP();
     }
 
     public void setSpecAP(int specAP)
     {
         remainingSpecAp = specAP;
-        gm.displayAP(FreeAP,remainingSpecAp);
+        gm.displayAP();
     }
 
     // Refresh AP while rolling over unused AP (a maximum of 4)
@@ -298,7 +300,7 @@ public class Fireman
             }else if (remainingSpecAp + FreeAP >= requiredAP)
             {
 
-                setAP(FreeAP - remainingSpecAp);
+                setAP(FreeAP - requiredAP + remainingSpecAp);
                 setSpecAP(0);
             }
         }
@@ -312,6 +314,18 @@ public class Fireman
         currentX = x * 6;
         currentZ = z * 6;
         gm.UpdateLocation(currentX, currentZ);
+
+        int[] key = new int[] { x, z };
+        if (gm.pOIManager.placedPOI.ContainsKey(key)&& gm.pOIManager.placedPOI[key].status==POIStatus.Hidden)
+        {
+            gm.pOIManager.reveal(x, z);
+
+        }
+    }
+
+    public void extingFire(int x, int z)
+    {
+
     }
 
 
@@ -374,7 +388,8 @@ public class Fireman
 
         }
 
-        setAP(AP + savedAP);
+        //setAP(AP + savedAP);
+        FreeAP = AP + savedAP;
 
     }
 
