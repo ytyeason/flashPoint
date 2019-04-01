@@ -16,7 +16,7 @@ public class POIManager{
     public List<POI> poi = new List<POI>();
 
     private System.Random rand = new System.Random();
-    private float posY = -10;
+    private float posY = -1;
 
     public int rescued = 0;
     public int killed = 0;
@@ -61,6 +61,7 @@ public class POIManager{
             POI p = poi[randIndex];
             placedPOI.Add(new int[] { randX, randZ },p);
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*6 - 1.5), posY, (float)((double)randZ*6 + 1.5)), Quaternion.identity);
+            go.transform.Rotate(90, 0, 0);
             poiLookup.Add(new int[] { randX, randZ }, go);
             poi.Remove(p);
         }
@@ -106,6 +107,7 @@ public class POIManager{
         else
         {
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
+            go.transform.Rotate(90, 0, 0);
         }
     }
 
@@ -119,5 +121,6 @@ public class POIManager{
         }
         gm.DestroyObject(poiLookup[key]);
         GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
     }
 }

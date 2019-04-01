@@ -11,7 +11,7 @@ public static class StaticInfo
     public static JSONObject game_info;
     public static int[] Location;
 
-    public static Role role;
+    public static Role role=Role.None;
 
     public static String numOfHazmat;
     public static String numOfHotspot;

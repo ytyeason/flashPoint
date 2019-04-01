@@ -39,6 +39,14 @@ public class GameManager: MonoBehaviour
 	public FireManager fireManager;
     public POIManager pOIManager;
     public HazmatManager hazmatManager;
+    public OperationManager operationManager;
+
+    // --op
+    public List<Button> prefabs = new List<Button>();
+    public GameObject opPanel;
+
+    public List<GameObject> options = new List<GameObject>();
+
 
     private JSONObject room;
     private JSONObject participants;
@@ -92,6 +100,7 @@ public class GameManager: MonoBehaviour
         fireman = initializeFireman();
         amB = initializeAmbulance();
         enG = initializeEngine();
+        operationManager = new OperationManager(this);
         wallManager = new WallManager(wallTypes,this);
         doorManager = new DoorManager(doorTypes,this);
     //    vehicleManager = new VehicleManager(vehicleTypes,this);
@@ -99,6 +108,7 @@ public class GameManager: MonoBehaviour
 		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
         pOIManager = new POIManager(this);
         hazmatManager=new HazmatManager(this);
+
 
         displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()));
      //   vehicleManager.StartvehicleManager();
@@ -323,6 +333,19 @@ public class GameManager: MonoBehaviour
     {
         GameObject objectW = (GameObject)Instantiate(w, v, q);
         return objectW;
+    }
+
+    public Button instantiateOp(Button w, Transform parent, bool b)
+    {
+        //Button objectW = (Button)Instantiate(w, parent, b);
+        Button button = Instantiate(w, parent.position, parent.rotation, parent);
+        return button;
+    }
+
+    public void cancel()
+    {
+        Debug.Log("cancel");
+        operationManager.cancel();
     }
 
     public void DestroyObject(GameObject w)

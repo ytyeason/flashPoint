@@ -13,5 +13,7 @@
     Drive,
     Remote,
     Ride,
-
+    DeckGun,
+    StopDrive,
+    GetOff,
 }

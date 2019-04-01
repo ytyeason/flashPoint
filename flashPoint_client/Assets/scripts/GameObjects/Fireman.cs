@@ -33,6 +33,10 @@ public class Fireman
 
 	public bool carryingVictim = false;
 
+    public bool driving = false;
+
+    public bool riding = false;
+
     public GameManager gm;
 
 

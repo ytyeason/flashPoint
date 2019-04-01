@@ -32,8 +32,8 @@ public class Ambulance : MonoBehaviour {
 	{
 		if (map.gm.isMyTurn)
 		{
-			int vehicleX = x / 5;
-			int vehicleZ = z / 5;
+			int vehicleX = x / 6;
+			int vehicleZ = z / 6;
 			v.transform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
 			Debug.Log("Mouse is over GameObject.");
 

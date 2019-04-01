@@ -13,7 +13,7 @@ public class HazmatManager{
     public Dictionary<int[], Hazmat> placedHotspot=new Dictionary<int[], Hazmat>();
 
     private System.Random rand = new System.Random();
-    private float posY=-10;
+    private float posY=-1;
 
     public int numOfHazmat = 0; // default to 0 for Family
     public int additionalHotspot = 0;

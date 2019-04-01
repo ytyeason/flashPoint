@@ -20,6 +20,12 @@ public class ClickableTile : MonoBehaviour {
             int x = tileX / 6;
             int z = tileZ / 6;
 
+            OperationManager om = map.gm.operationManager;
+
+            Debug.Log(om);
+
+            om.selectTile(x, z);
+
             // if (x==9&&z==4)
             // {
             //     List<int[]> keyList = new List<int[]>(vm.vehicleStores.Keys);
@@ -35,29 +41,29 @@ public class ClickableTile : MonoBehaviour {
             //     }
             // }
 
-            if (map.tiles[x, z] != 0&&map.tiles[x, z] != 3&&map.tiles[x, z] != 4)
-            {
-                // Extinguish the fire or smoke:
-                int result = map.selectedUnit.extinguishFire(map.tiles[x, z]);
-                if (result == -1)
-                    Debug.Log("Not enough AP to extinguish the fire");
-                else
-                {
-                    map.buildNewTile(x, z, result);
-                    //broadcast new tile
-                    map.gm.UpdateTile(x, z, result);
-                }
+            //if (map.tiles[x, z] != 0&&map.tiles[x, z] != 3&&map.tiles[x, z] != 4)
+            //{
+            //    // Extinguish the fire or smoke:
+            //    int result = map.selectedUnit.extinguishFire(map.tiles[x, z]);
+            //    if (result == -1)
+            //        Debug.Log("Not enough AP to extinguish the fire");
+            //    else
+            //    {
+            //        map.buildNewTile(x, z, result);
+            //        //broadcast new tile
+            //        map.gm.UpdateTile(x, z, result);
+            //    }
 
-            }
-            else if (map.tiles[x, z] == 4 && x==9 && z==4)
-            {
-                map.MoveAmbulanceTo();
-            }
-            else
-            {
-                // Move to selected tile (only if tile is normal)
-                map.MoveSelectedUnitTo(tileX, tileZ, 0);
-            }
+            //}
+            //else if (map.tiles[x, z] == 4 && x==9 && z==4)
+            //{
+            //    map.MoveAmbulanceTo();
+            //}
+            //else
+            //{
+            //    // Move to selected tile (only if tile is normal)
+            //    map.MoveSelectedUnitTo(tileX, tileZ, 0);
+            //}
 
 
             //Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);

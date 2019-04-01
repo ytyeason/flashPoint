@@ -63,7 +63,7 @@ public class RoomManager : MonoBehaviour {
     public void RightClicked()
     {
         Debug.Log("Right Clicked");
-        StaticInfo.Location = new int[] { 45, 15 };
+        StaticInfo.Location = new int[] { 54, 18 };
         Dictionary<String, String> Right = new Dictionary<string, string>();
         Right["room"] = StaticInfo.roomNumber;
         Right["name"] = StaticInfo.name;
@@ -75,7 +75,7 @@ public class RoomManager : MonoBehaviour {
     public void LeftClicked()
     {
         Debug.Log("Left Clicked");
-        StaticInfo.Location = new int[] { 0, 15 }; 
+        StaticInfo.Location = new int[] { 0, 18 }; 
         Dictionary<String, String> Left = new Dictionary<string, string>();
         Left["room"] = StaticInfo.roomNumber;
         Left["name"] = StaticInfo.name;
@@ -88,7 +88,7 @@ public class RoomManager : MonoBehaviour {
     public void TopClicked()
     {
         Debug.Log("Top Clicked");
-        StaticInfo.Location = new int[] { 25, 35 };
+        StaticInfo.Location = new int[] { 30, 42 };
         Dictionary<String, String> Top = new Dictionary<string, string>();
         Top["room"] = StaticInfo.roomNumber;
         Top["name"] = StaticInfo.name;
@@ -100,7 +100,7 @@ public class RoomManager : MonoBehaviour {
     public void BottomClicked()
     {
         Debug.Log("Bottom Clicked");
-        StaticInfo.Location = new int[] { 25, 0 };
+        StaticInfo.Location = new int[] { 30, 0 };
         Dictionary<String, String> Bottom = new Dictionary<string, string>();
         Bottom["room"] = StaticInfo.roomNumber;
         Bottom["name"] = StaticInfo.name;
