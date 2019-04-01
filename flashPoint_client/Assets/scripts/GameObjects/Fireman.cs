@@ -32,6 +32,8 @@ public class Fireman
     public int remainingSpecAp = 0;
 
 	public bool carryingVictim = false;
+    public POI carriedPOI;
+    public Hazmat carriedHazmat;
 
     public bool driving = false;
 
@@ -70,11 +72,17 @@ public class Fireman
     public void setAP(int in_ap)
     {
         FreeAP = in_ap;
-		gm.displayAP(FreeAP);
+		gm.displayAP(FreeAP,remainingSpecAp);
     }
 
-	// Refresh AP while rolling over unused AP (a maximum of 4)
-	public void refreshAP() 
+    public void setSpecAP(int specAP)
+    {
+        remainingSpecAp = specAP;
+        gm.displayAP(FreeAP,remainingSpecAp);
+    }
+
+    // Refresh AP while rolling over unused AP (a maximum of 4)
+    public void refreshAP() 
 	{
 		Debug.Log("EOT AP: " + FreeAP);
         int rollover_AP = Math.Min(FreeAP, 4);
@@ -94,7 +102,7 @@ public class Fireman
 		// Change AP
 		setAP(AP + rollover_AP);
         savedAP = rollover_AP;
-        remainingSpecAp = specialtyAP;
+        setSpecAP(specialtyAP);
 		Debug.Log("Rolling over: " + rollover_AP);
 		Debug.Log("Total AP for new turn is: " + FreeAP);
 	}
@@ -163,9 +171,9 @@ public class Fireman
 			// Validate tile
 			if (x >= 0 && z >= 0)
 			{
-				if (x == currentX - 5 || x == currentX + 5 || x == currentX)
+				if (x == currentX - 6 || x == currentX + 6 || x == currentX)
 				{
-					if (z == currentZ - 5 || z == currentZ + 5 || z == currentZ)
+					if (z == currentZ - 6 || z == currentZ + 6 || z == currentZ)
 					{
 						//ClickableTile cur_ct = ct_table[ct_key];
 						//Debug.Log("(DEBUG) tryMove(" + x + ", " + z + ")'s spaceState is: " + in_status);
@@ -272,6 +280,38 @@ public class Fireman
 
 			Debug.Log("The victim has been rescued!");
 		}
+    }
+
+    // For operations-----------------------------------------
+    public void move(int x, int z)
+    {
+        int requiredAP = 1;
+        if (gm.tileMap.tiles[x, z] == 2||carryingVictim)
+        {
+            requiredAP = 2;
+        }
+        if (this.role == Role.RescueSpec) // Rescue Specialist
+        {
+            if (remainingSpecAp >= requiredAP)
+            {
+                setSpecAP(remainingSpecAp - requiredAP);
+            }else if (remainingSpecAp + FreeAP >= requiredAP)
+            {
+
+                setAP(FreeAP - remainingSpecAp);
+                setSpecAP(0);
+            }
+        }
+        else
+        {
+            if (FreeAP >= requiredAP)
+            {
+                setAP(FreeAP - requiredAP);
+            }
+        }
+        currentX = x * 6;
+        currentZ = z * 6;
+        gm.UpdateLocation(currentX, currentZ);
     }
 
 

@@ -110,7 +110,7 @@ public class GameManager: MonoBehaviour
         hazmatManager=new HazmatManager(this);
 
 
-        displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()));
+        displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
      //   vehicleManager.StartvehicleManager();
 
         tileMap.GenerateFiremanVisual(players);
@@ -119,9 +119,22 @@ public class GameManager: MonoBehaviour
 
     }
 
-    public void displayAP(int ap){
+    public void displayAP(int ap, int sp){
         nameAP.text= StaticInfo.name + " has " + fireman.FreeAP + " AP" ;
+        if (StaticInfo.role == Role.Captain)
+        {
+            nameAP.text += " and " + sp + " Command AP";
+        }
+        if (StaticInfo.role == Role.CAFS)
+        {
+            nameAP.text += " and " + sp + " Extinguish AP";
+        }
+        if (StaticInfo.role == Role.RescueSpec)
+        {
+            nameAP.text += " and " + sp + " Movement AP";
+        }
     }
+
 
     void WallUpdate_Success(SocketIOEvent obj)
     {
@@ -340,6 +353,11 @@ public class GameManager: MonoBehaviour
         //Button objectW = (Button)Instantiate(w, parent, b);
         Button button = Instantiate(w, parent.position, parent.rotation, parent);
         return button;
+    }
+
+    public void DestroyButton(Button b)
+    {
+        Destroy(b);
     }
 
     public void cancel()

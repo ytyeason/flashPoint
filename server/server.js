@@ -128,7 +128,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(Games[room_number]);
         socket.emit('LocationSetUp_SUCCESS',{status: "True"} );
 
-        socket.broadcast.emit('LocationUpdate_SUCCESS',Games);
+        io.sockets.emit('LocationUpdate_SUCCESS',Games);
     });
 
     socket.on('UpdateTile',function(data){

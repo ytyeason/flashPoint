@@ -13,6 +13,7 @@ public class OperationManager
     public List<Button> prefabs;
 
     List<Operation> possibleOp = new List<Operation>();
+    List<Button> buttons = new List<Button>();
 
     public GameObject opPanel;
 
@@ -37,6 +38,8 @@ public class OperationManager
 
     public void selectTile(int x, int z)
     {
+        DestroyAll();
+
         this.x = x;
         this.z = z;
 
@@ -101,6 +104,7 @@ public class OperationManager
                     newObject.onClick.AddListener(move);
                     break;
             }
+            buttons.Add(newObject);
         }
     }
 
@@ -414,6 +418,8 @@ public class OperationManager
                     moveTo = true;
                 }
             }
+            if (gm.tileMap.tiles[x, z] == 2 && gm.tileMap.selectedUnit.carryingVictim) moveTo = false;
+
             Debug.Log(extingFire);
             Debug.Log(gm.tileMap.selectedUnit.FreeAP);
             Debug.Log(moveTo);
@@ -560,87 +566,104 @@ public class OperationManager
     public void move()
     {
         Debug.Log("move");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.move(x, z);
+        opPanel.SetActive(false);
+        DestroyAll();
+
     }
 
     public void extingSmoke()
     {
+        Debug.Log("extinguish smoke");
+        Fireman fireman = gm.tileMap.selectedUnit;
 
+        DestroyAll();
     }
 
     public void extingFire()
     {
-
+        DestroyAll();
     }
 
     public void treat()
     {
-
+        DestroyAll();
     }
 
     public void carryV()
     {
-
+        DestroyAll();
     }
 
     public void leadV()
     {
-
+        DestroyAll();
     }
 
     public void removeHazmat()
     {
-
+        DestroyAll();
     }
 
     public void carryHazmat()
     {
-
+        DestroyAll();
     }
 
     public void imaging()
     {
-
+        DestroyAll();
     }
 
     public void command()
     {
-
+        DestroyAll();
     }
 
     public void drive()
     {
-
+        DestroyAll();
     }
 
     public void remote()
     {
-
+        DestroyAll();
     }
 
     public void ride()
     {
-
+        DestroyAll();
     }
 
     public void deckGun()
     {
-
+        DestroyAll();
     }
 
     public void stopDrive()
     {
-
+        DestroyAll();
     }
 
     public void getOff()
     {
-
+        DestroyAll();
     }
 
     public void cancel()
     {
         opPanel.SetActive(false);
+        DestroyAll();
         Debug.Log("cancel");
+    }
+
+    void DestroyAll() {
+        //opPanel.SetActive(false);
+        foreach (Button b in buttons) {
+            gm.DestroyButton(b);
+        }
     }
 }
 
