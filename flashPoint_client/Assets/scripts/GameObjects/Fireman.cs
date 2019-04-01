@@ -29,6 +29,10 @@ public class Fireman
 
     public GameManager gm;
 
+    public POIManager POIManager;
+
+    public HazmatManager hazamatManager;
+
 
     public int freeExtinguishAp = 3;
 
@@ -38,7 +42,7 @@ public class Fireman
 
     public String level = StaticInfo.level;
 
-    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
+    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm,POIManager POIManager,HazmatManager hazmatManager)
     {
         this.name = name;
         this.color = color;
@@ -49,6 +53,9 @@ public class Fireman
         this.AP = AP;
         this.FreeAP = AP;
         this.gm = gm;
+        this.POIManager = POIManager; 
+        this.hazamatManager = hazmatManager;
+
 
         if (string.Equals(level, "Experienced"))
         {
@@ -293,12 +300,22 @@ public class Fireman
 
     public void flipPOI(int x, int z)
     {
-
+        POIManager.reveal(x, z);
     }
 
 
-    public void removeHazamet()
+    public void removeHazamet(int x, int z)
     {
+        if (currentX == x && currentZ == z)
+        {
+            hazamatManager.removeHazmat(x, z);
+        }
+        else
+        {
+            return;
+        }
+
+
 
     }
 
