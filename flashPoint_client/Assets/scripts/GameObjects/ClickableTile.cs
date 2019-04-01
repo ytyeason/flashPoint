@@ -17,8 +17,8 @@ public class ClickableTile : MonoBehaviour {
         {
             //Debug.Log(this);
 
-            int x = tileX / 5;
-            int z = tileZ / 5;
+            int x = tileX / 6;
+            int z = tileZ / 6;
 
             // if (x==9&&z==4)
             // {

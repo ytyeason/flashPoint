@@ -8,9 +8,13 @@ public class Operation
     public OperationType type;
     public OperationManager om;
 
-    public Operation(OperatingSystem om)
-    {
+    public Button prefab;
 
+    public Operation(OperationManager om, OperationType type)
+    {
+        this.om = om;
+        this.type = type;
+        this.prefab = om.prefabs[(int)this.type];
     }
 }
 

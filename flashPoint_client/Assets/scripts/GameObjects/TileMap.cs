@@ -162,7 +162,7 @@ public class TileMap  {
                 var cord = location.Split(',');
                 int x = Convert.ToInt32(cord[0]);
                 int z = Convert.ToInt32(cord[1]);
-                GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x, 0, z), Quaternion.identity);
+                GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x*6, 0, z*6), Quaternion.identity);
                 firemanSores[name] = go;
                 if (x == 5)					// TODO: Why is this here?
                 {
@@ -198,7 +198,7 @@ public class TileMap  {
             else
             {
                 Debug.Log("Register new fireman in firemanStore");
-                GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x, 0, z), Quaternion.identity);
+                GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x*6, 0, z*6), Quaternion.identity);
                 firemanSores[name] = go;
             }
 
@@ -229,13 +229,13 @@ public class TileMap  {
 				tiles[x, z] = type;
 				TileType tt = tileTypes[ tiles[x,z] ];
 				//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
-				GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
+				GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x*6, 0, z*6), Quaternion.identity );
 
 				// Connect a ClickableTile to each TileType
 				ClickableTile ct = go.GetComponent<ClickableTile>();
 				// Assign the variables as needed
-				ct.tileX = x*5;
-				ct.tileZ = z*5;
+				ct.tileX = x*6;
+				ct.tileZ = z*6;
 				ct.map = this;
 				ct.type = tt;	// Change type to reflect new state
 				

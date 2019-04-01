@@ -222,8 +222,8 @@ public class Fireman
 	// Check if x & z coordinates place fireman outside
 	public bool checkOutside(int x_coord, int z_coord)
 	{
-		if(	(x_coord == 0 || (x_coord / 5) == map.gm.mapSizeX - 1) &&
-			(z_coord == 0 || (z_coord / 5) == map.gm.mapSizeZ - 1))
+		if(	(x_coord == 0 || (x_coord / 6) == map.gm.mapSizeX - 1) &&
+			(z_coord == 0 || (z_coord / 6) == map.gm.mapSizeZ - 1))
 		{
 			Debug.Log("x, z : " + x_coord + ", " + z_coord);
 			return true;
@@ -241,16 +241,16 @@ public class Fireman
 		s.transform.position = new Vector3(x, 0.2f, z);
 		//Debug.Log("x, y is outside: " + checkOutside(x, z));
 
-        if(x==5 && z == 5)
-        {
-			//firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, fireandvictim, currentX, currentZ);
-			Debug.Log("You are now carrying the victim!");
-			carryingVictim = true;
-			//GameManager gmm = new GameManager();
-            gm.DestroyObject(gmo);
+   //     if(x==5 && z == 5)
+   //     {
+			////firemanplusvictim firemanandvictim = new firemanplusvictim(name, FreeAP, color, fireandvictim, currentX, currentZ);
+			//Debug.Log("You are now carrying the victim!");
+			//carryingVictim = true;
+			////GameManager gmm = new GameManager();
+        //    gm.DestroyObject(gmo);
             
-            //s = gmm.instantiateObject(firemanandvictim.s, new Vector3(5, 0, 5), Quaternion.identity);
-        }
+        //    //s = gmm.instantiateObject(firemanandvictim.s, new Vector3(5, 0, 5), Quaternion.identity);
+        //}
 
 		// Check if fireman is outside & carrying a victim 
 		if(carryingVictim && checkOutside(x, z) == true)
