@@ -293,7 +293,7 @@ public class GameManager: MonoBehaviour
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
 		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap);
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this,pOIManager,hazmatManager);
 
 
         return f;
