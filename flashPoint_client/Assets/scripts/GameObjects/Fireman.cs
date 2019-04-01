@@ -25,24 +25,24 @@ public class Fireman
 
     public int FreeAP = REFRESH_AP;
 
+    public int savedAP = 0;
+
+    public int specialtyAP = 0;
+
 	public bool carryingVictim = false;
 
     public GameManager gm;
 
-    public POIManager POIManager;
 
-    public HazmatManager hazamatManager;
+    //public int freeExtinguishAp = 3;
 
-
-    public int freeExtinguishAp = 3;
-
-    public int freeMovementAp = 3;
+    //public int freeMovementAp = 3;
 
     public Role role = StaticInfo.role;
 
     public String level = StaticInfo.level;
 
-    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm,POIManager POIManager,HazmatManager hazmatManager)
+    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm)
     {
         this.name = name;
         this.color = color;
@@ -51,11 +51,8 @@ public class Fireman
 		this.currentX = in_x;
 		this.currentZ = in_z;
         this.AP = AP;
-        this.FreeAP = AP;
+        this.FreeAP = AP+savedAP+specialtyAP;
         this.gm = gm;
-        this.POIManager = POIManager; 
-        this.hazamatManager = hazmatManager;
-
 
         if (string.Equals(level, "Experienced"))
         {
@@ -74,22 +71,23 @@ public class Fireman
 	public void refreshAP() 
 	{
 		Debug.Log("EOT AP: " + FreeAP);
-		int rollover_AP;
+        int rollover_AP = Math.Min(FreeAP, 4);
 
 		// Had AP from a previous turn
-		if (FreeAP > 4)
-		{
-			// Stores values between 0 and 4 which are allowed to be rolled-over
-			rollover_AP = 4;
-		}
-		// No rollover (i.e. FreeAP < 4
-		else
-		{
-			rollover_AP = FreeAP % 5;
-		}
+		//if (FreeAP > 4)
+		//{
+		//	// Stores values between 0 and 4 which are allowed to be rolled-over
+		//	rollover_AP = 4;
+		//}
+		//// No rollover (i.e. FreeAP < 4
+		//else
+		//{
+		//	rollover_AP = FreeAP % 5;
+		//}
 
 		// Change AP
-		setAP(REFRESH_AP + rollover_AP);
+		setAP(AP + rollover_AP);
+        savedAP = rollover_AP;
 		Debug.Log("Rolling over: " + rollover_AP);
 		Debug.Log("Total AP for new turn is: " + FreeAP);
 	}
@@ -272,54 +270,79 @@ public class Fireman
 
     public void setRole(Role role)
     {
+        this.role = role;
+
         if (role.Equals(Role.Generalist)){
-            FreeAP = 5;
+            AP = 5;
             // role = "Generalist";
-			this.role=role;
         }
 
         if (role.Equals(Role.ImagingTech))
         {
-            FreeAP = 4;
+            AP = 4;
             // role = "imagingTech";
-			this.role=role;
         }
 
         if (role.Equals(Role.CAFS))
         {
-            FreeAP = 3;
-            freeExtinguishAp = 3;
+            AP = 3;
+            specialtyAP = 3;
             // role = "CAFSfighter";
-			this.role=role;
         }
 
+        if (role == Role.Captain)
+        {
+            AP = 4;
+            specialtyAP = 2;
+        }
 
+        if (role == Role.Paramedic)
+        {
+            AP = 4;
+        }
 
+        if (role == Role.HazmatTech)
+        {
+            AP = 4;
+        }
+
+        if (role == Role.RescueSpec)
+        {
+            AP = 4;
+            specialtyAP = 3;
+        }
+
+        if (role == Role.Driver)
+        {
+            AP = 4;
+        }
+
+        if (role == Role.Dog)
+        {
+            
+        }
+
+        if (role == Role.Veteran)
+        {
+
+        }
+
+        setAP(AP + savedAP);
 
     }
 
     public void flipPOI(int x, int z)
     {
-        POIManager.reveal(x, z);
+
     }
 
 
     public void removeHazamet(int x, int z)
     {
-        if (currentX == x && currentZ == z)
-        {
-            hazamatManager.removeHazmat(x, z);
-        }
-        else
-        {
-            return;
-        }
-
-
 
     }
 
-    public void extinFireForFirefighter()
+    public void extinFireForFirefighter(int x, int z)
     {
 
     }
