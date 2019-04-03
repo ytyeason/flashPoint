@@ -79,6 +79,7 @@ public class GameManager: MonoBehaviour
         socket.On("sendChat_Success", sendChat_Success);
         socket.On("DoorUpdate_Success", DoorUpdate_Success);
         socket.On("sendNotification_Success",sendNotification_SUCCESS);
+        socket.On("revealPOI_Success", revealPOI_SUCCESS);
 
         if (game_info != null)
         {
@@ -146,6 +147,15 @@ public class GameManager: MonoBehaviour
             s += " ";
         }
         return s;
+    }
+
+    void revealPOI_SUCCESS(SocketIOEvent obj)
+    {
+        Debug.Log("reveal POI successful");
+        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        pOIManager.reveal(x, z);
     }
 
 
@@ -246,6 +256,8 @@ public class GameManager: MonoBehaviour
         }
     }
 
+
+
     void changingTurn_Success(SocketIOEvent obj)
     {
         Debug.Log("in changingTurn_Success");
@@ -329,7 +341,7 @@ public class GameManager: MonoBehaviour
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
 		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap);
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role,pOIManager, hazmatManager);
 
         return f;
     }
@@ -436,6 +448,18 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("UpdateDoor", new JSONObject(updateDoor));
     }
+
+
+    public void updateRevealPOI(int x,int z)
+    {
+        Debug.Log("update after reveal POI");
+        Dictionary<String, string> revealPOI = new Dictionary<string, string>();
+        revealPOI["x"] = x.ToString();
+        revealPOI["z"] = z.ToString();
+
+        socket.Emit("RevealPOI", new JSONObject(revealPOI));
+    }
+
 
     public void EndTurn()
     {

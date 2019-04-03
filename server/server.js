@@ -225,6 +225,17 @@ io.on('connection', function (socket) {//default event for client connect to ser
       io.sockets.emit('sendNotification_Success',{"name":name,"text":text});
     });
 
+    socket.on('RevealPOI',function(data){
+        var x = data['x'];
+        var z = data['z'];
+        
+        console.log(x);
+        console.log(z);
+        
+        socket.broadcast.emit('revealPOI_Success', {"x":x, "z":z});
+        
+    });
+
     socket.on('SelectRole', function(data){
       var role=data['role'];
       var result='true';
