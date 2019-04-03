@@ -670,16 +670,16 @@ public class OperationManager
         {
             Ambulance amb = gm.tileMap.ambulance;
             amb.moveNextStation(x,z);
-            opPanel.SetActive(false);
-            DestroyAll();
         }
         else
         {
             Engine eng = gm.tileMap.engine;
             eng.moveNextStation(x,z);
-            opPanel.SetActive(false);
-            DestroyAll();
         }
+        Fireman fireman = gm.tileMap.selectedUnit;
+        fireman.move(x, z);
+        opPanel.SetActive(false);
+        DestroyAll();
     }
 
     public void remote()
