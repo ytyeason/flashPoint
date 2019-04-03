@@ -142,18 +142,43 @@ public class Fireman
         if (debugMode) Debug.Log("Running extuinguishFire(" + doorX + ", " + doorZ + ")");
 
         // AP check
-        if (FreeAP < 1)
+        if (gm.operationManager.inCommand)
         {
-            if (debugMode) Debug.Log("ToggleDoor() failed, AP unchanged: " + FreeAP);
-            return false;
+            if (remainingSpecAp >= 1)
+            {
+                setSpecAP(remainingSpecAp - 1);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        // toggleDoor()
         else
         {
-            setAP(FreeAP - 1);
-            if (debugMode) Debug.Log("Changed (toggleDoor): AP is now: " + FreeAP);
-            return true;
+            if (FreeAP >= 1)
+            {
+                setAP(FreeAP - 1);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
+
+        //if (FreeAP < 1)
+        //{
+        //    if (debugMode) Debug.Log("ToggleDoor() failed, AP unchanged: " + FreeAP);
+        //    return false;
+        //}
+        //// toggleDoor()
+        //else
+        //{
+        //    setAP(FreeAP - 1);
+        //    if (debugMode) Debug.Log("Changed (toggleDoor): AP is now: " + FreeAP);
+        //    return true;
+        //}
     }
 
 

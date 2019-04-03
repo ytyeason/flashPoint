@@ -96,6 +96,7 @@ public int HorizontalDoor(int x, int z)
 		defaultHorizontalDoors.Add(new int[] { 6, 3 });
 		defaultHorizontalDoors.Add(new int[] { 5, 4 });
 		defaultHorizontalDoors.Add(new int[] { 6, 7 });
+        defaultHorizontalDoors.Add(new int[] { 3, 5 });
 
 		defaultVerticalDoors.Add(new int[] { 1, 3 });
 		defaultVerticalDoors.Add(new int[] { 6, 4 });

@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Door : MonoBehaviour
 {
@@ -22,31 +23,64 @@ public class Door : MonoBehaviour
 			int doorZ = z / 6;
 
 			Debug.Log("Clicked type: " + type);
-			Debug.Log("doorX: " + doorX + ", doorZ: " + doorZ);
+			Debug.Log("doorX: " + x + ", doorZ: " + x);
 
-			if (type == 0) // Closed horizontal
-			{
-				doorMap.ChangeDoor(doorX, doorZ, 2, 0);
-				doorMap.gm.UpdateDoor(doorX, doorZ, 2, 0);
-			}
+            int currentX = doorMap.gm.fireman.currentX;
+            int currentZ = doorMap.gm.fireman.currentZ;
 
-			if (type == 1) // Closed vertical
-			{
-				doorMap.ChangeDoor(doorX, doorZ, 3, 1);
-				doorMap.gm.UpdateDoor(doorX, doorZ, 3, 1);
-			}
+            bool canDo = true;
+            if (doorMap.gm.operationManager.inCommand)
+            {
+                currentX = doorMap.gm.operationManager.controlled.currentX;
+                currentZ = doorMap.gm.operationManager.controlled.currentZ;
+                if (doorMap.gm.operationManager.controlled.role == Role.CAFS)
+                {
+                    if (doorMap.gm.operationManager.commandMoves == 0)
+                    {
+                        canDo = false;
+                    }
+                }
+                if (doorMap.gm.fireman.remainingSpecAp < 1)
+                {
+                    canDo = false;
+                }
+            }
+            else
+            {
+                if (doorMap.gm.fireman.FreeAP < 1)
+                {
+                    canDo = false;
+                }
+            }
 
-			if (type == 2) // Open horizontal
-			{
-				doorMap.ChangeDoor(doorX, doorZ, 0, 2);
-				doorMap.gm.UpdateDoor(doorX, doorZ, 0, 2);
-			}
+            if (currentX==x&&currentZ-z==-6||currentX==x&&currentZ==z||currentZ==z&&currentX-x==-6&&canDo) // reachable door
+            {
+                if (type == 0) // Closed horizontal
+                {
+                    doorMap.ChangeDoor(doorX, doorZ, 2, 0);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 2, 0);
+                }
 
-			if (type == 3) // Open vertical
-			{
-				doorMap.ChangeDoor(doorX, doorZ, 1, 3);
-				doorMap.gm.UpdateDoor(doorX, doorZ, 1, 3);
-			}
+                if (type == 1) // Closed vertical
+                {
+                    doorMap.ChangeDoor(doorX, doorZ, 3, 1);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 3, 1);
+                }
+
+                if (type == 2) // Open horizontal
+                {
+                    doorMap.ChangeDoor(doorX, doorZ, 0, 2);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 0, 2);
+                }
+
+                if (type == 3) // Open vertical
+                {
+                    doorMap.ChangeDoor(doorX, doorZ, 1, 3);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 1, 3);
+                }
+            }
+
+
 
 
 			//Debug.Log("Clicked x: " + tileX + ", z: " + tileZ);

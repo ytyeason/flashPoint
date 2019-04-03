@@ -21,36 +21,58 @@ public class Wall : MonoBehaviour
 
 			Debug.Log("Clicked type: " + type);
 
-			if (type == 0) // Horizontal normal
-			{
-				Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
-				wallMap.BreakWall(wallX, wallZ, 2, 1, false);
-				wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
-			}
+            int currentX = wallMap.gm.fireman.currentX;
+            int currentZ = wallMap.gm.fireman.currentZ;
 
-			if (type == 1) // Vertical normal
-			{
-				Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
-				wallMap.BreakWall(wallX, wallZ, 3, 0, false);
-				wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
-			}
+            bool canDo = true;
 
-			if (type == 2) // Horizontal damaged
-			{
-				Debug.Log("NORMAL -> DESTROYED"); 
-				wallMap.BreakWall(wallX, wallZ, 4, 1, false);
-				wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
-			}
+            if (wallMap.gm.operationManager.inCommand)
+            {
+                canDo = false;
+            }
+            else
+            {
+                if (wallMap.gm.fireman.FreeAP < 1)
+                {
+                    canDo = false;
+                }
+            }
 
-			if (type == 3) // Vertical damaged
-			{
-				Debug.Log("NORMAL -> DESTROYED");
-				wallMap.BreakWall(wallX, wallZ, 5, 0, false);
-				wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
-			}
-			//		4 -> Horizontal destroyed
-			//		5 -> Vertical destroyed
-		}
+            if (currentX == x && currentZ - z == -6 || currentX == x && currentZ == z || currentZ == z && currentX - x == -6 && canDo)
+            {
+                if (type == 0) // Horizontal normal
+                {
+                    Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
+                    wallMap.BreakWall(wallX, wallZ, 2, 1, false);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
+                }
+
+                if (type == 1) // Vertical normal
+                {
+                    Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
+                    wallMap.BreakWall(wallX, wallZ, 3, 0, false);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
+                }
+
+                if (type == 2) // Horizontal damaged
+                {
+                    Debug.Log("NORMAL -> DESTROYED");
+                    wallMap.BreakWall(wallX, wallZ, 4, 1, false);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
+                }
+
+                if (type == 3) // Vertical damaged
+                {
+                    Debug.Log("NORMAL -> DESTROYED");
+                    wallMap.BreakWall(wallX, wallZ, 5, 0, false);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
+                }
+                //      4 -> Horizontal destroyed
+                //      5 -> Vertical destroyed
+            }
+
+
+        }
 		else
 		{
 			Debug.Log("Not my turn, dont click");
