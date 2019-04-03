@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class Ambulance : MonoBehaviour {
 
@@ -67,7 +69,16 @@ public class Ambulance : MonoBehaviour {
 		if ((dx==4&&dz==7)||(dx==5&&dz==7))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
+			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>6)
+			{
+				v.transform.Rotate(0, -angle*2, 0);
+			}
+			else{
 			 v.transform.Rotate(0, -angle, 0);
+			}
+			
+			
+			
 		    //System.Threading.Thread.Sleep(500);
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*950);
 			 v.transform.position=new Vector3(27, 0, dz*6);
@@ -78,7 +89,13 @@ public class Ambulance : MonoBehaviour {
 		else if ((dx==0&&dz==2)||(dx==0&&dz==3))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
+			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>6)
+			{
+				v.transform.Rotate(0, -angle*2, 0);
+			}
+			else{
 			 v.transform.Rotate(0, -angle, 0);
+			}
 			// //System.Threading.Thread.Sleep(500);
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*950);
 			  v.transform.position=new Vector3(dx*6, 0, 15);
@@ -88,7 +105,13 @@ public class Ambulance : MonoBehaviour {
 		else if ((dx==4&&dz==0)||(dx==5&&dz==0))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
+			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>6)
+			{
+				v.transform.Rotate(0, -angle*2, 0);
+			}
+			else{
 			 v.transform.Rotate(0, -angle, 0);
+			}
 			// //System.Threading.Thread.Sleep(500);
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*950);
 			v.transform.position=new Vector3(27, 0, dz*6);
@@ -98,7 +121,13 @@ public class Ambulance : MonoBehaviour {
 		else if((dx==9&&dz==4)||(dx==9&&dz==5))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-		    v.transform.Rotate(0, -angle, 0);
+			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>6)
+			{
+				v.transform.Rotate(0, -angle*2, 0);
+			}
+			else{
+			 v.transform.Rotate(0, -angle, 0);
+			}
 			// //System.Threading.Thread.Sleep(500);
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*950);
 			v.transform.position=new Vector3(dx*6, 0, 27);
