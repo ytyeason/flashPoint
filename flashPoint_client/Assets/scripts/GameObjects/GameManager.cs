@@ -66,6 +66,8 @@ public class GameManager: MonoBehaviour
 
     public Text nameAP;
 
+    public Text roles;
+
 
     void Start()
     {
@@ -124,6 +126,7 @@ public class GameManager: MonoBehaviour
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
         checkTurn();	//initialize isMyTurn variable at start
+        if(!level.Equals("Family")) displayRole();
 
     }
 
@@ -141,6 +144,49 @@ public class GameManager: MonoBehaviour
         if (fireman.role == Role.RescueSpec)
         {
             nameAP.text += "\n" + nameLengthSpace() + fireman.remainingSpecAp + " Movement AP";
+        }
+    }
+
+    public void displayRole()
+    {
+        Debug.Log("displaying role");
+        roles.text = StaticInfo.name+": "+roleToString(StaticInfo.role);
+        if (players != null)
+        {
+            foreach (string name in players.Keys)
+            {
+                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name]["Role"].ToString()));
+            }
+        }
+
+    }
+
+    public string roleToString(Role role)
+    {
+        switch (role)
+        {
+            case Role.Paramedic:
+                return "Paramedic";
+            case Role.Captain:
+                return "Fire Captain";
+            case Role.ImagingTech:
+                return "Imaging Technician";
+            case Role.CAFS:
+                return "CAFS Firefighter";
+            case Role.HazmatTech:
+                return "Hazmat Technician";
+            case Role.Generalist:
+                return "Generalist";
+            case Role.RescueSpec:
+                return "Rescue Specialist";
+            case Role.Driver:
+                return "Driver";
+            case Role.Veteran:
+                return "Veteran";
+            case Role.Dog:
+                return "Rescue Dog";
+            default:
+                return "";
         }
     }
 
@@ -243,6 +289,7 @@ public class GameManager: MonoBehaviour
             Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
+
 
     }
 
