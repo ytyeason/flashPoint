@@ -18,6 +18,8 @@ public class HazmatManager{
     public int numOfHazmat = 0; // default to 0 for Family
     public int additionalHotspot = 0;
 
+    public int removedHazmat = 0;
+
     public HazmatManager(GameManager gm){
         this.gm=gm;
         if (Int32.TryParse(StaticInfo.numOfHazmat,out this.numOfHazmat)){
@@ -130,6 +132,18 @@ public class HazmatManager{
         Hazmat h = new Hazmat(this, HazmatStatus.HotSpot);
         placedHotspot.Add(key, h);
         gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+    }
+
+    public void removeHazmat(int x, int z)
+    {
+        int[] key = new int[] { x, z };
+
+        if (placedHazmat.ContainsKey(key))
+        {
+            placedHazmat.Remove(key);
+        }
+        gm.DestroyObject(lookUp[key]);
+        removedHazmat++;
     }
 
 }

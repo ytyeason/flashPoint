@@ -109,6 +109,7 @@ public class POIManager{
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
         }
+
     }
 
     public void treat(int x, int z)

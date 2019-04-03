@@ -41,6 +41,10 @@ public class Fireman
 
     public GameManager gm;
 
+    public POIManager pOIManager;
+    public HazmatManager hazamatManager;
+
+
 
     //public int freeExtinguishAp = 3;
 
@@ -50,7 +54,8 @@ public class Fireman
 
     public String level = StaticInfo.level;
 
-    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm, Role role)
+    public Fireman(String name, Colors color, GameObject s,GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm, Role role,POIManager 
+    pOIManager, HazmatManager hazmatManager)
     {
         this.name = name;
         this.color = color;
@@ -62,6 +67,9 @@ public class Fireman
         setRole(role);
         this.FreeAP = AP + savedAP;
         this.remainingSpecAp = this.specialtyAP;
+
+        this.pOIManager = pOIManager;
+        this.hazamatManager = hazmatManager;
 
 
         //if (string.Equals(level, "Experienced"))
@@ -319,6 +327,7 @@ public class Fireman
         if (gm.pOIManager.placedPOI.ContainsKey(key)&& gm.pOIManager.placedPOI[key].status==POIStatus.Hidden)
         {
             gm.pOIManager.reveal(x, z);
+            pOIManager.gm.updateRevealPOI(x, z);
 
         }
     }
@@ -395,13 +404,21 @@ public class Fireman
 
     public void flipPOI(int x, int z)
     {
+        pOIManager.reveal(x, z);
 
     }
 
 
     public void removeHazamet(int x, int z)
     {
-
+        if (currentX == x && currentZ == z)
+        {
+            hazamatManager.removeHazmat(x, z);
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void extinFireForFirefighter(int x, int z)
