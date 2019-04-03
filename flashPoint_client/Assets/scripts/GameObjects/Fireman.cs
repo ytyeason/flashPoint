@@ -452,12 +452,12 @@ public class Fireman
 
         if (role == Role.Dog)
         {
-
+            AP = 12;
         }
 
         if (role == Role.Veteran)
         {
-
+            AP = 4;
         }
 
         //setAP(AP + savedAP);
