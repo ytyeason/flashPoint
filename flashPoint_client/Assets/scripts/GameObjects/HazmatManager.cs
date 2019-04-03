@@ -160,7 +160,7 @@ public class HazmatManager{
         return false;
     }
 
-    public bool containsKey(int x, int y, Dictionary<int[], GameObject> list)
+    public bool containsKey(int x, int z, Dictionary<int[], GameObject> list)
     {
         foreach (var key in list.Keys)
         {

@@ -135,14 +135,16 @@ public class OperationManager
             if (gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.placedPOI))
             {
                 Debug.Log("has poi");
-                POI p = gm.pOIManager.placedPOI[key];
+                POI p = gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI);
                 if (p.status == POIStatus.Treated)
                 {
                     Operation op = new Operation(this, OperationType.LeadV);
                     possibleOp.Add(op);
                 }
+                Debug.Log(p.type);
                 if (p.type == POIType.Victim)
                 {
+                    Debug.Log("victim");
                     if (!fireman.carryingVictim)
                     {
                         Operation op = new Operation(this, OperationType.CarryV);
@@ -243,7 +245,7 @@ public class OperationManager
                         possibleOp.Add(op);
                     }
 
-                    if (!fireman.riding)
+                    if (!fireman.riding) // ------------------
                     {
                         Operation op = new Operation(this, OperationType.Ride);
                         possibleOp.Add(op);
@@ -589,76 +591,92 @@ public class OperationManager
         Debug.Log("extinguish smoke");
         Fireman fireman = gm.tileMap.selectedUnit;
 
+        fireman.extingSmoke(x, z);
+        opPanel.SetActive(false);
         DestroyAll();
     }
 
     public void extingFire()
     {
+        opPanel.SetActive(false);
         DestroyAll();
     }
 
     public void treat()
     {
+        opPanel.SetActive(false);
         DestroyAll();
     }
 
     public void carryV()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void leadV()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void removeHazmat()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void carryHazmat()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void imaging()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void command()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void drive()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void remote()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void ride()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void deckGun()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void stopDrive()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void getOff()
     {
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 

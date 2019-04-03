@@ -75,23 +75,23 @@ public class POIManager{
             POI p = getPOI(key[0],key[1],placedPOI);
             p.setStatus(POIStatus.Removed);
             killed++;
-            placedPOI.Remove(key);
-            gm.DestroyObject(poiLookup[key]);
-            poiLookup.Remove(key);
+            Remove(key[0],key[1],placedPOI);
+            gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
+            Remove(key[0],key[1],poiLookup);
         }
     }
 
     public void rescue(int x, int z)
     {
         int[] key = new int[] { x, z };
-        if (containsKey(key[0], key[1], placedPOI)
+        if (containsKey(key[0], key[1], placedPOI))
         {
             POI p = getPOI(key[0],key[1],placedPOI);
             p.setStatus(POIStatus.Removed);
             rescued++;
-            placedPOI.Remove(key);
-            gm.DestroyObject(poiLookup[key]);
-            poiLookup.Remove(key);
+            Remove(key[0],key[1],placedPOI);
+            gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
+            Remove(key[0],key[1],poiLookup);
         }
     }
 
@@ -101,11 +101,11 @@ public class POIManager{
         int[] key = new int[] { x, z };
         POI p = getPOI(key[0],key[1],placedPOI);
         p.setStatus(POIStatus.Revealed);
-        gm.DestroyObject(poiLookup[key]);
-        poiLookup.Remove(key);
+        gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
+        Remove(key[0],key[1],poiLookup);
         if (p.type == POIType.FalseAlarm)
         {
-            placedPOI.Remove(key);
+            Remove(key[0],key[1],placedPOI);
             p.setStatus(POIStatus.Removed);
         }
         else
@@ -126,7 +126,7 @@ public class POIManager{
         {
             p.setStatus(POIStatus.Treated);
         }
-        gm.DestroyObject(poiLookup[key]);
+        gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
         GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
         go.transform.Rotate(90, 0, 0);
         poiLookup.Add(key, go);
@@ -144,7 +144,7 @@ public class POIManager{
         return false;
     }
 
-    public bool containsKey(int x, int y, Dictionary<int[], GameObject> list)
+    public bool containsKey(int x, int z, Dictionary<int[], GameObject> list)
     {
         foreach (var key in list.Keys)
         {

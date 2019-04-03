@@ -328,7 +328,7 @@ public class Fireman
         gm.UpdateLocation(currentX, currentZ);
 
         int[] key = new int[] { x, z };
-        if (gm.pOIManager.placedPOI.ContainsKey(key) && gm.pOIManager.placedPOI[key].status == POIStatus.Hidden)
+        if (gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI) && gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI).status == POIStatus.Hidden)
         {
             gm.pOIManager.reveal(x, z);
             pOIManager.gm.updateRevealPOI(x, z);
@@ -420,191 +420,77 @@ public class Fireman
 
     public void extingSmoke(int x, int z)
     {
-        if (gm.tileMap.tiles[x, z] == 2)
+        int requiredAP = 1;
+        if (role.Equals(Role.CAFS))
         {
-            if (role.Equals(Role.CAFS))
+            if (remainingSpecAp >= requiredAP)
             {
-                if (FreeAP < 1)
-                {
-                    return;
-                }
-                else
-                {
-                    remainingSpecAp = remainingSpecAp - 1;
-                    gm.tileMap.buildNewTile(x, z, 1);
-                }
-                return;
-            }
-
-            if (role.Equals(Role.RescueSpec))
-            {
-                if (FreeAP < 2)
-                {
-                    return;
-                }
-                else
-                {
-                    remainingSpecAp = remainingSpecAp - 2;
-                    gm.tileMap.buildNewTile(x, z, 1);
-                }
-
-                return;
-            }
-
-
-            if (role.Equals(Role.Paramedic))
-            {
-                if (FreeAP < 2)
-                {
-                    return;
-                }
-                else
-                {
-                    remainingSpecAp = remainingSpecAp - 2;
-                    gm.tileMap.buildNewTile(x, z, 1);
-                }
-
-                return;
-            }
-
-            if (FreeAP < 1)
-            {
-                return;
+                setSpecAP(remainingSpecAp - requiredAP);
             }
             else
             {
-                remainingSpecAp = remainingSpecAp - 1;
-                gm.tileMap.buildNewTile(x, z, 1);
+                setAP(FreeAP - remainingSpecAp);
+                setSpecAP(0);
             }
+        }
 
-
+        else if (role.Equals(Role.RescueSpec)||role==Role.Paramedic)
+        {
+            requiredAP *= 2;
+            if (FreeAP >= requiredAP)
+            {
+                setAP(FreeAP - requiredAP);
+            }
         }
         else
         {
-            if (role.Equals(Role.CAFS))
-            {
-                if (FreeAP < 1)
-                {
-                    return;
-                }
-                else
-                {
-                    remainingSpecAp = remainingSpecAp - 1;
-                    gm.tileMap.buildNewTile(x, z, 0);
-                }
-                return;
-            }
-
-            if (role.Equals(Role.RescueSpec))
-            {
-                if (FreeAP < 2)
-                {
-                    return;
-                }
-                else
-                {
-                    remainingSpecAp = remainingSpecAp - 2;
-                    gm.tileMap.buildNewTile(x, z, 0);
-                }
-
-                return;
-            }
-
-
-            if (role.Equals(Role.Paramedic))
-            {
-                if (FreeAP < 2)
-                {
-                    return;
-                }
-                else
-                {
-                    remainingSpecAp = remainingSpecAp - 2;
-                    gm.tileMap.buildNewTile(x, z, 0);
-                }
-
-                return;
-            }
-
-            if (FreeAP < 1)
-            {
-                return;
-            }
-            else
-            {
-                remainingSpecAp = remainingSpecAp - 1;
-                gm.tileMap.buildNewTile(x, z, 0);
-            }
-
-
+            setAP(FreeAP - requiredAP);
         }
 
+        if (gm.tileMap.tiles[x, z] == 1)
+        {
+            gm.tileMap.buildNewTile(x, z, 0);
+            gm.UpdateTile(x, z, 0);
+        }
+        else if (gm.tileMap.tiles[x, z] == 2)
+        {
+            gm.tileMap.buildNewTile(x, z, 1);
+            gm.UpdateTile(x, z, 1);
+        }
     }
 
 
 
     public void extingFire(int x, int z)
     {
+        int requiredAP = 2;
         if (role.Equals(Role.CAFS))
         {
-            if (FreeAP < 2)
+            if (remainingSpecAp >= requiredAP)
             {
-                return;
+                setSpecAP(remainingSpecAp - requiredAP);
             }
             else
             {
-                remainingSpecAp = remainingSpecAp - 2;
-                gm.tileMap.buildNewTile(x, z, 0);
+                setAP(FreeAP - remainingSpecAp);
+                setSpecAP(0);
             }
-            return;
         }
 
-        if (role.Equals(Role.RescueSpec))
+        else if (role.Equals(Role.RescueSpec) || role == Role.Paramedic)
         {
-            if (FreeAP < 4)
+            requiredAP *= 2;
+            if (FreeAP >= requiredAP)
             {
-                return;
+                setAP(FreeAP - requiredAP);
             }
-            else
-            {
-                remainingSpecAp = remainingSpecAp - 4;
-                gm.tileMap.buildNewTile(x, z, 0);
-            }
-
-            return;
-        }
-
-
-        if (role.Equals(Role.Paramedic))
-        {
-            if (FreeAP < 4)
-            {
-                return;
-            }
-            else
-            {
-                remainingSpecAp = remainingSpecAp - 4;
-                gm.tileMap.buildNewTile(x, z, 0);
-            }
-
-            return;
-        }
-
-        if (FreeAP < 2)
-        {
-            return;
         }
         else
         {
-            remainingSpecAp = remainingSpecAp - 2;
-            gm.tileMap.buildNewTile(x, z, 0);
+            setAP(FreeAP - requiredAP);
         }
-
-
-
-
-
-
+        gm.tileMap.buildNewTile(x, z, 0);
+        gm.UpdateTile(x, z, 0);
     }
 
 
