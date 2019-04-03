@@ -257,9 +257,4 @@ public class TileMap  {
 		//Debug.Log("Running TileMap.MoveSelectedUnitTo(" + x + ", " + z + ")");
 		selectedUnit.tryMove(x, z, in_status, goo);
 	}
-
-	public void MoveAmbulanceTo() {
-
-			ambulance.moveToAmbStationTwo();
-	}
 }

@@ -18,8 +18,8 @@ public class Door : MonoBehaviour
 		Debug.Log("MOUSE UP DOOR");
 		if (doorMap.gm.isMyTurn)
 		{
-			int doorX = x / 5;
-			int doorZ = z / 5;
+			int doorX = x / 6;
+			int doorZ = z / 6;
 
 			Debug.Log("Clicked type: " + type);
 			Debug.Log("doorX: " + doorX + ", doorZ: " + doorZ);

@@ -483,7 +483,7 @@ public class OperationManager
                 int vx = gm.engine.GetComponent<Engine>().x / 6;
                 int vz = gm.engine.GetComponent<Engine>().z / 6;
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&currentX==vx&&currentZ==vz)
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&((Math.Abs(currentX-vx)<4&&(Math.Abs(currentZ-vz)<4))||(Math.Abs(currentX-vz)<4&&(Math.Abs(currentX-vx)<4))))
                 {
                     if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) !=9 && Math.Abs(currentZ - z) !=7 ))
                     {
@@ -569,7 +569,6 @@ public class OperationManager
     {
         Debug.Log("move");
         Fireman fireman = gm.tileMap.selectedUnit;
-
         fireman.move(x, z);
         opPanel.SetActive(false);
         DestroyAll();
@@ -626,12 +625,26 @@ public class OperationManager
 
     public void drive()
     {
-        DestroyAll();
+        if ((x==9&&z==4)||(x==9&&z==5)||(x==4&&z==0)||(x==5&&z==0)||(x==0&&z==2)||(x==0&&z==3)||(x==4&&z==7)||(x==5&&z==7))
+        {
+            Ambulance amb = gm.tileMap.ambulance;
+            amb.moveNextStation(x,z);
+            opPanel.SetActive(false);
+            DestroyAll();
+        }
+        else
+        {
+            Engine eng = gm.tileMap.engine;
+            eng.moveNextStation(x,z);
+            opPanel.SetActive(false);
+            DestroyAll();
+        }
     }
 
     public void remote()
     {
         DestroyAll();
+
     }
 
     public void ride()
