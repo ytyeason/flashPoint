@@ -14,6 +14,8 @@ public class POIManager{
     public Dictionary<int[],POI> placedPOI=new Dictionary<int[],POI>();
     public Dictionary<int[], GameObject> poiLookup = new Dictionary<int[], GameObject>();
     public List<POI> poi = new List<POI>();
+    public Dictionary<int[], POI> treated = new Dictionary<int[], POI>();
+    public Dictionary<int[], GameObject> treatedLookup = new Dictionary<int[], GameObject>();
 
     private System.Random rand = new System.Random();
     private float posY = -1;
@@ -125,11 +127,37 @@ public class POIManager{
         if (p.type == POIType.Victim)
         {
             p.setStatus(POIStatus.Treated);
+            treated.Add(key, p);
         }
         gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
+        Remove(key[0], key[1], poiLookup);
         GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
         go.transform.Rotate(90, 0, 0);
-        poiLookup.Add(key, go);
+        treatedLookup.Add(key, go);
+    }
+
+    public void movePOI(int origx, int origz, int newx, int newz)
+    {
+        POI p = getPOI(origx, origz, placedPOI);
+        GameObject obj = getPOIPrefab(origx, origz, poiLookup);
+        Remove(origx, origz, gm.pOIManager.placedPOI);
+        Remove(origx, origz, gm.pOIManager.poiLookup);
+        obj.transform.position = new Vector3(newx, 0.2f, newz);
+        int[] key = new int[] { newx, newz };
+        placedPOI.Add(key, p);
+        poiLookup.Add(key, obj);
+    }
+
+    public void moveTreated(int origx, int origz, int newx, int newz)
+    {
+        POI p = getPOI(origx, origz, treated);
+        GameObject obj = getPOIPrefab(origx, origz, treatedLookup);
+        Remove(origx, origz, gm.pOIManager.treated);
+        Remove(origx, origz, gm.pOIManager.treatedLookup);
+        obj.transform.position = new Vector3(newx, 0.2f, newz);
+        int[] key = new int[] { newx, newz };
+        treated.Add(key, p);
+        treatedLookup.Add(key, obj);
     }
 
     public bool containsKey(int x, int z, Dictionary<int[],POI> list)
