@@ -50,7 +50,7 @@ public class POIManager{
             int randX = rand.Next(1, 9);
             int randZ = rand.Next(1, 7);
             int[] key = new int[] { randX, randZ };
-            while (placedPOI.ContainsKey(key) || placedPOI.ContainsKey(key) || gm.tileMap.tiles[randX, randZ] == 2)
+            while (containsKey(key[0],key[1],placedPOI) || gm.tileMap.tiles[randX, randZ] == 2)
             {
                 randX = rand.Next(1, 9);
                 randZ = rand.Next(1, 7);
@@ -59,10 +59,10 @@ public class POIManager{
             }
             int randIndex = rand.Next(0, poi.Count);
             POI p = poi[randIndex];
-            placedPOI.Add(new int[] { randX, randZ },p);
+            placedPOI.Add(key,p);
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*6 - 1.5), posY, (float)((double)randZ*6 + 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
-            poiLookup.Add(new int[] { randX, randZ }, go);
+            poiLookup.Add(key, go);
             poi.Remove(p);
         }
     }
@@ -70,35 +70,39 @@ public class POIManager{
     public void kill(int x, int z)
     {
         int[] key = new int[] { x, z };
-        if(placedPOI.ContainsKey(key))
+        if(containsKey(key[0], key[1], placedPOI))
         {
-            POI p = placedPOI[key];
+            POI p = getPOI(key[0],key[1],placedPOI);
             p.setStatus(POIStatus.Removed);
             killed++;
             placedPOI.Remove(key);
             gm.DestroyObject(poiLookup[key]);
+            poiLookup.Remove(key);
         }
     }
 
     public void rescue(int x, int z)
     {
         int[] key = new int[] { x, z };
-        if (placedPOI.ContainsKey(key))
+        if (containsKey(key[0], key[1], placedPOI)
         {
-            POI p = placedPOI[key];
+            POI p = getPOI(key[0],key[1],placedPOI);
             p.setStatus(POIStatus.Removed);
             rescued++;
             placedPOI.Remove(key);
             gm.DestroyObject(poiLookup[key]);
+            poiLookup.Remove(key);
         }
     }
 
     public void reveal(int x,int z)
     {
+        Debug.Log("reveal");
         int[] key = new int[] { x, z };
-        POI p = placedPOI[key];
+        POI p = getPOI(key[0],key[1],placedPOI);
         p.setStatus(POIStatus.Revealed);
         gm.DestroyObject(poiLookup[key]);
+        poiLookup.Remove(key);
         if (p.type == POIType.FalseAlarm)
         {
             placedPOI.Remove(key);
@@ -107,14 +111,17 @@ public class POIManager{
         else
         {
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
+
             go.transform.Rotate(90, 0, 0);
+            poiLookup.Add(key, go);
         }
+
     }
 
     public void treat(int x, int z)
     {
         int[] key = new int[] { x, z };
-        POI p = placedPOI[key];
+        POI p = getPOI(key[0],key[1],placedPOI);
         if (p.type == POIType.Victim)
         {
             p.setStatus(POIStatus.Treated);
@@ -122,5 +129,78 @@ public class POIManager{
         gm.DestroyObject(poiLookup[key]);
         GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
         go.transform.Rotate(90, 0, 0);
+        poiLookup.Add(key, go);
+    }
+
+    public bool containsKey(int x, int z, Dictionary<int[],POI> list)
+    {
+        foreach(var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool containsKey(int x, int y, Dictionary<int[], GameObject> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public POI getPOI(int x, int z, Dictionary<int[],POI> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return list[key];
+            }
+        }
+        return null;
+    }
+
+    public GameObject getPOIPrefab(int x, int z, Dictionary<int[], GameObject> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return list[key];
+            }
+        }
+        return null;
+    }
+
+    public void Remove(int x, int z, Dictionary<int[], GameObject> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                list.Remove(key);
+                break;
+            }
+        }
+    }
+
+    public void Remove(int x, int z, Dictionary<int[], POI> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                list.Remove(key);
+                break;
+            }
+        }
     }
 }

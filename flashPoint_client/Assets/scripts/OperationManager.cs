@@ -129,9 +129,12 @@ public class OperationManager
         {
             int[] key = new int[] { x, z };
             Fireman fireman = gm.fireman;
+            Debug.Log("same place");
+            Debug.Log(gm.pOIManager.placedPOI.Count);
             //------ POI---------------
-            if (gm.pOIManager.placedPOI.ContainsKey(key))
+            if (gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.placedPOI))
             {
+                Debug.Log("has poi");
                 POI p = gm.pOIManager.placedPOI[key];
                 if (p.status == POIStatus.Treated)
                 {
@@ -154,7 +157,7 @@ public class OperationManager
             }
 
             //------Hazmat------------
-            if (gm.hazmatManager.placedHazmat.ContainsKey(key))
+            if (gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat))
             {
                 if (fireman.role == Role.HazmatTech&&fireman.FreeAP>=2)
                 {
@@ -275,7 +278,7 @@ public class OperationManager
                 if (currentZ < z) // below the target
                 {
                     int[] key = new int[] { x, z };
-                    if (!gm.wallManager.hwallStores.ContainsKey(key)||gm.wallManager.hwallStores.ContainsKey(key) && gm.wallManager.hwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfHWall(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2) 
                         {
@@ -291,7 +294,7 @@ public class OperationManager
                 else // above the target
                 {
                     int[] key = new int[] { currentX, currentZ };
-                    if (!gm.wallManager.hwallStores.ContainsKey(key) || gm.wallManager.hwallStores.ContainsKey(key) && gm.wallManager.hwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfHWall(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -310,7 +313,7 @@ public class OperationManager
                 if (currentX < x) // left of the target
                 {
                     int[] key = new int[] { x, z };
-                    if (!gm.wallManager.vwallStores.ContainsKey(key) || gm.wallManager.vwallStores.ContainsKey(key) && gm.wallManager.vwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfVWall(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -326,7 +329,7 @@ public class OperationManager
                 else // right to the target
                 {
                     int[] key = new int[] { currentX, currentZ };
-                    if (!gm.wallManager.vwallStores.ContainsKey(key) || gm.wallManager.vwallStores.ContainsKey(key) && gm.wallManager.vwallStores[key].GetComponent<Wall>().type == 2) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfVWall(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -399,7 +402,7 @@ public class OperationManager
                     keyM[0] = currentX;
                     keyM[1] = currentZ;
                 }
-                if (!gm.wallManager.hwallStores.ContainsKey(keyM) || gm.wallManager.hwallStores.ContainsKey(keyM) && gm.wallManager.hwallStores[keyM].GetComponent<Wall>().type == 2) {
+                if (!gm.wallManager.checkIfHWall(keyM[0], keyM[1])) {
                     moveTo = true;
                 }
             }
@@ -415,8 +418,13 @@ public class OperationManager
                     keyM[0] = currentX;
                     keyM[1] = currentZ;
                 }
-                if (!gm.wallManager.vwallStores.ContainsKey(keyM) || gm.wallManager.vwallStores.ContainsKey(keyM) && gm.wallManager.vwallStores[keyM].GetComponent<Wall>().type == 2)
+                if (!gm.wallManager.checkIfVWall(keyM[0],keyM[1]))
                 {
+
+                    foreach(int[] a in gm.wallManager.vwallStores.Keys)
+                    {
+                        Debug.Log(a[0] + " " + a[1]);
+                    }
                     moveTo = true;
                 }
             }
@@ -460,7 +468,7 @@ public class OperationManager
         {
             int[] key = new int[] { x, z };
             Fireman fireman = gm.tileMap.selectedUnit;
-            if (fireman.role == Role.ImagingTech&&fireman.FreeAP>=1&&gm.pOIManager.placedPOI.ContainsKey(key)&&gm.pOIManager.placedPOI[key].status==POIStatus.Hidden)
+            if (fireman.role == Role.ImagingTech&&fireman.FreeAP>=1&&gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI)&&gm.pOIManager.getPOI(key[0],key[1], gm.pOIManager.placedPOI).status==POIStatus.Hidden)
             {
                 Operation op = new Operation(this, OperationType.Imaging);
                 possibleOp.Add(op);

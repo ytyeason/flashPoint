@@ -131,7 +131,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(Games[room_number]);
         socket.emit('LocationSetUp_SUCCESS',{status: "True"} );
 
-        io.sockets.emit('LocationUpdate_SUCCESS',Games);
+        socket.broadcast.emit('LocationUpdate_SUCCESS',Games);
     });
 
     socket.on('UpdateTile',function(data){
@@ -223,6 +223,17 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var text=data['text'];
       console.log(name+" "+text);
       io.sockets.emit('sendNotification_Success',{"name":name,"text":text});
+    });
+
+    socket.on('RevealPOI',function(data){
+        var x = data['x'];
+        var z = data['z'];
+        
+        console.log(x);
+        console.log(z);
+        
+        socket.broadcast.emit('revealPOI_Success', {"x":x, "z":z});
+        
     });
 
     socket.on('SelectRole', function(data){

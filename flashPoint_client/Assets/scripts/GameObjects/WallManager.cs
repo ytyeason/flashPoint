@@ -278,7 +278,8 @@ public class WallManager
 			w.wallMap = this;
 			w.type = 0;
 
-			hwallStores[hWall] = go;
+            //hwallStores[hWall] = go;
+            hwallStores.Add(hWall, go);
 		}
 
 		foreach (var vWall in defaultVerticalWalls)
@@ -296,7 +297,8 @@ public class WallManager
 			w.wallMap = this;
 			w.type = 1;
 
-			vwallStores[vWall] = go;
+            //vwallStores[vWall] = go;
+            vwallStores.Add(vWall, go);
 		}
 
 	}
