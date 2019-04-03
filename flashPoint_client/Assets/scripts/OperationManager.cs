@@ -23,6 +23,10 @@ public class OperationManager
 
     public SocketIOComponent socket;
 
+    public bool inCommand = false;
+    public Fireman controlled;
+    public int commandMoves = 1;
+
     public OperationManager(GameManager gm)
     {
         this.gm = gm;
@@ -105,6 +109,15 @@ public class OperationManager
                 case OperationType.DeckGun:
                     newObject.onClick.AddListener(move);
                     break;
+                case OperationType.DropV:
+                    newObject.onClick.AddListener(dropeV);
+                    break;
+                case OperationType.DropHazmat:
+                    newObject.onClick.AddListener(dropHazmat);
+                    break;
+                case OperationType.StopCommand:
+                    newObject.onClick.AddListener(stopCommand);
+                    break;
             }
             buttons.Add(newObject);
         }
@@ -124,6 +137,9 @@ public class OperationManager
 
         Debug.Log(diffX);
         Debug.Log(diffZ);
+
+        Boolean extingFire = false;
+        Boolean extingsmoke = false;
 
         if (diffX + diffZ == 0) //same tile (hazmat, poi)
         {
@@ -157,6 +173,16 @@ public class OperationManager
                 }
             }
 
+            if (!gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.placedPOI)&&!gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.treated))
+            {
+                if (fireman.carriedPOI != null || fireman.ledPOI != null)
+                {
+                    Operation op = new Operation(this, OperationType.DropV);
+                    possibleOp.Add(op);
+                }
+
+            }
+
             //------Hazmat------------
             if (gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat))
             {
@@ -168,6 +194,15 @@ public class OperationManager
                 if (!fireman.carryingVictim)
                 {
                     Operation op = new Operation(this, OperationType.CarryHazmat);
+                    possibleOp.Add(op);
+                }
+            }
+
+            if(!gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat))
+            {
+                if (fireman.carriedHazmat != null)
+                {
+                    Operation op = new Operation(this, OperationType.DropHazmat);
                     possibleOp.Add(op);
                 }
             }
@@ -222,7 +257,7 @@ public class OperationManager
                         {
                             for(int j = minZ; j <= maxZ; j++)
                             {
-                                if (o["Location"].Equals(i / 6 + "," + j / 6))
+                                if (o["Location"].Equals(i * 6 + "," + j * 6))
                                 {
                                     existsF = true;
                                     break;
@@ -267,12 +302,20 @@ public class OperationManager
                     possibleOp.Add(op);
                 }
             }
+
+            if (inCommand)
+            {
+                if (x == controlled.currentX && z == controlled.currentZ&&fireman.specialtyAP>0)
+                {
+                    Operation op = new Operation(this, OperationType.StopCommand);
+                    possibleOp.Add(op);
+                }
+            }
         }
         else if (diffX + diffZ == 1) // neighbor tile (fire, move)
         {
             Debug.Log("neighbor");
-            Boolean extingFire = false;
-            Boolean extingsmoke = false;
+
             // check obstable (wall/closed door)
             if (currentX - x == 0)// same column, check above and below
             {
@@ -429,8 +472,17 @@ public class OperationManager
                     moveTo = true;
                 }
             }
-            if (gm.tileMap.tiles[x, z] == 2 && gm.tileMap.selectedUnit.carryingVictim) moveTo = false;
+            if (gm.tileMap.tiles[x, z] == 2 && (gm.tileMap.selectedUnit.carryingVictim||gm.tileMap.selectedUnit.ledPOI!=null)) moveTo = false;
             if (gm.tileMap.selectedUnit.driving) moveTo = false;
+            if (inCommand)
+            {
+                int distantX = Math.Abs(controlled.currentX - x);
+                int distantZ = Math.Abs(controlled.currentZ - z);
+                if (distantX + distantZ != 1)
+                {
+                    moveTo = false;
+                }
+            }
 
             Debug.Log(extingFire);
             Debug.Log(gm.tileMap.selectedUnit.FreeAP);
@@ -476,6 +528,7 @@ public class OperationManager
                 possibleOp.Add(op);
             }
 
+            //command
             if (fireman.role == Role.Captain)
             {
                 foreach(JSONObject o in gm.players.Values)
@@ -486,7 +539,89 @@ public class OperationManager
                         possibleOp.Add(op);
                     }
                 }
+                if (inCommand)
+                {
+                    int distantX = Math.Abs(controlled.currentX - x);
+                    int distantZ = Math.Abs(controlled.currentZ);
+
+                    Boolean moveTo = false;
+                    int[] keyM = new int[2];
+                    if (distantX + diffZ == 1)
+                    {
+                        if (controlled.currentX == x) // same column
+                        {
+                            if (controlled.currentZ < z) // below the target
+                            {
+                                keyM[0] = x;
+                                keyM[1] = z;
+                            }
+                            else // above
+                            {
+                                keyM[0] = controlled.currentX;
+                                keyM[1] = controlled.currentZ;
+                            }
+                            if (!gm.wallManager.checkIfHWall(keyM[0], keyM[1]))
+                            {
+                                moveTo = true;
+                            }
+                        }
+                        else // same row
+                        {
+                            if (controlled.currentX < x) // left
+                            {
+                                keyM[0] = x;
+                                keyM[1] = z;
+                            }
+                            else
+                            {
+                                keyM[0] = controlled.currentX;
+                                keyM[1] = controlled.currentZ;
+                            }
+                            if (!gm.wallManager.checkIfVWall(keyM[0], keyM[1]))
+                            {
+                                moveTo = true;
+                            }
+                        }
+                        if (gm.tileMap.tiles[x, z] == 2 && controlled.carryingVictim) {
+                            moveTo = false;
+                        }
+                        if (controlled.driving) moveTo = false;
+                        int ap = fireman.remainingSpecAp;
+                        int requiredAP = 1;
+                        if(gm.tileMap.tiles[x, z] == 2 || controlled.carryingVictim)
+                        {
+                            requiredAP = 2;
+                        }
+                        if (controlled.role == Role.CAFS&&commandMoves>0) // not commanded before
+                        {
+                            if (moveTo&&fireman.specialtyAP>=requiredAP)
+                            {
+                                Operation op = new Operation(this, OperationType.Move);
+                                possibleOp.Add(op);
+                            }
+                        }
+                        else if(controlled.role == Role.RescueSpec|| controlled.role == Role.Paramedic)
+                        {
+                            if (moveTo && fireman.specialtyAP >= requiredAP * 2)
+                            {
+                                Operation op = new Operation(this, OperationType.Move);
+                                possibleOp.Add(op);
+                            }
+                        }
+                        else
+                        {
+                            if (moveTo && fireman.specialtyAP >= requiredAP)
+                            {
+                                Operation op = new Operation(this, OperationType.Move);
+                                possibleOp.Add(op);
+                            }
+                        }
+
+                    }
+
+                }
             }
+            
 
             if (gm.tileMap.tiles[x, z] == 3) // engine
             {
@@ -582,6 +717,14 @@ public class OperationManager
     {
         Debug.Log("move");
         Fireman fireman = gm.tileMap.selectedUnit;
+        if (inCommand)
+        {
+            if (controlled.role == Role.CAFS)
+            {
+                commandMoves -= 1;
+            }
+            gm.UpdateLocation(x, z, controlled.name);
+        }
         fireman.move(x, z);
         opPanel.SetActive(false);
         DestroyAll();
@@ -654,10 +797,10 @@ public class OperationManager
 
     public void carryHazmat()
     {
-        Debug.Log("removeHazmat");
+        Debug.Log("carryHazmat");
         Fireman fireman = gm.tileMap.selectedUnit;
 
-        fireman.removeHazmet(x, z);
+        fireman.carryHazmat(x, z);
 
         opPanel.SetActive(false); 
         DestroyAll();
@@ -665,12 +808,42 @@ public class OperationManager
 
     public void imaging()
     {
+        Debug.Log("imaging");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.flipPOI(x, z);
+
         opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void command()
     {
+        Debug.Log("command");
+
+        this.inCommand = true;
+        Role role = Role.None;
+        int drive = 0;
+        bool carrying = false;
+        string name = "";
+        foreach (string o in gm.players.Keys)
+        {
+            if (gm.players[o]["Location"] .Equals( x * 6 + "," + z * 6))
+            {
+                role = (Role)Int32.Parse(gm.players[o]["Role"].ToString());
+                if(!Int32.TryParse(gm.players[o]["Driving"].ToString(),out drive))
+                {
+                    drive = 0;
+                }
+                if (gm.players[o]["Carrying"].ToString().Equals( "true"))
+                {
+                    carrying = false;
+                }
+                name = o;
+            }
+        }
+        controlled = new Fireman(x * 6, z * 6, role, drive,carrying,name);
+
         opPanel.SetActive(false); 
         DestroyAll();
     }
@@ -679,18 +852,20 @@ public class OperationManager
     {
         if ((x==9&&z==4)||(x==9&&z==5)||(x==4&&z==0)||(x==5&&z==0)||(x==0&&z==2)||(x==0&&z==3)||(x==4&&z==7)||(x==5&&z==7))
         {
+            gm.startDrive(1);
             Ambulance amb = gm.tileMap.ambulance;
             amb.moveNextStation(x,z);
+            opPanel.SetActive(false);
+            DestroyAll();
         }
         else
         {
+            gm.startDrive(2);
             Engine eng = gm.tileMap.engine;
             eng.moveNextStation(x,z);
+            opPanel.SetActive(false);
+            DestroyAll();
         }
-        Fireman fireman = gm.tileMap.selectedUnit;
-        fireman.move(x, z);
-        opPanel.SetActive(false);
-        DestroyAll();
     }
 
     public void remote()
@@ -722,6 +897,22 @@ public class OperationManager
     {
         opPanel.SetActive(false); 
         DestroyAll();
+    }
+
+    public void dropeV()
+    {
+
+    }
+
+    public void dropHazmat()
+    {
+
+    }
+
+    public void stopCommand()
+    {
+        controlled = null;
+        inCommand = false;
     }
 
     public void cancel()

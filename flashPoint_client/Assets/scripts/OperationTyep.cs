@@ -16,4 +16,7 @@
     DeckGun,
     StopDrive,
     GetOff,
+    DropV,
+    DropHazmat,
+    StopCommand
 }

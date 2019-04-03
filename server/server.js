@@ -131,7 +131,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(Games[room_number]);
         socket.emit('LocationSetUp_SUCCESS',{status: "True"} );
 
-        socket.broadcast.emit('LocationUpdate_SUCCESS',Games);
+        io.sockets.emit('LocationUpdate_SUCCESS',Games);
     });
 
     socket.on('UpdateTile',function(data){
@@ -296,7 +296,39 @@ io.on('connection', function (socket) {//default event for client connect to ser
       socket.broadcast.emit('UpdateHazmatLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
     });
 
+    socket.on('StartDrive',function(data){
+      var room_number = data['room'];
+        var Location = data['Location'];
+        var name = data['name'];
+        var drive=data['driving'];
 
+        var participants = Games[room_number]["participants"];
+        participants[name]["Location"] = Location;
+        participants[name]['Driving']=drive;
+        console.log(Games[room_number]);
+        socket.broadcast.emit('LocationSetUp_SUCCESS',Games );
+    });
+
+    socket.on('StartCarryV',function(data){
+      var room_number = data['room'];
+        var Location = data['Location'];
+        var name = data['name'];
+        var carryV=data['carryV'];
+
+        var participants = Games[room_number]["participants"];
+        participants[name]["Location"] = Location;
+        participants[name]['Carrying']=carryV;
+        console.log(Games[room_number]);
+        socket.broadcast.emit('LocationSetUp_SUCCESS',Games );
+    });
+
+    socket.on('AddPOI',function(data){
+      var x=data['x'];
+      var z=data['z'];
+      var type=data['type'];
+
+      socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type});
+    });
 
 });
 

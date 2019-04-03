@@ -70,7 +70,26 @@ public class POIManager{
             go.transform.Rotate(90, 0, 0);
             poiLookup.Add(key, go);
             poi.Remove(p);
+            gm.AddPOI(randX, randZ, (int)p.type);
         }
+    }
+
+    public void addPOI(int x,int z, int type)
+    {
+        int[] key = new int[] { x, z };
+        POI p0 = null;
+        foreach(POI p in poi)
+        {
+            if (p.type == (POIType)type)
+            {
+                p0 = p;
+            }
+        }
+        placedPOI.Add(key, p0);
+        GameObject go = gm.instantiateObject(p0.Prefab, new Vector3((float)((double)x * 6 - 1.5), posY, (float)((double)z * 6 + 1.5)),Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
+        poiLookup.Add(key, go);
+        poi.Remove(p0);
     }
 
     public void kill(int x, int z)

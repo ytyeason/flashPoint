@@ -100,7 +100,7 @@ public class firemanplusvictim
                             String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
                             Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z);
-                            gm.UpdateLocation(x, z);
+                            gm.UpdateLocation(x, z,StaticInfo.name);
                         }
                         else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
                         {
@@ -108,7 +108,7 @@ public class firemanplusvictim
                             String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
                             Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z);
-                            gm.UpdateLocation(x, z);
+                            gm.UpdateLocation(x, z,StaticInfo.name);
                         }
                         else if (in_status != 2 && carryingVictim && FreeAP >= 2)
                         {
@@ -116,7 +116,7 @@ public class firemanplusvictim
                             String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
                             Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z);
-                            gm.UpdateLocation(x, z);
+                            gm.UpdateLocation(x, z,StaticInfo.name);
                         }
                         else
                         {

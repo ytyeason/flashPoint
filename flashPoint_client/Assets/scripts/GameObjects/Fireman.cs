@@ -38,6 +38,7 @@ public class Fireman
     public POI ledPOI;
 
     public bool driving = false;
+    public int vehicle = 0;
 
     public bool riding = false;
 
@@ -78,6 +79,20 @@ public class Fireman
         //{
         //    setRole(role);
         //}
+    }
+
+    public Fireman(int in_x, int in_z, Role role, int drive, bool carrying, string name)
+    {
+        this.currentX = in_x;
+        this.currentZ = in_z;
+        this.role = role;
+        if (drive != 0)
+        {
+            this.driving = true;
+            vehicle = drive;
+        }
+        this.carryingVictim = carrying;
+        this.name = name;
     }
 
 
@@ -199,7 +214,7 @@ public class Fireman
                             String condition = (debugMode) ? " - ran with (!CarryVictim, Safe, AP >= 1)" : "";
                             Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z, gmo);
-                            gm.UpdateLocation(x, z);
+                            gm.UpdateLocation(x, z,StaticInfo.name);
                         }
                         else if (in_status == 2 && FreeAP >= 2 && !carryingVictim) // Fire
                         {
@@ -207,7 +222,7 @@ public class Fireman
                             String condition = (debugMode) ? " - ran with (!CarryVictim, Fire, AP >= 2)" : "";
                             Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z, gmo);
-                            gm.UpdateLocation(x, z);
+                            gm.UpdateLocation(x, z,StaticInfo.name);
                         }
                         else if (in_status != 2 && carryingVictim && FreeAP >= 2)
                         {
@@ -215,7 +230,7 @@ public class Fireman
                             String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
                             Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z, gmo);
-                            gm.UpdateLocation(x, z);
+                            gm.UpdateLocation(x, z,StaticInfo.name);
                         }
                         else if (in_status != 2 && carryingVictim && FreeAP >= 2)
                         {
@@ -223,7 +238,7 @@ public class Fireman
                             String condition = (debugMode) ? " - ran with (CarryVictim, !Fire, AP >= 2)" : "";
                             //Debug.Log("AP is now: " + FreeAP + condition);
                             move(x, z, gmo);
-                            gm.UpdateLocation(x, z);
+                            gm.UpdateLocation(x, z,StaticInfo.name);
                         }
                         else
                         {
@@ -330,7 +345,7 @@ public class Fireman
         currentX = x * 6;
         currentZ = z * 6;
         s.transform.position = new Vector3(currentX, 0.2f, currentZ);
-        gm.UpdateLocation(currentX, currentZ);
+        gm.UpdateLocation(currentX, currentZ,StaticInfo.name);
 
         if (carriedPOI != null)
         {
@@ -429,7 +444,6 @@ public class Fireman
     {
         pOIManager.reveal(x, z);
         pOIManager.gm.updateRevealPOI(x, z);
-
     }
 
 
@@ -528,12 +542,14 @@ public class Fireman
         this.carryingVictim = true;
         this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
         gm.pOIManager.carryPOI(x, z);
+        gm.startCarryV();
     }
 
     public void leadV(int x, int z)
     {
         this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
         gm.pOIManager.leadPOI(x, z);
+        gm.startCarryV();
     }
 
     public void carryHazmat(int x,int z)
@@ -541,7 +557,9 @@ public class Fireman
         this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
         this.carryingVictim = true;
         gm.hazmatManager.carryHazmat(x, z);
+        gm.startCarryV();
     }
+
 
 
 }

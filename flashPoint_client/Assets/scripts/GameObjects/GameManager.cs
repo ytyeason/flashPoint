@@ -85,6 +85,7 @@ public class GameManager: MonoBehaviour
         socket.On("UpdateTreatedLocation_Success", UpdateTreatedLocation_Success);
         socket.On("RemoveHazmat_Success", RemoveHazmat_Success);
         socket.On("UpdateHazmatLocation_Success", UpdateHazmatLocation_Success);
+        socket.On("AddPOI_Success", AddPOI_Success);
 
         if (game_info != null)
         {
@@ -368,7 +369,7 @@ public class GameManager: MonoBehaviour
     public void registerNewFireman(Fireman f)
     {
         Debug.Log("let other user know a new fireman has been created");
-        UpdateLocation(f.currentX, f.currentZ);//let other user know a new fireman has been created
+        UpdateLocation(f.currentX, f.currentZ, StaticInfo.name);//let other user know a new fireman has been created
     }
 
     public GameObject instantiateObject(GameObject w, Vector3 v, Quaternion q)
@@ -406,13 +407,14 @@ public class GameManager: MonoBehaviour
         Destroy(w);
     }
 
-    public void UpdateLocation(int x, int z)
+    public void UpdateLocation(int x, int z, string name)
     {
         Debug.Log("Update Location");
         StaticInfo.Location = new int[] { x, z };
         Dictionary<String, String> update = new Dictionary<string, string>();
         update["room"] = StaticInfo.roomNumber;
         update["name"] = StaticInfo.name;
+        if (!name.Equals(StaticInfo.name)) update["name"] = name;
         update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
         update["role"] = ((int)StaticInfo.role).ToString();
 
@@ -473,8 +475,12 @@ public class GameManager: MonoBehaviour
 		// advanceFire, n.b parameters only matter for testing
 		fireManager.advanceFire(1, 4, false);
 		Debug.Log("Finished advFire, redistributing AP");
-		
 
+        operationManager.commandMoves = 1;
+        operationManager.controlled = null;
+        operationManager.inCommand = false;
+
+        pOIManager.replenishPOI();
 
 
 		checkTurn();
@@ -663,6 +669,47 @@ public class GameManager: MonoBehaviour
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
 
         hazmatManager.moveHazmat(origx, origz, newx, newz);
+    }
+
+    public void startDrive(int type)
+    {
+        Dictionary<string, string> update = new Dictionary<string, string>();
+        update["room"] = StaticInfo.roomNumber;
+        update["name"] = StaticInfo.name;
+        update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
+        update["driving"] = type.ToString();
+
+        socket.Emit("StartDrive", new JSONObject(update));
+    }
+
+    public void startCarryV()
+    {
+        Dictionary<string, string> update = new Dictionary<string, string>();
+        update["room"] = StaticInfo.roomNumber;
+        update["name"] = StaticInfo.name;
+        update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
+        update["carryV"] = true.ToString();
+
+        socket.Emit("StartCarryV", new JSONObject(update));
+    }
+
+    public void AddPOI(int x, int z,int type)
+    {
+        Dictionary<string, string> poi = new Dictionary<string, string>();
+        poi["x"] = x.ToString();
+        poi["z"] = z.ToString();
+        poi["type"] = type.ToString();
+
+        socket.Emit("AddPOI", new JSONObject(poi));
+    }
+
+    public void AddPOI_Success(SocketIOEvent obj)
+    {
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"].ToString());
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"].ToString());
+        int type = Convert.ToInt32(obj.data.ToDictionary()["type"].ToString());
+
+        pOIManager.addPOI(x, z, type);
     }
 
 }
