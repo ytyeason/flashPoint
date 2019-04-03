@@ -77,6 +77,7 @@ public class POIManager{
             killed++;
             placedPOI.Remove(key);
             gm.DestroyObject(poiLookup[key]);
+            poiLookup.Remove(key);
         }
     }
 
@@ -90,15 +91,18 @@ public class POIManager{
             rescued++;
             placedPOI.Remove(key);
             gm.DestroyObject(poiLookup[key]);
+            poiLookup.Remove(key);
         }
     }
 
     public void reveal(int x,int z)
     {
+        Debug.Log("reveal");
         int[] key = new int[] { x, z };
         POI p = placedPOI[key];
         p.setStatus(POIStatus.Revealed);
         gm.DestroyObject(poiLookup[key]);
+        poiLookup.Remove(key);
         if (p.type == POIType.FalseAlarm)
         {
             placedPOI.Remove(key);
@@ -108,6 +112,7 @@ public class POIManager{
         {
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
+            poiLookup.Add(key, go);
         }
     }
 
@@ -122,5 +127,7 @@ public class POIManager{
         gm.DestroyObject(poiLookup[key]);
         GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
         go.transform.Rotate(90, 0, 0);
+        poiLookup.Add(key, go);
     }
+
 }

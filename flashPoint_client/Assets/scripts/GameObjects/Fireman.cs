@@ -313,6 +313,7 @@ public class Fireman
         }
         currentX = x * 6;
         currentZ = z * 6;
+        s.transform.position = new Vector3(currentX, 0.2f, currentZ);
         gm.UpdateLocation(currentX, currentZ);
 
         int[] key = new int[] { x, z };
