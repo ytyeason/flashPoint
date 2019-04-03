@@ -348,14 +348,14 @@ public class GameManager: MonoBehaviour
 
     public Ambulance initializeAmbulance()
     {
-        Ambulance amb = new Ambulance(ambulance, 9, 4, this);
+        Ambulance amb = new Ambulance(ambulance, 54, 27, this);
 
         return amb;
     }
 
     public Engine initializeEngine()
     {
-        Engine eng = new Engine(engine, 0, 5, this);
+        Engine eng = new Engine(engine, 0, 33, this);
 
         return eng;
     }

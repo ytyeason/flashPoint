@@ -21,24 +21,24 @@ public class Engine : MonoBehaviour {
 		}
 
 	// Occurs when we click the mouse:
-	void OnMouseUp()
-	{
-		if (map.gm.isMyTurn)
-		{
-			 int vehicleX = x / 6;
-			 int vehicleZ = z / 6;
+	//void OnMouseUp()
+	//{
+	//	if (map.gm.isMyTurn)
+	//	{
+	//		 int vehicleX = x / 6;
+	//		 int vehicleZ = z / 6;
 
-            OperationManager om = map.gm.operationManager;
+ //           OperationManager om = map.gm.operationManager;
 
-            Debug.Log(om);
+ //           Debug.Log(om);
 
-            om.selectTile(vehicleX, vehicleZ);
-		}
-		else
-        {
-            Debug.Log("Not my turn, dont click");
-        }
-	}
+ //           om.selectTile(vehicleX, vehicleZ);
+	//	}
+	//	else
+ //       {
+ //           Debug.Log("Not my turn, dont click");
+ //       }
+	//}
 
 	public void moveNextStation(int dx, int dz)
 	{

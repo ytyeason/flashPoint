@@ -490,10 +490,13 @@ public class OperationManager
 
             if (gm.tileMap.tiles[x, z] == 3) // engine
             {
-                int vx = gm.engine.GetComponent<Engine>().x / 6;
-                int vz = gm.engine.GetComponent<Engine>().z / 6;
+                double vx = (double)gm.enG.x / 6;
+                double vz = (double)gm.enG.z / 6;
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&((Math.Abs(currentX-vx)<4&&(Math.Abs(currentZ-vz)<4))||(Math.Abs(currentX-vz)<4&&(Math.Abs(currentX-vx)<4))))
+                Debug.Log(vx);
+                Debug.Log(vz);
+
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<=0.5&&(Math.Abs(currentZ-vz)<=0.5)))
                 {
                     if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) !=9 && Math.Abs(currentZ - z) !=7 ))
                     {
@@ -512,12 +515,12 @@ public class OperationManager
 
             if (gm.tileMap.tiles[x, z] == 4) // ambulance
             {
-                int vx = gm.ambulance.GetComponent<Ambulance>().x / 6;
-                int vz = gm.ambulance.GetComponent<Ambulance>().z / 6;
+                int vx = gm.amB.x / 6;
+                int vz = gm.amB.z / 6;
 
                 if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) != 9 && Math.Abs(currentZ - z) != 7))
                 {
-                    if (currentX == vx && currentZ == vz)
+                    if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
                         Operation op = new Operation(this, OperationType.Drive);
                         possibleOp.Add(op);
@@ -529,7 +532,7 @@ public class OperationManager
 
                 if (fireman.FreeAP >= 4 && (Math.Abs(x - currentX) == 9 || Math.Abs(z - currentZ) == 7))
                 {
-                    if (currentX == vx && currentZ == vz)
+                    if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
                         Operation op = new Operation(this, OperationType.Drive);
                         possibleOp.Add(op);
