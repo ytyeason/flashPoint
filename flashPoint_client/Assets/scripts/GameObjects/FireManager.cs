@@ -433,8 +433,8 @@ public class FireManager : MonoBehaviour
 	public void newFire(int in_x, int in_z, bool isATest)
 	{
 		// Coordinate to place the new Smoke marker
-		int rng_X = (isATest) ? in_x : UnityEngine.Random.Range(0, mapSizeX - 1);
-		int rng_Z = (isATest) ? in_z : UnityEngine.Random.Range(0, mapSizeZ - 1);
+		int rng_X = (isATest) ? in_x : UnityEngine.Random.Range(1, mapSizeX - 2);
+		int rng_Z = (isATest) ? in_z : UnityEngine.Random.Range(1, mapSizeZ - 2);
 		int current_type = tileMap.tiles[rng_X, rng_Z];
 		if (debugMode) Debug.Log("Type is: " + current_type);
 		
