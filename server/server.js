@@ -276,6 +276,27 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     });
 
+    socket.on('RemoveH',function(data){
+      var x = data['x'];
+      var z = data['z'];
+      
+      console.log(x);
+      console.log(z);
+      
+      socket.broadcast.emit('RemoveHazmat_Success', {"x":x, "z":z});
+      
+    });
+
+    socket.on('UpdateHazmatLocation', function(data){
+      var origx=data['origx'];
+      var origz=data['origz'];
+      var newx=data['newx'];
+      var newz=data['newz'];
+
+      socket.broadcast.emit('UpdateHazmatLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
+    });
+
+
 
 });
 

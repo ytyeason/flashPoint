@@ -12,6 +12,9 @@ public class HazmatManager{
 
     public Dictionary<int[], Hazmat> placedHotspot=new Dictionary<int[], Hazmat>();
 
+    public Dictionary<int[], Hazmat> movingHazmat = new Dictionary<int[], Hazmat>();
+    public Dictionary<int[], GameObject> movingLookup = new Dictionary<int[], GameObject>();
+
     private System.Random rand = new System.Random();
     private float posY=-1;
 
@@ -146,6 +149,30 @@ public class HazmatManager{
         }
         gm.DestroyObject(get(key[0],key[1],lookUp));
         removedHazmat++;
+    }
+
+    public void moveHazmat(int origx, int origz, int newx, int newz)
+    {
+        Hazmat p = get(origx, origz, movingHazmat);
+        GameObject obj = get(origx, origz, movingLookup);
+        Remove(origx, origz, movingHazmat);
+        Remove(origx, origz, movingLookup);
+        obj.transform.position = new Vector3(newx, posY, newz);
+        int[] key = new int[] { newx, newz };
+        movingHazmat.Add(key, p);
+        movingLookup.Add(key, obj);
+    }
+
+    public void carryHazmat(int x, int z)
+    {
+        Hazmat p = get(x, z, placedHazmat);
+        GameObject obj = get(x, z, lookUp);
+        Remove(x, z, placedHazmat);
+        Remove(x, z, lookUp);
+
+        int[] key = new int[] { x, z };
+        movingHazmat.Add(key, p);
+        movingLookup.Add(key, obj);
     }
 
     public bool containsKey(int x, int z, Dictionary<int[], Hazmat> list)

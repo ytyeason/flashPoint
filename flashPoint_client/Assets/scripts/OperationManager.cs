@@ -430,6 +430,7 @@ public class OperationManager
                 }
             }
             if (gm.tileMap.tiles[x, z] == 2 && gm.tileMap.selectedUnit.carryingVictim) moveTo = false;
+            if (gm.tileMap.selectedUnit.driving) moveTo = false;
 
             Debug.Log(extingFire);
             Debug.Log(gm.tileMap.selectedUnit.FreeAP);
@@ -631,7 +632,7 @@ public class OperationManager
 
     public void leadV()
     {
-        Debug.Log("treat");
+        Debug.Log("leadV");
         Fireman fireman = gm.tileMap.selectedUnit;
 
         fireman.leadV(x, z);
@@ -642,12 +643,22 @@ public class OperationManager
 
     public void removeHazmat()
     {
+        Debug.Log("removeHazmat");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.removeHazmet(x, z);
+
         opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void carryHazmat()
     {
+        Debug.Log("removeHazmat");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.removeHazmet(x, z);
+
         opPanel.SetActive(false); 
         DestroyAll();
     }
@@ -684,9 +695,7 @@ public class OperationManager
 
     public void remote()
     {
-        Ambulance amb = gm.tileMap.ambulance;
-        amb.moveNextStation(x,z);
-        opPanel.SetActive(false);
+        opPanel.SetActive(false); 
         DestroyAll();
 
     }

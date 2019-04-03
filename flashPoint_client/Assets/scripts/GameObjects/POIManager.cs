@@ -16,6 +16,10 @@ public class POIManager{
     public List<POI> poi = new List<POI>();
     public Dictionary<int[], POI> treated = new Dictionary<int[], POI>();
     public Dictionary<int[], GameObject> treatedLookup = new Dictionary<int[], GameObject>();
+    public Dictionary<int[], POI> movingPOI = new Dictionary<int[], POI>();
+    public Dictionary<int[], GameObject> movingPOILookup = new Dictionary<int[], GameObject>();
+    public Dictionary<int[], POI> movingTreated = new Dictionary<int[], POI>();
+    public Dictionary<int[], GameObject> movingTreatedLookup = new Dictionary<int[], GameObject>();
 
     private System.Random rand = new System.Random();
     private float posY = -1;
@@ -138,26 +142,50 @@ public class POIManager{
 
     public void movePOI(int origx, int origz, int newx, int newz)
     {
-        POI p = getPOI(origx, origz, placedPOI);
-        GameObject obj = getPOIPrefab(origx, origz, poiLookup);
-        Remove(origx, origz, gm.pOIManager.placedPOI);
-        Remove(origx, origz, gm.pOIManager.poiLookup);
-        obj.transform.position = new Vector3(newx, 0.2f, newz);
+        POI p = getPOI(origx, origz, movingPOI);
+        GameObject obj = getPOIPrefab(origx, origz, movingPOILookup);
+        Remove(origx, origz, gm.pOIManager.movingPOI);
+        Remove(origx, origz, gm.pOIManager.movingPOILookup);
+        obj.transform.position = new Vector3(newx, posY, newz);
         int[] key = new int[] { newx, newz };
-        placedPOI.Add(key, p);
-        poiLookup.Add(key, obj);
+        movingPOI.Add(key, p);
+        movingPOILookup.Add(key, obj);
     }
 
     public void moveTreated(int origx, int origz, int newx, int newz)
     {
-        POI p = getPOI(origx, origz, treated);
-        GameObject obj = getPOIPrefab(origx, origz, treatedLookup);
-        Remove(origx, origz, gm.pOIManager.treated);
-        Remove(origx, origz, gm.pOIManager.treatedLookup);
-        obj.transform.position = new Vector3(newx, 0.2f, newz);
+        POI p = getPOI(origx, origz, movingTreated);
+        GameObject obj = getPOIPrefab(origx, origz, movingTreatedLookup);
+        Remove(origx, origz, gm.pOIManager.movingTreated);
+        Remove(origx, origz, gm.pOIManager.movingTreatedLookup);
+        obj.transform.position = new Vector3(newx, posY, newz);
         int[] key = new int[] { newx, newz };
-        treated.Add(key, p);
-        treatedLookup.Add(key, obj);
+        movingTreated.Add(key, p);
+        movingTreatedLookup.Add(key, obj);
+    }
+
+    public void carryPOI(int x,int z)
+    {
+        POI p = getPOI(x, z, placedPOI);
+        GameObject obj = getPOIPrefab(x, z, poiLookup);
+        Remove(x, z, gm.pOIManager.placedPOI);
+        Remove(x, z, gm.pOIManager.poiLookup);
+
+        int[] key = new int[] { x, z };
+        movingPOI.Add(key, p);
+        movingPOILookup.Add(key, obj);
+    }
+
+    public void leadPOI(int x, int z)
+    {
+        POI p = getPOI(x, z, treated);
+        GameObject obj = getPOIPrefab(x, z, treatedLookup);
+        Remove(x, z, gm.pOIManager.treated);
+        Remove(x, z, gm.pOIManager.treatedLookup);
+
+        int[] key = new int[] { x, z };
+        movingTreated.Add(key, p);
+        movingTreatedLookup.Add(key, obj);
     }
 
     public bool containsKey(int x, int z, Dictionary<int[],POI> list)

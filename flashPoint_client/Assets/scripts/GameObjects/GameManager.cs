@@ -83,6 +83,8 @@ public class GameManager: MonoBehaviour
         socket.On("treatV_Success", UpdateTreatV_Success);
         socket.On("UpdatePOILocation_Success", UpdatePOILocation_Success);
         socket.On("UpdateTreatedLocation_Success", UpdateTreatedLocation_Success);
+        socket.On("RemoveHazmat_Success", RemoveHazmat_Success);
+        socket.On("UpdateHazmatLocation_Success", UpdateHazmatLocation_Success);
 
         if (game_info != null)
         {
@@ -603,7 +605,7 @@ public class GameManager: MonoBehaviour
 
     public void UpdateTreatedLocation(int origx, int origz, int newx, int newz)
     {
-        Debug.Log("update poi location");
+        Debug.Log("update treated location");
         Dictionary<String, string> location = new Dictionary<string, string>();
         location["origx"] = origx.ToString();
         location["origz"] = origz.ToString();
@@ -621,6 +623,46 @@ public class GameManager: MonoBehaviour
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
 
         pOIManager.moveTreated(origx, origz, newx, newz);
+    }
+
+    public void RemoveHazmat(int x,int z)
+    {
+        Debug.Log("RemovingHazmat");
+        Dictionary<String, string> hazmat = new Dictionary<string, string>();
+        hazmat["x"] = x.ToString();
+        hazmat["z"] = z.ToString();
+
+        socket.Emit("RemoveH", new JSONObject(hazmat));
+    }
+
+    public void RemoveHazmat_Success(SocketIOEvent obj)
+    {
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        hazmatManager.removeHazmat(x, z);
+    }
+
+    public void UpdateHazmatLocation(int origx, int origz, int newx, int newz)
+    {
+        Debug.Log("update hazmat location");
+        Dictionary<String, string> location = new Dictionary<string, string>();
+        location["origx"] = origx.ToString();
+        location["origz"] = origz.ToString();
+        location["newx"] = newx.ToString();
+        location["newz"] = newz.ToString();
+
+        socket.Emit("UpdateTreatedLocation", new JSONObject(location));
+    }
+
+    public void UpdateHazmatLocation_Success(SocketIOEvent obj)
+    {
+        int origx = Convert.ToInt32(obj.data.ToDictionary()["origx"]);
+        int origz = Convert.ToInt32(obj.data.ToDictionary()["origz"]);
+        int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
+        int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
+
+        hazmatManager.moveHazmat(origx, origz, newx, newz);
     }
 
 }
