@@ -684,7 +684,9 @@ public class OperationManager
 
     public void remote()
     {
-        opPanel.SetActive(false); 
+        Ambulance amb = gm.tileMap.ambulance;
+        amb.moveNextStation(x,z);
+        opPanel.SetActive(false);
         DestroyAll();
 
     }
