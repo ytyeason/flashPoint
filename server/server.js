@@ -236,6 +236,31 @@ io.on('connection', function (socket) {//default event for client connect to ser
         
     });
 
+    socket.on('TreatV', function(data){
+      var x=data['x'];
+      var z=data['z'];
+
+      socket.broadcast.emit('TreatV_Success',{'x':x,'z':z});
+    });
+
+    socket.on('UpdatePOILocation', function(data){
+      var origx=data['origx'];
+      var origz=data['origz'];
+      var newx=data['newx'];
+      var newz=data['newz'];
+
+      socket.broadcast.emit('UpdatePOILocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
+    });
+
+    socket.on('UpdateTreatedLocation', function(data){
+      var origx=data['origx'];
+      var origz=data['origz'];
+      var newx=data['newx'];
+      var newz=data['newz'];
+
+      socket.broadcast.emit('UpdateTreatedLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
+    });
+
     socket.on('SelectRole', function(data){
       var role=data['role'];
       var result='true';

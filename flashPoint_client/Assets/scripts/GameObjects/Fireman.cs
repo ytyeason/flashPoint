@@ -35,6 +35,7 @@ public class Fireman
     public bool carryingVictim = false;
     public POI carriedPOI;
     public Hazmat carriedHazmat;
+    public POI ledPOI;
 
     public bool driving = false;
 
@@ -322,17 +323,32 @@ public class Fireman
                 setAP(FreeAP - requiredAP);
             }
         }
+
+        int origX = currentX;
+        int origZ = currentZ;
+
         currentX = x * 6;
         currentZ = z * 6;
         s.transform.position = new Vector3(currentX, 0.2f, currentZ);
         gm.UpdateLocation(currentX, currentZ);
+
+        if (carriedPOI != null)
+        {
+            gm.pOIManager.movePOI(origX, origZ, currentX, currentZ);
+            gm.UpdatePOILocation(origX, origZ, currentX, currentZ);
+        }
+
+        if (ledPOI != null)
+        {
+            gm.pOIManager.moveTreated(origX, origZ, currentX, currentZ);
+            gm.UpdateTreatedLocation(origX, origZ, currentX, currentZ);
+        }
 
         int[] key = new int[] { x, z };
         if (gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI) && gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI).status == POIStatus.Hidden)
         {
             gm.pOIManager.reveal(x, z);
             pOIManager.gm.updateRevealPOI(x, z);
-
         }
     }
 
@@ -493,6 +509,22 @@ public class Fireman
         gm.UpdateTile(x, z, 0);
     }
 
+    public void treat(int x, int z)
+    {
+        setAP(FreeAP - 1);
+        gm.pOIManager.treat(x, z);
 
+    }
+
+    public void carryV(int x, int z)
+    {
+        this.carryingVictim = true;
+        this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
+    }
+
+    public void leadV(int x, int z)
+    {
+        this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
+    }
 
 }

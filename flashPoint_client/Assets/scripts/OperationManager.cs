@@ -134,27 +134,26 @@ public class OperationManager
             //------ POI---------------
             if (gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.placedPOI))
             {
-                Debug.Log("has poi");
-                POI p = gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI);
+                if (!fireman.carryingVictim)
+                {
+                    Operation op = new Operation(this, OperationType.CarryV);
+                    possibleOp.Add(op);
+                }
+                if (fireman.role == Role.Paramedic && fireman.FreeAP >= 1)
+                {
+                    Operation op = new Operation(this, OperationType.Treat);
+                    possibleOp.Add(op);
+                }
+            }
+
+            if (gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.treated))
+            {
+                Debug.Log("has treated");
+                POI p = gm.pOIManager.getPOI(key[0], key[1], gm.pOIManager.treated);
                 if (p.status == POIStatus.Treated)
                 {
                     Operation op = new Operation(this, OperationType.LeadV);
                     possibleOp.Add(op);
-                }
-                Debug.Log(p.type);
-                if (p.type == POIType.Victim)
-                {
-                    Debug.Log("victim");
-                    if (!fireman.carryingVictim)
-                    {
-                        Operation op = new Operation(this, OperationType.CarryV);
-                        possibleOp.Add(op);
-                    }
-                    if (fireman.role == Role.Paramedic&&fireman.FreeAP>=1)
-                    {
-                        Operation op = new Operation(this, OperationType.Treat);
-                        possibleOp.Add(op);
-                    }
                 }
             }
 
@@ -600,24 +599,43 @@ public class OperationManager
 
     public void extingFire()
     {
+        Debug.Log("extinguish fire");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.extingFire(x, z);
         opPanel.SetActive(false);
         DestroyAll();
     }
 
     public void treat()
     {
+        Debug.Log("treat");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.treat(x, z);
+
         opPanel.SetActive(false);
         DestroyAll();
     }
 
     public void carryV()
     {
+        Debug.Log("carryV");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.carryV(x, z);
+
         opPanel.SetActive(false); 
         DestroyAll();
     }
 
     public void leadV()
     {
+        Debug.Log("treat");
+        Fireman fireman = gm.tileMap.selectedUnit;
+
+        fireman.leadV(x, z);
+
         opPanel.SetActive(false); 
         DestroyAll();
     }

@@ -80,6 +80,9 @@ public class GameManager: MonoBehaviour
         socket.On("DoorUpdate_Success", DoorUpdate_Success);
         socket.On("sendNotification_Success",sendNotification_SUCCESS);
         socket.On("revealPOI_Success", revealPOI_SUCCESS);
+        socket.On("treatV_Success", UpdateTreatV_Success);
+        socket.On("UpdatePOILocation_Success", UpdatePOILocation_Success);
+        socket.On("UpdateTreatedLocation_Success", UpdateTreatedLocation_Success);
 
         if (game_info != null)
         {
@@ -556,6 +559,68 @@ public class GameManager: MonoBehaviour
 
         chatLog.Add(notification);
         Debug.Log(chatString);
+    }
+
+    public void UpdateTreatV(int x,int z)
+    {
+        Debug.Log("update after treat victim");
+        Dictionary<String, string> treat = new Dictionary<string, string>();
+        treat["x"] = x.ToString();
+        treat["z"] = z.ToString();
+
+        socket.Emit("TreatV", new JSONObject(treat));
+    }
+
+    public void UpdateTreatV_Success(SocketIOEvent obj)
+    {
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        pOIManager.treat(x, z);
+    }
+
+    public void UpdatePOILocation(int origx,int origz, int newx, int newz)
+    {
+        Debug.Log("update poi location");
+        Dictionary<String, string> location = new Dictionary<string, string>();
+        location["origx"] = origx.ToString();
+        location["origz"] = origz.ToString();
+        location["newx"] = newx.ToString();
+        location["newz"] = newz.ToString();
+
+        socket.Emit("UpdatePOILocation", new JSONObject(location));
+    }
+
+    public void UpdatePOILocation_Success(SocketIOEvent obj)
+    {
+        int origx = Convert.ToInt32(obj.data.ToDictionary()["origx"]);
+        int origz = Convert.ToInt32(obj.data.ToDictionary()["origz"]);
+        int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
+        int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
+
+        pOIManager.movePOI(origx, origz, newx, newz);
+    }
+
+    public void UpdateTreatedLocation(int origx, int origz, int newx, int newz)
+    {
+        Debug.Log("update poi location");
+        Dictionary<String, string> location = new Dictionary<string, string>();
+        location["origx"] = origx.ToString();
+        location["origz"] = origz.ToString();
+        location["newx"] = newx.ToString();
+        location["newz"] = newz.ToString();
+
+        socket.Emit("UpdateTreatedLocation", new JSONObject(location));
+    }
+
+    public void UpdateTreatedLocation_Success(SocketIOEvent obj)
+    {
+        int origx = Convert.ToInt32(obj.data.ToDictionary()["origx"]);
+        int origz = Convert.ToInt32(obj.data.ToDictionary()["origz"]);
+        int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
+        int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
+
+        pOIManager.moveTreated(origx, origz, newx, newz);
     }
 
 }
