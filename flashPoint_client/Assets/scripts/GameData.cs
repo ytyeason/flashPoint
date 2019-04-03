@@ -1,16 +1,10 @@
 ﻿using System;
 
+[Serializable]
 public class GameData
 {
 
+    public GameManager gm;
 
-
-    public GameData()
-    {
-
-    }
-
-    public void Update() {
-
-    }
+    
 }

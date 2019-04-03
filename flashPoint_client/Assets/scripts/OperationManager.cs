@@ -132,7 +132,7 @@ public class OperationManager
             Debug.Log("same place");
             Debug.Log(gm.pOIManager.placedPOI.Count);
             //------ POI---------------
-            if (gm.pOIManager.placedPOI.ContainsKey(key))
+            if (gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.placedPOI))
             {
                 Debug.Log("has poi");
                 POI p = gm.pOIManager.placedPOI[key];
@@ -157,7 +157,7 @@ public class OperationManager
             }
 
             //------Hazmat------------
-            if (gm.hazmatManager.placedHazmat.ContainsKey(key))
+            if (gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat))
             {
                 if (fireman.role == Role.HazmatTech&&fireman.FreeAP>=2)
                 {
@@ -420,8 +420,7 @@ public class OperationManager
                 }
                 if (!gm.wallManager.checkIfVWall(keyM[0],keyM[1]))
                 {
-                    Debug.Log(gm.wallManager.vwallStores.ContainsKey(keyM));
-                    Debug.Log(gm.wallManager.vwallStores.Count);
+
                     foreach(int[] a in gm.wallManager.vwallStores.Keys)
                     {
                         Debug.Log(a[0] + " " + a[1]);
@@ -469,7 +468,7 @@ public class OperationManager
         {
             int[] key = new int[] { x, z };
             Fireman fireman = gm.tileMap.selectedUnit;
-            if (fireman.role == Role.ImagingTech&&fireman.FreeAP>=1&&gm.pOIManager.placedPOI.ContainsKey(key)&&gm.pOIManager.placedPOI[key].status==POIStatus.Hidden)
+            if (fireman.role == Role.ImagingTech&&fireman.FreeAP>=1&&gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI)&&gm.pOIManager.getPOI(key[0],key[1], gm.pOIManager.placedPOI).status==POIStatus.Hidden)
             {
                 Operation op = new Operation(this, OperationType.Imaging);
                 possibleOp.Add(op);

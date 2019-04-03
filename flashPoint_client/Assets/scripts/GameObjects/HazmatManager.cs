@@ -22,15 +22,6 @@ public class HazmatManager{
 
     public HazmatManager(GameManager gm){
         this.gm=gm;
-        if (Int32.TryParse(StaticInfo.numOfHazmat,out this.numOfHazmat)){
-
-        }
-
-
-        if (Int32.TryParse(StaticInfo.numOfHotspot, out this.additionalHotspot))
-        {
-
-        }
 
         //this.additionalHotspot 
         switch (StaticInfo.level)
@@ -53,23 +44,34 @@ public class HazmatManager{
         }
         if (StaticInfo.level == "Random")
         {
-            switch (StaticInfo.numberOfPlayer)
+            if (Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
-                case "3":
-                    additionalHotspot += 3;
-                    break;
-                case "4":
-                    additionalHotspot += 4;
-                    break;
-                case "5":
-                    additionalHotspot += 4;
-                    break;
-                case "6":
-                    additionalHotspot += 4;
-                    break;
-                default:
-                    break;
+                numOfHazmat = Int32.Parse(StaticInfo.numOfHazmat);
             }
+
+            if (Int32.TryParse(StaticInfo.numOfHotspot, out this.numOfHazmat))
+            {
+                additionalHotspot += Int32.Parse(StaticInfo.numOfHotspot);
+            }
+
+        }
+
+        switch (StaticInfo.numberOfPlayer)
+        {
+            case "3":
+                additionalHotspot += 2;
+                break;
+            case "4":
+                additionalHotspot += 3;
+                break;
+            case "5":
+                additionalHotspot += 3;
+                break;
+            case "6":
+                additionalHotspot += 3;
+                break;
+            default:
+                break;
         }
         //initiate();
 
@@ -82,7 +84,7 @@ public class HazmatManager{
 
         int[] key = new int[] { randX, randZ };
 
-        while (placedHazmat.ContainsKey(key) || placedHotspot.ContainsKey(key)||gm.tileMap.tiles[randX,randZ]==2)
+        while (containsKey(key[0],key[1],placedHazmat) || containsKey(key[0],key[1],placedHotspot)||gm.tileMap.tiles[randX,randZ]==2)
         {
             randX = rand.Next(1, 9);
             randZ = rand.Next(1, 7);
@@ -102,13 +104,13 @@ public class HazmatManager{
     public void explodeHazmat(int x, int z)
     {
         int[] key = new int[] { x, z };
-        if (placedHazmat.ContainsKey(key))
+        if (containsKey(key[0],key[1],placedHazmat))
         {
-            Hazmat h = placedHazmat[key];
+            Hazmat h = get(key[0],key[1],placedHazmat);
             h.setHazmatStatus(HazmatStatus.Hazmat);
-            placedHazmat.Remove(key);
-            lookUp.Remove(key);
-            gm.DestroyObject(lookUp[key]);
+            Remove(key[0],key[1],placedHazmat);
+            Remove(key[0],key[1],lookUp);
+            gm.DestroyObject(get(key[0],key[1],lookUp));
             placedHotspot.Add(key, h);
             gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
         }
@@ -138,12 +140,83 @@ public class HazmatManager{
     {
         int[] key = new int[] { x, z };
 
-        if (placedHazmat.ContainsKey(key))
+        if (containsKey(key[0],key[1],placedHazmat))
         {
-            placedHazmat.Remove(key);
+            Remove(key[0],key[1],placedHazmat);
         }
-        gm.DestroyObject(lookUp[key]);
+        gm.DestroyObject(get(key[0],key[1],lookUp));
         removedHazmat++;
     }
 
+    public bool containsKey(int x, int z, Dictionary<int[], Hazmat> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool containsKey(int x, int y, Dictionary<int[], GameObject> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Hazmat get(int x, int z, Dictionary<int[], Hazmat> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return list[key];
+            }
+        }
+        return null;
+    }
+
+    public GameObject get(int x, int z, Dictionary<int[], GameObject> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                return list[key];
+            }
+        }
+        return null;
+    }
+
+    public void Remove(int x, int z, Dictionary<int[], GameObject> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                list.Remove(key);
+                break;
+            }
+        }
+    }
+
+    public void Remove(int x, int z, Dictionary<int[], Hazmat> list)
+    {
+        foreach (var key in list.Keys)
+        {
+            if (key[0] == x && key[1] == z)
+            {
+                list.Remove(key);
+                break;
+            }
+        }
+    }
 }

@@ -406,20 +406,16 @@ public class Fireman
     public void flipPOI(int x, int z)
     {
         pOIManager.reveal(x, z);
+        gm.updateRevealPOI(x, z);
 
     }
 
 
-    public void removeHazamet(int x, int z)
+    public void removeHazmet(int x, int z)
     {
-        if (currentX == x && currentZ == z)
-        {
-            hazamatManager.removeHazmat(x, z);
-        }
-        else
-        {
-            return;
-        }
+
+        hazamatManager.removeHazmat(x, z);
+
     }
 
     public void extinFireForFirefighter(int x, int z)
