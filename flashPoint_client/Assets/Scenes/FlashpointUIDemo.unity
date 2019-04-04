@@ -2745,7 +2745,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 797790093}
   m_HandleRect: {fileID: 797790092}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3225,11 +3225,11 @@ MonoBehaviour:
       type: 2}
     isWalkable: 1
   - name: Smoke
-    tileVisualPrefab: {fileID: 1520557845550388, guid: e81b2f6cff0b04d17bcddbb30ae013a7,
+    tileVisualPrefab: {fileID: 1427809008085432, guid: f90a0ca6ab3dc481f9d4f9873f2975aa,
       type: 2}
     isWalkable: 1
   - name: Fire
-    tileVisualPrefab: {fileID: 1631757475314962, guid: 8d2acccf198ba4f2b92c6113b88419f1,
+    tileVisualPrefab: {fileID: 1644348543854996, guid: 8d2acccf198ba4f2b92c6113b88419f1,
       type: 2}
     isWalkable: 1
   - name: parking_engin
@@ -3374,7 +3374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0.000013828278, y: 215.40002}
+  m_AnchoredPosition: {x: 0.0000014305115, y: 215.40002}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881

@@ -233,29 +233,29 @@ public class FireManager : MonoBehaviour
             //TOP 
 
             //if this is wall
-            if (gm.wallManager.isHorizontalWall(rng_X, rng_Z))
+            if (gm.wallManager.isHorizontalWall(rng_X, rng_Z+1))
             {
-                int type = gm.wallManager.HorizontalWall(rng_X, rng_Z);
+                int type = gm.wallManager.HorizontalWall(rng_X, rng_Z+1);
                 type += 2;
                 if (type == 2 || type == 4)
 
                 {
-                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1, true);
-                    gm.UpdateWall(rng_X, rng_Z, type, 1); // horizontal
+                    gm.wallManager.BreakWall(rng_X, rng_Z+1, type, 1, true);
+                    gm.UpdateWall(rng_X, rng_Z+1, type, 1); // horizontal
                 }
 
 
             }
             //if this is door 
-            else if (gm.doorManager.isHorizontalDoor(rng_X, rng_Z))
+            else if (gm.doorManager.isHorizontalDoor(rng_X, rng_Z+1))
                 {
-                int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z);
+                int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z+1);
                 type += 4;
                 if (type == 4)
 
                 {
-                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 1);
-                    gm.UpdateDoor(rng_X, rng_Z, type, 1);// horizontal
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z+1, type, 1);
+                    gm.UpdateDoor(rng_X, rng_Z+1, type, 1);// horizontal
                 }
 
             }
@@ -392,29 +392,29 @@ public class FireManager : MonoBehaviour
             //TOP 
 
             //if this is wall
-            if (gm.wallManager.isHorizontalWall(rng_X , rng_Z-1))
+            if (gm.wallManager.isHorizontalWall(rng_X , rng_Z))
             {
-                int type = gm.wallManager.HorizontalWall(rng_X , rng_Z-1);
+                int type = gm.wallManager.HorizontalWall(rng_X , rng_Z);
                 type += 2;
                 if (type == 2 || type == 4)
 
                 {
-                    gm.wallManager.BreakWall(rng_X, rng_Z-1, type, 1, true);
-                    gm.UpdateWall(rng_X, rng_Z-1, type, 1); // 
+                    gm.wallManager.BreakWall(rng_X, rng_Z, type, 1, true);
+                    gm.UpdateWall(rng_X, rng_Z, type, 1); // 
                 }
 
 
             }
             //if this is door 
-            else if (gm.doorManager.isHorizontalDoor(rng_X , rng_Z-1))
+            else if (gm.doorManager.isHorizontalDoor(rng_X , rng_Z))
                 {
-                int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z-1);
+                int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z);
                 type += 4;
                 if (type == 4)
 
                 {
-                    gm.doorManager.ChangeDoor(rng_X, rng_Z-1, type, 1);
-                    gm.UpdateDoor(rng_X, rng_Z-1, type, 1);// horizontal
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 0);
+                    gm.UpdateDoor(rng_X, rng_Z, type, 1);// horizontal
                 }
 
             }
@@ -463,6 +463,7 @@ public class FireManager : MonoBehaviour
 		}
 		else if (current_type == 2)
 		{
+			Debug.Log("Explosion happens at:" + rng_X + rng_Z);
 			// Trigger explosion in all four directions
             keepGoingUp(rng_X, rng_Z);
             keepGoingDown(rng_X, rng_Z);

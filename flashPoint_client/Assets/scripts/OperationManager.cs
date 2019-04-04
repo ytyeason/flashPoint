@@ -295,11 +295,11 @@ public class OperationManager
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(currentX - vx) != 9 && Math.Abs(currentZ - vz) != 7)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1){
+                if (fireman.FreeAP >= 2 && (Math.Abs(currentX - vx) != 9 && Math.Abs(currentZ - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)){
                     Operation op = new Operation(this, OperationType.Remote);
                     possibleOp.Add(op);
                 }
-                if (fireman.FreeAP >= 4 && (Math.Abs(currentX - vx) == 9 || Math.Abs(currentZ - vz) == 7)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                if (fireman.FreeAP >= 4 && (Math.Abs(currentX - vx) == 9 || Math.Abs(currentZ - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     Operation op = new Operation(this, OperationType.Remote);
                     possibleOp.Add(op);
@@ -538,7 +538,7 @@ public class OperationManager
                 // Debug.Log(currentX+" "+currentZ);
                 // Debug.Log(vx+" "+vz);
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
                 {
                     //if (fireman.driving)
                     //{
@@ -625,7 +625,7 @@ public class OperationManager
 
                 Fireman fireman=gm.fireman;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) != 9 && Math.Abs(currentZ - z) != 7)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) != 9 && Math.Abs(currentZ - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -637,7 +637,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(x - currentX) == 9 || Math.Abs(z - currentZ) == 7)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                if (fireman.FreeAP >= 4 && (Math.Abs(x - currentX) == 9 || Math.Abs(z - currentZ) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -772,15 +772,15 @@ public class OperationManager
                 Debug.Log(vx);
                 Debug.Log(vz);
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<=0.5&&(Math.Abs(currentZ-vz)<=0.5)))
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1)))
                 {
-                    if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) !=9 && Math.Abs(currentZ - z) !=7 )&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                    if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) !=9 && Math.Abs(currentZ - z) !=7 )&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                     {
                         Operation op = new Operation(this, OperationType.Drive);
                         possibleOp.Add(op);
                     }
 
-                    if (fireman.FreeAP >= 4 && (Math.Abs(x - currentX) ==9 || Math.Abs(z - currentZ) ==7)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                    if (fireman.FreeAP >= 4 && (Math.Abs(x - currentX) ==9 || Math.Abs(z - currentZ) ==7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                     {
                         Operation op = new Operation(this, OperationType.Drive);
                         possibleOp.Add(op);
@@ -794,7 +794,7 @@ public class OperationManager
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) != 9 && Math.Abs(currentZ - z) != 7)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) != 9 && Math.Abs(currentZ - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
@@ -806,7 +806,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(x - currentX) == 9 || Math.Abs(z - currentZ) == 7)&&Math.Abs(vx-x)>1&&Math.Abs(vz-z)>1)
+                if (fireman.FreeAP >= 4 && (Math.Abs(x - currentX) == 9 || Math.Abs(z - currentZ) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
@@ -1016,24 +1016,43 @@ public class OperationManager
     {
         Ambulance amb = gm.tileMap.ambulance;
         Engine eng = gm.tileMap.engine;
+        Fireman fireman = gm.tileMap.selectedUnit;
         if ((x==9&&z==4)||(x==9&&z==5)||(x==4&&z==0)||(x==5&&z==0)||(x==0&&z==2)||(x==0&&z==3)||(x==4&&z==7)||(x==5&&z==7))
         {
-            Debug.Log("in driving ambbbbbbbbbbbbbbbbbbbbbb");
+            int vx = gm.amB.x / 6;
+            int vz = gm.amB.z / 6;
             gm.startDrive(1);
             amb.moveNextStation(x,z);
             gm.UpdateAmbulanceLocation(x, z);
             opPanel.SetActive(false);
             DestroyAll();
+            int requiredAP = 2;
+            Debug.Log("differece x:"+(vx-x));
+            Debug.Log("differece z:"+(vz-z));
+            if (Math.Abs(vx-x)==9||Math.Abs(vz-z)==7)
+            {
+                requiredAP = 4;
+            }
+            fireman.setAP(fireman.FreeAP - requiredAP);
         }
         else
         {
+            int vx = gm.enG.x / 6;
+            int vz = gm.enG.z / 6;
             gm.startDrive(2);
             eng.moveNextStation(x,z);
             gm.UpdateEngineLocation(x, z);
             opPanel.SetActive(false);
             DestroyAll();
+            int requiredAP = 2;
+            Debug.Log("differece x:"+(vx-x));
+            Debug.Log("differece z:"+(vz-z));
+            if (Math.Abs(vx-x)==9||Math.Abs(vz-z)==7)
+            {
+                requiredAP = 4;
+            }
+            fireman.setAP(fireman.FreeAP - requiredAP);
         }
-        Fireman fireman = gm.tileMap.selectedUnit;
         fireman.s.transform.position = new Vector3(x*6, 0.2f, z*6);
         gm.UpdateLocation(x*6, z*6,StaticInfo.name);
         fireman.currentX=x*6;
@@ -1049,6 +1068,17 @@ public class OperationManager
     public void remote()
     {
         Ambulance amb = gm.tileMap.ambulance;
+        Fireman fireman = gm.tileMap.selectedUnit;
+        int vx = gm.amB.x / 6;
+        int vz = gm.amB.z / 6;
+        int requiredAP = 2;
+        Debug.Log((Math.Abs(vx-x)));
+        Debug.Log((Math.Abs(vz-z)));
+        if (Math.Abs(vx-x)==9||Math.Abs(vz-z)==7)
+        {
+            requiredAP = 4;
+        }
+        fireman.setAP(fireman.FreeAP - requiredAP);
         gm.startDrive(1);
         amb.moveNextStation(x,z);
         gm.UpdateAmbulanceLocation(x, z);
@@ -1065,6 +1095,14 @@ public class OperationManager
 
     public void deckGun()
     {
+        int requiredAP = 4;
+        if (controlled.role == Role.Driver)
+        {
+            requiredAP = 2;
+        }
+        Fireman fireman = gm.tileMap.selectedUnit;
+        fireman.setAP(fireman.FreeAP - requiredAP);
+
         Debug.Log("fire deckgun");
         double vx = gm.enG.x / 6;
         double vz = gm.enG.z / 6;
@@ -1105,7 +1143,6 @@ public class OperationManager
         int rng_Z = UnityEngine.Random.Range(rz1, rz2);
         Debug.Log("range"+rng_X+","+rng_Z);
         //need to ask player if he is satisfied with the extinguishing area
-        Fireman fireman = gm.tileMap.selectedUnit;
         gm.tileMap.buildNewTile(rng_X, rng_Z,0);
         gm.UpdateTile(rng_X, rng_Z, 0);
         if (!gm.wallManager.isVeritcalWall(rng_X, rng_Z)&&!gm.doorManager.isVerticalDoor(rng_X, rng_Z)){
