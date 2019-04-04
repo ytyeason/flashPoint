@@ -322,7 +322,7 @@ public class OperationManager
                 if (currentZ < z) // below the target
                 {
                     int[] key = new int[] { x, z };
-                    if (!gm.wallManager.checkIfHWall(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfHWall(key[0], key[1])&& !gm.doorManager.checkIfHDoor(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2) 
                         {
@@ -338,7 +338,7 @@ public class OperationManager
                 else // above the target
                 {
                     int[] key = new int[] { currentX, currentZ };
-                    if (!gm.wallManager.checkIfHWall(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfHWall(key[0], key[1])&& !gm.doorManager.checkIfHDoor(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -357,7 +357,7 @@ public class OperationManager
                 if (currentX < x) // left of the target
                 {
                     int[] key = new int[] { x, z };
-                    if (!gm.wallManager.checkIfVWall(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfVWall(key[0], key[1])&& !gm.doorManager.checkIfVDoor(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -373,7 +373,7 @@ public class OperationManager
                 else // right to the target
                 {
                     int[] key = new int[] { currentX, currentZ };
-                    if (!gm.wallManager.checkIfVWall(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfVWall(key[0], key[1])&&!gm.doorManager.checkIfVDoor(key[0], key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -449,6 +449,10 @@ public class OperationManager
                 if (!gm.wallManager.checkIfHWall(keyM[0], keyM[1])) {
                     moveTo = true;
                 }
+                if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
+                {
+                    moveTo = true;
+                }
             }
             else // same row
             {
@@ -470,6 +474,10 @@ public class OperationManager
                         Debug.Log(a[0] + " " + a[1]);
                     }
                     moveTo = true;
+                    if (!gm.doorManager.checkIfVDoor(keyM[0], keyM[1]))
+                    {
+                        moveTo = true;
+                    }
                 }
             }
             if (gm.tileMap.tiles[x, z] == 2 && (gm.tileMap.selectedUnit.carryingVictim||gm.tileMap.selectedUnit.ledPOI!=null)) moveTo = false;
@@ -516,6 +524,7 @@ public class OperationManager
                     }
                 }
             }
+
 
         }
         else // not neighboring 
@@ -564,6 +573,10 @@ public class OperationManager
                             {
                                 moveTo = true;
                             }
+                            if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
+                            {
+                                moveTo = true;
+                            }
                         }
                         else // same row
                         {
@@ -578,6 +591,10 @@ public class OperationManager
                                 keyM[1] = controlled.currentZ;
                             }
                             if (!gm.wallManager.checkIfVWall(keyM[0], keyM[1]))
+                            {
+                                moveTo = true;
+                            }
+                            if (!gm.doorManager.checkIfVDoor(keyM[0], keyM[1]))
                             {
                                 moveTo = true;
                             }

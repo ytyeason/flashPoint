@@ -64,16 +64,21 @@ public class FireManager : MonoBehaviour
 				if (tileMap.tiles[x_elem, z_elem] == 2 &&
 					tileMap.selectedUnit.currentX == (x_elem * 5) && tileMap.selectedUnit.currentZ == (z_elem * 5))
 				{
-					Debug.Log("Reached knockdown");	
+					Debug.Log("Reached knockdown");
 
-					// If firefighter is on the tile knock them out: send them to lower ambulance unit
-					if(z_elem <= 3)
+                    // If firefighter is on the tile knock them out: send them to lower ambulance unit
+                    if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
+                    {
+                        gm.pOIManager.kill(x_elem, z_elem);
+                    }
+                    if (z_elem <= 3)
 					{
-						tileMap.selectedUnit.s.transform.position = new Vector3(45, 0.2f, 15);
+						
+                        tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 18);
 					}
 					else
 					{
-						tileMap.selectedUnit.s.transform.position = new Vector3(45, 0.2f, 20);
+						tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
 					}
 				}
 			}
@@ -285,7 +290,7 @@ public class FireManager : MonoBehaviour
             {
                 int type = gm.wallManager.VerticalWall(rng_X, rng_Z);
                 type += 2;
-                if (type == 2 || type == 4)
+                if (type == 3 || type == 5)
 
                 {
                     gm.wallManager.BreakWall(rng_X, rng_Z, type, 0, true);
@@ -299,11 +304,11 @@ public class FireManager : MonoBehaviour
                 {
                 int type = gm.doorManager.VerticalDoor(rng_X, rng_Z);
                 type += 4;
-                if (type == 4)
+                if (type == 5)
 
                 {
-                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 1);
-                    gm.UpdateDoor(rng_X, rng_Z, type, 1);// horizontal
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 0);
+                    gm.UpdateDoor(rng_X, rng_Z, type, 0);// horizontal
                 }
 
             }
@@ -352,7 +357,7 @@ public class FireManager : MonoBehaviour
                 {
                 int type = gm.doorManager.VerticalDoor(rng_X+1, rng_Z);
                 type += 4;
-                if (type == 4)
+                if (type == 5)
 
                 {
                     gm.doorManager.ChangeDoor(rng_X+1, rng_Z, type, 0);
@@ -509,12 +514,12 @@ public class FireManager : MonoBehaviour
 			adjOnFire = true;
 		}
 		if (canLeft && tileMap.tiles[rng_X - 1, rng_Z] == 2 && !adjOnFire &&
-				!(dm.checkIfHDoor(rng_X, rng_Z) || wm.checkIfHWall(rng_X, rng_Z)))
+				!(dm.checkIfVDoor(rng_X, rng_Z) || wm.checkIfVWall(rng_X, rng_Z)))
 		{
 			adjOnFire = true;
 		}
 		if (canRight && tileMap.tiles[rng_X + 1, rng_Z] == 2 && !adjOnFire &&
-				!(dm.checkIfHDoor(rng_X + 1, rng_Z) || wm.checkIfHWall(rng_X + 1, rng_Z)))
+				!(dm.checkIfVDoor(rng_X + 1, rng_Z) || wm.checkIfVWall(rng_X + 1, rng_Z)))
 		{
 			adjOnFire = true;
 		}
