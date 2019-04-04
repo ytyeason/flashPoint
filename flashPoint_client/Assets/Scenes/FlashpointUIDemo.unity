@@ -2745,7 +2745,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 797790093}
   m_HandleRect: {fileID: 797790092}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3217,8 +3217,8 @@ MonoBehaviour:
   socket: {fileID: 1363472030}
   firemanObject: {fileID: 1847778216}
   firemanplusObject: {fileID: 0}
-  ambulance: {fileID: 100000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
-  engine: {fileID: 100002, guid: 20aa7f73247c74045b530e62d2ff0f4d, type: 3}
+  ambulance: {fileID: 257392398}
+  engine: {fileID: 1334519896}
   tileTypes:
   - name: Normal
     tileVisualPrefab: {fileID: 1899577080576674, guid: 0290d3a6b4a471244a4e1947028f52a5,
@@ -3374,7 +3374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.0000014305115, y: 215.40002}
+  m_AnchoredPosition: {x: 0.000013828278, y: 215.40002}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881

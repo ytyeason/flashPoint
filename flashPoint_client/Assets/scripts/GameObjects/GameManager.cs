@@ -308,12 +308,13 @@ public class GameManager: MonoBehaviour
 
     public void UpdateAmbulanceLocation_Success(SocketIOEvent obj)
     {
+        Debug.Log("hello,updateambulance");
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
         tileMap.ambulance.moveNextStation(newx, newz);
     }
 
-        public void UpdateEngineLocation(int newx,int newz)
+    public void UpdateEngineLocation(int newx,int newz)
     {
         Dictionary<String, string> location = new Dictionary<string, string>();
         location["newx"] = newx.ToString();
