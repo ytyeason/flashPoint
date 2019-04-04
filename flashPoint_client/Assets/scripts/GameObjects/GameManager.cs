@@ -759,6 +759,20 @@ public class GameManager: MonoBehaviour
         pOIManager.addPOI(x, z, type);
     }
 
+    public void stopDrive(string name)
+    {
+        Dictionary<string, string> stop = new Dictionary<string, string>();
+        stop["name"] = name;
+        stop["room"] = StaticInfo.roomNumber;
+
+        socket.Emit("StopDrive", new JSONObject(stop));
+    }
+
+    public void stopDrive_Success(SocketIOEvent obj)
+    {
+
+    }
+
 }
 
 public class Notification{

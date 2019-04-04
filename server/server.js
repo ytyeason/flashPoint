@@ -263,11 +263,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     socket.on('SelectRole', function(data){
       var room_number=data['room'];
-      var seletRoles=Games[room_number]['selectedRoles'];
+      var selectRoles=Games[room_number]['selectedRoles'];
       var role=data['role'];
       var result='true';
       console.log(role);
-      console.log(selectRoles);
+      // console.log(selectRoles);
       if(selectRoles.includes(role)||role==""){
         result='false';
       }else{
@@ -330,6 +330,15 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var type=data['type'];
 
       socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type});
+    });
+
+    socket.on('StropDrive',function(data){
+      var name=data['name'];
+      var room=data['room'];
+
+      Games[room]["participants"][name]['Driving']=0;
+      socket.broadcast.emit('LocationSetUp_SUCCESS',Games);
+
     });
 
 });
