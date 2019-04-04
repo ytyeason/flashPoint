@@ -78,7 +78,7 @@ public class WallManager
 
         foreach (var key in keyList)
         {
-            if (key[0] == x && key[1] == z&& hwallStores[key].GetComponent<Wall>().type!=2)
+            if (key[0] == x && key[1] == z&& hwallStores[key].GetComponent<Wall>().type!=4)
             {
                 return true;
             }
@@ -92,7 +92,7 @@ public class WallManager
 
         foreach (var key in keyList)
         {
-            if (key[0] == x && key[1] == z && vwallStores[key].GetComponent<Wall>().type != 2)
+            if (key[0] == x && key[1] == z && vwallStores[key].GetComponent<Wall>().type != 5)
             {
                 return true;
             }

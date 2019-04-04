@@ -850,22 +850,29 @@ public class OperationManager
 
     public void drive()
     {
+        Ambulance amb = gm.tileMap.ambulance;
+        Engine eng = gm.tileMap.engine;
         if ((x==9&&z==4)||(x==9&&z==5)||(x==4&&z==0)||(x==5&&z==0)||(x==0&&z==2)||(x==0&&z==3)||(x==4&&z==7)||(x==5&&z==7))
         {
             gm.startDrive(1);
-            Ambulance amb = gm.tileMap.ambulance;
             amb.moveNextStation(x,z);
         }
         else
         {
             gm.startDrive(2);
-            Engine eng = gm.tileMap.engine;
             eng.moveNextStation(x,z);
         }
         Fireman fireman = gm.tileMap.selectedUnit;
         fireman.move(x, z);
+        fireman.currentX=x*6;
+        fireman.currentZ=z*6;
         opPanel.SetActive(false);
         DestroyAll();
+        Debug.Log("fireman is at x:"+fireman.currentX);
+        Debug.Log("fireman is at z:"+fireman.currentZ); 
+        Debug.Log("engine is at x:"+eng.x);
+        Debug.Log("engine is at z:"+eng.z);
+
     }
 
     public void remote()
@@ -926,61 +933,19 @@ public class OperationManager
         int rng_Z = UnityEngine.Random.Range(rz1, rz2);
         //need to ask player if he is satisfied with the extinguishing area
         Fireman fireman = gm.tileMap.selectedUnit;
-        if(gm.tileMap.tiles[rng_X, rng_Z] == 2)
-        {
-            Debug.Log("extinguish smoke");
-            fireman.extingSmoke(rng_X, rng_Z);
+        gm.tileMap.buildNewTile(rng_X, rng_Z,0);
+        if (!gm.wallManager.checkIfVWall(rng_X, rng_Z)&&!gm.doorManager.checkIfVDoor(rng_X, rng_Z)){
+            gm.tileMap.buildNewTile(rng_X-1, rng_Z,0);
         }
-        if(gm.tileMap.tiles[rng_X, rng_Z] == 3)
-        {
-            Debug.Log("extinguish fire");
-            fireman.extingFire(rng_X, rng_Z);
-            fireman.extingSmoke(rng_X, rng_Z);
+        if (!gm.wallManager.checkIfVWall(rng_X+1, rng_Z)&&!gm.doorManager.checkIfVDoor(rng_X+1, rng_Z)){
+            gm.tileMap.buildNewTile(rng_X+1, rng_Z,0);
         }
-        if(gm.tileMap.tiles[rng_X-1, rng_Z] == 2)
-        {
-            Debug.Log("extinguish smoke");
-            fireman.extingSmoke(rng_X-1, rng_Z);
+        if (!gm.wallManager.checkIfHWall(rng_X, rng_Z)&&!gm.doorManager.checkIfHDoor(rng_X, rng_Z)){
+            gm.tileMap.buildNewTile(rng_X, rng_Z+1,0);
         }
-        if(gm.tileMap.tiles[rng_X-1, rng_Z] == 3)
-        {
-            Debug.Log("extinguish fire");
-            fireman.extingFire(rng_X-1, rng_Z);
-            fireman.extingSmoke(rng_X-1, rng_Z);
-        }
-        if(gm.tileMap.tiles[rng_X+1, rng_Z] == 2)
-        {
-            Debug.Log("extinguish smoke");
-            fireman.extingSmoke(rng_X+1, rng_Z);
-        }
-        if(gm.tileMap.tiles[rng_X+1, rng_Z] == 3)
-        {
-            Debug.Log("extinguish fire");
-            fireman.extingFire(rng_X+1, rng_Z);
-            fireman.extingSmoke(rng_X+1, rng_Z);
-        }
-        if(gm.tileMap.tiles[rng_X, rng_Z+1] == 2)
-        {
-            Debug.Log("extinguish smoke");
-            fireman.extingSmoke(rng_X, rng_Z+1);
-        }
-        if(gm.tileMap.tiles[rng_X, rng_Z+1] == 3)
-        {
-            Debug.Log("extinguish fire");
-            fireman.extingFire(rng_X, rng_Z+1);
-            fireman.extingSmoke(rng_X, rng_Z+1);
-        }
-        if(gm.tileMap.tiles[rng_X, rng_Z-1] == 2)
-        {
-            Debug.Log("extinguish smoke");
-            fireman.extingSmoke(rng_X, rng_Z-1);
-        }
-        if(gm.tileMap.tiles[rng_X, rng_Z-1] == 3)
-        {
-            Debug.Log("extinguish fire");
-            fireman.extingFire(rng_X, rng_Z-1);
-            fireman.extingSmoke(rng_X, rng_Z-1);
-        }
+        if (!gm.wallManager.checkIfHWall(rng_X, rng_Z-1)&&!gm.doorManager.checkIfHDoor(rng_X, rng_Z-1)){
+            gm.tileMap.buildNewTile(rng_X, rng_Z-1,0);
+        }       
         opPanel.SetActive(false); 
         DestroyAll();
     }
