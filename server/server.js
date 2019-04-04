@@ -252,6 +252,19 @@ io.on('connection', function (socket) {//default event for client connect to ser
       socket.broadcast.emit('UpdatePOILocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
     });
 
+    socket.on('UpdateAmbulanceLocation', function(data){
+      // console.log("ambbbbbbbbbbulance");
+      var newx=data['newx'];
+      var newz=data['newz'];
+      socket.broadcast.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz});
+    });
+    socket.on('UpdateEngineLocation', function(data){
+      // console.log("engineeee");
+      var newx=data['newx'];
+      var newz=data['newz'];
+      socket.broadcast.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz});
+    });
+
     socket.on('UpdateTreatedLocation', function(data){
       var origx=data['origx'];
       var origz=data['origz'];
