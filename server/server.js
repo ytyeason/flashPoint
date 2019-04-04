@@ -263,7 +263,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     socket.on('SelectRole', function(data){
       var room_number=data['room'];
-      var seletRoles=Games[room_number]['selectedRoles'];
+      var selectRoles=Games[room_number]['selectedRoles'];
       var role=data['role'];
       var result='true';
       console.log(role);
