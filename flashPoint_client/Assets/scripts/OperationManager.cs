@@ -107,7 +107,7 @@ public class OperationManager
                     newObject.onClick.AddListener(getOff);
                     break;
                 case OperationType.DeckGun:
-                    newObject.onClick.AddListener(move);
+                    newObject.onClick.AddListener(deckGun);
                     break;
                 case OperationType.DropV:
                     newObject.onClick.AddListener(dropeV);
@@ -886,6 +886,7 @@ public class OperationManager
 
     public void deckGun()
     {
+        Debug.Log("fire deckgun");
         double vx = gm.enG.x / 6;
         double vz = gm.enG.z / 6;
         int rx1;
@@ -934,6 +935,7 @@ public class OperationManager
         {
             Debug.Log("extinguish fire");
             fireman.extingFire(rng_X, rng_Z);
+            fireman.extingSmoke(rng_X, rng_Z);
         }
         if(gm.tileMap.tiles[rng_X-1, rng_Z] == 2)
         {
@@ -944,6 +946,7 @@ public class OperationManager
         {
             Debug.Log("extinguish fire");
             fireman.extingFire(rng_X-1, rng_Z);
+            fireman.extingSmoke(rng_X-1, rng_Z);
         }
         if(gm.tileMap.tiles[rng_X+1, rng_Z] == 2)
         {
@@ -954,6 +957,7 @@ public class OperationManager
         {
             Debug.Log("extinguish fire");
             fireman.extingFire(rng_X+1, rng_Z);
+            fireman.extingSmoke(rng_X+1, rng_Z);
         }
         if(gm.tileMap.tiles[rng_X, rng_Z+1] == 2)
         {
@@ -964,6 +968,7 @@ public class OperationManager
         {
             Debug.Log("extinguish fire");
             fireman.extingFire(rng_X, rng_Z+1);
+            fireman.extingSmoke(rng_X, rng_Z+1);
         }
         if(gm.tileMap.tiles[rng_X, rng_Z-1] == 2)
         {
@@ -974,6 +979,7 @@ public class OperationManager
         {
             Debug.Log("extinguish fire");
             fireman.extingFire(rng_X, rng_Z-1);
+            fireman.extingSmoke(rng_X, rng_Z-1);
         }
         opPanel.SetActive(false); 
         DestroyAll();
