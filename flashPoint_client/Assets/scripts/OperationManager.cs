@@ -212,7 +212,7 @@ public class OperationManager
                 int vx = gm.engine.GetComponent<Engine>().x / 6;
                 int vz = gm.engine.GetComponent<Engine>().z / 6;
 
-                if (Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)
+                if (Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5))
                 {
                     //if (fireman.driving)
                     //{
