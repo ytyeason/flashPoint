@@ -107,7 +107,7 @@ public class OperationManager
                     newObject.onClick.AddListener(getOff);
                     break;
                 case OperationType.DeckGun:
-                    newObject.onClick.AddListener(move);
+                    newObject.onClick.AddListener(deckGun);
                     break;
                 case OperationType.DropV:
                     newObject.onClick.AddListener(dropeV);

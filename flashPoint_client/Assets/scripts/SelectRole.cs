@@ -94,6 +94,7 @@ public class SelectRole : MonoBehaviour {
         
         Dictionary<String, String> selectedRole = new Dictionary<string, string>();
         selectedRole["role"] = role;
+        selectedRole["room"] = StaticInfo.roomNumber;
         socket.Emit("SelectRole",new JSONObject(selectedRole));
     }
 

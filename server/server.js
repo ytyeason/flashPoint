@@ -13,7 +13,7 @@ var Games = {};
 
 var clients	= [];
 
-var selectRoles=[];
+// var selectRoles=[];
 
 io.on('connection', function (socket) {//default event for client connect to server
 
@@ -61,7 +61,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     socket.on('gameSetUp', function(data){
       console.log("gameSetUp");
-      selectRoles=[];
       var room_number = data['room'];
       var level = data['level'];
       var numberOfPlayer = data['numberOfPlayer'];
@@ -71,6 +70,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       Games[room_number]["numberOfPlayer"] = numberOfPlayer;
       Games[room_number]["numberOfHazmat"]=numberOfHazmat;
       Games[room_number]["numberOfHotspot"]=numberOfHotspot;
+      Games[room_number]["selectedRoles"]=[];
       console.log(Games[room_number]+level);
       socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
     });
@@ -262,6 +262,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('SelectRole', function(data){
+      var room_number=data['room'];
+      var seletRoles=Games[room_number]['selectedRoles'];
       var role=data['role'];
       var result='true';
       console.log(role);
