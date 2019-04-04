@@ -165,7 +165,7 @@ public class POIManager{
         GameObject obj = getPOIPrefab(origx, origz, movingPOILookup);
         Remove(origx, origz, gm.pOIManager.movingPOI);
         Remove(origx, origz, gm.pOIManager.movingPOILookup);
-        obj.transform.position = new Vector3(newx, posY, newz);
+        obj.transform.position = new Vector3((float)(newx*6-1.5), posY, (float)(newz*6-1.5));
         int[] key = new int[] { newx, newz };
         movingPOI.Add(key, p);
         movingPOILookup.Add(key, obj);
@@ -177,7 +177,7 @@ public class POIManager{
         GameObject obj = getPOIPrefab(origx, origz, movingTreatedLookup);
         Remove(origx, origz, gm.pOIManager.movingTreated);
         Remove(origx, origz, gm.pOIManager.movingTreatedLookup);
-        obj.transform.position = new Vector3(newx, posY, newz);
+        obj.transform.position = new Vector3((float)(newx * 6 + 1.5), posY, (float)(newz * 6 + 1.5));
         int[] key = new int[] { newx, newz };
         movingTreated.Add(key, p);
         movingTreatedLookup.Add(key, obj);
@@ -193,6 +193,7 @@ public class POIManager{
         int[] key = new int[] { x, z };
         movingPOI.Add(key, p);
         movingPOILookup.Add(key, obj);
+        obj.transform.position = new Vector3((float)(x * 6 - 1.5), posY, (float)(z * 6 - 1.5));
     }
 
     public void leadPOI(int x, int z)
@@ -205,6 +206,7 @@ public class POIManager{
         int[] key = new int[] { x, z };
         movingTreated.Add(key, p);
         movingTreatedLookup.Add(key, obj);
+        obj.transform.position = new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 + 1.5));
     }
 
     public bool containsKey(int x, int z, Dictionary<int[],POI> list)

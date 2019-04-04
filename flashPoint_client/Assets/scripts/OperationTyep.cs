@@ -15,7 +15,7 @@
     Ride,
     DeckGun,
     //StopDrive,
-    GetOff,
+    //GetOff,
     DropV,
     DropHazmat,
     StopCommand
