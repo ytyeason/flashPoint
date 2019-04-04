@@ -889,6 +889,21 @@ public class OperationManager
             opPanel.SetActive(false);
             DestroyAll();
         }
+<<<<<<< HEAD
+        Fireman fireman = gm.tileMap.selectedUnit;
+        fireman.move(x, z);
+        opPanel.SetActive(false);
+        DestroyAll();
+<<<<<<< HEAD
+        Debug.Log("fireman is at x:"+fireman.currentX);
+        Debug.Log("fireman is at z:"+fireman.currentZ); 
+        Debug.Log("engine is at x:"+eng.x);
+        Debug.Log("engine is at z:"+eng.z);
+
+=======
+>>>>>>> 6ece87bd2866fb4e8e410124aef5e054894283f5
+=======
+>>>>>>> parent of f3d5bb2... fixed bugs, merge
     }
 
     public void remote()
@@ -906,6 +921,110 @@ public class OperationManager
 
     public void deckGun()
     {
+<<<<<<< HEAD
+        Debug.Log("fire deckgun");
+        double vx = gm.enG.x / 6;
+        double vz = gm.enG.z / 6;
+        int rx1;
+        int rx2;
+        int rz1;
+        int rz2;
+
+        if (vz==0)
+        {
+            rx1=1;
+            rx2=4;
+            rz1=1;
+            rz2=3;
+        }
+        else if (vx==0)
+        {
+            rx1=1;
+            rx2=4;
+            rz1=4;
+            rz2=6;
+        }
+        else if (vz==7)
+        {
+            rx1=5;
+            rx2=8;
+            rz1=4;
+            rz2=6;
+        }
+        else
+        {
+            rx1=5;
+            rx2=8;
+            rz1=1;
+            rz2=3;
+        }
+        int rng_X = UnityEngine.Random.Range(rx1, rx2);
+        int rng_Z = UnityEngine.Random.Range(rz1, rz2);
+        //need to ask player if he is satisfied with the extinguishing area
+        Fireman fireman = gm.tileMap.selectedUnit;
+        if(gm.tileMap.tiles[rng_X, rng_Z] == 2)
+        {
+            Debug.Log("extinguish smoke");
+            fireman.extingSmoke(rng_X, rng_Z);
+        }
+        if(gm.tileMap.tiles[rng_X, rng_Z] == 3)
+        {
+            Debug.Log("extinguish fire");
+            fireman.extingFire(rng_X, rng_Z);
+            fireman.extingSmoke(rng_X, rng_Z);
+        }
+        if(gm.tileMap.tiles[rng_X-1, rng_Z] == 2)
+        {
+            Debug.Log("extinguish smoke");
+            fireman.extingSmoke(rng_X-1, rng_Z);
+        }
+        if(gm.tileMap.tiles[rng_X-1, rng_Z] == 3)
+        {
+            Debug.Log("extinguish fire");
+            fireman.extingFire(rng_X-1, rng_Z);
+            fireman.extingSmoke(rng_X-1, rng_Z);
+        }
+        if(gm.tileMap.tiles[rng_X+1, rng_Z] == 2)
+        {
+            Debug.Log("extinguish smoke");
+            fireman.extingSmoke(rng_X+1, rng_Z);
+        }
+        if(gm.tileMap.tiles[rng_X+1, rng_Z] == 3)
+        {
+            Debug.Log("extinguish fire");
+            fireman.extingFire(rng_X+1, rng_Z);
+            fireman.extingSmoke(rng_X+1, rng_Z);
+        }
+        if(gm.tileMap.tiles[rng_X, rng_Z+1] == 2)
+        {
+            Debug.Log("extinguish smoke");
+            fireman.extingSmoke(rng_X, rng_Z+1);
+        }
+        if(gm.tileMap.tiles[rng_X, rng_Z+1] == 3)
+        {
+            Debug.Log("extinguish fire");
+            fireman.extingFire(rng_X, rng_Z+1);
+            fireman.extingSmoke(rng_X, rng_Z+1);
+        }
+        if(gm.tileMap.tiles[rng_X, rng_Z-1] == 2)
+        {
+            Debug.Log("extinguish smoke");
+            fireman.extingSmoke(rng_X, rng_Z-1);
+        }
+        if(gm.tileMap.tiles[rng_X, rng_Z-1] == 3)
+        {
+            Debug.Log("extinguish fire");
+            fireman.extingFire(rng_X, rng_Z-1);
+            fireman.extingSmoke(rng_X, rng_Z-1);
+        }
+<<<<<<< HEAD
+        if (!gm.wallManager.checkIfHWall(rng_X, rng_Z-1)&&!gm.doorManager.checkIfHDoor(rng_X, rng_Z-1)){
+            gm.tileMap.buildNewTile(rng_X, rng_Z-1,0);
+        }       
+=======
+>>>>>>> 6ece87bd2866fb4e8e410124aef5e054894283f5
+=======
+>>>>>>> parent of f3d5bb2... fixed bugs, merge
         opPanel.SetActive(false); 
         DestroyAll();
     }
