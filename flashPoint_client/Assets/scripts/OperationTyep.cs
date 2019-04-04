@@ -14,7 +14,7 @@
     Remote,
     Ride,
     DeckGun,
-    //StopDrive,
+    StopDrive,
     GetOff,
     DropV,
     DropHazmat,
