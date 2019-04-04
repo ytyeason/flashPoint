@@ -3809,9 +3809,12 @@ MonoBehaviour:
   - {fileID: 114485038136896142, guid: 60c90126fe97942469bde4c424c248ee, type: 2}
   - {fileID: 114477792595451682, guid: e39ca8ffa36ed487e9290c7651f6ddce, type: 2}
   - {fileID: 114155248369261302, guid: e3e8936584a654851a3762ff6fb30737, type: 2}
+<<<<<<< HEAD
+=======
   - {fileID: 114155248369261302, guid: e3e8936584a654851a3762ff6fb30737, type: 2}
   - {fileID: 0}
   - {fileID: 0}
+>>>>>>> 6ece87bd2866fb4e8e410124aef5e054894283f5
   - {fileID: 0}
   - {fileID: 0}
   opPanel: {fileID: 2809480}
@@ -3876,7 +3879,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000002861023, y: 215.40002}
+  m_AnchoredPosition: {x: 0.000002861023, y: 215.40002}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881
