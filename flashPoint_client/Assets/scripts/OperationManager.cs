@@ -103,9 +103,9 @@ public class OperationManager
                 //case OperationType.StopDrive:
                     //newObject.onClick.AddListener(stopDrive);
                     //break;
-                case OperationType.GetOff:
-                    newObject.onClick.AddListener(getOff);
-                    break;
+                //case OperationType.GetOff:
+                    //newObject.onClick.AddListener(getOff);
+                    //break;
                 case OperationType.DeckGun:
                     newObject.onClick.AddListener(deckGun);
                     break;
@@ -209,8 +209,8 @@ public class OperationManager
 
             if (gm.tileMap.tiles[x, z] == 3 ) // fire deck gun && ride
             {
-                int vx = gm.engine.GetComponent<Engine>().x / 6;
-                int vz = gm.engine.GetComponent<Engine>().z / 6;
+                int vx = gm.enG.x / 6;
+                int vz = gm.enG.z / 6;
 
                 if (Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5))
                 {
@@ -273,11 +273,11 @@ public class OperationManager
                         possibleOp.Add(op);
                     }
 
-                    if (fireman.riding)
-                    {
-                        Operation op = new Operation(this, OperationType.GetOff);
-                        possibleOp.Add(op);
-                    }
+                    //if (fireman.riding)
+                    //{
+                    //    Operation op = new Operation(this, OperationType.GetOff);
+                    //    possibleOp.Add(op);
+                    //}
 
                     if (!fireman.riding) // ------------------
                     {
@@ -289,8 +289,8 @@ public class OperationManager
 
             if(gm.tileMap.tiles[x, z] == 4)
             {
-                int vx = gm.ambulance.GetComponent<Ambulance>().x / 6;
-                int vz = gm.ambulance.GetComponent<Ambulance>().z / 6;
+                int vx = gm.amB.x / 6;
+                int vz = gm.amB.z / 6;
 
                 if (fireman.FreeAP >= 2 && (Math.Abs(currentX - vx) != 9 && Math.Abs(currentZ - vz) != 7)){
                     Operation op = new Operation(this, OperationType.Remote);
