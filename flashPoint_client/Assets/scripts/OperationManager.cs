@@ -209,10 +209,12 @@ public class OperationManager
 
             if (gm.tileMap.tiles[x, z] == 3 ) // fire deck gun && ride
             {
-                int vx = gm.enG.x / 6;
-                int vz = gm.enG.z / 6;
+                double vx = (double)gm.enG.x / 6;
+                double vz = (double)gm.enG.z / 6;
 
-                if (Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5))
+                Debug.Log("int same place deck gun");
+
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
                 {
                     //if (fireman.driving)
                     //{
@@ -260,6 +262,7 @@ public class OperationManager
                                 if (o["Location"].Equals(i * 6 + "," + j * 6))
                                 {
                                     existsF = true;
+                                    Debug.Log("another fireman here");
                                     break;
                                 }
                             }
@@ -279,7 +282,7 @@ public class OperationManager
                     //    possibleOp.Add(op);
                     //}
 
-                    if (!fireman.riding) // ------------------
+                    if (!fireman.riding&&!fireman.driving) // ------------------
                     {
                         Operation op = new Operation(this, OperationType.Ride);
                         possibleOp.Add(op);
@@ -289,8 +292,8 @@ public class OperationManager
 
             if(gm.tileMap.tiles[x, z] == 4)
             {
-                int vx = gm.amB.x / 6;
-                int vz = gm.amB.z / 6;
+                double vx = gm.amB.x / 6;
+                double vz = gm.amB.z / 6;
 
                 if (fireman.FreeAP >= 2 && (Math.Abs(currentX - vx) != 9 && Math.Abs(currentZ - vz) != 7)){
                     Operation op = new Operation(this, OperationType.Remote);
@@ -525,6 +528,96 @@ public class OperationManager
                 }
             }
 
+            if (gm.tileMap.tiles[x, z] == 3 ) // fire deck gun && ride
+            {
+                Debug.Log("in deckgun");
+                double vx = (double)gm.enG.x / 6;
+                double vz = (double)gm.enG.z / 6;
+                Fireman fireman=gm.fireman;
+
+                Debug.Log(currentX+" "+currentZ);
+                Debug.Log(vx+" "+vz);
+
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
+                {
+                    //if (fireman.driving)
+                    //{
+                    //    Operation op = new Operation(this, OperationType.StopDrive);
+                    //    possibleOp.Add(op);
+                    //}
+                    Debug.Log("in parking");
+
+                    int minX=0, maxX = 0;
+                    int minZ=0, maxZ = 0;
+                    if (x < 5 && z < 4)
+                    {
+                        minX = 1;
+                        maxX = 4;
+                        minZ = 1;
+                        maxZ = 3;
+                    }
+                    else if (x >= 5 && z < 4)
+                    {
+                        minX = 5;
+                        maxX = 8;
+                        minZ = 1;
+                        maxZ = 3;
+                    }
+                    else if (x >= 5 && z >= 4)
+                    {
+                        minX = 5;
+                        maxX = 8;
+                        minZ = 4;
+                        maxZ = 6;
+                    }
+                    else if (x < 5 && z >= 4)
+                    {
+                        minX = 1;
+                        maxX = 4;
+                        minZ = 4;
+                        maxZ = 6;
+                    }
+                    Debug.Log(minX+" "+minZ);
+                    bool existsF = false;
+                    foreach (JSONObject o in gm.players.Values)
+                    {
+                        for(int i = minX; i <= maxX; i++)
+                        {
+                            for(int j = minZ; j <= maxZ; j++)
+                            {
+                                Debug.Log(o["Location"]);
+                                if (o["Location"].Equals(i * 6 + "," + j * 6))
+                                {
+                                    existsF = true;
+                                    Debug.Log("another fireman here");
+                                    break;
+                                }
+                            }
+                            if (existsF) break;
+                        }
+                        if (existsF) break;
+                    }
+                    Debug.Log(existsF);
+                    if (!existsF)
+                    {
+                        Operation op = new Operation(this, OperationType.DeckGun);
+                        possibleOp.Add(op);
+                    }
+
+                    //if (fireman.riding)
+                    //{
+                    //    Operation op = new Operation(this, OperationType.GetOff);
+                    //    possibleOp.Add(op);
+                    //}
+
+                    if (!fireman.riding&&!fireman.driving) // ------------------
+                    {
+                        Operation op = new Operation(this, OperationType.Ride);
+                        possibleOp.Add(op);
+                    }
+                }
+            }
+
 
         }
         else // not neighboring 
@@ -667,8 +760,8 @@ public class OperationManager
 
             if (gm.tileMap.tiles[x, z] == 4) // ambulance
             {
-                int vx = gm.amB.x / 6;
-                int vz = gm.amB.z / 6;
+                double vx = gm.amB.x / 6;
+                double vz = gm.amB.z / 6;
 
                 if (fireman.FreeAP >= 2 && (Math.Abs(x - currentX) != 9 && Math.Abs(currentZ - z) != 7))
                 {
@@ -890,10 +983,11 @@ public class OperationManager
 
     public void drive()
     {
+        Ambulance amb = gm.tileMap.ambulance;
+        Engine eng = gm.tileMap.engine;
         if ((x==9&&z==4)||(x==9&&z==5)||(x==4&&z==0)||(x==5&&z==0)||(x==0&&z==2)||(x==0&&z==3)||(x==4&&z==7)||(x==5&&z==7))
         {
             gm.startDrive(1);
-            Ambulance amb = gm.tileMap.ambulance;
             amb.moveNextStation(x,z);
             opPanel.SetActive(false);
             DestroyAll();
@@ -901,15 +995,27 @@ public class OperationManager
         else
         {
             gm.startDrive(2);
-            Engine eng = gm.tileMap.engine;
             eng.moveNextStation(x,z);
             opPanel.SetActive(false);
             DestroyAll();
         }
+        Fireman fireman = gm.tileMap.selectedUnit;
+        fireman.move(x, z);
+        fireman.currentX=x*6;
+        fireman.currentZ=z*6;
+        opPanel.SetActive(false);
+        DestroyAll();
+        Debug.Log("fireman is at x:"+fireman.currentX);
+        Debug.Log("fireman is at z:"+fireman.currentZ); 
+        Debug.Log("engine is at x:"+eng.x);
+        Debug.Log("engine is at z:"+eng.z);
     }
 
     public void remote()
     {
+        Ambulance amb = gm.tileMap.ambulance;
+        gm.startDrive(1);
+        amb.moveNextStation(x,z);
         opPanel.SetActive(false); 
         DestroyAll();
 
@@ -923,6 +1029,64 @@ public class OperationManager
 
     public void deckGun()
     {
+        Debug.Log("fire deckgun");
+        double vx = gm.enG.x / 6;
+        double vz = gm.enG.z / 6;
+        int rx1;
+        int rx2;
+        int rz1;
+        int rz2;
+
+        if (vz==0)
+        {
+            rx1=1;
+            rx2=4;
+            rz1=1;
+            rz2=3;
+        }
+        else if (vx==0)
+        {
+            rx1=1;
+            rx2=4;
+            rz1=4;
+            rz2=6;
+        }
+        else if (vz==7)
+        {
+            rx1=5;
+            rx2=8;
+            rz1=4;
+            rz2=6;
+        }
+        else
+        {
+            rx1=5;
+            rx2=8;
+            rz1=1;
+            rz2=3;
+        }
+        int rng_X = UnityEngine.Random.Range(rx1, rx2);
+        int rng_Z = UnityEngine.Random.Range(rz1, rz2);
+        Debug.Log("range"+rng_X+","+rng_Z);
+        //need to ask player if he is satisfied with the extinguishing area
+        Fireman fireman = gm.tileMap.selectedUnit;
+        gm.tileMap.buildNewTile(rng_X, rng_Z,0);
+        if (!gm.wallManager.checkIfVWall(rng_X, rng_Z)&&!gm.doorManager.checkIfVDoor(rng_X, rng_Z)){
+            Debug.Log("im in 1");
+            gm.tileMap.buildNewTile(rng_X-1, rng_Z,0);
+        }
+        if (!gm.wallManager.checkIfVWall(rng_X+1, rng_Z)&&!gm.doorManager.checkIfVDoor(rng_X+1, rng_Z)){
+            Debug.Log("im in 2");
+            gm.tileMap.buildNewTile(rng_X+1, rng_Z,0);
+        }
+        if (!gm.wallManager.checkIfHWall(rng_X, rng_Z)&&!gm.doorManager.checkIfHDoor(rng_X, rng_Z)){
+            Debug.Log("im in 3");
+            gm.tileMap.buildNewTile(rng_X, rng_Z+1,0);
+        }
+        if (!gm.wallManager.checkIfHWall(rng_X, rng_Z-1)&&!gm.doorManager.checkIfHDoor(rng_X, rng_Z-1)){
+            Debug.Log("im in 4");
+            gm.tileMap.buildNewTile(rng_X, rng_Z-1,0);
+        }       
         opPanel.SetActive(false); 
         DestroyAll();
     }
