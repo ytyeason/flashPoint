@@ -6,7 +6,6 @@ using SocketIO;
 using System;
 using System.Linq;
 using UnityEngine.UI;
-
 //using Newtonsoft.Json;
 //using System.Web.Script.Serialization;
 
@@ -46,6 +45,12 @@ public class GameManager: MonoBehaviour
     public GameObject opPanel;
 
     public List<GameObject> options = new List<GameObject>();
+
+    // change role
+    public Dropdown possibleRoles;
+    public GameObject selectRolePanel;
+    public Text selectedRole;
+    public GameObject changeRoleButton;
 
 
     private JSONObject room;
@@ -126,7 +131,17 @@ public class GameManager: MonoBehaviour
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
         checkTurn();	//initialize isMyTurn variable at start
-        if(!level.Equals("Family")) displayRole();
+        if (!level.Equals("Family"))
+        {
+            displayRole();
+        }
+        else
+        {
+            changeRoleButton.SetActive(false);
+        }
+
+        selectRolePanel.SetActive(false);
+
 
     }
 
@@ -289,7 +304,7 @@ public class GameManager: MonoBehaviour
             Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
-
+        if (!level.Equals("Family")) displayRole();
 
     }
 
@@ -528,6 +543,7 @@ public class GameManager: MonoBehaviour
         operationManager.inCommand = false;
 
         pOIManager.replenishPOI();
+        operationManager.DestroyAll();
 
 
 		checkTurn();
@@ -771,6 +787,104 @@ public class GameManager: MonoBehaviour
     public void stopDrive_Success(SocketIOEvent obj)
     {
 
+    }
+
+    public List<string> parseJsonArray(JSONObject obj)
+    {
+        string result = obj.ToString().TrimStart('[');
+        result = result.TrimEnd(']');
+        string[] words = result.Split(',');
+        List<string> final = new List<string>();
+        foreach(string w in words)
+        {
+            string a = w.TrimStart('\"');
+            a = a.TrimEnd('\"');
+            final.Add(a);
+        }
+        return final;
+    }
+
+    public void changeRole()
+    {
+        if (fireman.FreeAP < 2)
+        {
+            return;
+        }
+        selectRolePanel.SetActive(true);
+        possibleRoles.ClearOptions();
+
+        List<string> roles = new List<string>();
+
+        List<string> allRoles = parseJsonArray(room["selectedRoles"]);
+
+        foreach(string s in allRoles)
+        {
+            Debug.Log(s);
+        }
+        if (!allRoles.Contains("3"))
+        {
+            roles.Add(roleToString(Role.CAFS));
+        }
+        if (!allRoles.Contains("7"))
+        {
+            roles.Add(roleToString(Role.Driver));
+        }
+        if (!allRoles.Contains("1"))
+        {
+            roles.Add(roleToString(Role.Captain));
+        }
+        if (!allRoles.Contains("5"))
+        {
+            roles.Add(roleToString(Role.Generalist));
+        }
+        if (!allRoles.Contains("4"))
+        {
+            roles.Add(roleToString(Role.HazmatTech));
+        }
+        if (!allRoles.Contains("0"))
+        {
+            roles.Add(roleToString(Role.Paramedic));
+        }
+        if (!allRoles.Contains("8"))
+        {
+            roles.Add(roleToString(Role.Dog));
+        }
+        if (!allRoles.Contains("6"))
+        {
+            roles.Add(roleToString(Role.RescueSpec));
+        }
+        if (!allRoles.Contains("9"))
+        {
+            roles.Add(roleToString(Role.Veteran));
+        }
+        if (!allRoles.Contains("2"))
+        {
+            roles.Add(roleToString(Role.ImagingTech));
+        }
+
+        possibleRoles.AddOptions(roles);
+    }
+
+    public void selectRole()
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            if (roleToString((Role)i).Equals(selectedRole.text))
+            {
+                Role oldRole = StaticInfo.role;
+                fireman.setRole((Role)i);
+                fireman.setAP(fireman.FreeAP - 2);
+                displayRole();
+                Dictionary<string, string> change = new Dictionary<string, string>();
+                change["room"] = StaticInfo.roomNumber;
+                change["name"] = StaticInfo.name;
+                change["role"] = ((int)StaticInfo.role).ToString();
+                change["oldRole"] = ((int)oldRole).ToString();
+                socket.Emit("changeRole", new JSONObject(change));
+                break;
+            }
+        }
+        selectRolePanel.SetActive(false);
     }
 
 }

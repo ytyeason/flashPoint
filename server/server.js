@@ -308,7 +308,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         participants[name]["Location"] = Location;
         participants[name]['Driving']=drive;
         console.log(Games[room_number]);
-        socket.broadcast.emit('LocationSetUp_SUCCESS',Games );
+        socket.broadcast.emit('LocationUpdate_SUCCESS',Games );
     });
 
     socket.on('StartCarryV',function(data){
@@ -321,7 +321,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         participants[name]["Location"] = Location;
         participants[name]['Carrying']=carryV;
         console.log(Games[room_number]);
-        socket.broadcast.emit('LocationSetUp_SUCCESS',Games );
+        socket.broadcast.emit('LocationUpdate_SUCCESS',Games );
     });
 
     socket.on('AddPOI',function(data){
@@ -332,13 +332,28 @@ io.on('connection', function (socket) {//default event for client connect to ser
       socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type});
     });
 
-    socket.on('StropDrive',function(data){
+    socket.on('StopDrive',function(data){
       var name=data['name'];
       var room=data['room'];
 
       Games[room]["participants"][name]['Driving']=0;
-      socket.broadcast.emit('LocationSetUp_SUCCESS',Games);
+      socket.broadcast.emit('LocationUpdate_SUCCESS',Games);
 
+    });
+
+    socket.on('changeRole', function(data){
+      var room=data['room'];
+      var name=data['name'];
+      var role=data['role'];
+      var old=data['oldRole'];
+      Games[room]["selectedRoles"].splice(Games[room]["selectedRoles"].indexOf(old),1);
+      Games[room]["selectedRoles"].push(role);
+
+      Games[room]["participants"][name]['Role']=role;
+
+      console.log("changing Role:");
+      console.log(Games[room]);
+      socket.broadcast.emit('LocationUpdate_SUCCESS',Games);
     });
 
 });

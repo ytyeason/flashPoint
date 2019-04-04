@@ -1126,7 +1126,7 @@ public class OperationManager
         Debug.Log("cancel");
     }
 
-    void DestroyAll() {
+    public void DestroyAll() {
         //opPanel.SetActive(false);
         Debug.Log("destroying");
         //for(int i = 0; i < gm.options.Count; i++) {

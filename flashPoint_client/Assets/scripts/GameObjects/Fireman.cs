@@ -462,7 +462,7 @@ public class Fireman
 
         //setAP(AP + savedAP);
         FreeAP = AP + savedAP;
-
+        StaticInfo.role = role;
     }
 
     public void flipPOI(int x, int z)

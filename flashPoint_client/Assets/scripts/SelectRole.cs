@@ -37,32 +37,35 @@ public class SelectRole : MonoBehaviour {
         }
         error.text="";
         switch(role){
-            case "Cafs_Firefighter":
+            case "3":
                 StaticInfo.role=Role.CAFS;
                 break;
-            case "Driver_Operation":
+            case "7":
                 StaticInfo.role=Role.Driver;
                 break;
-            case "Fire_Captain":
+            case "1":
                 StaticInfo.role=Role.Captain;
                 break;
-            case "Generalist":
+            case "5":
                 StaticInfo.role=Role.Generalist;
                 break;
-            case "Hazmat_Technician":
+            case "4":
                 StaticInfo.role=Role.HazmatTech;
                 break;
-            case "Paramedic":
+            case "0":
                 StaticInfo.role=Role.Paramedic;
                 break;
-            case "rescue_dog":
+            case "8":
                 StaticInfo.role=Role.Dog;
                 break;
-            case "Rescue_Specialist":
+            case "6":
                 StaticInfo.role=Role.RescueSpec;
                 break;
-            case "veteran":
+            case "9":
                 StaticInfo.role=Role.Veteran;
+                break;
+            case "2":
+                StaticInfo.role = Role.ImagingTech;
                 break;
         }
         Debug.Log("selectRole successful");
@@ -91,9 +94,43 @@ public class SelectRole : MonoBehaviour {
         // StaticInfo.role=role;
         
         Debug.Log(role);
-        
+        Role r = Role.None;
+        switch (role)
+        {
+            case "Cafs_Firefighter":
+                r = Role.CAFS;
+                break;
+            case "Driver_Operation":
+                r = Role.Driver;
+                break;
+            case "Fire_Captain":
+                r = Role.Captain;
+                break;
+            case "Generalist":
+                r = Role.Generalist;
+                break;
+            case "Hazmat_Technician":
+                r = Role.HazmatTech;
+                break;
+            case "Paramedic":
+                r = Role.Paramedic;
+                break;
+            case "rescue_dog":
+                r = Role.Dog;
+                break;
+            case "Rescue_Specialist":
+                r = Role.RescueSpec;
+                break;
+            case "veteran":
+                r = Role.Veteran;
+                break;
+            case "Imaging_Technician":
+                r = Role.ImagingTech;
+                break;
+        }
+
         Dictionary<String, String> selectedRole = new Dictionary<string, string>();
-        selectedRole["role"] = role;
+        selectedRole["role"] = ((int)r).ToString();
         selectedRole["room"] = StaticInfo.roomNumber;
         socket.Emit("SelectRole",new JSONObject(selectedRole));
     }
