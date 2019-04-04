@@ -84,6 +84,8 @@ public class GameManager: MonoBehaviour
         socket.On("revealPOI_Success", revealPOI_SUCCESS);
         socket.On("treatV_Success", UpdateTreatV_Success);
         socket.On("UpdatePOILocation_Success", UpdatePOILocation_Success);
+        socket.On("UpdateAmbulanceLocation_Success", UpdateAmbulanceLocation_Success);
+        socket.On("UpdateEngineLocation_Success", UpdateEngineLocation_Success);
         socket.On("UpdateTreatedLocation_Success", UpdateTreatedLocation_Success);
         socket.On("RemoveHazmat_Success", RemoveHazmat_Success);
         socket.On("UpdateHazmatLocation_Success", UpdateHazmatLocation_Success);
@@ -289,9 +291,46 @@ public class GameManager: MonoBehaviour
             Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
+    }
 
+//for vehicles
+    public void UpdateAmbulanceLocation(int newx,int newz)
+    {
+        Dictionary<String, string> location = new Dictionary<string, string>();
+        location["newx"] = newx.ToString();
+        location["newz"] = newz.ToString();
+
+        socket.Emit("UpdateAmbulanceLocation", new JSONObject(location));
+        Debug.Log("update ambulance location");
 
     }
+
+
+    public void UpdateAmbulanceLocation_Success(SocketIOEvent obj)
+    {
+        int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
+        int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
+        tileMap.ambulance.moveNextStation(newx, newz);
+    }
+
+        public void UpdateEngineLocation(int newx,int newz)
+    {
+        Dictionary<String, string> location = new Dictionary<string, string>();
+        location["newx"] = newx.ToString();
+        location["newz"] = newz.ToString();
+
+        socket.Emit("UpdateEngineLocation", new JSONObject(location));
+        Debug.Log("update eng location");
+
+    }
+    
+    public void UpdateEngineLocation_Success(SocketIOEvent obj)
+    {
+        int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
+        int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
+        tileMap.engine.moveNextStation(newx, newz);
+    }
+
 
     void checkingTurn_Success(SocketIOEvent obj)
     {

@@ -212,7 +212,7 @@ public class OperationManager
                 double vx = (double)gm.enG.x / 6;
                 double vz = (double)gm.enG.z / 6;
 
-                Debug.Log("int same place deck gun");
+                // Debug.Log("int same place deck gun");
 
                 if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
                 {
@@ -522,13 +522,13 @@ public class OperationManager
 
             if (gm.tileMap.tiles[x, z] == 3 ) // fire deck gun && ride
             {
-                Debug.Log("in deckgun");
+                // Debug.Log("in deckgun");
                 double vx = (double)gm.enG.x / 6;
                 double vz = (double)gm.enG.z / 6;
                 Fireman fireman=gm.fireman;
 
-                Debug.Log(currentX+" "+currentZ);
-                Debug.Log(vx+" "+vz);
+                // Debug.Log(currentX+" "+currentZ);
+                // Debug.Log(vx+" "+vz);
 
                 if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
                 {
@@ -537,7 +537,7 @@ public class OperationManager
                     //    Operation op = new Operation(this, OperationType.StopDrive);
                     //    possibleOp.Add(op);
                     //}
-                    Debug.Log("in parking");
+                    // Debug.Log("in parking");
 
                     int minX=0, maxX = 0;
                     int minZ=0, maxZ = 0;
@@ -569,7 +569,7 @@ public class OperationManager
                         minZ = 4;
                         maxZ = 6;
                     }
-                    Debug.Log(minX+" "+minZ);
+                    // Debug.Log(minX+" "+minZ);
                     bool existsF = false;
                     foreach (JSONObject o in gm.players.Values)
                     {
@@ -577,11 +577,11 @@ public class OperationManager
                         {
                             for(int j = minZ; j <= maxZ; j++)
                             {
-                                Debug.Log(o["Location"]);
+                                // Debug.Log(o["Location"]);
                                 if (o["Location"].Equals(i * 6 + "," + j * 6))
                                 {
                                     existsF = true;
-                                    Debug.Log("another fireman here");
+                                    // Debug.Log("another fireman here");
                                     break;
                                 }
                             }
@@ -589,7 +589,7 @@ public class OperationManager
                         }
                         if (existsF) break;
                     }
-                    Debug.Log(existsF);
+                    // Debug.Log(existsF);
                     if (!existsF)
                     {
                         Operation op = new Operation(this, OperationType.DeckGun);
@@ -973,6 +973,7 @@ public class OperationManager
         {
             gm.startDrive(1);
             amb.moveNextStation(x,z);
+            gm.UpdateAmbulanceLocation(x, z);
             opPanel.SetActive(false);
             DestroyAll();
         }
@@ -980,6 +981,7 @@ public class OperationManager
         {
             gm.startDrive(2);
             eng.moveNextStation(x,z);
+            gm.UpdateEngineLocation(x, z);
             opPanel.SetActive(false);
             DestroyAll();
         }
@@ -1055,19 +1057,19 @@ public class OperationManager
         //need to ask player if he is satisfied with the extinguishing area
         Fireman fireman = gm.tileMap.selectedUnit;
         gm.tileMap.buildNewTile(rng_X, rng_Z,0);
-        if (!gm.wallManager.checkIfVWall(rng_X, rng_Z)&&!gm.doorManager.checkIfVDoor(rng_X, rng_Z)){
+        if (!gm.wallManager.isVeritcalWall(rng_X, rng_Z)&&!gm.doorManager.isVerticalDoor(rng_X, rng_Z)){
             Debug.Log("im in 1");
             gm.tileMap.buildNewTile(rng_X-1, rng_Z,0);
         }
-        if (!gm.wallManager.checkIfVWall(rng_X+1, rng_Z)&&!gm.doorManager.checkIfVDoor(rng_X+1, rng_Z)){
+        if (!gm.wallManager.isVeritcalWall(rng_X+1, rng_Z)&&!gm.doorManager.isVerticalDoor(rng_X+1, rng_Z)){
             Debug.Log("im in 2");
             gm.tileMap.buildNewTile(rng_X+1, rng_Z,0);
         }
-        if (!gm.wallManager.checkIfHWall(rng_X, rng_Z)&&!gm.doorManager.checkIfHDoor(rng_X, rng_Z)){
+        if (!gm.wallManager.isHorizontalWall(rng_X, rng_Z)&&!gm.doorManager.isHorizontalDoor(rng_X, rng_Z)){
             Debug.Log("im in 3");
             gm.tileMap.buildNewTile(rng_X, rng_Z+1,0);
         }
-        if (!gm.wallManager.checkIfHWall(rng_X, rng_Z-1)&&!gm.doorManager.checkIfHDoor(rng_X, rng_Z-1)){
+        if (!gm.wallManager.isHorizontalWall(rng_X, rng_Z-1)&&!gm.doorManager.isHorizontalDoor(rng_X, rng_Z-1)){
             Debug.Log("im in 4");
             gm.tileMap.buildNewTile(rng_X, rng_Z-1,0);
         }       
