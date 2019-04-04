@@ -69,7 +69,7 @@ public class Ambulance : MonoBehaviour {
 		if ((dx==4&&dz==7)||(dx==5&&dz==7))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, -angle*2, 0);
 			}
@@ -86,7 +86,7 @@ public class Ambulance : MonoBehaviour {
 		else if ((dx==0&&dz==2)||(dx==0&&dz==3))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, -angle*2, 0);
 			}
@@ -102,7 +102,7 @@ public class Ambulance : MonoBehaviour {
 		else if ((dx==4&&dz==0)||(dx==5&&dz==0))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, -angle*2, 0);
 			}
@@ -118,7 +118,7 @@ public class Ambulance : MonoBehaviour {
 		else if((dx==9&&dz==4)||(dx==9&&dz==5))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, -angle*2, 0);
 			}

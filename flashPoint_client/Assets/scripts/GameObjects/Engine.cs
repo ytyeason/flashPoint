@@ -53,7 +53,7 @@ public class Engine : MonoBehaviour {
 		if ((dx==7&&dz==7)||((dx==8&&dz==7)))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
 			}
@@ -70,7 +70,7 @@ public class Engine : MonoBehaviour {
 		else if ((dx==0&&dz==5)||((dx==0&&dz==6)))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
 			}
@@ -80,13 +80,13 @@ public class Engine : MonoBehaviour {
 			// //System.Threading.Thread.Sleep(500);
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*950);
 			v.transform.position=new Vector3(dx*6, 0, 33);
-			x=dz*6;
+			x=dx*6;
 			z=33;
 		}
 		else if ((dx==1&&dz==0)||((dx==2&&dz==0)))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
 			}
@@ -95,14 +95,14 @@ public class Engine : MonoBehaviour {
 			}
 			// //System.Threading.Thread.Sleep(500);
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*950);
-			v.transform.position=new Vector3(9, 0, dz*9);
+			v.transform.position=new Vector3(9, 0, dz*6);
 			x=9;
-			dz=6;
+			z=dz*6;
 		}
 		else if((dx==9&&dz==1)||((dx==9&&dz==2)))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
-			if (Math.Abs(dx-x/6)>7||Math.Abs(dz-z/6)>5)
+			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
 			}
@@ -112,7 +112,7 @@ public class Engine : MonoBehaviour {
 			// //System.Threading.Thread.Sleep(500);
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*950);
 			v.transform.position=new Vector3(dx*6, 0, 9);
-			x=dz*6;
+			x=dx*6;
 			z=9;
 
 		}
