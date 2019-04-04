@@ -95,28 +95,65 @@ public class POIManager{
     public void kill(int x, int z)
     {
         int[] key = new int[] { x, z };
+        
         if(containsKey(key[0], key[1], placedPOI))
         {
             POI p = getPOI(key[0],key[1],placedPOI);
             p.setStatus(POIStatus.Removed);
-            killed++;
+            if (p.type != POIType.FalseAlarm)
+            {
+                killed++;
+            }
             Remove(key[0],key[1],placedPOI);
             gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
             Remove(key[0],key[1],poiLookup);
         }
+        if (containsKey(key[0], key[1], movingPOI))
+        {
+            POI p = getPOI(key[0], key[1], movingPOI);
+            p.setStatus(POIStatus.Removed);
+            killed++;
+            Remove(key[0], key[1], movingPOI);
+            gm.DestroyObject(getPOIPrefab(key[0], key[1], movingPOILookup));
+            Remove(key[0], key[1], movingPOILookup);
+        }
+
+        if (containsKey(key[0], key[1], movingTreated))
+        {
+            POI p = getPOI(key[0], key[1], movingTreated);
+            p.setStatus(POIStatus.Removed);
+            killed++;
+            Remove(key[0], key[1], movingTreated);
+            gm.DestroyObject(getPOIPrefab(key[0], key[1], movingTreatedLookup));
+            Remove(key[0], key[1], movingTreatedLookup);
+        }
     }
 
-    public void rescue(int x, int z)
+    public void rescueCarried(int x, int z)
     {
         int[] key = new int[] { x, z };
-        if (containsKey(key[0], key[1], placedPOI))
+        if (containsKey(key[0], key[1], movingPOI))
         {
-            POI p = getPOI(key[0],key[1],placedPOI);
+            POI p = getPOI(key[0],key[1],movingPOI);
             p.setStatus(POIStatus.Removed);
             rescued++;
-            Remove(key[0],key[1],placedPOI);
-            gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
-            Remove(key[0],key[1],poiLookup);
+            Remove(key[0],key[1],movingPOI);
+            gm.DestroyObject(getPOIPrefab(key[0],key[1], movingPOILookup));
+            Remove(key[0],key[1],movingPOILookup);
+        }
+    }
+
+    public void rescueTreated(int x, int z)
+    {
+        int[] key = new int[] { x, z };
+        if (containsKey(key[0], key[1], movingTreated))
+        {
+            POI p = getPOI(key[0], key[1], movingTreated);
+            p.setStatus(POIStatus.Removed);
+            rescued++;
+            Remove(key[0], key[1], movingTreated);
+            gm.DestroyObject(getPOIPrefab(key[0], key[1], movingTreatedLookup));
+            Remove(key[0], key[1], movingTreatedLookup);
         }
     }
 

@@ -335,7 +335,7 @@ public int HorizontalDoor(int x, int z)
 
 		foreach (var key in keyList)
 		{
-			if (key[0] == x && key[1] == z && hdoorStores[key].GetComponent<Door>() == null)
+			if (key[0] == x && key[1] == z && hdoorStores[key].GetComponent<Door>() == null&&hdoorStores[key].GetComponent<Door>().type!=4)
 			{
 				return true;
 			}
@@ -351,7 +351,7 @@ public int HorizontalDoor(int x, int z)
 
 		foreach (var key in keyList)
 		{
-			if (key[0] == x && key[1] == z && vdoorStores[key].GetComponent<Door>() == null)
+			if (key[0] == x && key[1] == z && vdoorStores[key].GetComponent<Door>() == null && hdoorStores[key].GetComponent<Door>().type != 5)
 			{
 				return true;
 			}

@@ -3217,8 +3217,8 @@ MonoBehaviour:
   socket: {fileID: 1363472030}
   firemanObject: {fileID: 1847778216}
   firemanplusObject: {fileID: 0}
-  ambulance: {fileID: 257392398}
-  engine: {fileID: 1334519896}
+  ambulance: {fileID: 100000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
+  engine: {fileID: 100002, guid: 20aa7f73247c74045b530e62d2ff0f4d, type: 3}
   tileTypes:
   - name: Normal
     tileVisualPrefab: {fileID: 1899577080576674, guid: 0290d3a6b4a471244a4e1947028f52a5,
