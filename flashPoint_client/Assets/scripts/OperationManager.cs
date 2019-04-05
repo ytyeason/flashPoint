@@ -306,6 +306,47 @@ public class OperationManager
                 }
             }
 
+            // command move
+            if(inCommand){
+                bool moveTo=false;
+                if(Math.Abs(controlled.currentX-x)+Math.Abs(controlled.currentZ-z)==1&&(controlled.currentX==x&&controlled.currentZ<z&&(!gm.wallManager.checkIfHWall(x,z)&&!gm.doorManager.checkIfHDoor(x,z)||gm.doorManager.checkIfOpenHDoor(x,z))||controlled.currentX==x&&controlled.currentZ>z&&(!gm.wallManager.checkIfHWall(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfHDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenHDoor(controlled.currentX,controlled.currentZ))
+                ||controlled.currentZ==z&&(controlled.currentX<x&&!gm.wallManager.checkIfVWall(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ==z&&controlled.currentX>x&&(!gm.wallManager.checkIfVWall(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfVDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenVDoor(controlled.currentX,controlled.currentZ)))){
+                    moveTo=true;
+                }
+                if(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.ledPOI!=null)) moveTo=false;
+                int requiredAP=1;
+                if(gm.tileMap.tiles[x,z]==2||controlled.carryingVictim){
+                    requiredAP=2;
+                }
+                if(moveTo){
+                    if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
+                        Operation op=new Operation(this,OperationType.Move);
+                        possibleOp.Add(op);
+                    }else if(controlled.role==Role.Paramedic||controlled.role==Role.RescueSpec){
+                        if(fireman.remainingSpecAp>=requiredAP*2){
+                            Operation op=new Operation(this,OperationType.Move);
+                        possibleOp.Add(op);
+                        }
+                    }else{
+                        Operation op=new Operation(this,OperationType.Move);
+                        possibleOp.Add(op);
+                    }
+                }
+            }
+
+            if(!inCommand){
+                if (gm.fireman.role == Role.Captain)
+                {
+                    foreach(JSONObject o in gm.players.Values)
+                    {
+                        if (o["Location"].Equals( x*6 + "," + z*6))
+                        {
+                            Operation op = new Operation(this, OperationType.Command);
+                            possibleOp.Add(op);
+                        }
+                    }
+                }
+            }
             
         }
         else if (diffX + diffZ == 1) // neighbor tile (fire, move)
@@ -318,7 +359,7 @@ public class OperationManager
                 if (currentZ < z) // below the target
                 {
                     int[] key = new int[] { x, z };
-                    if (!gm.wallManager.checkIfHWall(key[0], key[1])&& !gm.doorManager.checkIfHDoor(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfHWall(key[0], key[1])&& !gm.doorManager.checkIfHDoor(key[0], key[1])||gm.doorManager.checkIfOpenHDoor(key[0],key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2) 
                         {
@@ -334,7 +375,7 @@ public class OperationManager
                 else // above the target
                 {
                     int[] key = new int[] { currentX, currentZ };
-                    if (!gm.wallManager.checkIfHWall(key[0], key[1])&& !gm.doorManager.checkIfHDoor(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfHWall(key[0], key[1])&& !gm.doorManager.checkIfHDoor(key[0], key[1])||gm.doorManager.checkIfOpenHDoor(key[0],key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -353,7 +394,7 @@ public class OperationManager
                 if (currentX < x) // left of the target
                 {
                     int[] key = new int[] { x, z };
-                    if (!gm.wallManager.checkIfVWall(key[0], key[1])&& !gm.doorManager.checkIfVDoor(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfVWall(key[0], key[1])&& !gm.doorManager.checkIfVDoor(key[0], key[1])||gm.doorManager.checkIfOpenVDoor(key[0],key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -369,7 +410,7 @@ public class OperationManager
                 else // right to the target
                 {
                     int[] key = new int[] { currentX, currentZ };
-                    if (!gm.wallManager.checkIfVWall(key[0], key[1])&&!gm.doorManager.checkIfVDoor(key[0], key[1])) // no wall or destroyed wall
+                    if (!gm.wallManager.checkIfVWall(key[0], key[1])&&!gm.doorManager.checkIfVDoor(key[0], key[1])||gm.doorManager.checkIfOpenVDoor(key[0],key[1])) // no wall or destroyed wall
                     {
                         if (gm.tileMap.tiles[x, z] >= 1 && gm.tileMap.tiles[x, z] <= 2)
                         {
@@ -452,18 +493,10 @@ public class OperationManager
                 }
                 */
                 
-                if (!gm.wallManager.checkIfHWall(keyM[0],keyM[1]))
+                if (!gm.wallManager.checkIfHWall(keyM[0],keyM[1])&&!gm.doorManager.checkIfHDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenHDoor(keyM[0],keyM[1]))
                 {
-
-                    foreach(int[] a in gm.wallManager.hwallStores.Keys)
-                    {
-                        Debug.Log(a[0] + " " + a[1]);
-                    }
                     moveTo = true;
-                    if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
-                    {
-                        moveTo = true;
-                    }
+                    
                 }
             }
             else // same row
@@ -478,31 +511,23 @@ public class OperationManager
                     keyM[0] = currentX;
                     keyM[1] = currentZ;
                 }
-                if (!gm.wallManager.checkIfVWall(keyM[0],keyM[1]))
+                if (!gm.wallManager.checkIfVWall(keyM[0],keyM[1])&&!gm.doorManager.checkIfVDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenVDoor(keyM[0],keyM[1]))
                 {
-
-                    foreach(int[] a in gm.wallManager.vwallStores.Keys)
-                    {
-                        Debug.Log(a[0] + " " + a[1]);
-                    }
                     moveTo = true;
-                    if (!gm.doorManager.checkIfVDoor(keyM[0], keyM[1]))
-                    {
-                        moveTo = true;
-                    }
+                    
                 }
             }
             if (gm.tileMap.tiles[x, z] == 2 && (gm.tileMap.selectedUnit.carryingVictim||gm.tileMap.selectedUnit.ledPOI!=null)) moveTo = false;
             //if (gm.tileMap.selectedUnit.driving) moveTo = false;
-            if (inCommand)
-            {
-                int distantX = Math.Abs(controlled.currentX - x);
-                int distantZ = Math.Abs(controlled.currentZ - z);
-                if (distantX + distantZ != 1)
-                {
-                    moveTo = false;
-                }
-            }
+            // if (inCommand)
+            // {
+            //     int distantX = Math.Abs(controlled.currentX/6 - x);
+            //     int distantZ = Math.Abs(controlled.currentZ/6 - z);
+            //     if (distantX + distantZ != 1)
+            //     {
+            //         moveTo = false;
+            //     }
+            // }
 
             Debug.Log(extingFire);
             Debug.Log(gm.tileMap.selectedUnit.FreeAP);
@@ -660,11 +685,39 @@ public class OperationManager
 
             if (inCommand)
             {
-                if (x == controlled.currentX && z == controlled.currentZ)
+                if (x == controlled.currentX/6 && z == controlled.currentZ/6)
                 {
                     Operation op = new Operation(this, OperationType.StopCommand);
                     possibleOp.Add(op);
                 }
+
+                bool moveTo1=false;
+                if(Math.Abs(controlled.currentX-x)+Math.Abs(controlled.currentZ-z)==1&&(controlled.currentX==x&&controlled.currentZ<z&&(!gm.wallManager.checkIfHWall(x,z)&&!gm.doorManager.checkIfHDoor(x,z)||gm.doorManager.checkIfOpenHDoor(x,z))||controlled.currentX==x&&controlled.currentZ>z&&(!gm.wallManager.checkIfHWall(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfHDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenHDoor(controlled.currentX,controlled.currentZ))
+                ||controlled.currentZ==z&&controlled.currentX<x&&(!gm.wallManager.checkIfVWall(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ==z&&controlled.currentX>x&&(!gm.wallManager.checkIfVWall(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfVDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenVDoor(controlled.currentX,controlled.currentZ)))){
+                    moveTo1=true;
+                }
+
+                if(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.ledPOI!=null)) moveTo1=false;
+
+                int requiredAP=1;
+                if(gm.tileMap.tiles[x,z]==2||controlled.carryingVictim){
+                    requiredAP=2;
+                }
+                if(moveTo1){
+                    if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
+                        Operation op=new Operation(this,OperationType.Move);
+                        possibleOp.Add(op);
+                    }else if(controlled.role==Role.Paramedic||controlled.role==Role.RescueSpec){
+                        if(gm.fireman.remainingSpecAp>=requiredAP*2){
+                            Operation op=new Operation(this,OperationType.Move);
+                        possibleOp.Add(op);
+                        }
+                    }else{
+                        Operation op=new Operation(this,OperationType.Move);
+                        possibleOp.Add(op);
+                    }
+                }
+                
             }else{
                 if (gm.fireman.role == Role.Captain)
                 {
@@ -703,56 +756,48 @@ public class OperationManager
                 }
                 if (inCommand)
                 {
-                    int distantX = Math.Abs(controlled.currentX - x);
-                    int distantZ = Math.Abs(controlled.currentZ);
+                    int distantX = Math.Abs(controlled.currentX/6 - x);
+                    int distantZ = Math.Abs(controlled.currentZ/6-z);
 
                     Boolean moveTo = false;
                     int[] keyM = new int[2];
-                    if (distantX + diffZ == 1)
+                    if (distantX + distantZ == 1)
                     {
-                        if (controlled.currentX == x) // same column
+                        if (controlled.currentX/6 == x) // same column
                         {
-                            if (controlled.currentZ < z) // below the target
+                            if (controlled.currentZ/6 < z) // below the target
                             {
                                 keyM[0] = x;
                                 keyM[1] = z;
                             }
                             else // above
                             {
-                                keyM[0] = controlled.currentX;
-                                keyM[1] = controlled.currentZ;
+                                keyM[0] = controlled.currentX/6;
+                                keyM[1] = controlled.currentZ/6;
                             }
-                            if (!gm.wallManager.checkIfHWall(keyM[0], keyM[1]))
-                            {
-                                moveTo = true;
-                            }
-                            if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
+                            if (!gm.wallManager.checkIfHWall(keyM[0], keyM[1])&&!gm.doorManager.checkIfHDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenHDoor(keyM[0],keyM[1]))
                             {
                                 moveTo = true;
                             }
                         }
                         else // same row
                         {
-                            if (controlled.currentX < x) // left
+                            if (controlled.currentX/6 < x) // left
                             {
                                 keyM[0] = x;
                                 keyM[1] = z;
                             }
                             else
                             {
-                                keyM[0] = controlled.currentX;
-                                keyM[1] = controlled.currentZ;
+                                keyM[0] = controlled.currentX/6;
+                                keyM[1] = controlled.currentZ/6;
                             }
-                            if (!gm.wallManager.checkIfVWall(keyM[0], keyM[1]))
-                            {
-                                moveTo = true;
-                            }
-                            if (!gm.doorManager.checkIfVDoor(keyM[0], keyM[1]))
+                            if (!gm.wallManager.checkIfVWall(keyM[0], keyM[1])&&!gm.doorManager.checkIfVDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenVDoor(keyM[0],keyM[1]))
                             {
                                 moveTo = true;
                             }
                         }
-                        if (gm.tileMap.tiles[x, z] == 2 && controlled.carryingVictim) {
+                        if (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim||controlled.ledPOI!=null)) {
                             moveTo = false;
                         }
                         //if (controlled.driving) moveTo = false;
@@ -762,9 +807,9 @@ public class OperationManager
                         {
                             requiredAP = 2;
                         }
-                        if (controlled.role == Role.CAFS&&commandMoves>0) // not commanded before
+                        if (controlled.role == Role.CAFS&&commandMoves>=requiredAP) // not commanded before
                         {
-                            if (moveTo&&fireman.specialtyAP>=requiredAP)
+                            if (moveTo&&fireman.remainingSpecAp>=requiredAP)
                             {
                                 Operation op = new Operation(this, OperationType.Move);
                                 possibleOp.Add(op);
@@ -772,7 +817,7 @@ public class OperationManager
                         }
                         else if(controlled.role == Role.RescueSpec|| controlled.role == Role.Paramedic)
                         {
-                            if (moveTo && fireman.specialtyAP >= requiredAP * 2)
+                            if (moveTo && fireman.remainingSpecAp >= requiredAP * 2)
                             {
                                 Operation op = new Operation(this, OperationType.Move);
                                 possibleOp.Add(op);
@@ -780,7 +825,7 @@ public class OperationManager
                         }
                         else
                         {
-                            if (moveTo && fireman.specialtyAP >= requiredAP)
+                            if (moveTo && fireman.remainingSpecAp >= requiredAP)
                             {
                                 Operation op = new Operation(this, OperationType.Move);
                                 possibleOp.Add(op);
@@ -900,7 +945,7 @@ public class OperationManager
             }
             gm.UpdateLocation(x, z, controlled.name);
             int requiredAP = 1;
-            if (gm.tileMap.tiles[x, z] == 2)
+            if (gm.tileMap.tiles[x, z] == 2||(controlled.carryingVictim))
             {
                 requiredAP = 2;
             }

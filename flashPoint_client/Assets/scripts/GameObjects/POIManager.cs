@@ -31,7 +31,7 @@ public class POIManager{
     {
         this.gm = gm;
         generatePOI();
-        replenishPOI();
+        initiatePOI();
     }
 
     public void generatePOI()
@@ -48,9 +48,27 @@ public class POIManager{
         }
     }
 
+    public void initiatePOI(){
+        placedPOI=new Dictionary<int[], POI>();
+        foreach(var key in poiLookup.Keys){
+            gm.DestroyObject(poiLookup[key]);
+        }
+        poiLookup=new Dictionary<int[], GameObject>();
+        gm.initializePOI();
+        replenishPOI();
+    }
+
+    public void refreshPOI(){
+        placedPOI=new Dictionary<int[], POI>();
+        foreach(var key in poiLookup.Keys){
+            gm.DestroyObject(poiLookup[key]);
+        }
+        poiLookup=new Dictionary<int[], GameObject>();
+    }
+
     public void replenishPOI()
     {
-        int size = placedPOI.Count;
+        int size = placedPOI.Count+movingPOI.Count+movingTreated.Count+treated.Count;
         for(int i = 0; i < 3 - size; i++)
         {
             int randX = rand.Next(1, 9);

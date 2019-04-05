@@ -335,12 +335,25 @@ public int HorizontalDoor(int x, int z)
 
 		foreach (var key in keyList)
 		{
-			if (key[0] == x && key[1] == z && hdoorStores[key].GetComponent<Door>() == null&&hdoorStores[key].GetComponent<Door>().type!=4)
+			if (key[0] == x && key[1] == z && hdoorStores[key].GetComponent<Door>() != null&&hdoorStores[key].GetComponent<Door>().type!=4)
 			{
 				return true;
 			}
 		}
 
+		return false;
+	}
+
+	public bool checkIfOpenHDoor(int x, int z){
+		List<int[]> keyList = new List<int[]>(hdoorStores.Keys);
+
+		foreach (var key in keyList)
+		{
+			if (key[0] == x && key[1] == z && hdoorStores[key].GetComponent<Door>() != null&&hdoorStores[key].GetComponent<Door>().type==2)
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -351,12 +364,25 @@ public int HorizontalDoor(int x, int z)
 
 		foreach (var key in keyList)
 		{
-			if (key[0] == x && key[1] == z && vdoorStores[key].GetComponent<Door>() == null && hdoorStores[key].GetComponent<Door>().type != 5)
+			if (key[0] == x && key[1] == z && vdoorStores[key].HasComponent<Door>() && vdoorStores[key].GetComponent<Door>().type != 5)
 			{
 				return true;
 			}
 		}
 
+		return false;
+	}
+
+	public bool checkIfOpenVDoor(int x, int z){
+		List<int[]> keyList = new List<int[]>(vdoorStores.Keys);
+
+		foreach (var key in keyList)
+		{
+			if (key[0] == x && key[1] == z && vdoorStores[key].HasComponent<Door>()&&vdoorStores[key].GetComponent<Door>().type==3)
+			{
+				return true;
+			}
+		}
 		return false;
 	}
 

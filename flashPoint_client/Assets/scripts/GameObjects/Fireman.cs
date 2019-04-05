@@ -398,7 +398,8 @@ public class Fireman
         if (gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI) && gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI).status == POIStatus.Hidden)
         {
             gm.pOIManager.reveal(x, z);
-            pOIManager.gm.updateRevealPOI(x, z);
+            Debug.Log("has poi");
+            gm.updateRevealPOI(x, z);
         }
     }
 
@@ -571,14 +572,14 @@ public class Fireman
         this.carryingVictim = true;
         this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
         gm.pOIManager.carryPOI(x, z);
-        gm.startCarryV();
+        gm.startCarryV(x,z);
     }
 
     public void leadV(int x, int z)
     {
         this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
         gm.pOIManager.leadPOI(x, z);
-        gm.startCarryV();
+        gm.startLeadV(x,z);
     }
 
     public void carryHazmat(int x,int z)
@@ -586,7 +587,7 @@ public class Fireman
         this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
         this.carryingVictim = true;
         gm.hazmatManager.carryHazmat(x, z);
-        gm.startCarryV();
+        gm.startCarryHazmat(x,z);
     }
 
 

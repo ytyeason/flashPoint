@@ -193,6 +193,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(Games[room_number]);
         // console.log(Games[room_number]['Turn']);
         var turn_name = Games[room_number]['Turn'];
+        console.log("turn: "+turn_name);
         if(turn_name.localeCompare(name)==0){//name matches
             var participants_in_order = Games[room_number]["participants_in_order"];
             var index = participants_in_order.indexOf(turn_name);
@@ -229,6 +230,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var x = data['x'];
         var z = data['z'];
         
+        console.log("revealing poi");
         console.log(x);
         console.log(z);
         
@@ -329,12 +331,44 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var Location = data['Location'];
         var name = data['name'];
         var carryV=data['carryV'];
+        var x=data['x'];
+        var z=data['z'];
 
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
         participants[name]['Carrying']=carryV;
         console.log(Games[room_number]);
-        socket.broadcast.emit('LocationUpdate_SUCCESS',Games );
+        socket.broadcast.emit('StartCarryV_Success', {"Games":Games, "x":x, "z":z} );
+    });
+
+    socket.on('StartLeadV',function(data){
+      var room_number = data['room'];
+        var Location = data['Location'];
+        var name = data['name'];
+        var carryV=data['carryV'];
+        var x=data['x'];
+        var z=data['z'];
+
+        var participants = Games[room_number]["participants"];
+        participants[name]["Location"] = Location;
+        participants[name]['Carrying']=carryV;
+        console.log(Games[room_number]);
+        socket.broadcast.emit('StartLeadV_Success', {"Games":Games, "x":x, "z":z} );
+    });
+
+    socket.on('StartCarryHazmat',function(data){
+      var room_number = data['room'];
+        var Location = data['Location'];
+        var name = data['name'];
+        var carryV=data['carryV'];
+        var x=data['x'];
+        var z=data['z'];
+
+        var participants = Games[room_number]["participants"];
+        participants[name]["Location"] = Location;
+        participants[name]['Carrying']=carryV;
+        console.log(Games[room_number]);
+        socket.broadcast.emit('StartCarryHazmat', {"Games":Games, "x":x, "z":z} );
     });
 
     socket.on('AddPOI',function(data){
@@ -367,6 +401,10 @@ io.on('connection', function (socket) {//default event for client connect to ser
       console.log("changing Role:");
       console.log(Games[room]);
       socket.broadcast.emit('LocationUpdate_SUCCESS',Games);
+    });
+
+    socket.on('InitializePOI', function(){
+      socket.broadcast.emit('InitializePOI_Success');
     });
 
 });
