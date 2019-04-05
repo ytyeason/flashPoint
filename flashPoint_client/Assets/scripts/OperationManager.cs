@@ -449,12 +449,28 @@ public class OperationManager
                     keyM[0] = currentX;
                     keyM[1] = currentZ;
                 }
+                /*
                 if (!gm.wallManager.checkIfHWall(keyM[0], keyM[1])) {
                     moveTo = true;
                 }
                 if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
                 {
                     moveTo = true;
+                }
+                */
+                
+                if (!gm.wallManager.checkIfHWall(keyM[0],keyM[1]))
+                {
+
+                    foreach(int[] a in gm.wallManager.hwallStores.Keys)
+                    {
+                        Debug.Log(a[0] + " " + a[1]);
+                    }
+                    moveTo = true;
+                    if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
+                    {
+                        moveTo = true;
+                    }
                 }
             }
             else // same row
