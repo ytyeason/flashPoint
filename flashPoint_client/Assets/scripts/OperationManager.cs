@@ -1195,7 +1195,7 @@ public class OperationManager
     public void deckGun()
     {
         int requiredAP = 4;
-        if (controlled.role == Role.Driver)
+        if (gm.fireman.role == Role.Driver)
         {
             requiredAP = 2;
         }
