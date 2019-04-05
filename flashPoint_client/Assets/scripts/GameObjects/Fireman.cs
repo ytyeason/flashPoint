@@ -33,6 +33,7 @@ public class Fireman
     public int remainingSpecAp = 0;
 
     public bool carryingVictim = false;
+    public bool leadingVictim=false;
     public POI carriedPOI;
     public Hazmat carriedHazmat;
     public POI ledPOI;
@@ -81,7 +82,7 @@ public class Fireman
         //}
     }
 
-    public Fireman(int in_x, int in_z, Role role, int drive, bool carrying, string name)
+    public Fireman(int in_x, int in_z, Role role, int drive, int ride, bool carrying, bool leading, string name)
     {
         this.currentX = in_x;
         this.currentZ = in_z;
@@ -91,7 +92,12 @@ public class Fireman
             this.driving = true;
             vehicle = drive;
         }
+        if(ride!=0){
+            this.riding=true;
+            vehicle=ride;
+        }
         this.carryingVictim = carrying;
+        this.leadingVictim=leading;
         this.name = name;
     }
 
@@ -579,6 +585,7 @@ public class Fireman
     {
         this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
         gm.pOIManager.leadPOI(x, z);
+        this.leadingVictim=true;
         gm.startLeadV(x,z);
     }
 

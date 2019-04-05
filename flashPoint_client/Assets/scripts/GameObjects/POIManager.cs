@@ -264,6 +264,31 @@ public class POIManager{
         obj.transform.position = new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 + 1.5));
     }
 
+    public void dropPOI(int x, int z){
+        if(containsKey(x,z,movingPOI)){
+            POI p=getPOI(x,z,movingPOI);
+            GameObject obj=getPOIPrefab(x,z,movingPOILookup);
+            Remove(x,z,movingPOI);
+            Remove(x,z,movingPOILookup);
+
+            int[] key=new int[]{x,z};
+            placedPOI.Add(key,p);
+            poiLookup.Add(key,obj);
+            obj.transform.position=new Vector3((float)(x*6-1.5),posY,(float)(z*6+1.5));
+        }
+        else if(containsKey(x,z,movingTreated)){
+            POI p=getPOI(x,z,movingTreated);
+            GameObject obj=getPOIPrefab(x,z,movingTreatedLookup);
+            Remove(x,z,movingTreated);
+            Remove(x,z,movingTreatedLookup);
+
+            int[] key=new int[]{x,z};
+            treated.Add(key,p);
+            treatedLookup.Add(key,obj);
+            obj.transform.position=new Vector3((float)(x*6-1.5),posY,(float)(z*6+1.5));
+        }
+    }
+
     public bool containsKey(int x, int z, Dictionary<int[],POI> list)
     {
         foreach(var key in list.Keys)

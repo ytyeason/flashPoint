@@ -200,7 +200,7 @@ public class OperationManager
                 }
             }
 
-            if(!gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat))
+            if(!gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat)&&!gm.hazmatManager.containsKey(key[0],key[1],gm.hazmatManager.placedHotspot))
             {
                 if (fireman.carriedHazmat != null)
                 {
@@ -948,6 +948,10 @@ public class OperationManager
                 controlled.driving = false;
                 gm.stopDrive(controlled.name);
             }
+            if(controlled.riding){
+                controlled.riding=false;
+                gm.stopRide(controlled.name);
+            }
             gm.UpdateLocation(x, z, controlled.name);
             int requiredAP = 1;
             if (gm.tileMap.tiles[x, z] == 2||(controlled.carryingVictim))
@@ -966,6 +970,10 @@ public class OperationManager
             {
                 fireman.driving = false;
                 gm.stopDrive(StaticInfo.name);
+            }
+            if(fireman.riding){
+                fireman.riding=false;
+                gm.stopRide(StaticInfo.name);
             }
             fireman.move(x, z);
         }
@@ -1067,7 +1075,9 @@ public class OperationManager
         this.inCommand = true;
         Role role = Role.None;
         int drive = 0;
+        int ride=0;
         bool carrying = false;
+        bool leading=false;
         string name = "";
         foreach (string o in gm.players.Keys)
         {
@@ -1078,14 +1088,20 @@ public class OperationManager
                 {
                     drive = 0;
                 }
+                if(!Int32.TryParse(gm.players[o]["Riding"].ToString(),out ride)){
+                    ride=0;
+                }
                 if (gm.players[o]["Carrying"].ToString().Equals( "true"))
                 {
-                    carrying = false;
+                    carrying = true;
+                }
+                if(gm.players[o]["Leading"].ToString().Equals("true")){
+                    leading=true;
                 }
                 name = o;
             }
         }
-        controlled = new Fireman(x * 6, z * 6, role, drive,carrying,name);
+        controlled = new Fireman(x * 6, z * 6, role, drive, ride ,carrying, leading ,name);
 
         opPanel.SetActive(false); 
         DestroyAll();
@@ -1284,12 +1300,26 @@ public class OperationManager
 
     public void dropeV()
     {
-
+        Fireman fireman=gm.fireman;
+        if(fireman.carriedPOI!=null){
+            fireman.carryingVictim=false;
+            gm.pOIManager.dropPOI(x,z);
+            fireman.carriedPOI=null;
+            gm.StopCarry(x,z);
+        }else if(fireman.ledPOI!=null){
+            gm.pOIManager.dropPOI(x,z);
+            fireman.ledPOI=null;
+            gm.StopLead(x,z);
+        }
     }
 
     public void dropHazmat()
     {
-
+        Fireman fireman=gm.fireman;
+        fireman.carryingVictim=false;
+        fireman.carriedHazmat=null;
+        gm.hazmatManager.dropHazmat(x,z);
+        gm.StopCarry(x,z);
     }
 
     public void stopCommand()
