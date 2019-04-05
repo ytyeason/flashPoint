@@ -672,7 +672,7 @@ public class GameManager: MonoBehaviour
         Debug.Log("Ending Turn");
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(1, 4, false);
+		fireManager.advanceFire(1, 3, true);
 		Debug.Log("Finished advFire, redistributing AP");
 
         operationManager.commandMoves = 1;

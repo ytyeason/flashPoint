@@ -68,7 +68,7 @@ public class SelectRole : MonoBehaviour {
                 StaticInfo.role = Role.ImagingTech;
                 break;
         }
-        Debug.Log("selectRole successful");
+        Debug.Log("selectRole successful: " + StaticInfo.role);
         SceneManager.LoadScene("Room");
 
     }
