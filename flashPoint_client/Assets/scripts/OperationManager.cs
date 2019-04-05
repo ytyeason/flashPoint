@@ -1112,7 +1112,7 @@ public class OperationManager
         Ambulance amb = gm.tileMap.ambulance;
         Engine eng = gm.tileMap.engine;
         Fireman fireman = gm.tileMap.selectedUnit;
-        if ((x==9&&z==4)||(x==9&&z==5)||(x==4&&z==0)||(x==5&&z==0)||(x==0&&z==2)||(x==0&&z==3)||(x==4&&z==7)||(x==5&&z==7))
+        if ((x==9&&z==4)||(x==9&&z==3)||(x==4&&z==0)||(x==3&&z==0)||(x==0&&z==4)||(x==0&&z==3)||(x==6&&z==7)||(x==5&&z==7))
         {
             int vx = gm.amB.x;
             int vz = gm.amB.z;
@@ -1120,7 +1120,7 @@ public class OperationManager
             gm.AskForRide(vx,vz);
             Debug.Log("gm.confirmed = " + gm.confirmed);
             Debug.Log("nPlayer" + StaticInfo.numberOfPlayer);
-            while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
+            // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
 
             amb.moveNextStation(x,z);
             gm.UpdateAmbulanceLocation(amb.x, amb.z,vx,vz);
@@ -1141,7 +1141,7 @@ public class OperationManager
             int vz = gm.enG.z;
             gm.startDrive(2);
             gm.AskForRide(vx,vz);
-            while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
+            // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
             eng.moveNextStation(x,z);
             gm.UpdateEngineLocation(x, z);
             opPanel.SetActive(false);

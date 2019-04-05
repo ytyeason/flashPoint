@@ -559,7 +559,7 @@ public class GameManager: MonoBehaviour
 
     public Ambulance initializeAmbulance()
     {
-        Ambulance amb = new Ambulance(ambulance, 54, 27, this);
+        Ambulance amb = new Ambulance(ambulance, 54, 21, this);
 
         return amb;
     }

@@ -415,7 +415,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 27
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalRotation.x
@@ -4844,11 +4844,11 @@ MonoBehaviour:
       type: 2}
     isWalkable: 1
   - name: parking_engin
-    tileVisualPrefab: {fileID: 1259267309625838, guid: 329bf543f1f2b412a9a7094ccd5165f3,
+    tileVisualPrefab: {fileID: 1305533539631988, guid: 117916cd6514c47dc922241b0771ada5,
       type: 2}
     isWalkable: 1
   - name: parking_ambulance
-    tileVisualPrefab: {fileID: 1305533539631988, guid: 117916cd6514c47dc922241b0771ada5,
+    tileVisualPrefab: {fileID: 1259267309625838, guid: 329bf543f1f2b412a9a7094ccd5165f3,
       type: 2}
     isWalkable: 1
   - name: hotspot
@@ -4990,7 +4990,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.0000667572, y: 215.4}
+  m_AnchoredPosition: {x: -0.00006055832, y: 215.4}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881
