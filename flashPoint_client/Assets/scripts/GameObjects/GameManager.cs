@@ -138,7 +138,9 @@ public class GameManager: MonoBehaviour
         tileMap.GenerateFiremanVisual(players);
         registerNewFireman(fireman);
         checkTurn();	//initialize isMyTurn variable at start
-        if (!level.Equals("Family"))
+        Debug.Log(level);
+        roles.text="";
+        if (!StaticInfo.level.Equals("Family"))
         {
             displayRole();
         }
@@ -150,7 +152,6 @@ public class GameManager: MonoBehaviour
         }
 
         selectRolePanel.SetActive(false);
-
 
     }
 
@@ -173,6 +174,9 @@ public class GameManager: MonoBehaviour
 
     public void displayRole()
     {
+        if(StaticInfo.level.Equals("Family")){
+            return;
+        }
         Debug.Log("displaying role");
         roles.text = StaticInfo.name+": "+roleToString(StaticInfo.role);
         if (players != null)
@@ -313,7 +317,7 @@ public class GameManager: MonoBehaviour
             Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
-        if (!level.Equals("Family")) displayRole();
+        if (!StaticInfo.level.Equals("Family")) displayRole();
     }
 
 //for vehicles

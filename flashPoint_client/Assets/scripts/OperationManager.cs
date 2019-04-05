@@ -308,14 +308,7 @@ public class OperationManager
                 }
             }
 
-            if (inCommand)
-            {
-                if (x == controlled.currentX && z == controlled.currentZ&&fireman.specialtyAP>0)
-                {
-                    Operation op = new Operation(this, OperationType.StopCommand);
-                    possibleOp.Add(op);
-                }
-            }
+            
         }
         else if (diffX + diffZ == 1) // neighbor tile (fire, move)
         {
@@ -451,12 +444,28 @@ public class OperationManager
                     keyM[0] = currentX;
                     keyM[1] = currentZ;
                 }
+                /*
                 if (!gm.wallManager.checkIfHWall(keyM[0], keyM[1])) {
                     moveTo = true;
                 }
                 if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
                 {
                     moveTo = true;
+                }
+                */
+                
+                if (!gm.wallManager.checkIfHWall(keyM[0],keyM[1]))
+                {
+
+                    foreach(int[] a in gm.wallManager.hwallStores.Keys)
+                    {
+                        Debug.Log(a[0] + " " + a[1]);
+                    }
+                    moveTo = true;
+                    if (!gm.doorManager.checkIfHDoor(keyM[0], keyM[1]))
+                    {
+                        moveTo = true;
+                    }
                 }
             }
             else // same row
@@ -651,6 +660,26 @@ public class OperationManager
                 }
             }
 
+            if (inCommand)
+            {
+                if (x == controlled.currentX && z == controlled.currentZ)
+                {
+                    Operation op = new Operation(this, OperationType.StopCommand);
+                    possibleOp.Add(op);
+                }
+            }else{
+                if (gm.fireman.role == Role.Captain)
+                {
+                    foreach(JSONObject o in gm.players.Values)
+                    {
+                        if (o["Location"].Equals( x*6 + "," + z*6))
+                        {
+                            Operation op = new Operation(this, OperationType.Command);
+                            possibleOp.Add(op);
+                        }
+                    }
+                }
+            }
 
         }
         else // not neighboring 

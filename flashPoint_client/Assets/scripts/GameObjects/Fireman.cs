@@ -364,31 +364,35 @@ public class Fireman
             }
         }
 
-        int origX = currentX;
-        int origZ = currentZ;
+        int origX = currentX/6;
+        int origZ = currentZ/6;
 
         currentX = x * 6;
         currentZ = z * 6;
         s.transform.position = new Vector3(currentX, 0.2f, currentZ);
         gm.UpdateLocation(currentX, currentZ,StaticInfo.name);
 
+        Debug.Log(carriedPOI);
+
         if (carriedPOI != null)
         {
-            gm.pOIManager.movePOI(origX, origZ, currentX, currentZ);
-            gm.UpdatePOILocation(origX, origZ, currentX, currentZ);
+            gm.pOIManager.movePOI(origX, origZ, x, z);
+            gm.UpdatePOILocation(origX, origZ, x, z);
         }
 
         if (ledPOI != null)
         {
-            gm.pOIManager.moveTreated(origX, origZ, currentX, currentZ);
-            gm.UpdateTreatedLocation(origX, origZ, currentX, currentZ);
+            gm.pOIManager.moveTreated(origX, origZ, x, z);
+            gm.UpdateTreatedLocation(origX, origZ, x, z);
         }
 
         if (carriedHazmat != null)
         {
-            gm.hazmatManager.moveHazmat(origX, origZ, currentX, currentZ);
+            gm.hazmatManager.moveHazmat(origX, origZ, x, z);
             
         }
+
+        
 
         int[] key = new int[] { x, z };
         if (gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI) && gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI).status == POIStatus.Hidden)
