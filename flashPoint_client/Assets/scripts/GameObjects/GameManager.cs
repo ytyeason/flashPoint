@@ -52,6 +52,9 @@ public class GameManager: MonoBehaviour
     public Text selectedRole;
     public GameObject changeRoleButton;
 
+    //drive
+    public int confirmed=0;
+
 
     private JSONObject room;
     private JSONObject participants;
@@ -91,10 +94,12 @@ public class GameManager: MonoBehaviour
         socket.On("UpdatePOILocation_Success", UpdatePOILocation_Success);
         socket.On("UpdateAmbulanceLocation_Success", UpdateAmbulanceLocation_Success);
         socket.On("UpdateEngineLocation_Success", UpdateEngineLocation_Success);
+        socket.On("AskForRide_Success", AskForRide_Success);
         socket.On("UpdateTreatedLocation_Success", UpdateTreatedLocation_Success);
         socket.On("RemoveHazmat_Success", RemoveHazmat_Success);
         socket.On("UpdateHazmatLocation_Success", UpdateHazmatLocation_Success);
         socket.On("AddPOI_Success", AddPOI_Success);
+        socket.On("ConfirmRide", ConfirmRide);
 
         if (game_info != null)
         {
@@ -140,6 +145,8 @@ public class GameManager: MonoBehaviour
         else
         {
             changeRoleButton.SetActive(false);
+            ambulance.SetActive(false);
+            engine.SetActive(false);
         }
 
         selectRolePanel.SetActive(false);
@@ -284,7 +291,7 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["type"]);
 
 		// Bottom is temporarily commented out:
-		// tileMap.buildNewTile(x, z,type);
+		tileMap.buildNewTile(x, z,type);
     }
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
@@ -310,24 +317,78 @@ public class GameManager: MonoBehaviour
     }
 
 //for vehicles
-    public void UpdateAmbulanceLocation(int newx,int newz)
+    public void UpdateAmbulanceLocation(int newx,int newz, int origx, int origz)
     {
         Dictionary<String, string> location = new Dictionary<string, string>();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+        location["origx"]=origx.ToString();
+        location["origz"]=origz.ToString();
+        location["room"]=StaticInfo.roomNumber;
 
         socket.Emit("UpdateAmbulanceLocation", new JSONObject(location));
         Debug.Log("update ambulance location");
 
     }
 
+    public void AskForRide(int origx, int origz)
+    {
+        Dictionary<String, string> location = new Dictionary<string, string>();
+        location["origx"]=origx.ToString();
+        location["origz"]=origz.ToString();
+        location["room"]=StaticInfo.roomNumber;
+        location["name"]=StaticInfo.name;
+        socket.Emit("AskForRide", new JSONObject(location));
+    }
+
+    public void AskForRide_Success(SocketIOEvent obj){
+        Debug.Log("AskForRide_Success");
+        // Debug.Log(obj.data["targetNames"]);
+        List<string> names=parseJsonArray(obj.data["targetNames"]);
+        Debug.Log("names count:" + names.Count);
+        foreach(string n in names){
+            if (string.Equals(n, StaticInfo.name)){
+                opPanel.SetActive(true);
+                Operation op = new Operation(operationManager, OperationType.Ride);
+                Button newObject = this.instantiateOp(op.prefab, options[0].transform, true);
+                newObject.onClick.AddListener(ride);
+                operationManager.askingForRide=true;
+            }
+        }
+        Debug.Log("ask for ride succeed!!!!!!!");
+        this.confirmed=Int32.Parse(StaticInfo.numberOfPlayer)-names.Count;
+
+        Debug.Log("confirmed:" + this.confirmed);
+
+    }
+
+    void ride(){
+        operationManager.ride();
+    }
+
+    public void startRide(int type){
+        Dictionary<string,string> ride=new Dictionary<string,string>();
+        ride["type"]=type.ToString();
+        ride["name"]=StaticInfo.name;
+        ride["room"]=StaticInfo.roomNumber;
+
+        socket.Emit("StartRide",new JSONObject(ride));
+    }
+
+    public void ConfirmRide(SocketIOEvent obj){
+        if(obj.data.ToString().Equals("true")){
+            confirmed++;
+        }
+        operationManager.askingForRide=false;
+    }
 
     public void UpdateAmbulanceLocation_Success(SocketIOEvent obj)
     {
-        Debug.Log("hello,updateambulance");
+        Debug.Log("hello,update ambulance");
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
-        tileMap.ambulance.moveNextStation(newx, newz);
+
+        tileMap.ambulance.moveNextStation(newx/6, newz/6);
     }
 
     public void UpdateEngineLocation(int newx,int newz)
@@ -383,6 +444,7 @@ public class GameManager: MonoBehaviour
         {
             isMyTurn = false;
 			Debug.Log("It is now someone else's turn!");
+            fireman.refreshAP();
 		}
 
     }
@@ -397,6 +459,7 @@ public class GameManager: MonoBehaviour
         {
             isMyTurn = true;
             sendNotification(". It's your turn.");
+            // fireman.refreshAP();
         }
         else
         {
@@ -834,6 +897,9 @@ public class GameManager: MonoBehaviour
     {
         string result = obj.ToString().TrimStart('[');
         result = result.TrimEnd(']');
+        if(result.Equals("")){
+            return new List<string>();
+        }
         string[] words = result.Split(',');
         List<string> final = new List<string>();
         foreach(string w in words)

@@ -23,7 +23,6 @@ public static class hasComponent
 
 public class WallManager
 {
-	
 
 	readonly int wallMapSizeX = 10;
 	readonly int wallMapSizeZ = 8;
