@@ -351,7 +351,8 @@ public class GameManager: MonoBehaviour
         List<string> names=parseJsonArray(obj.data["targetNames"]);
         Debug.Log("names count:" + names.Count);
         foreach(string n in names){
-            if (string.Equals(n, StaticInfo.name)){
+            if (n.Equals(StaticInfo.name)){
+                Debug.Log("same name");
                 opPanel.SetActive(true);
                 Operation op = new Operation(operationManager, OperationType.Ride);
                 Button newObject = this.instantiateOp(op.prefab, options[0].transform, true);
@@ -372,18 +373,20 @@ public class GameManager: MonoBehaviour
 
     public void startRide(int type){
         Dictionary<string,string> ride=new Dictionary<string,string>();
-        ride["type"]=type.ToString();
         ride["name"]=StaticInfo.name;
         ride["room"]=StaticInfo.roomNumber;
+        ride["type"]=type.ToString();
 
         socket.Emit("StartRide",new JSONObject(ride));
     }
 
     public void ConfirmRide(SocketIOEvent obj){
         if(obj.data.ToString().Equals("true")){
+
             confirmed++;
         }
         operationManager.askingForRide=false;
+
     }
 
     public void UpdateAmbulanceLocation_Success(SocketIOEvent obj)
@@ -392,7 +395,15 @@ public class GameManager: MonoBehaviour
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
 
+        List<string> names=parseJsonArray(obj.data["names"]);
+        foreach(var name in names){
+            if(name.Equals(StaticInfo.name)){
+                fireman.s.transform.position=new Vector3(newx*6,0.2f,newz*6);
+            }
+        }
+
         tileMap.ambulance.moveNextStation(newx/6, newz/6);
+        confirmed=0;
     }
 
     public void UpdateEngineLocation(int newx,int newz)
@@ -403,14 +414,23 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("UpdateEngineLocation", new JSONObject(location));
         Debug.Log("update eng location");
-
+        
     }
     
     public void UpdateEngineLocation_Success(SocketIOEvent obj)
     {
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
-        tileMap.engine.moveNextStation(newx, newz);
+
+        List<string> names=parseJsonArray(obj.data["names"]);
+        foreach(var name in names){
+            if(name.Equals(StaticInfo.name)){
+                fireman.s.transform.position=new Vector3(newx*6,0.2f,newz*6);
+            }
+        }
+
+        tileMap.engine.moveNextStation(newx/6, newz/6);
+        confirmed=0;
     }
 
 

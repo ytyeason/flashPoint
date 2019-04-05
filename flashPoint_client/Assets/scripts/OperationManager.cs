@@ -216,8 +216,10 @@ public class OperationManager
 
                 // Debug.Log("int same place deck gun");
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("Family"))
                 {
+
+                    
                     //if (fireman.driving)
                     //{
                     //    Operation op = new Operation(this, OperationType.StopDrive);
@@ -549,7 +551,7 @@ public class OperationManager
                 // Debug.Log(currentX+" "+currentZ);
                 // Debug.Log(vx+" "+vz);
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("Family"))
                 {
                     //if (fireman.driving)
                     //{
@@ -636,7 +638,7 @@ public class OperationManager
 
                 Fireman fireman=gm.fireman;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
+                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -648,7 +650,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
+                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -803,7 +805,7 @@ public class OperationManager
                 Debug.Log(vx);
                 Debug.Log(vz);
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1)))
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1))&&!StaticInfo.level.Equals("Family"))
                 {
                     if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) !=9 && Math.Abs(vz- z) !=7 )&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                     {
@@ -825,7 +827,7 @@ public class OperationManager
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
+                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
                 {
                     Debug.Log("before remoting, my AP is" + " " + fireman.FreeAP);
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
@@ -838,7 +840,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
+                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
                 {
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
@@ -1057,7 +1059,7 @@ public class OperationManager
             gm.AskForRide(vx,vz);
             Debug.Log("gm.confirmed = " + gm.confirmed);
             Debug.Log("nPlayer" + StaticInfo.numberOfPlayer);
-            // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
+            while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
 
             amb.moveNextStation(x,z);
             gm.UpdateAmbulanceLocation(amb.x, amb.z,vx,vz);
@@ -1096,6 +1098,7 @@ public class OperationManager
         gm.UpdateLocation(x*6, z*6,StaticInfo.name);
         fireman.currentX=x*6;
         fireman.currentZ=z*6;
+        gm.confirmed=0;
         opPanel.SetActive(false);
         DestroyAll();
         Debug.Log("fireman is at x:"+fireman.currentX);
@@ -1154,7 +1157,7 @@ public class OperationManager
         Fireman fireman = gm.tileMap.selectedUnit;
         fireman.setAP(fireman.FreeAP - requiredAP);
 
-        Debug.Log("fire deckgun");
+        Debug.Log("fire deckgunnnnnnnnnnnnnnnnnnnnnnnn");
         double vx = gm.enG.x / 6;
         double vz = gm.enG.z / 6;
         int rx1;

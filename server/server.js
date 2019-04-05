@@ -259,7 +259,17 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var origx=data['origx'];
       var origz=data['origz'];
       var room=data['room'];
-      socket.broadcast.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz});
+      var names=[];
+
+      var participants=Games[room]["participants"];
+      for(var n in participants){
+        var riding=participants[n]["Riding"];
+        if(riding=="1"){
+          participants[n]["Location"]=newx+","+newz;
+          names.push(n);
+        }
+      }
+      socket.broadcast.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names});
     });
       
 
@@ -299,14 +309,25 @@ io.on('connection', function (socket) {//default event for client connect to ser
           // }
         }
         console.log("sending");
-       socket.emit('AskForRide_Success',{"targetNames":targetNames});
+       io.sockets.emit('AskForRide_Success',{"targetNames":targetNames});
     });
 
     socket.on('UpdateEngineLocation', function(data){
       // console.log("engineeee");
       var newx=data['newx'];
       var newz=data['newz'];
-      socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz});
+      var names=[];
+
+      var participants=Games[room]["participants"];
+      for(var n in participants){
+        var riding=participants[n]["Riding"];
+        if(riding=="2"){
+          participants[n]["Location"]=newx+","+newz;
+          names.push(n);
+        }
+      }
+      socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz,"names":names});
+      // socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz});
 
     });
 
@@ -316,7 +337,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var type=data['type'];
 
       Games[room]['participants'][name]["Riding"]=type;
-      socket.broadcast.emit('ConfirmRide', "true");
+      io.sockets.emit('ConfirmRide', "true");
     });
 
     socket.on('UpdateTreatedLocation', function(data){
