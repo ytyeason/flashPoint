@@ -4935,6 +4935,7 @@ MonoBehaviour:
   selectRolePanel: {fileID: 1968159818}
   selectedRole: {fileID: 1749190485}
   changeRoleButton: {fileID: 2028607538}
+  confirmed: 0
   amB: {fileID: 0}
   enG: {fileID: 0}
   isMyTurn: 0
