@@ -60,6 +60,8 @@ public class GameManager: MonoBehaviour
     private JSONObject participants;
     private String level;
     private String numberOfPlayer;
+    private String numberOfHazmat;
+    private String numberOfHotspot;
     public Dictionary<String, JSONObject> players = new Dictionary<string, JSONObject>();
     public Ambulance amB;
     public Engine enG;
@@ -116,6 +118,8 @@ public class GameManager: MonoBehaviour
             participants = room["participants"];
             level = room["level"].ToString();
             numberOfPlayer = room["numberOfPlayer"].ToString();
+            numberOfHazmat=room["numberOfHazmat"].ToString();
+            numberOfHotspot=room["numberOfHotspot"].ToString();
 
             List<string> p = participants.keys;
             foreach (var v in p)
@@ -149,7 +153,7 @@ public class GameManager: MonoBehaviour
         checkTurn();	//initialize isMyTurn variable at start
         Debug.Log(level);
         roles.text="";
-        if (!level.Equals("Family")||(StaticInfo.level!=null)&&!StaticInfo.level.Equals("Family"))
+        if (!level.Equals("\"Family\"")||(StaticInfo.level!=null)&&!StaticInfo.level.Equals("\"Family\""))
         {
             displayRole();
             changeRoleButton.SetActive(true);
@@ -161,6 +165,7 @@ public class GameManager: MonoBehaviour
             engine.SetActive(false);
         }
 
+        Debug.Log("staticinfo "+StaticInfo.numberOfPlayer);
         selectRolePanel.SetActive(false);
 
     }
@@ -184,7 +189,8 @@ public class GameManager: MonoBehaviour
 
     public void displayRole()
     {
-        if(StaticInfo.level.Equals("Family")){
+        Debug.Log("staticinfo "+StaticInfo.name);
+        if(StaticInfo.level.Equals("\"Family\"")){
             return;
         }
         Debug.Log("displaying role");

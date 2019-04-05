@@ -216,7 +216,7 @@ public class OperationManager
 
                 // Debug.Log("int same place deck gun");
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("Family"))
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("\"Family\""))
                 {
 
                     
@@ -576,7 +576,7 @@ public class OperationManager
                 // Debug.Log(currentX+" "+currentZ);
                 // Debug.Log(vx+" "+vz);
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("Family"))
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("\"Family\""))
                 {
                     //if (fireman.driving)
                     //{
@@ -663,7 +663,7 @@ public class OperationManager
 
                 Fireman fireman=gm.fireman;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
+                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -675,7 +675,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
+                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -850,7 +850,7 @@ public class OperationManager
                 Debug.Log(vx);
                 Debug.Log(vz);
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1))&&!StaticInfo.level.Equals("Family"))
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1))&&!StaticInfo.level.Equals("\"Family\""))
                 {
                     if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) !=9 && Math.Abs(vz- z) !=7 )&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                     {
@@ -872,7 +872,7 @@ public class OperationManager
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
+                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
                 {
                     Debug.Log("before remoting, my AP is" + " " + fireman.FreeAP);
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
@@ -885,7 +885,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
+                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
                 {
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
@@ -1306,11 +1306,30 @@ public class OperationManager
             gm.pOIManager.dropPOI(x,z);
             fireman.carriedPOI=null;
             gm.StopCarry(x,z);
+            if(StaticInfo.level.Equals("\"Family\"")){
+                if(x==0||x==7||z==0||z==9){
+                    gm.pOIManager.rescueCarried(x,z);
+                }
+            }else{
+                if(gm.tileMap.tiles[x,z]==4){
+                    gm.pOIManager.rescueCarried(x,z);
+                }
+            }
         }else if(fireman.ledPOI!=null){
             gm.pOIManager.dropPOI(x,z);
             fireman.ledPOI=null;
             gm.StopLead(x,z);
+            if(StaticInfo.level.Equals("\"Family\"")){
+                if(x==0||x==7||z==0||z==9){
+                    gm.pOIManager.rescueTreated(x,z);
+                }
+            }else{
+                if(gm.tileMap.tiles[x,z]==4){
+                    gm.pOIManager.rescueTreated(x,z);
+                }
+            }
         }
+        
     }
 
     public void dropHazmat()

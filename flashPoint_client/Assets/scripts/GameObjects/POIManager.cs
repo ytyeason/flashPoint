@@ -69,18 +69,51 @@ public class POIManager{
     public void replenishPOI()
     {
         int size = placedPOI.Count+movingPOI.Count+movingTreated.Count+treated.Count;
-        for(int i = 0; i < 3 - size; i++)
+        
+        while(size<3)
         {
             int randX = rand.Next(1, 9);
             int randZ = rand.Next(1, 7);
             int[] key = new int[] { randX, randZ };
-            while (containsKey(key[0],key[1],placedPOI) || gm.tileMap.tiles[randX, randZ] == 2)
-            {
-                randX = rand.Next(1, 9);
-                randZ = rand.Next(1, 7);
-                key[0] = randX;
-                key[1] = randZ;
+            bool reveal=false;
+            if(StaticInfo.level.Equals("\"Family\"")){
+                while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated))
+                {
+                    randX = rand.Next(1, 9);
+                    randZ = rand.Next(1, 7);
+                    key[0] = randX;
+                    key[1] = randZ;
+                }
+                if(gm.tileMap.tiles[randX,randZ]==1||gm.tileMap.tiles[randX,randZ]==2){
+                    gm.tileMap.buildNewTile(randX,randZ,0);
+                    gm.UpdateTile(randX,randZ,0);
+                }
+                foreach(var o in gm.players.Keys){
+                    if(gm.players[o]["Location"].Equals(randX*6+","+randZ*6)){
+                        reveal=true;
+                        break;
+                    }
+                }
+            }else{
+                while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated)||gm.tileMap.tiles[randX,randZ]==2||gm.tileMap.tiles[randX,randZ]==1)
+                {
+                    bool cont=false;
+                    foreach(var o in gm.players.Keys){
+                        if(gm.players[o]["Location"].Equals(randX*6+","+randZ*6)){
+                            cont=true;
+                            break;
+                        }
+                    }
+                    if(!cont){
+                        break;
+                    }
+                    randX = rand.Next(1, 9);
+                    randZ = rand.Next(1, 7);
+                    key[0] = randX;
+                    key[1] = randZ;
+                }
             }
+            
             int randIndex = rand.Next(0, poi.Count);
             POI p = poi[randIndex];
             placedPOI.Add(key,p);
@@ -89,6 +122,11 @@ public class POIManager{
             poiLookup.Add(key, go);
             poi.Remove(p);
             gm.AddPOI(randX, randZ, (int)p.type);
+            if(reveal){
+                this.reveal(randX,randZ);
+                gm.updateRevealPOI(randX,randZ);
+            }
+            size = placedPOI.Count+movingPOI.Count+movingTreated.Count+treated.Count;
         }
     }
 

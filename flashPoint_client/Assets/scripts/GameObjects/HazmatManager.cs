@@ -29,23 +29,23 @@ public class HazmatManager{
         //this.additionalHotspot 
         switch (StaticInfo.level)
         {
-            case "Family":
+            case "\"Family\"":
                 numOfHazmat=0;
                 additionalHotspot = 0;
                 break;
-            case "Experienced-Recruit":
+            case "\"Experienced-Recruit\"":
                 numOfHazmat = 3;
                 break;
-            case "Experienced-Veteran":
+            case "\"Experienced-Veteran\"":
                 numOfHazmat = 4;
                 additionalHotspot += 3;
                 break;
-            case "Experienced-Heroic":
+            case "\"Experienced-Heroic\"":
                 numOfHazmat = 5;
                 additionalHotspot += 3;
                 break; 
         }
-        if (StaticInfo.level == "Random")
+        if (StaticInfo.level == "\"Random\"")
         {
             if (Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
