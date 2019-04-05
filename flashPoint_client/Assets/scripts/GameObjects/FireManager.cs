@@ -62,7 +62,7 @@ public class FireManager : MonoBehaviour
 			for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
 			{
 				if (tileMap.tiles[x_elem, z_elem] == 2 &&
-					tileMap.selectedUnit.currentX == (x_elem * 5) && tileMap.selectedUnit.currentZ == (z_elem * 5))
+					tileMap.selectedUnit.currentX == (x_elem * 6) && tileMap.selectedUnit.currentZ == (z_elem * 6))
 				{
 					Debug.Log("Reached knockdown");
 
