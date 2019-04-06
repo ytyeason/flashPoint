@@ -111,7 +111,9 @@ public class GameManager: MonoBehaviour
         socket.On("RemoveHazmat_Success", RemoveHazmat_Success);
         socket.On("UpdateHazmatLocation_Success", UpdateHazmatLocation_Success);
         socket.On("AddPOI_Success", AddPOI_Success);
+        socket.On("AddHazmat_Success", AddHazmat_Success);
         socket.On("InitializePOI_Success", initializePOI_Success);
+        socket.On("InitializeHazmat_Success", initializeHazmat_Success);
         socket.On("StartCarryV_Success", StartCarryV_Success);
         socket.On("StartLeadV_Success", StartLeadV_Success);
         socket.On("StartCarryHazmat_Success",StartCarryHazmat_Success);
@@ -154,7 +156,6 @@ public class GameManager: MonoBehaviour
         pOIManager = new POIManager(this);
         hazmatManager=new HazmatManager(this);
 
-
         //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
         displayAP();
      //   vehicleManager.StartvehicleManager();
@@ -164,7 +165,7 @@ public class GameManager: MonoBehaviour
         checkTurn();	//initialize isMyTurn variable at start
         Debug.Log(level);
         roles.text="";
-        if (!level.Equals("\"Family\"")||(StaticInfo.level!=null)&&!StaticInfo.level.Equals("\"Family\""))
+        if (!level.Equals("\"Family\"")||(StaticInfo.level!=null)&&!StaticInfo.level.Equals("Family"))
         {
             displayRole();
             changeRoleButton.SetActive(true);
@@ -201,7 +202,7 @@ public class GameManager: MonoBehaviour
     public void displayRole()
     {
         Debug.Log("staticinfo "+StaticInfo.name);
-        if(StaticInfo.level.Equals("\"Family\"")){
+        if(StaticInfo.level.Equals("Family")){
             return;
         }
         Debug.Log("displaying role");
@@ -1340,6 +1341,25 @@ public class GameManager: MonoBehaviour
         pOIManager.addPOI(x, z, type);
     }
 
+    public void AddHazmat(int x, int z,int type)
+    {
+        Dictionary<string, string> poi = new Dictionary<string, string>();
+        poi["x"] = x.ToString();
+        poi["z"] = z.ToString();
+        poi["type"] = type.ToString();
+
+        socket.Emit("AddHazmat", new JSONObject(poi));
+    }
+
+    public void AddHazmat_Success(SocketIOEvent obj)
+    {
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"].ToString());
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"].ToString());
+        int type = Convert.ToInt32(obj.data.ToDictionary()["type"].ToString());
+
+        hazmatManager.addHazmat(x, z, type);
+    }
+
     public void stopDrive(string name)
     {
         Dictionary<string, string> stop = new Dictionary<string, string>();
@@ -1526,6 +1546,14 @@ public class GameManager: MonoBehaviour
 
     public void initializePOI_Success(SocketIOEvent obj){
         pOIManager.refreshPOI();
+    }
+
+    public void initializeHazmat(){
+        socket.Emit("InitializeHazmat");
+    }
+
+    public void initializeHazmat_Success(SocketIOEvent obj){
+        hazmatManager.refreshHazmat();
     }
 
 }

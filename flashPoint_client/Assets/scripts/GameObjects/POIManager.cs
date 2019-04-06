@@ -76,7 +76,7 @@ public class POIManager{
             int randZ = rand.Next(1, 7);
             int[] key = new int[] { randX, randZ };
             bool reveal=false;
-            if(StaticInfo.level.Equals("\"Family\"")){
+            if(StaticInfo.level.Equals("Family")){
                 while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated))
                 {
                     randX = rand.Next(1, 9);

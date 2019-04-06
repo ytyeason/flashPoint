@@ -461,6 +461,14 @@ io.on('connection', function (socket) {//default event for client connect to ser
       socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type});
     });
 
+    socket.on('AddHazmat',function(data){
+      var x=data['x'];
+      var z=data['z'];
+      var type=data['type'];
+
+      socket.broadcast.emit('AddHazmat_Success',{'x':x,'z':z,'type':type});
+    });
+
     socket.on('StopDrive',function(data){
       var name=data['name'];
       var room=data['room'];
@@ -520,6 +528,10 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     socket.on('InitializePOI', function(){
       socket.broadcast.emit('InitializePOI_Success');
+    });
+
+    socket.on('InitializeHazmat', function(){
+      socket.broadcast.emit('InitializeHazmat_Success');
     });
 
 });
