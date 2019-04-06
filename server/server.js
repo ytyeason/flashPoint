@@ -40,13 +40,18 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on('LOAD_ROOM', function(data){
       console.log(data);
       console.log(Games[data['room']]["participants"]);
+      var det="true";
       if(Games[data['room']]!=undefined){
-
         var name = data['name'];
-        Games[data['room']]["participants"][name]={"Location": "0,0", "AP":4};
-        Games[data['room']]["participants_in_order"].push(name);
+        if(Games[data['room']]["participants"][name]==undefined){
+          Games[data['room']]["participants"][name]={"Location": "0,0", "AP":4, "Role":"10","Driving":"0", "Riding":"0","Carrying":"false","Leading":"false"};
+          Games[data['room']]["participants_in_order"].push(name);
+          det="true";
+        }else{
+          det="false";
+        }
         console.log(Games);
-        socket.emit('LOAD_ROOM_SUCCESS',{status: "True"} );
+        socket.emit('LOAD_ROOM_SUCCESS',{"status": det, "level":Games[data['room']]["level"]} );
       }
     });
 
@@ -54,7 +59,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       var room_number = data['room'];
       var name = data['name'];
-      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"0", "Driving":"0", "Riding":"0","Carrying":"false","Leading":"false"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
+      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"false","Leading":"false"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
       console.log(Games);
       socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
     });
@@ -356,6 +361,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var selectRoles=Games[room_number]['selectedRoles'];
       var role=data['role'];
       var result='true';
+      var name=data['name'];
       console.log(role);
       // console.log(selectRoles);
       if(selectRoles.includes(role)||role==""){
@@ -363,6 +369,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }else{
         result='true';
         selectRoles.push(role);
+        Games[room_number]["participants"][name]["Role"]=role;
       }
       socket.emit('selectRole_SUCCESS',{'result':result,'role':role});
 

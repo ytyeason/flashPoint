@@ -127,7 +127,8 @@ public class GameManager: MonoBehaviour
                 //Debug.Log(participants[v]);
                 var o = participants[v];
                 players[v] = o;
-                //Debug.Log(players[v]);
+                Debug.Log("debug location");
+                Debug.Log(players[v]["Location"]);
             }
         }
 
@@ -199,7 +200,7 @@ public class GameManager: MonoBehaviour
         {
             foreach (string name in players.Keys)
             {
-                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name]["Role"].ToString()));
+                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
             }
         }
 

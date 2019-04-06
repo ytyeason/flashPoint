@@ -219,7 +219,10 @@ public class OperationManager
                 if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("\"Family\""))
                 {
 
-                    
+                    int requiredAP=4;
+                    if(fireman.role==Role.Driver){
+                        requiredAP=2;
+                    }
                     //if (fireman.driving)
                     //{
                     //    Operation op = new Operation(this, OperationType.StopDrive);
@@ -263,7 +266,7 @@ public class OperationManager
                         {
                             for(int j = minZ; j <= maxZ; j++)
                             {
-                                if (o["Location"].Equals(i * 6 + "," + j * 6))
+                                if (o["Location"].Equals("\""+i * 6 + "," + j * 6+"\""))
                                 {
                                     existsF = true;
                                     Debug.Log("another fireman here");
@@ -274,7 +277,7 @@ public class OperationManager
                         }
                         if (existsF) break;
                     }
-                    if (!existsF)
+                    if (!existsF&&fireman.FreeAP>=requiredAP)
                     {
                         Operation op = new Operation(this, OperationType.DeckGun);
                         possibleOp.Add(op);
@@ -343,7 +346,7 @@ public class OperationManager
                 {
                     foreach(JSONObject o in gm.players.Values)
                     {
-                        if (o["Location"].Equals( x*6 + "," + z*6))
+                        if (o["Location"].Equals("\""+ x*6 + "," + z*6+"\""))
                         {
                             Operation op = new Operation(this, OperationType.Command);
                             possibleOp.Add(op);
@@ -585,6 +588,11 @@ public class OperationManager
                     //}
                     // Debug.Log("in parking");
 
+                    int requiredAP=4;
+                    if(fireman.role==Role.Driver){
+                        requiredAP=2;
+                    }
+
                     int minX=0, maxX = 0;
                     int minZ=0, maxZ = 0;
                     if (x < 5 && z < 4)
@@ -624,7 +632,7 @@ public class OperationManager
                             for(int j = minZ; j <= maxZ; j++)
                             {
                                 // Debug.Log(o["Location"]);
-                                if (o["Location"].Equals(i * 6 + "," + j * 6))
+                                if (o["Location"].Equals("\""+i * 6 + "," + j * 6+"\""))
                                 {
                                     existsF = true;
                                     // Debug.Log("another fireman here");
@@ -636,7 +644,7 @@ public class OperationManager
                         if (existsF) break;
                     }
                     // Debug.Log(existsF);
-                    if (!existsF)
+                    if (!existsF&&fireman.FreeAP>=requiredAP)
                     {
                         Operation op = new Operation(this, OperationType.DeckGun);
                         possibleOp.Add(op);
@@ -727,7 +735,7 @@ public class OperationManager
                 {
                     foreach(JSONObject o in gm.players.Values)
                     {
-                        if (o["Location"].Equals( x*6 + "," + z*6))
+                        if (o["Location"].Equals( "\""+x*6 + "," + z*6+"\""))
                         {
                             Operation op = new Operation(this, OperationType.Command);
                             possibleOp.Add(op);
@@ -752,7 +760,7 @@ public class OperationManager
             {
                 foreach(JSONObject o in gm.players.Values)
                 {
-                    if (o["Location"] .Equals( x*6 + "," + z*6))
+                    if (o["Location"] .Equals( "\""+x*6 + "," + z*6+"\""))
                     {
                         Operation op = new Operation(this, OperationType.Command);
                         possibleOp.Add(op);
@@ -1081,21 +1089,21 @@ public class OperationManager
         string name = "";
         foreach (string o in gm.players.Keys)
         {
-            if (gm.players[o]["Location"] .Equals( x * 6 + "," + z * 6))
+            if (gm.players[o]["Location"] .Equals( "\""+x * 6 + "," + z * 6+"\""))
             {
-                role = (Role)Int32.Parse(gm.players[o]["Role"].ToString());
-                if(!Int32.TryParse(gm.players[o]["Driving"].ToString(),out drive))
+                role = (Role)Int32.Parse(gm.players[o].ToDictionary()["Role"]);
+                if(!Int32.TryParse(gm.players[o].ToDictionary()["Driving"],out drive))
                 {
                     drive = 0;
                 }
-                if(!Int32.TryParse(gm.players[o]["Riding"].ToString(),out ride)){
+                if(!Int32.TryParse(gm.players[o].ToDictionary()["Riding"],out ride)){
                     ride=0;
                 }
-                if (gm.players[o]["Carrying"].ToString().Equals( "true"))
+                if (gm.players[o].ToDictionary()["Carrying"].Equals( "true"))
                 {
                     carrying = true;
                 }
-                if(gm.players[o]["Leading"].ToString().Equals("true")){
+                if(gm.players[o].ToDictionary()["Leading"].Equals("true")){
                     leading=true;
                 }
                 name = o;
