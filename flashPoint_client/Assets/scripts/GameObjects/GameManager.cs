@@ -55,8 +55,18 @@ public class GameManager: MonoBehaviour
     //drive
     public int confirmed=0;
 
+	// Dodging
+	public bool isDodging = false;
+	public bool leftDodgeDown = false;
+	public bool upDodgeDown = false;
+	public bool rightDodgeDown = false;
+	public bool downDodgeDown = false;
+	bool canUp = false;
+	bool canRight = false;
+	bool canDown = false;
+	bool canLeft = false;
 
-    private JSONObject room;
+	private JSONObject room;
     private JSONObject participants;
     private String level;
     private String numberOfPlayer;
@@ -673,16 +683,279 @@ public class GameManager: MonoBehaviour
         socket.Emit("RevealPOI", new JSONObject(revealPOI));
     }
 
+	// Checks for dodging:
+	public void leftDodge()
+	{
+		if (isDodging && canLeft)
+		{
+			Debug.Log("LEFT DODGE");
+			leftDodgeDown = true;
+		}
+		else leftDodgeDown = false;
+	}
+	public void upDodge()
+	{
+		if (isDodging && canUp)
+		{
+			Debug.Log("UP DODGE");
+			upDodgeDown = true;
+		}
+		else upDodgeDown = false;
+	}
+	public void rightDodge()
+	{
+		if (isDodging && canRight)
+		{
+			Debug.Log("RIGHT DODGE");
+			rightDodgeDown = true;
+		}
+		else rightDodgeDown = false;
+	}
+	public void downDodge()
+	{
+		if (isDodging && canDown)
+		{
+			Debug.Log("DOWN DODGE");
+			downDodgeDown = true;
+		}
+		else downDodgeDown = false;
+	}
+	public void resetDodge()
+	{
+		downDodgeDown = false;
+		rightDodgeDown = false;
+		upDodgeDown = false;
+		leftDodgeDown = false;
+		isDodging = false;
+	}
 
-    public void EndTurn()
+	// TEST:
+	public IEnumerator SimTest(float in_time)
+	{
+		Debug.Log("WAITING (1)" + Time.time);
+		yield return new WaitForSeconds(in_time);
+		Debug.Log("WAITING (2)" + Time.time);
+
+		//StartCoroutine(SimTest());
+
+	}
+
+	// Next 2 are used for a WaitUntil coroutine
+	public bool buttonDown()
+	{
+		return (leftDodgeDown || upDodgeDown || rightDodgeDown || downDodgeDown);
+	}
+	public IEnumerator ButtonTest()
+	{
+		Debug.Log("PRESS LEFT BUTTON");
+		yield return new WaitUntil(() => buttonDown() == true);
+		Debug.Log("FINISHED WAITING");
+
+	}
+
+	// Check if player can dodge in a direction
+	public bool canDodge(int in_x, int in_z)
+	{
+		// Can dodge up
+		if (tileMap.tiles[in_x, in_z + 1] != 2)
+		{
+			Debug.Log("No fire above!");
+
+			// Check if a door is between fireman and safety. If its open, allow dodge
+			if (doorManager.checkIfHDoor(in_x, in_z + 1))
+			{
+				if (doorManager.checkIfOpenHDoor(in_x, in_z + 1))
+				{
+					canUp = true;
+				}
+				else canUp = false;
+			}
+			// If an unbroken wall is between fireman and safety then they cannot dodge that way
+			else if (wallManager.checkIfHWall(in_x, in_z + 1))
+			{
+				canUp = false;
+			}
+			else canUp = true;
+		}
+
+		// Can dodge right
+		if (tileMap.tiles[in_x + 1, in_z] != 2)
+		{
+			Debug.Log("No fire right!");
+
+			// Check if a door is between fireman and safety. If its open, allow dodge
+			if (doorManager.checkIfVDoor(in_x + 1, in_z))
+			{
+				if (doorManager.checkIfOpenVDoor(in_x + 1, in_z))
+				{
+					canRight = true;
+				}
+				else canRight = false;
+			}
+			// If an unbroken wall is between fireman and safety then they cannot dodge that way
+			else if (wallManager.checkIfVWall(in_x + 1, in_z))
+			{
+				canRight = false;
+			}
+			else canRight = true;
+		}
+
+		// Can dodge down
+		if (tileMap.tiles[in_x, in_z - 1] != 2)
+		{
+			Debug.Log("No fire down!");
+
+			if (doorManager.checkIfHDoor(in_x, in_z))
+			{
+				if (doorManager.checkIfOpenHDoor(in_x, in_z))
+				{
+					canDown = true;
+				}
+				else canDown = false;
+			}
+			else if (wallManager.checkIfHWall(in_x, in_z))
+			{
+				canDown = false;
+			}
+			else canDown = true;
+		}
+
+		// Can dodge left
+		if (tileMap.tiles[in_x - 1, in_z] != 2)
+		{
+			Debug.Log("No fire left!");
+
+			if (doorManager.checkIfVDoor(in_x, in_z))
+			{
+				if (doorManager.checkIfOpenVDoor(in_x, in_z))
+				{
+					canLeft = true;
+				}
+				else canLeft = false;
+			}
+			else if (wallManager.checkIfVWall(in_x, in_z))
+			{
+				canLeft = false;
+			}
+			else canLeft = true;
+		}
+
+		// Print to console
+		Debug.Log("canLeft: " + canLeft);
+		Debug.Log("canDown: " + canDown);
+		Debug.Log("canRight: " + canRight);
+		Debug.Log("canUp: " + canUp);
+
+		// Return true iff at least one direction is available
+		return (canUp || canRight || canDown || canLeft);
+	}
+
+
+	// Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)
+	public IEnumerator knockDown()
+	{
+		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
+		{
+			for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
+			{
+				if (tileMap.tiles[x_elem, z_elem] == 2 &&
+					tileMap.selectedUnit.currentX == (x_elem * 6) && tileMap.selectedUnit.currentZ == (z_elem * 6))
+				{
+					Debug.Log("Reached knockdown - savedAP = " + Math.Min(fireman.FreeAP, 4));
+
+					// Check if the player is able to dodge:
+					if (fireman.role == Role.Veteran && canDodge(x_elem, z_elem) && Math.Min(fireman.FreeAP, 4) >= 1)
+					{
+						isDodging = true;
+
+
+						// TODO: call dodge()
+						Debug.Log("    VET (1) Please press a dodge button: " + Time.time);
+						//yield return new WaitForSeconds(2.0f);
+						yield return new WaitUntil(() => buttonDown() == true);
+						fireman.setAP(fireman.FreeAP - 1);      // 'Spending the 1AP
+						Debug.Log("    VET (2) " + Time.time);
+
+						// Player has chosen to move to the left:
+						if (leftDodgeDown)
+						{
+							Debug.Log("Moving left");
+							tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX - 6, 0.2f, fireman.currentZ);
+							UpdateLocation(fireman.currentX - 6, fireman.currentZ, fireman.name);
+							fireman.currentX = fireman.currentX - 6;
+						}
+						else if (downDodgeDown)
+						{
+							Debug.Log("Moving down");
+							tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX, 0.2f, fireman.currentZ - 6);
+							UpdateLocation(fireman.currentX, fireman.currentZ - 6, fireman.name);
+							fireman.currentZ = fireman.currentZ - 6;
+						}
+						else if (rightDodgeDown)
+						{
+							Debug.Log("Moving right");
+							tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX + 6, 0.2f, fireman.currentZ);
+							UpdateLocation(fireman.currentX + 6, fireman.currentZ, fireman.name);
+							fireman.currentX = fireman.currentX + 6;
+
+						}
+						else if (upDodgeDown)
+						{
+							Debug.Log("Moving up");
+							tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX, 0.2f, fireman.currentZ + 6);
+							UpdateLocation(fireman.currentX, fireman.currentZ + 6, fireman.name);
+							fireman.currentZ = fireman.currentZ + 6;
+						}
+
+
+						Debug.Log("Resetting dodge");
+						resetDodge();
+					}
+					else
+					{
+						// If firefighter is on the tile knock them out: send them to lower ambulance unit
+						if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
+						{
+							pOIManager.kill(x_elem, z_elem);
+						}
+						if (z_elem <= 3)
+						{
+							tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
+							//tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 18);
+							UpdateLocation(0 * 6, 3 * 6, fireman.name);
+							fireman.currentX = 0;
+							fireman.currentZ = 18;
+						}
+						else
+						{
+							tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
+						}
+					}
+				}
+			}
+		}
+
+		yield return 0;
+	}
+
+	public void EndTurn()
     {
-        Debug.Log("Ending Turn");
+		Debug.Log("Ending Turn");
+
+		// BEGIN OF WIP
+		//StartCoroutine(SimTest());
+		//StartCoroutine(ButtonTest());
+		
+		//isDodging = true;
 
 		// advanceFire, n.b parameters only matter for testing
 		fireManager.advanceFire(1, 3, true);
+		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
 
-        operationManager.commandMoves = 1;
+		// END OF WIP
+
+		operationManager.commandMoves = 1;
         operationManager.controlled = null;
         operationManager.inCommand = false;
 

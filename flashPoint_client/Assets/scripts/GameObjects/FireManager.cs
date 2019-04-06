@@ -36,8 +36,8 @@ public class FireManager : MonoBehaviour
 		flashover();
 		
 		// Remove victims in fire & knockdown Firemen
-		if (debugMode) Debug.Log("knockDown:");
-		knockDown();
+		//if (debugMode) Debug.Log("knockDown:");
+		//knockDown();
 		
 		// Final step
 		if (debugMode) Debug.Log("extOutFire:");
@@ -55,6 +55,7 @@ public class FireManager : MonoBehaviour
 	 *	
 	 *	Ambulance coords are (mapSizeX - 1, 3) & (mapSizeX - 1, 4)
 	 */
+	/*
 	public void knockDown()
 	{
 		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
@@ -84,6 +85,7 @@ public class FireManager : MonoBehaviour
 			}
 		}
 	}
+	*/
 
 
 	// Called to "Remove any Fire markers that were placed outside of the building"
