@@ -294,7 +294,7 @@ public class OperationManager
                 }
             }
 
-            if(gm.tileMap.tiles[x, z] == 4)
+            if(gm.tileMap.tiles[x, z] == 4&&!StaticInfo.level.Equals("Family"))
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
