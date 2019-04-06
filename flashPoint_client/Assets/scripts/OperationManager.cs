@@ -1319,7 +1319,7 @@ public class OperationManager
                     gm.pOIManager.rescueCarried(x,z);
                 }
             }else{
-                if(gm.tileMap.tiles[x,z]==4){
+                if(gm.tileMap.tiles[x,z]==4&&Math.Abs((double)gm.amB.x/6-x)<1&&Math.Abs((double)gm.amB.z/6-z)<1){
                     gm.pOIManager.rescueCarried(x,z);
                 }
             }
@@ -1332,7 +1332,7 @@ public class OperationManager
                     gm.pOIManager.rescueTreated(x,z);
                 }
             }else{
-                if(gm.tileMap.tiles[x,z]==4){
+                if(gm.tileMap.tiles[x,z]==4&&Math.Abs((double)gm.amB.x/6-x)<1&&Math.Abs((double)gm.amB.z/6-z)<1){
                     gm.pOIManager.rescueTreated(x,z);
                 }
             }

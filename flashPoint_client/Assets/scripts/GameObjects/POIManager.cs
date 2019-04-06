@@ -89,29 +89,37 @@ public class POIManager{
                     gm.UpdateTile(randX,randZ,0);
                 }
                 foreach(var o in gm.players.Keys){
-                    if(gm.players[o]["Location"].Equals(randX*6+","+randZ*6)){
+                    if(gm.players[o]["Location"].Equals("\""+randX*6+","+randZ*6+"\"")){
                         reveal=true;
                         break;
                     }
                 }
             }else{
-                while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated)||gm.tileMap.tiles[randX,randZ]==2||gm.tileMap.tiles[randX,randZ]==1)
-                {
-                    bool cont=false;
-                    foreach(var o in gm.players.Keys){
-                        if(gm.players[o]["Location"].Equals(randX*6+","+randZ*6)){
-                            cont=true;
-                            break;
-                        }
-                    }
-                    if(!cont){
+                bool cont=false;
+                foreach(var o in gm.players.Keys){
+                    if(gm.players[o]["Location"].Equals("\""+randX*6+","+randZ*6+"\"")){
+                        cont=true;
                         break;
+                    }else{
+                        cont=false;
                     }
+                }
+                while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated)||gm.tileMap.tiles[randX,randZ]==2||gm.tileMap.tiles[randX,randZ]==1||cont)
+                {
                     randX = rand.Next(1, 9);
                     randZ = rand.Next(1, 7);
                     key[0] = randX;
                     key[1] = randZ;
+                    foreach(var o in gm.players.Keys){
+                        if(gm.players[o]["Location"].Equals("\""+randX*6+","+randZ*6+"\"")){
+                            cont=true;
+                            break;
+                        }else{
+                            cont=false;
+                        }
+                    }
                 }
+                
             }
             
             int randIndex = rand.Next(0, poi.Count);
