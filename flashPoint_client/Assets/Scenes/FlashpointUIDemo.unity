@@ -415,7 +415,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 27
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalRotation.x
@@ -4096,7 +4096,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: New Text
 --- !u!222 &1816763136
@@ -4550,7 +4550,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1968159819
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4621,7 +4621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2028607539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4844,11 +4844,11 @@ MonoBehaviour:
       type: 2}
     isWalkable: 1
   - name: parking_engin
-    tileVisualPrefab: {fileID: 1259267309625838, guid: 329bf543f1f2b412a9a7094ccd5165f3,
+    tileVisualPrefab: {fileID: 1305533539631988, guid: 117916cd6514c47dc922241b0771ada5,
       type: 2}
     isWalkable: 1
   - name: parking_ambulance
-    tileVisualPrefab: {fileID: 1305533539631988, guid: 117916cd6514c47dc922241b0771ada5,
+    tileVisualPrefab: {fileID: 1259267309625838, guid: 329bf543f1f2b412a9a7094ccd5165f3,
       type: 2}
     isWalkable: 1
   - name: hotspot
@@ -4897,7 +4897,9 @@ MonoBehaviour:
   - {fileID: 1991871228526364, guid: 1a3f0ad36468a448fa6133a17158d12e, type: 2}
   - {fileID: 1490012992239220, guid: 474c6044396354d579c5cc745eded30f, type: 2}
   - {fileID: 1245993598905458, guid: b3a233d30dd3048dcad2dbe1e4ea41a5, type: 2}
-  hazPrefabs: []
+  hazPrefabs:
+  - {fileID: 1806957779694818, guid: 3df2607a77c044767aa6af66e0e30e34, type: 2}
+  - {fileID: 1843453792999338, guid: 1040191083ff744acb164cb0ed80cdb2, type: 2}
   mapSizeX: 10
   mapSizeZ: 8
   damaged_wall_num: 0
@@ -4990,7 +4992,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000059604645, y: 215.4}
+  m_AnchoredPosition: {x: -0.00006771088, y: 215.4}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881

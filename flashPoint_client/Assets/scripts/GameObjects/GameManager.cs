@@ -60,6 +60,8 @@ public class GameManager: MonoBehaviour
     private JSONObject participants;
     private String level;
     private String numberOfPlayer;
+    private String numberOfHazmat;
+    private String numberOfHotspot;
     public Dictionary<String, JSONObject> players = new Dictionary<string, JSONObject>();
     public Ambulance amB;
     public Engine enG;
@@ -99,7 +101,16 @@ public class GameManager: MonoBehaviour
         socket.On("RemoveHazmat_Success", RemoveHazmat_Success);
         socket.On("UpdateHazmatLocation_Success", UpdateHazmatLocation_Success);
         socket.On("AddPOI_Success", AddPOI_Success);
+        socket.On("InitializePOI_Success", initializePOI_Success);
+        socket.On("StartCarryV_Success", StartCarryV_Success);
+        socket.On("StartLeadV_Success", StartLeadV_Success);
+        socket.On("StartCarryHazmat_Success",StartCarryHazmat_Success);
         socket.On("ConfirmRide", ConfirmRide);
+        socket.On("StopDrive_Success",stopDrive_Success);
+        socket.On("StopRide_Success",StopRide_Success);
+        socket.On("StopCarry_Success",StopCarry_Success);
+        socket.On("StopLead_Success",StopLead_Success);
+        socket.On("changeRole_Success",changeRole_Success);
 
         if (game_info != null)
         {
@@ -107,6 +118,8 @@ public class GameManager: MonoBehaviour
             participants = room["participants"];
             level = room["level"].ToString();
             numberOfPlayer = room["numberOfPlayer"].ToString();
+            numberOfHazmat=room["numberOfHazmat"].ToString();
+            numberOfHotspot=room["numberOfHotspot"].ToString();
 
             List<string> p = participants.keys;
             foreach (var v in p)
@@ -114,7 +127,8 @@ public class GameManager: MonoBehaviour
                 //Debug.Log(participants[v]);
                 var o = participants[v];
                 players[v] = o;
-                //Debug.Log(players[v]);
+                Debug.Log("debug location");
+                Debug.Log(players[v]["Location"]);
             }
         }
 
@@ -140,9 +154,10 @@ public class GameManager: MonoBehaviour
         checkTurn();	//initialize isMyTurn variable at start
         Debug.Log(level);
         roles.text="";
-        if (!StaticInfo.level.Equals("Family"))
+        if (!level.Equals("\"Family\"")||(StaticInfo.level!=null)&&!StaticInfo.level.Equals("\"Family\""))
         {
             displayRole();
+            changeRoleButton.SetActive(true);
         }
         else
         {
@@ -151,12 +166,13 @@ public class GameManager: MonoBehaviour
             engine.SetActive(false);
         }
 
+        Debug.Log("staticinfo "+StaticInfo.numberOfPlayer);
         selectRolePanel.SetActive(false);
 
     }
 
     public void displayAP(){
-        Debug.Log(fireman);
+        Debug.Log(fireman.role.ToString());
         nameAP.text= StaticInfo.name + " : " + fireman.FreeAP + " AP" ;
         if (fireman.role == Role.Captain)
         {
@@ -174,7 +190,8 @@ public class GameManager: MonoBehaviour
 
     public void displayRole()
     {
-        if(StaticInfo.level.Equals("Family")){
+        Debug.Log("staticinfo "+StaticInfo.name);
+        if(StaticInfo.level.Equals("\"Family\"")){
             return;
         }
         Debug.Log("displaying role");
@@ -183,7 +200,7 @@ public class GameManager: MonoBehaviour
         {
             foreach (string name in players.Keys)
             {
-                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name]["Role"].ToString()));
+                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
             }
         }
 
@@ -257,7 +274,7 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["horizontal"]);
 
 		// Bottom is temporarily commented out:
-		//wallManager.BreakWall(x, z, type, horizontal, false);
+		wallManager.BreakWall(x, z, type, horizontal, false);
 	}
 
 	void DoorUpdate_Success(SocketIOEvent obj)
@@ -317,7 +334,6 @@ public class GameManager: MonoBehaviour
             Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
-        if (!StaticInfo.level.Equals("Family")) displayRole();
     }
 
 //for vehicles
@@ -544,7 +560,7 @@ public class GameManager: MonoBehaviour
 
     public Ambulance initializeAmbulance()
     {
-        Ambulance amb = new Ambulance(ambulance, 54, 27, this);
+        Ambulance amb = new Ambulance(ambulance, 54, 21, this);
 
         return amb;
     }
@@ -663,7 +679,7 @@ public class GameManager: MonoBehaviour
         Debug.Log("Ending Turn");
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(1, 4, false);
+		fireManager.advanceFire(1, 3, true);
 		Debug.Log("Finished advFire, redistributing AP");
 
         operationManager.commandMoves = 1;
@@ -679,7 +695,7 @@ public class GameManager: MonoBehaviour
 
         //if (isMyTurn)
         //{
-			changeTurn();
+		changeTurn();
         //}
         //else
         //{
@@ -873,16 +889,164 @@ public class GameManager: MonoBehaviour
         socket.Emit("StartDrive", new JSONObject(update));
     }
 
-    public void startCarryV()
+    public void startCarryV(int x, int z)
     {
         Dictionary<string, string> update = new Dictionary<string, string>();
         update["room"] = StaticInfo.roomNumber;
         update["name"] = StaticInfo.name;
         update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
         update["carryV"] = true.ToString();
+        update["x"]=x.ToString();
+        update["z"]=z.ToString();
 
         socket.Emit("StartCarryV", new JSONObject(update));
     }
+
+    public void startLeadV(int x, int z){
+        Dictionary<string, string> update = new Dictionary<string, string>();
+        update["room"] = StaticInfo.roomNumber;
+        update["name"] = StaticInfo.name;
+        update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
+        update["carryV"] = true.ToString();
+        update["x"]=x.ToString();
+        update["z"]=z.ToString();
+
+        socket.Emit("StartLeadV", new JSONObject(update));
+    }
+
+    public void StartCarryV_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        pOIManager.carryPOI(x,z);
+
+    }
+
+    public void StartLeadV_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        pOIManager.leadPOI(x,z);
+
+    }
+
+    public void startCarryHazmat(int x, int z){
+        Dictionary<string, string> update = new Dictionary<string, string>();
+        update["room"] = StaticInfo.roomNumber;
+        update["name"] = StaticInfo.name;
+        update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
+        update["carryV"] = true.ToString();
+        update["x"]=x.ToString();
+        update["z"]=z.ToString();
+
+        socket.Emit("StartCarryHazmat", new JSONObject(update));
+    }
+
+    public void StartCarryHazmat_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        hazmatManager.carryHazmat(x,z);
+
+    }
+
+    public void StopCarry(int x, int z){
+        Dictionary<string,string> carry=new Dictionary<string, string>();
+        carry["room"]=StaticInfo.roomNumber;
+        carry["name"]=StaticInfo.name;
+        carry["x"]=x.ToString();
+        carry["z"]=z.ToString();
+        socket.Emit("StopCarry",new JSONObject(carry));
+    }
+
+    public void StopCarry_Success(SocketIOEvent obj){
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+        pOIManager.dropPOI(x,z);
+    }
+
+    public void StopLead(int x, int z){
+        Dictionary<string,string> carry=new Dictionary<string, string>();
+        carry["room"]=StaticInfo.roomNumber;
+        carry["name"]=StaticInfo.name;
+        carry["x"]=x.ToString();
+        carry["z"]=z.ToString();
+        socket.Emit("StopLead",new JSONObject(carry));
+    }
+
+    public void StopLead_Success(SocketIOEvent obj){
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+        pOIManager.dropPOI(x,z);
+    }
+    
 
     public void AddPOI(int x, int z,int type)
     {
@@ -914,7 +1078,51 @@ public class GameManager: MonoBehaviour
 
     public void stopDrive_Success(SocketIOEvent obj)
     {
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
 
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+    }
+
+    public void StopRide_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+
+        List<string> names=parseJsonArray(obj.data["ToStop"]);
+        foreach(string n in names){
+            if(n.Equals(StaticInfo.name)){
+                this.fireman.riding=false;
+            }
+        }
+    }
+
+    public void stopRide(string name)
+    {
+        Dictionary<string, string> stop = new Dictionary<string, string>();
+        stop["name"] = name;
+        stop["room"] = StaticInfo.roomNumber;
+
+        socket.Emit("StopRide", new JSONObject(stop));
     }
 
     public List<string> parseJsonArray(JSONObject obj)
@@ -1004,6 +1212,7 @@ public class GameManager: MonoBehaviour
             {
                 Role oldRole = StaticInfo.role;
                 fireman.setRole((Role)i);
+                StaticInfo.role=(Role)i;
                 fireman.setAP(fireman.FreeAP - 2);
                 displayRole();
                 Dictionary<string, string> change = new Dictionary<string, string>();
@@ -1016,6 +1225,34 @@ public class GameManager: MonoBehaviour
             }
         }
         selectRolePanel.SetActive(false);
+    }
+
+    public void changeRole_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+
+        if(!level.Equals("Family")){
+            displayRole();
+        }
+    }
+
+    public void initializePOI(){
+        socket.Emit("InitializePOI");
+    }
+
+    public void initializePOI_Success(SocketIOEvent obj){
+        pOIManager.refreshPOI();
     }
 
 }

@@ -29,23 +29,23 @@ public class HazmatManager{
         //this.additionalHotspot 
         switch (StaticInfo.level)
         {
-            case "Family":
+            case "\"Family\"":
                 numOfHazmat=0;
                 additionalHotspot = 0;
                 break;
-            case "Experienced-Recruit":
+            case "\"Experienced-Recruit\"":
                 numOfHazmat = 3;
                 break;
-            case "Experienced-Veteran":
+            case "\"Experienced-Veteran\"":
                 numOfHazmat = 4;
                 additionalHotspot += 3;
                 break;
-            case "Experienced-Heroic":
+            case "\"Experienced-Heroic\"":
                 numOfHazmat = 5;
                 additionalHotspot += 3;
                 break; 
         }
-        if (StaticInfo.level == "Random")
+        if (StaticInfo.level == "\"Random\"")
         {
             if (Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
@@ -157,7 +157,7 @@ public class HazmatManager{
         GameObject obj = get(origx, origz, movingLookup);
         Remove(origx, origz, movingHazmat);
         Remove(origx, origz, movingLookup);
-        obj.transform.position = new Vector3(newx, posY, newz);
+        obj.transform.position = new Vector3((float)(newx*6-1.5), posY, (float)(newz*6-1.5));
         int[] key = new int[] { newx, newz };
         movingHazmat.Add(key, p);
         movingLookup.Add(key, obj);
@@ -173,6 +173,21 @@ public class HazmatManager{
         int[] key = new int[] { x, z };
         movingHazmat.Add(key, p);
         movingLookup.Add(key, obj);
+        obj.transform.position = new Vector3((float)(x * 6 - 1.5), posY, (float)(z * 6 - 1.5));
+    }
+
+    public void dropHazmat(int x, int z){
+        if(containsKey(x,z,movingHazmat)){
+            Hazmat p=get(x,z,movingHazmat);
+            GameObject obj=get(x,z,movingLookup);
+            Remove(x,z,movingHazmat);
+            Remove(x,z,movingLookup);
+
+            int[] key=new int[]{x,z};
+            placedHazmat.Add(key,p);
+            lookUp.Add(key,obj);
+            obj.transform.position=new Vector3((float)(x*6+1.5),posY,(float)(z*6-1.5));
+        }
     }
 
     public bool containsKey(int x, int z, Dictionary<int[], Hazmat> list)

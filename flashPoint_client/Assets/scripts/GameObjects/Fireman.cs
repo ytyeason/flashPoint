@@ -33,6 +33,7 @@ public class Fireman
     public int remainingSpecAp = 0;
 
     public bool carryingVictim = false;
+    public bool leadingVictim=false;
     public POI carriedPOI;
     public Hazmat carriedHazmat;
     public POI ledPOI;
@@ -81,7 +82,7 @@ public class Fireman
         //}
     }
 
-    public Fireman(int in_x, int in_z, Role role, int drive, bool carrying, string name)
+    public Fireman(int in_x, int in_z, Role role, int drive, int ride, bool carrying, bool leading, string name)
     {
         this.currentX = in_x;
         this.currentZ = in_z;
@@ -91,7 +92,12 @@ public class Fireman
             this.driving = true;
             vehicle = drive;
         }
+        if(ride!=0){
+            this.riding=true;
+            vehicle=ride;
+        }
         this.carryingVictim = carrying;
+        this.leadingVictim=leading;
         this.name = name;
     }
 
@@ -398,7 +404,8 @@ public class Fireman
         if (gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI) && gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI).status == POIStatus.Hidden)
         {
             gm.pOIManager.reveal(x, z);
-            pOIManager.gm.updateRevealPOI(x, z);
+            Debug.Log("has poi");
+            gm.updateRevealPOI(x, z);
         }
     }
 
@@ -571,14 +578,15 @@ public class Fireman
         this.carryingVictim = true;
         this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
         gm.pOIManager.carryPOI(x, z);
-        gm.startCarryV();
+        gm.startCarryV(x,z);
     }
 
     public void leadV(int x, int z)
     {
         this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
         gm.pOIManager.leadPOI(x, z);
-        gm.startCarryV();
+        this.leadingVictim=true;
+        gm.startLeadV(x,z);
     }
 
     public void carryHazmat(int x,int z)
@@ -586,7 +594,7 @@ public class Fireman
         this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
         this.carryingVictim = true;
         gm.hazmatManager.carryHazmat(x, z);
-        gm.startCarryV();
+        gm.startCarryHazmat(x,z);
     }
 
 

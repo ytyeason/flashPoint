@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEngine.SceneManagement;
+using UnityEngine;
 using System.Collections;
 
 public class ApplicationManager : MonoBehaviour {
@@ -12,4 +13,10 @@ public class ApplicationManager : MonoBehaviour {
 		Application.Quit();
 		#endif
 	}
+
+    public void newGame ()
+    {
+        Debug.Log("New game button clicked");
+        SceneManager.LoadScene("Lobby");
+    }
 }

@@ -68,7 +68,7 @@ public class SelectRole : MonoBehaviour {
                 StaticInfo.role = Role.ImagingTech;
                 break;
         }
-        Debug.Log("selectRole successful");
+        Debug.Log("selectRole successful: " + StaticInfo.role);
         SceneManager.LoadScene("Room");
 
     }
@@ -132,6 +132,7 @@ public class SelectRole : MonoBehaviour {
         Dictionary<String, String> selectedRole = new Dictionary<string, string>();
         selectedRole["role"] = ((int)r).ToString();
         selectedRole["room"] = StaticInfo.roomNumber;
+        selectedRole["name"]=StaticInfo.name;
         socket.Emit("SelectRole",new JSONObject(selectedRole));
     }
 
