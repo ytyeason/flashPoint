@@ -478,15 +478,15 @@ public class Fireman
 
     public void flipPOI(int x, int z)
     {
-        pOIManager.reveal(x, z);
-        pOIManager.gm.updateRevealPOI(x, z);
+        gm.pOIManager.reveal(x, z);
+        gm.updateRevealPOI(x, z);
     }
 
 
     public void removeHazmet(int x, int z)
     {
 
-        hazamatManager.removeHazmat(x, z);
+        gm.hazmatManager.removeHazmat(x, z);
         gm.RemoveHazmat(x, z);
 
     }
