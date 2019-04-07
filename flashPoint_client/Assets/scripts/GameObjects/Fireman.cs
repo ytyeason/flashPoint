@@ -6,7 +6,9 @@ using System.Text.RegularExpressions;
 using SocketIO;
 using System;
 
+using System;
 
+[Serializable]
 public class Fireman
 {
     public GameObject s;

@@ -7,7 +7,9 @@ using System.Text.RegularExpressions;
 using SocketIO;
 using System;
 
+using System;
 
+[Serializable]
 public class TileMap  {
 
    //public Fireman selectedUnit2;

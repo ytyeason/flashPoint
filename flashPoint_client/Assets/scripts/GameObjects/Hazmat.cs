@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
+[Serializable]
 public class Hazmat
 {
     public HazmatManager hm;

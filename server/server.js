@@ -13,6 +13,64 @@ var Games = {};
 
 var clients	= [];
 
+var Games_state = {};
+
+function initialize_hWall(room){
+    console.log("initializing hwall");
+    room['hWallMemo'].push({[[1,1]]: 0});
+    room['hWallMemo'].push({[[2,1]]: 0});
+    room['hWallMemo'].push({[[4,1]]: 0});
+    room['hWallMemo'].push({[[3,1]]: 0});
+    room['hWallMemo'].push({[[6,1]]: 0});
+    room['hWallMemo'].push({[[7,1]]: 0});
+    room['hWallMemo'].push({[[8,1]]: 0});
+    room['hWallMemo'].push({[[1,3]]: 0});
+    room['hWallMemo'].push({[[2,3]]: 0});
+    room['hWallMemo'].push({[[4,3]]: 0});
+    room['hWallMemo'].push({[[5,3]]: 0});
+    room['hWallMemo'].push({[[4,4]]: 0});
+    room['hWallMemo'].push({[[6,4]]: 0});
+    room['hWallMemo'].push({[[7,4]]: 0});
+    room['hWallMemo'].push({[[8,4]]: 0});
+
+    room['hWallMemo'].push({[[1,5]]: 0});
+    room['hWallMemo'].push({[[2,5]]: 0});
+    room['hWallMemo'].push({[[4,6]]: 0});
+    room['hWallMemo'].push({[[5,6]]: 0});
+    room['hWallMemo'].push({[[1,7]]: 0});
+    room['hWallMemo'].push({[[2,7]]: 0});
+    room['hWallMemo'].push({[[3,7]]: 0});
+    room['hWallMemo'].push({[[4,7]]: 0});
+    room['hWallMemo'].push({[[5,7]]: 0});
+    room['hWallMemo'].push({[[8,7]]: 0});
+}
+
+function initialize_vWall(room){
+    console.log("initializing vwall");
+    room['vWallMemo'].push({[[1,1]]: 1});
+    room['vWallMemo'].push({[[1,2]]: 1});
+    room['vWallMemo'].push({[[1,4]]: 1});
+    room['vWallMemo'].push({[[1,5]]: 1});
+    room['vWallMemo'].push({[[1,6]]: 1});
+    room['vWallMemo'].push({[[4,1]]: 1});
+    room['vWallMemo'].push({[[4,2]]: 1});
+    room['vWallMemo'].push({[[4,4]]: 1});
+    room['vWallMemo'].push({[[4,5]]: 1});
+    room['vWallMemo'].push({[[4,6]]: 1});
+    room['vWallMemo'].push({[[6,5]]: 1});
+    room['vWallMemo'].push({[[6,6]]: 1});
+
+    room['vWallMemo'].push({[[7,1]]: 1});
+    room['vWallMemo'].push({[[7,2]]: 1});
+    room['vWallMemo'].push({[[7,3]]: 1});
+    room['vWallMemo'].push({[[9,1]]: 1});
+    room['vWallMemo'].push({[[9,2]]: 1});
+    room['vWallMemo'].push({[[9,4]]: 1});
+    room['vWallMemo'].push({[[9,5]]: 1});
+    room['vWallMemo'].push({[[9,6]]: 1});
+
+}
+
 // var selectRoles=[];
 
 io.on('connection', function (socket) {//default event for client connect to server
@@ -50,12 +108,52 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
     });
 
+    socket.on('LOAD_GAME', function(data){
+      console.log(data);
+
+      var room_num = data["room"];
+      var name = data["name"];
+      var room = Games[room_num];
+      if(room!=undefined){
+          if(room['participants'][name]!= undefined){
+              console.log("found participant's saved game!!!")
+              var room_state = Games_state[room_num];
+              console.log(room_state);
+              socket.emit("LOAD_GAME_SUCCESS", {'room':Games, 'state': room_state});
+          }else{
+            console.log("Didn't found your name!")
+            socket.emit("LOAD_GAME_SUCCESS", {'status':false});
+          }
+      }else{
+        console.log("Didn't found your room!")
+        socket.emit("LOAD_GAME_SUCCESS", {'status':false});
+      }
+
+    });
+
     socket.on('CREATE_ROOM', function(data){
 
       var room_number = data['room'];
       var name = data['name'];
       Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
+
+      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[]};
+
+      // var s = [1,2];
+      // Games_state[room_number]['hWallMemo'].push({[s]: 0});
+      // var s1 = [2,2];
+      // Games_state[room_number]['hWallMemo'].push({[s1]: 0});
+      //
+      // var s = [10,20];
+      // Games_state[room_number]['vWallMemo'].push({[s]: 0});
+      // var s1 = [20,20];
+      // Games_state[room_number]['vWallMemo'].push({[s1]: 0});
+
+      initialize_hWall(Games_state[room_number]);
+      initialize_vWall(Games_state[room_number]);
+
       console.log(Games);
+      console.log(Games_state);
       socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
     });
 
@@ -151,10 +249,37 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var z = data['z'];
         var type = data['type'];
         var horizontal = data["horizontal"];
-        console.log(x);
-        console.log(z);
-        console.log(type);
-        console.log(horizontal);
+        var room = data['room'];
+        var location = x+','+z;
+        // console.log(x);
+        // console.log(z);
+        // console.log(type);
+        // console.log(horizontal);
+        // console.log(room);
+        // console.log(Games_state[room]);
+        if(horizontal=='1'){//horizontal
+            console.log("updating horizontal Games_state wall");
+            var hWall_list = Games_state[room]['hWallMemo'];
+            hWall_list.forEach(w => {
+              if(w[location]!= null){
+                  console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
+                  w[[x,z]] = type;
+              }
+            });
+            Games_state[room]['hWallMemo'] = hWall_list;
+            console.log(Games_state[room]['hWallMemo']);
+        }else{
+            console.log("updating vertical Games_state wall");
+            var vWall_list = Games_state[room]['vWallMemo'];
+            vWall_list.forEach(w => {
+              if(w[location]!= null){
+                  console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
+                  w[[x,z]] = type;
+              }
+            });
+            Games_state[room]['vWallMemo'] = vWall_list;
+            console.log(Games_state[room]['vWallMemo']);
+        }
         socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal});
     });
 
@@ -228,12 +353,12 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on('RevealPOI',function(data){
         var x = data['x'];
         var z = data['z'];
-        
+
         console.log(x);
         console.log(z);
-        
+
         socket.broadcast.emit('revealPOI_Success', {"x":x, "z":z});
-        
+
     });
 
     socket.on('TreatV', function(data){
@@ -294,12 +419,12 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on('RemoveH',function(data){
       var x = data['x'];
       var z = data['z'];
-      
+
       console.log(x);
       console.log(z);
-      
+
       socket.broadcast.emit('RemoveHazmat_Success', {"x":x, "z":z});
-      
+
     });
 
     socket.on('UpdateHazmatLocation', function(data){
@@ -367,6 +492,13 @@ io.on('connection', function (socket) {//default event for client connect to ser
       console.log("changing Role:");
       console.log(Games[room]);
       socket.broadcast.emit('LocationUpdate_SUCCESS',Games);
+    });
+
+    socket.on('savedGame',function(data){
+        console.log(data);
+        console.log("in saved game");
+
+
     });
 
 });

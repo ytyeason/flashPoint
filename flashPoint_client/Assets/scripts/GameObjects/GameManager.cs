@@ -10,6 +10,7 @@ using UnityEngine.UI;
 //using System.Web.Script.Serialization;
 
 
+[Serializable]
 public class GameManager: MonoBehaviour
 {
     public SocketIOComponent socket;
@@ -95,6 +96,7 @@ public class GameManager: MonoBehaviour
         socket.On("RemoveHazmat_Success", RemoveHazmat_Success);
         socket.On("UpdateHazmatLocation_Success", UpdateHazmatLocation_Success);
         socket.On("AddPOI_Success", AddPOI_Success);
+        socket.On("SaveGame_Success", SaveGame_Success);
 
         if (game_info != null)
         {
@@ -112,40 +114,62 @@ public class GameManager: MonoBehaviour
                 //Debug.Log(players[v]);
             }
         }
-
-        fireman = initializeFireman();
-        amB = initializeAmbulance();
-        enG = initializeEngine();
-        operationManager = new OperationManager(this);
-        wallManager = new WallManager(wallTypes,this);
-        doorManager = new DoorManager(doorTypes,this);
-    //    vehicleManager = new VehicleManager(vehicleTypes,this);
-        tileMap = new TileMap(tileTypes,this, fireman, enG, amB);
-		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
-        pOIManager = new POIManager(this);
-        hazmatManager=new HazmatManager(this);
-
-
-        //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
-        displayAP();
-     //   vehicleManager.StartvehicleManager();
-
-        tileMap.GenerateFiremanVisual(players);
-        registerNewFireman(fireman);
-        checkTurn();	//initialize isMyTurn variable at start
-        if (!level.Equals("Family"))
-        {
-            displayRole();
-        }
         else
         {
-            changeRoleButton.SetActive(false);
+            Debug.Log("game_info is null");
+
+            
         }
 
-        selectRolePanel.SetActive(false);
+        if (game_info != null)
+        {
+            if (!StaticInfo.LoadGame)
+            {
+                fireman = initializeFireman();
+                amB = initializeAmbulance();
+                enG = initializeEngine();
+                operationManager = new OperationManager(this);
+                wallManager = new WallManager(wallTypes, this,0);
+                doorManager = new DoorManager(doorTypes, this);
+                //    vehicleManager = new VehicleManager(vehicleTypes,this);
+                tileMap = new TileMap(tileTypes, this, fireman, enG, amB);
+                fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+                pOIManager = new POIManager(this);
+                hazmatManager = new HazmatManager(this);
+
+
+                //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+                displayAP();
+                //   vehicleManager.StartvehicleManager();
+
+                tileMap.GenerateFiremanVisual(players);
+                registerNewFireman(fireman);
+                checkTurn(); //initialize isMyTurn variable at start
+                if (!level.Equals("Family"))
+                {
+                    displayRole();
+                }
+                else
+                {
+                    changeRoleButton.SetActive(false);
+                }
+
+                selectRolePanel.SetActive(false);
+            }
+            else
+            {
+                fireman = initializeFireman();
+                amB = initializeAmbulance();
+                enG = initializeEngine();
+                operationManager = new OperationManager(this);
+                wallManager = new WallManager(wallTypes, this,1);
+            }
+            
+        }
 
 
     }
+    
 
     public void displayAP(){
         Debug.Log(fireman);
@@ -216,6 +240,58 @@ public class GameManager: MonoBehaviour
             s += " ";
         }
         return s;
+    }
+    
+    public void saveGame()
+    {
+        Debug.Log("saveGame");
+
+        GameManager save = this;
+        
+        MyClass myObject = new MyClass();
+        myObject.level = 1;
+        myObject.timeElapsed = 47.5f;
+        myObject.playerName = "Dr Charles Francis";
+        //myObject.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
+        //Debug.Log(wallManager.defaultHorizontalWallsMemo.Keys.Count);
+
+        int[] a = new int[] { 1, 1 };
+        MyObjectArrayWrapper m = new MyObjectArrayWrapper();
+        m.objects = a;
+        //m.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
+
+        socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(m)));
+    }
+
+    void SaveGame_Success(SocketIOEvent obj)
+    {
+        Debug.Log("SaveGame_Success");
+        Debug.Log(obj.data);
+        Debug.Log(obj.data[0]); // [{"1,2":0},{"2,2":0}]
+        Debug.Log(obj.data[1]); 
+
+        Debug.Log(obj.data[0][0]);
+        Debug.Log(obj.data[0][1]);
+        Debug.Log(obj.data[0].Count);
+        
+        Debug.Log(obj.data[0][0].ToDictionary().Keys);
+        Debug.Log(obj.data[0][1].ToDictionary().Keys);
+
+        foreach (KeyValuePair<string, string> entry in obj.data[0][0].ToDictionary())
+        {
+            Debug.Log(entry.Key);
+            Debug.Log(entry.Value);
+        }
+        /*
+        Dictionary<string,string> s = obj.data.ToDictionary();
+        Debug.Log(JsonUtility.FromJson<GameManager>(s["doorManager"]));
+        */
+        /*
+        GameData g = new GameData();
+        g.gm = JsonUtility.FromJson<GameManager>(s);
+        Debug.Log(g + "------------");
+        */
+
     }
 
     void revealPOI_SUCCESS(SocketIOEvent obj)
@@ -543,6 +619,7 @@ public class GameManager: MonoBehaviour
         updateWall["z"] = z.ToString();
         updateWall["type"] = type.ToString();
         updateWall["horizontal"] = horizontal.ToString();
+        updateWall["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateWall", new JSONObject(updateWall));
     }
@@ -829,6 +906,8 @@ public class GameManager: MonoBehaviour
     {
 
     }
+    
+    
 
     public List<string> parseJsonArray(JSONObject obj)
     {
@@ -934,3 +1013,4 @@ public class Notification{
     public string msg;
     public Text textObject;
 }
+

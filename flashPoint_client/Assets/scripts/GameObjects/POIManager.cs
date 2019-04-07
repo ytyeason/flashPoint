@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SocketIO;
 using System;
+using System;
 
+[Serializable]
 public class POIManager{
 
     public GameManager gm;
