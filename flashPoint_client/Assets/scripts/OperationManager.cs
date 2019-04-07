@@ -209,14 +209,14 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 3 ) // fire deck gun && ride
+            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("\"Family\"")) // fire deck gun && ride
             {
                 double vx = (double)gm.enG.x / 6;
                 double vz = (double)gm.enG.z / 6;
 
                 // Debug.Log("int same place deck gun");
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("\"Family\""))
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
                 {
 
                     int requiredAP=4;
@@ -297,7 +297,7 @@ public class OperationManager
                 }
             }
 
-            if(gm.tileMap.tiles[x, z] == 4&&!StaticInfo.level.Equals("Family"))
+            if(gm.tileMap.tiles[x, z] == 4&&!StaticInfo.level.Equals("\"Family\""))
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
@@ -320,11 +320,15 @@ public class OperationManager
                 ||controlled.currentZ==z&&(controlled.currentX<x&&!gm.wallManager.checkIfVWall(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ==z&&controlled.currentX>x&&(!gm.wallManager.checkIfVWall(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfVDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenVDoor(controlled.currentX,controlled.currentZ)))){
                     moveTo=true;
                 }
-                if(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.ledPOI!=null)) moveTo=false;
+                if((gm.tileMap.tiles[x,z]==2&&controlled.role==Role.Dog)||(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.ledPOI!=null))) moveTo=false;
                 int requiredAP=1;
-                if(gm.tileMap.tiles[x,z]==2||controlled.carryingVictim){
+                if((gm.tileMap.tiles[x,z]==2&&controlled.role!=Role.Dog)||(controlled.carryingVictim&&controlled.role!=Role.Dog)){
                     requiredAP=2;
                 }
+                if(controlled.carryingVictim&&controlled.role==Role.Dog){
+                    requiredAP=4;
+                }
+
                 if(moveTo){
                     if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
                         Operation op=new Operation(this,OperationType.Move);
@@ -524,7 +528,7 @@ public class OperationManager
                     
                 }
             }
-            if (gm.tileMap.tiles[x, z] == 2 && (gm.tileMap.selectedUnit.carryingVictim||gm.tileMap.selectedUnit.ledPOI!=null)) moveTo = false;
+            if ((gm.tileMap.tiles[x, z] == 2&&gm.fireman.role==Role.Dog)||(gm.tileMap.tiles[x,z]==2&& (gm.tileMap.selectedUnit.carryingVictim||gm.tileMap.selectedUnit.ledPOI!=null))) moveTo = false;
             //if (gm.tileMap.selectedUnit.driving) moveTo = false;
             // if (inCommand)
             // {
@@ -569,7 +573,7 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 3 ) // fire deck gun && ride
+            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("\"Family\"")) // fire deck gun && ride
             {
                 // Debug.Log("in deckgun");
                 double vx = (double)gm.enG.x / 6;
@@ -579,7 +583,7 @@ public class OperationManager
                 // Debug.Log(currentX+" "+currentZ);
                 // Debug.Log(vx+" "+vz);
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("\"Family\""))
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
                 {
                     //if (fireman.driving)
                     //{
@@ -664,14 +668,14 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 4) // ambulance
+            if (gm.tileMap.tiles[x, z] == 4&& !StaticInfo.level.Equals("\"Family\"")) // ambulance
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
                 Fireman fireman=gm.fireman;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
+                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -683,7 +687,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
+                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -709,12 +713,18 @@ public class OperationManager
                     moveTo1=true;
                 }
 
-                if(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.ledPOI!=null)) moveTo1=false;
+                if((gm.tileMap.tiles[x,z]==2&&controlled.role==Role.Dog)||(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.ledPOI!=null))) moveTo1=false;
 
                 int requiredAP=1;
-                if(gm.tileMap.tiles[x,z]==2||controlled.carryingVictim){
+
+                if((gm.tileMap.tiles[x,z]==2&&controlled.role!=Role.Dog)||controlled.carryingVictim&&controlled.role!=Role.Dog){
                     requiredAP=2;
                 }
+
+                if(controlled.carryingVictim&&controlled.role==Role.Dog){
+                    requiredAP=4;
+                }
+
                 if(moveTo1){
                     if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
                         Operation op=new Operation(this,OperationType.Move);
@@ -809,16 +819,20 @@ public class OperationManager
                                 moveTo = true;
                             }
                         }
-                        if (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim||controlled.ledPOI!=null)) {
+                        if ((gm.tileMap.tiles[x, z] == 2 &&controlled.role==Role.Dog)||(gm.tileMap.tiles[x,z]==2&& (controlled.carryingVictim||controlled.ledPOI!=null))) {
                             moveTo = false;
                         }
                         //if (controlled.driving) moveTo = false;
                         int ap = fireman.remainingSpecAp;
                         int requiredAP = 1;
-                        if(gm.tileMap.tiles[x, z] == 2 || controlled.carryingVictim)
+                        if((gm.tileMap.tiles[x, z] == 2 &&controlled.role!=Role.Dog)|| (controlled.carryingVictim&&controlled.role!=Role.Dog))
                         {
                             requiredAP = 2;
                         }
+                        if(controlled.carryingVictim&&controlled.role==Role.Dog){
+                            requiredAP=4;
+                        }
+
                         if (controlled.role == Role.CAFS&&commandMoves>=requiredAP) // not commanded before
                         {
                             if (moveTo&&fireman.remainingSpecAp>=requiredAP)
@@ -850,7 +864,7 @@ public class OperationManager
             }
             
 
-            if (gm.tileMap.tiles[x, z] == 3) // engine
+            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("\"Family\"")) // engine
             {
                 double vx = (double)gm.enG.x / 6;
                 double vz = (double)gm.enG.z / 6;
@@ -858,7 +872,7 @@ public class OperationManager
                 Debug.Log(vx);
                 Debug.Log(vz);
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1))&&!StaticInfo.level.Equals("\"Family\""))
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1)))
                 {
                     if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) !=9 && Math.Abs(vz- z) !=7 )&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                     {
@@ -875,12 +889,12 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 4) // ambulance
+            if (gm.tileMap.tiles[x, z] == 4 ) // ambulance
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
+                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     Debug.Log("before remoting, my AP is" + " " + fireman.FreeAP);
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
@@ -893,7 +907,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("\"Family\""))
+                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                 {
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
@@ -962,9 +976,12 @@ public class OperationManager
             }
             gm.UpdateLocation(x, z, controlled.name);
             int requiredAP = 1;
-            if (gm.tileMap.tiles[x, z] == 2||(controlled.carryingVictim))
+            if ((gm.tileMap.tiles[x, z] == 2&&gm.fireman.role!=Role.Dog)||((controlled.carryingVictim)&&gm.fireman.role!=Role.Dog))
             {
                 requiredAP = 2;
+            }
+            if(controlled.carryingVictim&&gm.fireman.role==Role.Dog){
+                requiredAP=4;
             }
             if (controlled.role == Role.Paramedic || controlled.role == Role.RescueSpec)
             {

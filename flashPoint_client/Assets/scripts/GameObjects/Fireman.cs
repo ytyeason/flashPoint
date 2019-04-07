@@ -575,6 +575,7 @@ public class Fireman
 
     public void carryV(int x, int z)
     {
+        
         this.carryingVictim = true;
         this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
         gm.pOIManager.carryPOI(x, z);
