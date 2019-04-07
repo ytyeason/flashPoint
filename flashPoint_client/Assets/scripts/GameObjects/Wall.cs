@@ -32,7 +32,7 @@ public class Wall : MonoBehaviour
             }
             else
             {
-                if (wallMap.gm.fireman.FreeAP < 1)
+                if (wallMap.gm.fireman.role!=Role.RescueSpec&&wallMap.gm.fireman.FreeAP < 2||wallMap.gm.fireman.role==Role.RescueSpec&&wallMap.gm.fireman.FreeAP<1)
                 {
                     canDo = false;
                 }

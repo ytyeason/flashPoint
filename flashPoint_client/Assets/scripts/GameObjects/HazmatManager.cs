@@ -29,30 +29,30 @@ public class HazmatManager{
         //this.additionalHotspot 
         switch (StaticInfo.level)
         {
-            case "\"Family\"":
+            case "Family":
                 numOfHazmat=0;
                 additionalHotspot = 0;
                 break;
-            case "\"Experienced-Recruit\"":
+            case "Experienced-Recruit":
                 numOfHazmat = 3;
                 break;
-            case "\"Experienced-Veteran\"":
+            case "Experienced-Veteran":
                 numOfHazmat = 4;
                 additionalHotspot += 3;
                 break;
-            case "\"Experienced-Heroic\"":
+            case "Experienced-Heroic":
                 numOfHazmat = 5;
                 additionalHotspot += 3;
                 break; 
         }
-        if (StaticInfo.level == "\"Random\"")
+        if (StaticInfo.level == "Random")
         {
-            if (Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
+            if (!Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
                 numOfHazmat = Int32.Parse(StaticInfo.numOfHazmat);
             }
 
-            if (Int32.TryParse(StaticInfo.numOfHotspot, out this.numOfHazmat))
+            if (!Int32.TryParse(StaticInfo.numOfHotspot, out this.numOfHazmat))
             {
                 additionalHotspot += Int32.Parse(StaticInfo.numOfHotspot);
             }
@@ -77,10 +77,28 @@ public class HazmatManager{
                 break;
         }
         //initiate();
-
+        initiateHazmat();
     }
 
-    void putHazmat(HazmatStatus status=HazmatStatus.Hazmat)
+    public void initiateHazmat(){
+        placedHazmat=new Dictionary<int[], Hazmat>();
+        foreach(var key in lookUp.Keys){
+            gm.DestroyObject(lookUp[key]);
+        }
+        lookUp=new Dictionary<int[], GameObject>();
+        gm.initializeHazmat();
+        placeHazmat();
+    }
+
+    public void refreshHazmat(){
+        placedHazmat=new Dictionary<int[], Hazmat>();
+        foreach(var key in lookUp.Keys){
+            gm.DestroyObject(lookUp[key]);
+        }
+        lookUp=new Dictionary<int[], GameObject>();
+    }
+
+    public void putHazmat(HazmatStatus status=HazmatStatus.Hazmat)
     {
         int randX = rand.Next(1, 9);
         int randZ = rand.Next(1, 7);
@@ -96,8 +114,30 @@ public class HazmatManager{
         }
 
         Hazmat h = new Hazmat(this,status);
-        placedHazmat.Add(key, h);
+        if((HazmatStatus)status==HazmatStatus.Hazmat){
+            placedHazmat.Add(key, h);
+        }else{
+            placedHotspot.Add(key, h);
+        }
         GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(randX*6 + 1.5), posY, (float)(randZ*6 - 1.5)), Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
+        if (h.status == HazmatStatus.Hazmat)
+        {
+            lookUp.Add(key, go);
+        }
+        gm.AddHazmat(randX,randZ,(int)h.status);
+    }
+
+    public void addHazmat(int x, int z, int status){
+        int[] key=new int[]{x,z};
+        Hazmat h = new Hazmat(this,(HazmatStatus)status);
+        if((HazmatStatus)status==HazmatStatus.Hazmat){
+            placedHazmat.Add(key, h);
+        }else{
+            placedHotspot.Add(key, h);
+        }
+        GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(x*6 + 1.5), posY, (float)(z*6 - 1.5)), Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
         if (h.status == HazmatStatus.Hazmat)
         {
             lookUp.Add(key, go);
@@ -115,12 +155,16 @@ public class HazmatManager{
             Remove(key[0],key[1],lookUp);
             gm.DestroyObject(get(key[0],key[1],lookUp));
             placedHotspot.Add(key, h);
-            gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+            GameObject go=gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+            go.transform.Rotate(90, 0, 0);
         }
     }
 
     public void placeHazmat()
     {
+        Debug.Log("placing Hazmat");
+        Debug.Log(numOfHazmat);
+        Debug.Log(StaticInfo.level);
         for(int i = 0; i < numOfHazmat; i++)
         {
             putHazmat();
@@ -136,7 +180,8 @@ public class HazmatManager{
         int[] key = new int[] { x, z };
         Hazmat h = new Hazmat(this, HazmatStatus.HotSpot);
         placedHotspot.Add(key, h);
-        gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+        GameObject go=gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
     }
 
     public void removeHazmat(int x, int z)

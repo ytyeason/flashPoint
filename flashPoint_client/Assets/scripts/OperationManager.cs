@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using SocketIO;
+using UnityEngine.EventSystems;
 
 public class OperationManager
 {
@@ -42,6 +43,18 @@ public class OperationManager
 
     }
 
+    public void OnSelectOption(string str,Vector3 position){
+        
+        // gm.tooltipPanel.transform.position = new Vector3(position.x,position.y+25,position.z);
+        gm.tooltipPanel.SetActive(true);
+        gm.tooltipPanel.transform.position=new Vector3(position.x,position.y,position.z+2);
+        gm.tooltip.text=str;
+    }
+
+    public void OnMouseExit(){
+        gm.tooltipPanel.SetActive(false);
+    }
+    
     public void selectTile(int x, int z)
     {
         DestroyAll();
@@ -62,45 +75,69 @@ public class OperationManager
         for(int i = 0; i < possibleOp.Count; i++)
         {
             Button newObject = gm.instantiateOp(possibleOp[i].prefab, options[i].transform,true);
+            EventTrigger trigger= newObject.gameObject.GetComponent<EventTrigger>();
+            EventTrigger.Entry entry= new EventTrigger.Entry();
+            EventTrigger.Entry exit=new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerEnter;
+            entry.callback = new EventTrigger.TriggerEvent();
+            exit.eventID = EventTriggerType.PointerExit;
+            exit.callback = new EventTrigger.TriggerEvent();
+
+            string tip="";
+            Vector3 position=options[i].transform.position;
+            
             switch (possibleOp[i].type) {
                 case OperationType.Move:
                     newObject.onClick.AddListener(move);
+                    tip="Move";
                     break;
                 case OperationType.Treat:
                     newObject.onClick.AddListener(treat);
+                    tip="Treat";
                     break;
                 case OperationType.CarryV:
                     newObject.onClick.AddListener(carryV);
+                    tip="Carry Victim";
                     break;
                 case OperationType.LeadV:
                     newObject.onClick.AddListener(leadV);
+                    tip="Lead Victim";
                     break;
                 case OperationType.CarryHazmat:
                     newObject.onClick.AddListener(carryHazmat);
+                    tip="Carry Hazmat";
                     break;
                 case OperationType.RemoveHazmat:
                     newObject.onClick.AddListener(removeHazmat);
+                    tip="Remove Hazmat";
                     break;
                 case OperationType.Command:
                     newObject.onClick.AddListener(command);
+                    tip="Command";
                     break;
                 case OperationType.Imaging:
                     newObject.onClick.AddListener(imaging);
+                    tip="Imaging";
                     break;
                 case OperationType.ExtingSmoke:
                     newObject.onClick.AddListener(extingSmoke);
+                    tip="Extinguish Once";
                     break;
                 case OperationType.ExtingFire:
                     newObject.onClick.AddListener(extingFire);
+                    tip="Extinguish Twice";
                     break;
                 case OperationType.Drive:
                     newObject.onClick.AddListener(drive);
+                    tip="Drive";
                     break;
                 case OperationType.Remote:
                     newObject.onClick.AddListener(remote);
+                    tip="Call Over";
                     break;
                 case OperationType.Ride:
                     newObject.onClick.AddListener(ride);
+                    tip="Ride";
                     break;
                 //case OperationType.StopDrive:
                     //newObject.onClick.AddListener(stopDrive);
@@ -110,17 +147,27 @@ public class OperationManager
                     //break;
                 case OperationType.DeckGun:
                     newObject.onClick.AddListener(deckGun);
+                    tip="Fire DeckGun";
                     break;
                 case OperationType.DropV:
                     newObject.onClick.AddListener(dropeV);
+                    tip="Drop Victim";
                     break;
                 case OperationType.DropHazmat:
                     newObject.onClick.AddListener(dropHazmat);
+                    tip="Drop Hazmat";
                     break;
                 case OperationType.StopCommand:
                     newObject.onClick.AddListener(stopCommand);
+                    tip="Stop Command";
                     break;
             }
+            UnityEngine.Events.UnityAction<BaseEventData> l_callback = new UnityEngine.Events.UnityAction<BaseEventData>((eventData)=>OnSelectOption(tip,position));
+            entry.callback.AddListener(l_callback);
+            UnityEngine.Events.UnityAction<BaseEventData> exit_callback = new UnityEngine.Events.UnityAction<BaseEventData>((eventData)=>OnMouseExit());
+            exit.callback.AddListener(exit_callback);
+            trigger.triggers.Add(entry);
+            trigger.triggers.Add (exit);
             buttons.Add(newObject);
         }
     }
@@ -216,7 +263,7 @@ public class OperationManager
 
                 // Debug.Log("int same place deck gun");
 
-                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1))
+                if (Math.Abs(currentX - vx) < 1 && (Math.Abs(currentZ - vz) < 1)&&!StaticInfo.level.Equals("Family"))
                 {
 
                     int requiredAP=4;
@@ -325,22 +372,24 @@ public class OperationManager
                 if((gm.tileMap.tiles[x,z]==2&&controlled.role!=Role.Dog)||(controlled.carryingVictim&&controlled.role!=Role.Dog)){
                     requiredAP=2;
                 }
+
                 if(controlled.carryingVictim&&controlled.role==Role.Dog){
                     requiredAP=4;
                 }
 
+                if(controlled.carriedPOI!=null&&controlled.role==Role.Dog){
+                    requiredAP=4;
+                }
+
                 if(moveTo){
-                    if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
+                    if(controlled.role==Role.CAFS&&this.commandMoves+fireman.FreeAP>=requiredAP){
                         Operation op=new Operation(this,OperationType.Move);
                         possibleOp.Add(op);
-                    }else if(controlled.role==Role.Paramedic||controlled.role==Role.RescueSpec){
-                        if(fireman.remainingSpecAp>=requiredAP*2){
-                            Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
-                        }
                     }else{
-                        Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
+                        if(fireman.FreeAP+fireman.remainingSpecAp>=requiredAP&&controlled.role!=Role.CAFS){
+                            Operation op=new Operation(this,OperationType.Move);
+                            possibleOp.Add(op);
+                        }
                     }
                 }
             }
@@ -545,6 +594,13 @@ public class OperationManager
             Debug.Log(moveTo);
             if (moveTo) {
                 Fireman fireman = gm.tileMap.selectedUnit;
+                int requiredAP=1;
+                if(fireman.carryingVictim||extingFire){
+                    requiredAP=2;
+                }
+                if(fireman.carryingVictim&&fireman.role==Role.Dog){
+                    requiredAP=4;
+                }
                 if (fireman.role == Role.RescueSpec)
                 {
                     if (extingFire && fireman.FreeAP + fireman.remainingSpecAp >= 2)
@@ -560,11 +616,11 @@ public class OperationManager
                 else
                 {
                     Debug.Log("else");
-                    if(extingFire && fireman.FreeAP >= 2)
+                    if(extingFire && fireman.FreeAP >= requiredAP)
                     {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
-                    }else if (!extingFire && fireman.FreeAP >= 1)
+                    }else if (!extingFire && fireman.FreeAP >= requiredAP)
                     {
 
                         Operation op = new Operation(this, OperationType.Move);
@@ -726,17 +782,14 @@ public class OperationManager
                 }
 
                 if(moveTo1){
-                    if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
+                    if(controlled.role==Role.CAFS&&this.commandMoves+gm.fireman.FreeAP>=requiredAP){
                         Operation op=new Operation(this,OperationType.Move);
                         possibleOp.Add(op);
-                    }else if(controlled.role==Role.Paramedic||controlled.role==Role.RescueSpec){
-                        if(gm.fireman.remainingSpecAp>=requiredAP*2){
-                            Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
-                        }
                     }else{
-                        Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
+                        if(controlled.role!=Role.CAFS&&gm.fireman.FreeAP+gm.fireman.remainingSpecAp>=requiredAP){
+                            Operation op=new Operation(this,OperationType.Move);
+                            possibleOp.Add(op);
+                        }
                     }
                 }
                 
@@ -841,9 +894,9 @@ public class OperationManager
                                 possibleOp.Add(op);
                             }
                         }
-                        else if(controlled.role == Role.RescueSpec|| controlled.role == Role.Paramedic)
+                        if (controlled.role == Role.CAFS&&commandMoves+fireman.FreeAP>=requiredAP) // not commanded before
                         {
-                            if (moveTo && fireman.remainingSpecAp >= requiredAP * 2)
+                            if (moveTo)
                             {
                                 Operation op = new Operation(this, OperationType.Move);
                                 possibleOp.Add(op);
@@ -851,7 +904,7 @@ public class OperationManager
                         }
                         else
                         {
-                            if (moveTo && fireman.remainingSpecAp >= requiredAP)
+                            if (moveTo && fireman.remainingSpecAp+fireman.FreeAP >= requiredAP&&controlled.role!=Role.CAFS)
                             {
                                 Operation op = new Operation(this, OperationType.Move);
                                 possibleOp.Add(op);
@@ -872,7 +925,8 @@ public class OperationManager
                 Debug.Log(vx);
                 Debug.Log(vz);
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1)))
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1))&&!StaticInfo.level.Equals("Family"))
+
                 {
                     if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) !=9 && Math.Abs(vz- z) !=7 )&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
                     {
@@ -894,7 +948,7 @@ public class OperationManager
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
+                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
                 {
                     Debug.Log("before remoting, my AP is" + " " + fireman.FreeAP);
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
@@ -907,7 +961,8 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
+                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&&!StaticInfo.level.Equals("Family"))
+
                 {
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     {
@@ -1331,26 +1386,30 @@ public class OperationManager
             gm.pOIManager.dropPOI(x,z);
             fireman.carriedPOI=null;
             gm.StopCarry(x,z);
-            if(StaticInfo.level.Equals("\"Family\"")){
+            if(StaticInfo.level.Equals("Family")){
                 if(x==0||x==7||z==0||z==9){
                     gm.pOIManager.rescueCarried(x,z);
+                    gm.rescueCarried(x,z);
                 }
             }else{
-                if(gm.tileMap.tiles[x,z]==4){
+                if(gm.tileMap.tiles[x,z]==4&&Math.Abs((double)gm.amB.x/6-x)<1&&Math.Abs((double)gm.amB.z/6-z)<1){
                     gm.pOIManager.rescueCarried(x,z);
+                    gm.rescueCarried(x,z);
                 }
             }
         }else if(fireman.ledPOI!=null){
             gm.pOIManager.dropPOI(x,z);
             fireman.ledPOI=null;
             gm.StopLead(x,z);
-            if(StaticInfo.level.Equals("\"Family\"")){
+            if(StaticInfo.level.Equals("Family")){
                 if(x==0||x==7||z==0||z==9){
                     gm.pOIManager.rescueTreated(x,z);
+                    gm.rescueTreated(x,z);
                 }
             }else{
-                if(gm.tileMap.tiles[x,z]==4){
+                if(gm.tileMap.tiles[x,z]==4&&Math.Abs((double)gm.amB.x/6-x)<1&&Math.Abs((double)gm.amB.z/6-z)<1){
                     gm.pOIManager.rescueTreated(x,z);
+                    gm.rescueTreated(x,z);
                 }
             }
         }
