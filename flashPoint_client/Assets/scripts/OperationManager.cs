@@ -372,18 +372,18 @@ public class OperationManager
                 if(gm.tileMap.tiles[x,z]==2||controlled.carryingVictim){
                     requiredAP=2;
                 }
+                if(controlled.carriedPOI!=null&&controlled.role==Role.Dog){
+                    requiredAP=4;
+                }
                 if(moveTo){
-                    if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
+                    if(controlled.role==Role.CAFS&&this.commandMoves+fireman.FreeAP>=requiredAP){
                         Operation op=new Operation(this,OperationType.Move);
                         possibleOp.Add(op);
-                    }else if(controlled.role==Role.Paramedic||controlled.role==Role.RescueSpec){
-                        if(fireman.remainingSpecAp>=requiredAP*2){
-                            Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
-                        }
                     }else{
-                        Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
+                        if(fireman.FreeAP+fireman.remainingSpecAp>=requiredAP&&controlled.role!=Role.CAFS){
+                            Operation op=new Operation(this,OperationType.Move);
+                            possibleOp.Add(op);
+                        }
                     }
                 }
             }
@@ -588,6 +588,13 @@ public class OperationManager
             Debug.Log(moveTo);
             if (moveTo) {
                 Fireman fireman = gm.tileMap.selectedUnit;
+                int requiredAP=1;
+                if(fireman.carryingVictim||extingFire){
+                    requiredAP=2;
+                }
+                if(fireman.carryingVictim&&fireman.role==Role.Dog){
+                    requiredAP=4;
+                }
                 if (fireman.role == Role.RescueSpec)
                 {
                     if (extingFire && fireman.FreeAP + fireman.remainingSpecAp >= 2)
@@ -603,11 +610,11 @@ public class OperationManager
                 else
                 {
                     Debug.Log("else");
-                    if(extingFire && fireman.FreeAP >= 2)
+                    if(extingFire && fireman.FreeAP >= requiredAP)
                     {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
-                    }else if (!extingFire && fireman.FreeAP >= 1)
+                    }else if (!extingFire && fireman.FreeAP >= requiredAP)
                     {
 
                         Operation op = new Operation(this, OperationType.Move);
@@ -756,24 +763,24 @@ public class OperationManager
                     moveTo1=true;
                 }
 
-                if(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.ledPOI!=null)) moveTo1=false;
+                if(gm.tileMap.tiles[x,z]==2&&(controlled.carryingVictim||controlled.leadingVictim)) moveTo1=false;
 
                 int requiredAP=1;
                 if(gm.tileMap.tiles[x,z]==2||controlled.carryingVictim){
                     requiredAP=2;
                 }
+                if(controlled.role==Role.Dog&&controlled.carryingVictim){
+                    requiredAP=4;
+                }
                 if(moveTo1){
-                    if(controlled.role==Role.CAFS&&this.commandMoves>=requiredAP){
+                    if(controlled.role==Role.CAFS&&this.commandMoves+gm.fireman.FreeAP>=requiredAP){
                         Operation op=new Operation(this,OperationType.Move);
                         possibleOp.Add(op);
-                    }else if(controlled.role==Role.Paramedic||controlled.role==Role.RescueSpec){
-                        if(gm.fireman.remainingSpecAp>=requiredAP*2){
-                            Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
-                        }
                     }else{
-                        Operation op=new Operation(this,OperationType.Move);
-                        possibleOp.Add(op);
+                        if(controlled.role!=Role.CAFS&&gm.fireman.FreeAP+gm.fireman.remainingSpecAp>=requiredAP){
+                            Operation op=new Operation(this,OperationType.Move);
+                            possibleOp.Add(op);
+                        }
                     }
                 }
                 
@@ -856,7 +863,7 @@ public class OperationManager
                                 moveTo = true;
                             }
                         }
-                        if (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim||controlled.ledPOI!=null)) {
+                        if (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim||controlled.leadingVictim)) {
                             moveTo = false;
                         }
                         //if (controlled.driving) moveTo = false;
@@ -866,17 +873,12 @@ public class OperationManager
                         {
                             requiredAP = 2;
                         }
-                        if (controlled.role == Role.CAFS&&commandMoves>=requiredAP) // not commanded before
-                        {
-                            if (moveTo&&fireman.remainingSpecAp>=requiredAP)
-                            {
-                                Operation op = new Operation(this, OperationType.Move);
-                                possibleOp.Add(op);
-                            }
+                        if(controlled.role==Role.Dog&&controlled.carryingVictim){
+                            requiredAP=4;
                         }
-                        else if(controlled.role == Role.RescueSpec|| controlled.role == Role.Paramedic)
+                        if (controlled.role == Role.CAFS&&commandMoves+fireman.FreeAP>=requiredAP) // not commanded before
                         {
-                            if (moveTo && fireman.remainingSpecAp >= requiredAP * 2)
+                            if (moveTo)
                             {
                                 Operation op = new Operation(this, OperationType.Move);
                                 possibleOp.Add(op);
@@ -884,7 +886,7 @@ public class OperationManager
                         }
                         else
                         {
-                            if (moveTo && fireman.remainingSpecAp >= requiredAP)
+                            if (moveTo && fireman.remainingSpecAp+fireman.FreeAP >= requiredAP&&controlled.role!=Role.CAFS)
                             {
                                 Operation op = new Operation(this, OperationType.Move);
                                 possibleOp.Add(op);
