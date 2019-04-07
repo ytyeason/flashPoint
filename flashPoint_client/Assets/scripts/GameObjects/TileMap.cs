@@ -128,23 +128,46 @@ public class TileMap  {
 	void GenerateMapVisual() {
 		for(int x=0; x < mapSizeX; x++) {
 			for(int z=0; z < mapSizeZ; z++) {
-				TileType tt = tileTypes[ tiles[x,z] ];
-				//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
-				GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x * 6, 0, z * 6), Quaternion.identity);
-				
-				// Connect a ClickableTile to each TileType
-				ClickableTile ct = go.GetComponent<ClickableTile>();
-				// Assign the variables as needed
-				ct.tileX = x*6;
-                ct.tileZ = z*6;
-				ct.map = this;
-				ct.type = tt;
-				
-				int[] p = new int[2];
-				p[0] = x;
-				p[1] = z;
-				tileStores[p] = go;
-				//clickTileStores[p] = ct;
+				if(tiles[x,z]==3||tiles[x,z]==4)
+				{
+					TileType tt = tileTypes[ tiles[x,z] ];
+					//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
+					GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x * 6, -2, z * 6), Quaternion.identity);
+					
+					// Connect a ClickableTile to each TileType
+					ClickableTile ct = go.GetComponent<ClickableTile>();
+					// Assign the variables as needed
+					ct.tileX = x*6;
+	                ct.tileZ = z*6;
+					ct.map = this;
+					ct.type = tt;
+					
+					int[] p = new int[2];
+					p[0] = x;
+					p[1] = z;
+					tileStores[p] = go;
+					//clickTileStores[p] = ct;
+				}
+				else
+				{
+					TileType tt = tileTypes[ tiles[x,z] ];
+					//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
+					GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x * 6, 0, z * 6), Quaternion.identity);
+					
+					// Connect a ClickableTile to each TileType
+					ClickableTile ct = go.GetComponent<ClickableTile>();
+					// Assign the variables as needed
+					ct.tileX = x*6;
+	                ct.tileZ = z*6;
+					ct.map = this;
+					ct.type = tt;
+					
+					int[] p = new int[2];
+					p[0] = x;
+					p[1] = z;
+					tileStores[p] = go;
+					//clickTileStores[p] = ct;
+				}
 			}
 		}
 	}

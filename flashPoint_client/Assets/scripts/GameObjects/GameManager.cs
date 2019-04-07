@@ -383,7 +383,7 @@ public class GameManager: MonoBehaviour
         List<string> names=parseJsonArray(obj.data["targetNames"]);
         Debug.Log("names count:" + names.Count);
         foreach(string n in names){
-            if (n.Equals(StaticInfo.name)){
+            if (n.Equals(StaticInfo.name)&& StaticInfo.level!="Family"){
                 Debug.Log("same name");
                 opPanel.SetActive(true);
                 Operation op = new Operation(operationManager, OperationType.Ride);
