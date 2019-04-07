@@ -438,11 +438,14 @@ public class GameManager: MonoBehaviour
         confirmed=0;
     }
 
-    public void UpdateEngineLocation(int newx,int newz)
+    public void UpdateEngineLocation(int newx,int newz, int origx, int origz)
     {
         Dictionary<String, string> location = new Dictionary<string, string>();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+        location["origx"]=origx.ToString();
+        location["origz"]=origz.ToString();
+        location["room"]=StaticInfo.roomNumber;
 
         socket.Emit("UpdateEngineLocation", new JSONObject(location));
         Debug.Log("update eng location");

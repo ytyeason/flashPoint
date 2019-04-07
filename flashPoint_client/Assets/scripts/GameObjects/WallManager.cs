@@ -358,7 +358,7 @@ public class WallManager
 				//Debug.Log("HasComponent TRUE for (x, z): " + x + "," + z);
 
 				// This is done seperately to avoid segfaults
-				if (hwallStores[key].GetComponent<Wall>().type != 4 || hwallStores[key].GetComponent<Wall>().type != 2)
+				if (hwallStores[key].GetComponent<Wall>().type ==0)
 				{
 					//Debug.Log("Type != 4 for (x, z): " + x + "," + z);
 					return true;
@@ -380,7 +380,7 @@ public class WallManager
 			if (key[0] == x && key[1] == z && vwallStores[key].HasComponent<Wall>())
 			{
 				// This is done seperately to avoid segfaults
-				if (vwallStores[key].GetComponent<Wall>().type != 5 || vwallStores[key].GetComponent<Wall>().type != 3)
+				if (vwallStores[key].GetComponent<Wall>().type ==1)
 				{
 					//Debug.Log("Type != 5 for (x, z): " + x + "," + z);
 					return true;

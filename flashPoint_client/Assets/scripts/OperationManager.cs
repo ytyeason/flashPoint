@@ -27,6 +27,7 @@ public class OperationManager
     public bool inCommand = false;
     public Fireman controlled;
     public int commandMoves = 1;
+    public int dog_squeeze = 0;
 
     public bool askingForRide=false;
 
@@ -378,6 +379,7 @@ public class OperationManager
                 ||controlled.currentZ==z&&(controlled.currentX<x&&!gm.wallManager.checkIfVWall_dog(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ==z&&controlled.currentX>x&&(!gm.wallManager.checkIfVWall_dog(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfVDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenVDoor(controlled.currentX,controlled.currentZ)))){
                     moveTo=true;
                     requiredAP=2;
+                    dog_squeeze=2;
                 }
 
                 if(controlled.carryingVictim&&controlled.role==Role.Dog){
@@ -568,6 +570,7 @@ public class OperationManager
                 if (gm.fireman.role==Role.Dog&&!gm.wallManager.checkIfHWall_dog(keyM[0],keyM[1])&&!gm.doorManager.checkIfHDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenHDoor(keyM[0],keyM[1]))
                 {
                     moveTo = true;
+                    dog_squeeze = 1;
                     
                 }
             }
@@ -591,6 +594,7 @@ public class OperationManager
                 if (gm.fireman.role==Role.Dog&&!gm.wallManager.checkIfVWall_dog(keyM[0],keyM[1])&&!gm.doorManager.checkIfVDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenVDoor(keyM[0],keyM[1]))
                 {
                     moveTo = true;
+                    dog_squeeze = 1;
                     
                 }
             }
@@ -615,6 +619,11 @@ public class OperationManager
                 if(fireman.carryingVictim||extingFire){
                     requiredAP=2;
                 }
+                if (fireman.role==Role.Dog&&(fireman.currentX-1==x&&fireman.currentZ==z&&!gm.wallManager.checkIfVWall_dog(fireman.currentX,controlled.currentZ))||(fireman.currentX+1==x&&fireman.currentZ==z&&!gm.wallManager.checkIfVWall_dog(x,z))||(fireman.currentX==x&&fireman.currentZ+1==z&&!gm.wallManager.checkIfHWall_dog(x,z))||(fireman.currentX==x&&fireman.currentZ-1==z&&!gm.wallManager.checkIfHWall_dog(x,z))||dog_squeeze!=0)
+                {
+                    requiredAP=2;
+                }
+                
                 if(fireman.carryingVictim&&fireman.role==Role.Dog){
                     requiredAP=4;
                 }
@@ -629,6 +638,11 @@ public class OperationManager
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     }
+                }
+                else if (fireman.role==Role.Dog&& ((fireman.currentX-1==x&&fireman.currentZ==z&&!gm.wallManager.checkIfVWall_dog(currentX,currentZ))||(fireman.currentX+1==x&&fireman.currentZ==z&&!gm.wallManager.checkIfVWall_dog(x,z))||(fireman.currentX==x&&fireman.currentZ+1==z&&!gm.wallManager.checkIfHWall_dog(x,z))||(fireman.currentX==x&&fireman.currentZ-1==z&&!gm.wallManager.checkIfHWall_dog(x,z))) && fireman.FreeAP + fireman.remainingSpecAp >= 2)
+                {
+                    Operation op = new Operation(this, OperationType.Move);
+                        possibleOp.Add(op);
                 }
                 else
                 {
@@ -799,6 +813,7 @@ public class OperationManager
                 ||controlled.currentZ==z&&controlled.currentX<x&&(!gm.wallManager.checkIfVWall_dog(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ==z&&controlled.currentX>x&&(!gm.wallManager.checkIfVWall_dog(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfVDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenVDoor(controlled.currentX,controlled.currentZ)))){
                     moveTo1=true;
                     requiredAP=2;
+                    dog_squeeze=2;
                 }
 
                 if(controlled.carryingVictim&&controlled.role==Role.Dog){
@@ -881,6 +896,7 @@ public class OperationManager
                             if (controlled.role==Role.Dog&&!gm.wallManager.checkIfHWall_dog(keyM[0], keyM[1])&&!gm.doorManager.checkIfHDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenHDoor(keyM[0],keyM[1]))
                             {
                                 moveTo = true;
+                                dog_squeeze = 2;
                     
                             }
 
@@ -905,6 +921,7 @@ public class OperationManager
                             if (controlled.role==Role.Dog&&!gm.wallManager.checkIfVWall_dog(keyM[0], keyM[1])&&!gm.doorManager.checkIfVDoor(keyM[0],keyM[1])||gm.doorManager.checkIfOpenVDoor(keyM[0],keyM[1]))
                             {
                                 moveTo = true;
+                                dog_squeeze = 2;
                     
                             }
                         }
@@ -1071,6 +1088,13 @@ public class OperationManager
             {
                 requiredAP = 2;
             }
+            // if (controlled.role==Role.Dog&&(controlled.currentX-1==x&&controlled.currentZ==z&&!gm.wallManager.checkIfVWall_dog(controlled.currentX,controlled.currentZ))||(controlled.currentX+1==x&&controlled.currentZ==z&&!gm.wallManager.checkIfVWall_dog(x,z))||(controlled.currentX==x&&controlled.currentZ+1==z&&!gm.wallManager.checkIfHWall_dog(x,z))||(controlled.currentX==x&&controlled.currentZ-1==z&&!gm.wallManager.checkIfHWall_dog(x,z)))
+            // {
+            //     requiredAP = 2;
+            // }
+            if (dog_squeeze!=0&&controlled.role==Role.Dog){
+                requiredAP = 2;
+            }
             if(controlled.carryingVictim&&gm.fireman.role==Role.Dog){
                 requiredAP=4;
             }
@@ -1079,6 +1103,7 @@ public class OperationManager
                 requiredAP *= 2;
             }
             fireman.setSpecAP(fireman.remainingSpecAp - requiredAP);
+            dog_squeeze = 0;
         }
         else
         {
@@ -1259,7 +1284,7 @@ public class OperationManager
             gm.AskForRide(vx,vz);
             // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
             eng.moveNextStation(x,z);
-            gm.UpdateEngineLocation(x, z);
+            gm.UpdateEngineLocation(eng.x, eng.z, vx, vz);
             opPanel.SetActive(false);
             DestroyAll();
             int requiredAP = 2;
