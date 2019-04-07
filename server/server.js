@@ -534,6 +534,18 @@ io.on('connection', function (socket) {//default event for client connect to ser
       socket.broadcast.emit('InitializeHazmat_Success');
     });
 
+    socket.on('RescueCarried',function(data){
+      var x=data['x'];
+      var z=data['z'];
+      socket.broadcast.emit('RescueCarried_Success',{"x":x,"z":z});
+    });
+
+    socket.on('RescueTreated',function(data){
+      var x=data['x'];
+      var z=data['z'];
+      socket.broadcast.emit('RescueTreated_Success',{"x":x,"z":z});
+    });
+
 });
 
 

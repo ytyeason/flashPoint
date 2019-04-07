@@ -1366,10 +1366,12 @@ public class OperationManager
             if(StaticInfo.level.Equals("Family")){
                 if(x==0||x==7||z==0||z==9){
                     gm.pOIManager.rescueCarried(x,z);
+                    gm.rescueCarried(x,z);
                 }
             }else{
                 if(gm.tileMap.tiles[x,z]==4&&Math.Abs((double)gm.amB.x/6-x)<1&&Math.Abs((double)gm.amB.z/6-z)<1){
                     gm.pOIManager.rescueCarried(x,z);
+                    gm.rescueCarried(x,z);
                 }
             }
         }else if(fireman.ledPOI!=null){
@@ -1379,10 +1381,12 @@ public class OperationManager
             if(StaticInfo.level.Equals("Family")){
                 if(x==0||x==7||z==0||z==9){
                     gm.pOIManager.rescueTreated(x,z);
+                    gm.rescueTreated(x,z);
                 }
             }else{
                 if(gm.tileMap.tiles[x,z]==4&&Math.Abs((double)gm.amB.x/6-x)<1&&Math.Abs((double)gm.amB.z/6-z)<1){
                     gm.pOIManager.rescueTreated(x,z);
+                    gm.rescueTreated(x,z);
                 }
             }
         }

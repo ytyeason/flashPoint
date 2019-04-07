@@ -126,6 +126,8 @@ public class GameManager: MonoBehaviour
         socket.On("StopCarry_Success",StopCarry_Success);
         socket.On("StopLead_Success",StopLead_Success);
         socket.On("changeRole_Success",changeRole_Success);
+        socket.On("RescueCarried_Success",rescueCarried_Success);
+        socket.On("RescueTreated_Success",rescueTreated_Success);
 
         if (game_info != null)
         {
@@ -1557,6 +1559,34 @@ public class GameManager: MonoBehaviour
 
     public void initializeHazmat_Success(SocketIOEvent obj){
         hazmatManager.refreshHazmat();
+    }
+
+    public void rescueCarried(int x, int z){
+        Dictionary<string,string> rescue=new Dictionary<string, string>();
+        rescue["x"]=x.ToString();
+        rescue["z"]=z.ToString();
+        socket.Emit("RescueCarried",new JSONObject(rescue));
+    }
+
+    public void rescueTreated(int x, int z){
+        Dictionary<string,string> rescue=new Dictionary<string, string>();
+        rescue["x"]=x.ToString();
+        rescue["z"]=z.ToString();
+        socket.Emit("RescueTreated",new JSONObject(rescue));
+    }
+
+    public void rescueCarried_Success(SocketIOEvent obj){
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        pOIManager.rescueCarried(x,z);
+    }
+
+    public void rescueTreated_Success(SocketIOEvent obj){
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        pOIManager.rescueTreated(x,z);
     }
 
 }
