@@ -345,10 +345,17 @@ public class Fireman
     public void move(int x, int z)
     {
         int requiredAP = 1;
-        if (gm.tileMap.tiles[x, z] == 2 || carryingVictim)
+        if ((this.role==Role.Dog && !carryingVictim && (currentX/6-1==x&&currentZ/6==z&&!gm.wallManager.checkIfVWall_dog(currentX/6,currentZ/6)&&gm.wallManager.checkIfVWall(currentX/6,currentZ/6))
+            ||(currentX/6+1==x&&currentZ/6==z&&!gm.wallManager.checkIfVWall_dog(x,z)&&gm.wallManager.checkIfVWall(x,z))||(currentX/6==x&&currentZ/6+1==z&&!gm.wallManager.checkIfHWall_dog(x,z+1)&&gm.wallManager.checkIfHWall(x,z+1))
+            ||(this.currentX/6==x&&this.currentZ/6-1==z&&!gm.wallManager.checkIfHWall_dog(x,z)&&gm.wallManager.checkIfHWall(x,z))) || (this.role!=Role.Dog && gm.tileMap.tiles[x, z] == 2) || (this.role!=Role.Dog && carryingVictim))
         {
             requiredAP = 2;
+
         }
+        if (this.role == Role.Dog && this.carryingVictim==true)
+        {
+            requiredAP = 4;
+        } 
         if (this.role == Role.RescueSpec) // Rescue Specialist
         {
             if (remainingSpecAp >= requiredAP)
