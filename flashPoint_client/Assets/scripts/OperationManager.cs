@@ -240,14 +240,14 @@ public class OperationManager
                     Operation op = new Operation(this, OperationType.RemoveHazmat);
                     possibleOp.Add(op);
                 }
-                if (!fireman.carryingVictim)
+                if (!fireman.carryingVictim&&fireman.role != Role.Dog)
                 {
                     Operation op = new Operation(this, OperationType.CarryHazmat);
                     possibleOp.Add(op);
                 }
             }
 
-            if(!gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat)&&!gm.hazmatManager.containsKey(key[0],key[1],gm.hazmatManager.placedHotspot))
+            if(!gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat)&&!gm.hazmatManager.containsKey(key[0],key[1],gm.hazmatManager.placedHotspot)&&fireman.role != Role.Dog)
             {
                 if (fireman.carriedHazmat != null)
                 {
@@ -324,7 +324,7 @@ public class OperationManager
                         }
                         if (existsF) break;
                     }
-                    if (!existsF&&fireman.FreeAP>=requiredAP&& !StaticInfo.level.Equals("\"Family\""))
+                    if (!existsF&&fireman.FreeAP>=requiredAP&& !StaticInfo.level.Equals("\"Family\"")&&fireman.role != Role.Dog)
                     {
                         Operation op = new Operation(this, OperationType.DeckGun);
                         possibleOp.Add(op);
@@ -336,7 +336,7 @@ public class OperationManager
                     //    possibleOp.Add(op);
                     //}
 
-                    if (!fireman.riding&&!fireman.driving&& StaticInfo.level!="Family") // ------------------
+                    if (!fireman.riding&&!fireman.driving&& StaticInfo.level!="Family"&&fireman.role != Role.Dog) // ------------------
                     {
                         Operation op = new Operation(this, OperationType.Ride);
                         possibleOp.Add(op);
@@ -344,16 +344,16 @@ public class OperationManager
                 }
             }
 
-            if(gm.tileMap.tiles[x, z] == 4&&!StaticInfo.level.Equals("\"Family\""))
+            if(gm.tileMap.tiles[x, z] == 4&&!StaticInfo.level.Equals("\"Family\"")&&fireman.role != Role.Dog)
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(currentX - vx) != 9 && Math.Abs(currentZ - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family"){
+                if (fireman.FreeAP >= 2 && (Math.Abs(currentX - vx) != 9 && Math.Abs(currentZ - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family"&&fireman.role != Role.Dog){
                     Operation op = new Operation(this, OperationType.Remote);
                     possibleOp.Add(op);
                 }
-                if (fireman.FreeAP >= 4 && (Math.Abs(currentX - vx) == 9 || Math.Abs(currentZ - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family")
+                if (fireman.FreeAP >= 4 && (Math.Abs(currentX - vx) == 9 || Math.Abs(currentZ - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family"&&fireman.role != Role.Dog)
                 {
                     Operation op = new Operation(this, OperationType.Remote);
                     possibleOp.Add(op);
@@ -494,7 +494,7 @@ public class OperationManager
 
             // check for AP
 
-            if (gm.tileMap.selectedUnit.role == Role.Paramedic || gm.tileMap.selectedUnit.role == Role.RescueSpec) // paramedic and rescue spec: double AP
+            if (gm.tileMap.selectedUnit.role == Role.Paramedic || gm.tileMap.selectedUnit.role == Role.RescueSpec&&gm.tileMap.selectedUnit.role != Role.Dog) // paramedic and rescue spec: double AP
             {
                 if (extingsmoke&&gm.tileMap.selectedUnit.FreeAP>=2)
                 {
@@ -521,7 +521,7 @@ public class OperationManager
                 }
 
             }
-            else
+            else if(gm.tileMap.selectedUnit.role!=Role.Dog)
             {
                 if (extingsmoke && gm.tileMap.selectedUnit.FreeAP >= 1)
                 {
@@ -733,7 +733,7 @@ public class OperationManager
                         if (existsF) break;
                     }
                     // Debug.Log(existsF);
-                    if (!existsF&&fireman.FreeAP>=requiredAP&& !StaticInfo.level.Equals("\"Family\""))
+                    if (!existsF&&fireman.FreeAP>=requiredAP&& !StaticInfo.level.Equals("\"Family\"")&&fireman.role != Role.Dog)
                     {
                         Operation op = new Operation(this, OperationType.DeckGun);
                         possibleOp.Add(op);
@@ -745,7 +745,7 @@ public class OperationManager
                     //    possibleOp.Add(op);
                     //}
 
-                    if (!fireman.riding&&!fireman.driving&&  StaticInfo.level!="Family") // ------------------
+                    if (!fireman.riding&&!fireman.driving&&  StaticInfo.level!="Family"&&fireman.role != Role.Dog) // ------------------
                     {
                         Operation op = new Operation(this, OperationType.Ride);
                         possibleOp.Add(op);
@@ -753,14 +753,14 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 4 && !StaticInfo.level.Equals("\"Family\"")) // ambulance
+            if (gm.tileMap.tiles[x, z] == 4 && !StaticInfo.level.Equals("\"Family\"")&&gm.tileMap.selectedUnit.role != Role.Dog) // ambulance
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
                 Fireman fireman=gm.fireman;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family")
+                if (fireman.FreeAP >= 2 && (Math.Abs(vx - x) != 9 && Math.Abs(z - vz) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family"&&fireman.role != Role.Dog)
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -772,7 +772,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family")
+                if (fireman.FreeAP >= 4 && (Math.Abs(vx - x) == 9 || Math.Abs(vz - z) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family"&&fireman.role != Role.Dog)
                 {
                     // if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
                     // {
@@ -965,7 +965,7 @@ public class OperationManager
             }
             
 
-            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("\"Family\"")) // engine
+            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("\"Family\"")&&gm.tileMap.selectedUnit.role != Role.Dog) // engine
             {
                 double vx = (double)gm.enG.x / 6;
                 double vz = (double)gm.enG.z / 6;
@@ -973,7 +973,7 @@ public class OperationManager
                 Debug.Log(vx);
                 Debug.Log(vz);
 
-                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1))&&!StaticInfo.level.Equals("Family"))
+                if (gm.tileMap.tiles[fireman.currentX/6, fireman.currentZ/6] == 3&&(Math.Abs(currentX-vx)<1&&(Math.Abs(currentZ-vz)<1))&&!StaticInfo.level.Equals("Family")&&fireman.role != Role.Dog)
 
                 {
                     if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) !=9 && Math.Abs(vz- z) !=7 )&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1))
@@ -991,12 +991,12 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 4&&!StaticInfo.level.Equals("Family")) // ambulance
+            if (gm.tileMap.tiles[x, z] == 4&&!StaticInfo.level.Equals("Family")&&fireman.role != Role.Dog) // ambulance
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
 
-                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family")
+                if (fireman.FreeAP >= 2 && (Math.Abs(x - vx) != 9 && Math.Abs(vz - z) != 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family"&&fireman.role != Role.Dog)
                 {
                     Debug.Log("before remoting, my AP is" + " " + fireman.FreeAP);
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
@@ -1009,7 +1009,7 @@ public class OperationManager
                     possibleOp.Add(op1);
                 }
 
-                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family")
+                if (fireman.FreeAP >= 4 && (Math.Abs(x - vx) == 9 || Math.Abs(z - vz) == 7)&&(Math.Abs(vx-x)>1||Math.Abs(vz-z)>1)&& StaticInfo.level!="Family"&&fireman.role != Role.Dog)
 
                 {
                     if ((Math.Abs(currentX - vx) <= 0.5 && (Math.Abs(currentZ - vz) <= 0.5)))
