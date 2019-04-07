@@ -349,6 +349,9 @@ public class Fireman
         {
             requiredAP = 2;
         }
+        if(carryingVictim&&role==Role.Dog){
+            requiredAP=4;
+        }
         if (this.role == Role.RescueSpec) // Rescue Specialist
         {
             if (remainingSpecAp >= requiredAP)
