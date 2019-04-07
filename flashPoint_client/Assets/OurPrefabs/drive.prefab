@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222820015522089968}
   - component: {fileID: 114817791373891578}
   - component: {fileID: 114605050150477440}
+  - component: {fileID: 114875334870086542}
   m_Layer: 5
   m_Name: drive
   m_TagString: Untagged
@@ -155,6 +156,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114875334870086542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1315366949370848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!212 &212055791682627710
 SpriteRenderer:
   m_ObjectHideFlags: 1

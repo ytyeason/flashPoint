@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 222953483347447020}
   - component: {fileID: 114988958248666622}
   - component: {fileID: 114155248369261302}
+  - component: {fileID: 114429831793483554}
   m_Layer: 5
   m_Name: deckGun
   m_TagString: Untagged
@@ -128,6 +129,19 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114429831793483554
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1353617782713182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114988958248666622
 MonoBehaviour:
   m_ObjectHideFlags: 1

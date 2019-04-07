@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using SocketIO;
+using UnityEngine.EventSystems;
 
 public class OperationManager
 {
@@ -42,6 +43,18 @@ public class OperationManager
 
     }
 
+    public void OnSelectOption(string str,Vector3 position){
+        
+        // gm.tooltipPanel.transform.position = new Vector3(position.x,position.y+25,position.z);
+        gm.tooltipPanel.SetActive(true);
+        gm.tooltipPanel.transform.position=new Vector3(position.x,position.y,position.z+2);
+        gm.tooltip.text=str;
+    }
+
+    public void OnMouseExit(){
+        gm.tooltipPanel.SetActive(false);
+    }
+    
     public void selectTile(int x, int z)
     {
         DestroyAll();
@@ -62,45 +75,69 @@ public class OperationManager
         for(int i = 0; i < possibleOp.Count; i++)
         {
             Button newObject = gm.instantiateOp(possibleOp[i].prefab, options[i].transform,true);
+            EventTrigger trigger= newObject.gameObject.GetComponent<EventTrigger>();
+            EventTrigger.Entry entry= new EventTrigger.Entry();
+            EventTrigger.Entry exit=new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerEnter;
+            entry.callback = new EventTrigger.TriggerEvent();
+            exit.eventID = EventTriggerType.PointerExit;
+            exit.callback = new EventTrigger.TriggerEvent();
+
+            string tip="";
+            Vector3 position=options[i].transform.position;
+            
             switch (possibleOp[i].type) {
                 case OperationType.Move:
                     newObject.onClick.AddListener(move);
+                    tip="Move";
                     break;
                 case OperationType.Treat:
                     newObject.onClick.AddListener(treat);
+                    tip="Treat";
                     break;
                 case OperationType.CarryV:
                     newObject.onClick.AddListener(carryV);
+                    tip="Carry Victim";
                     break;
                 case OperationType.LeadV:
                     newObject.onClick.AddListener(leadV);
+                    tip="Lead Victim";
                     break;
                 case OperationType.CarryHazmat:
                     newObject.onClick.AddListener(carryHazmat);
+                    tip="Carry Hazmat";
                     break;
                 case OperationType.RemoveHazmat:
                     newObject.onClick.AddListener(removeHazmat);
+                    tip="Remove Hazmat";
                     break;
                 case OperationType.Command:
                     newObject.onClick.AddListener(command);
+                    tip="Command";
                     break;
                 case OperationType.Imaging:
                     newObject.onClick.AddListener(imaging);
+                    tip="Imaging";
                     break;
                 case OperationType.ExtingSmoke:
                     newObject.onClick.AddListener(extingSmoke);
+                    tip="Extinguish Once";
                     break;
                 case OperationType.ExtingFire:
                     newObject.onClick.AddListener(extingFire);
+                    tip="Extinguish Twice";
                     break;
                 case OperationType.Drive:
                     newObject.onClick.AddListener(drive);
+                    tip="Drive";
                     break;
                 case OperationType.Remote:
                     newObject.onClick.AddListener(remote);
+                    tip="Call Over";
                     break;
                 case OperationType.Ride:
                     newObject.onClick.AddListener(ride);
+                    tip="Ride";
                     break;
                 //case OperationType.StopDrive:
                     //newObject.onClick.AddListener(stopDrive);
@@ -110,17 +147,27 @@ public class OperationManager
                     //break;
                 case OperationType.DeckGun:
                     newObject.onClick.AddListener(deckGun);
+                    tip="Fire DeckGun";
                     break;
                 case OperationType.DropV:
                     newObject.onClick.AddListener(dropeV);
+                    tip="Drop Victim";
                     break;
                 case OperationType.DropHazmat:
                     newObject.onClick.AddListener(dropHazmat);
+                    tip="Drop Hazmat";
                     break;
                 case OperationType.StopCommand:
                     newObject.onClick.AddListener(stopCommand);
+                    tip="Stop Command";
                     break;
             }
+            UnityEngine.Events.UnityAction<BaseEventData> l_callback = new UnityEngine.Events.UnityAction<BaseEventData>((eventData)=>OnSelectOption(tip,position));
+            entry.callback.AddListener(l_callback);
+            UnityEngine.Events.UnityAction<BaseEventData> exit_callback = new UnityEngine.Events.UnityAction<BaseEventData>((eventData)=>OnMouseExit());
+            exit.callback.AddListener(exit_callback);
+            trigger.triggers.Add(entry);
+            trigger.triggers.Add (exit);
             buttons.Add(newObject);
         }
     }

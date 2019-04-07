@@ -88,6 +88,9 @@ public class GameManager: MonoBehaviour
 
     public Text roles;
 
+    public GameObject tooltipPanel;
+    public Text tooltip;
+
 
     void Start()
     {
