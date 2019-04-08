@@ -1253,11 +1253,11 @@ public class OperationManager
             int vx = gm.amB.x;
             int vz = gm.amB.z;
             gm.startDrive(1);
-            gm.AskForRide(vx, vz, amb.x, amb.z);
+            gm.AskForRide(vx,vz,x*6, z*6);
             Debug.Log("gm.confirmed = " + gm.confirmed);
             // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer)-1);
 
-            amb.moveNextStation(x, z);
+            // amb.moveNextStation(x,z);
             // gm.UpdateAmbulanceLocation(amb.x, amb.z,vx,vz);
             opPanel.SetActive(false);
             DestroyAll();
@@ -1275,9 +1275,9 @@ public class OperationManager
             int vx = gm.enG.x;
             int vz = gm.enG.z;
             gm.startDrive(2);
-            gm.AskForRide(vx, vz, eng.x, eng.z);
-            while (gm.confirmed != Int32.Parse(StaticInfo.numberOfPlayer) - 1) ;
-            eng.moveNextStation(x, z);
+            gm.AskForRide(vx,vz,eng.x, eng.z);
+            // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer)-1);
+            // eng.moveNextStation(x,z);
             // gm.UpdateEngineLocation(eng.x, eng.z, vx, vz);
             opPanel.SetActive(false);
             DestroyAll();
@@ -1290,11 +1290,10 @@ public class OperationManager
             }
             fireman.setAP(fireman.FreeAP - requiredAP);
         }
-        fireman.s.transform.position = new Vector3(x * 6, 0.2f, z * 6);
-        // gm.UpdateLocation(x*6, z*6,StaticInfo.name);
-        fireman.currentX = x * 6;
-        fireman.currentZ = z * 6;
-        gm.confirmed = 0;
+        
+        fireman.currentX=x*6;
+        fireman.currentZ=z*6;
+        // gm.confirmed=0;
         opPanel.SetActive(false);
         DestroyAll();
         Debug.Log("fireman is at x:" + fireman.currentX);
@@ -1319,27 +1318,37 @@ public class OperationManager
         }
         fireman.setAP(fireman.FreeAP - requiredAP);
         // gm.startDrive(1);
-        amb.moveNextStation(x, z);
-        gm.UpdateAmbulanceLocation(amb.x, amb.z, vx, vz);
-        opPanel.SetActive(false);
+        // amb.moveNextStation(x,z);
+        gm.UpdateAmbulanceLocation(x*6, z*6,vx,vz);
+        opPanel.SetActive(false); 
         DestroyAll();
 
     }
 
     public void ride()
     {
-        if (gm.tileMap.tiles[x, z] == 3) {
+        if(askingForRide){
+            if(gm.tileMap.tiles[gm.fireman.currentX/6,gm.fireman.currentZ/6]==3){
+                gm.fireman.riding=true;
+                gm.startRide(2);
+            }
+            if(gm.tileMap.tiles[gm.fireman.currentX/6,gm.fireman.currentZ/6]==4){
+                gm.fireman.riding=true;
+                gm.startRide(1);
+            }
+        }else{
+            if(gm.tileMap.tiles[x, z] == 3){
             Fireman fireman = gm.tileMap.selectedUnit;
             fireman.riding = true;
             gm.startRide(2);
-        }
-        if (gm.tileMap.tiles[x, z] == 4) {
-            Fireman fireman = gm.tileMap.selectedUnit;
-            fireman.riding = true;
-            gm.startRide(1);
-        }
-
-        opPanel.SetActive(false);
+            }
+            if(gm.tileMap.tiles[x, z] == 4){
+                Fireman fireman = gm.tileMap.selectedUnit;
+                fireman.riding = true;
+                gm.startRide(1);
+            }
+        }      
+        opPanel.SetActive(false); 
         DestroyAll();
     }
 

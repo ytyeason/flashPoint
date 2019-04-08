@@ -6,6 +6,7 @@ using SocketIO;
 using System;
 using System.Linq;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 //using Newtonsoft.Json;
 //using System.Web.Script.Serialization;
@@ -483,6 +484,7 @@ public class GameManager: MonoBehaviour
         location["newz"] = newz.ToString();
         location["origx"]=origx.ToString();
         location["origz"]=origz.ToString();
+        location["name"]=StaticInfo.name;
         location["room"]=StaticInfo.roomNumber;
 
         socket.Emit("UpdateAmbulanceLocation", new JSONObject(location));
@@ -501,28 +503,47 @@ public class GameManager: MonoBehaviour
         location["origz"]=origz.ToString();
         location["room"]=StaticInfo.roomNumber;
         location["name"]=StaticInfo.name;
+        Debug.Log("I'm at gm.askforride, the toX, toZ, fromx, fromz are: " + toX + " " + toZ + " " + fromX + " " + fromZ);
         socket.Emit("AskForRide", new JSONObject(location));
     }
 
     public void AskForRide_Success(SocketIOEvent obj){
-        var driver = obj.data["driver"];
+        string driver = obj.data.ToDictionary()["driver"];
+        Debug.Log(driver);
+        Debug.Log(StaticInfo.name);
+        operationManager.askingForRide=true;
         if (!StaticInfo.name.Equals(driver))
         {
-            Debug.Log("AskForRide_Success");
             // Debug.Log(obj.data["targetNames"]);
             List<string> names=parseJsonArray(obj.data["targetNames"]);
-            Debug.Log("names count:" + names.Count);
+            int nRider = Convert.ToInt32(obj.data.ToDictionary()["nRider"]);
+            Debug.Log("I'm at AskForRide_Success in gm, " + "names count:" + names.Count + " nRider is : " + nRider);
             if(names.Count>0)
             {
                 foreach(string n in names){
-                    if (n.Equals(StaticInfo.name)&& StaticInfo.level!="Family"){
+                    if (n.Equals(StaticInfo.name)&& !StaticInfo.level.Equals("Family")){
                         Debug.Log("same name");
                         opPanel.SetActive(true);
                         Operation op = new Operation(operationManager, OperationType.Ride);
                         Button newObject = this.instantiateOp(op.prefab, options[0].transform, true);
                         newObject.onClick.AddListener(ride);
-                        operationManager.askingForRide=true;
-                        Debug.Log("ask for ride succeed!!!!!!!");
+                        string tip="Ride";
+                        Vector3 position=options[0].transform.position;
+                        EventTrigger trigger= newObject.gameObject.GetComponent<EventTrigger>();
+                        EventTrigger.Entry entry= new EventTrigger.Entry();
+                        EventTrigger.Entry exit=new EventTrigger.Entry();
+                        entry.eventID = EventTriggerType.PointerEnter;
+                        entry.callback = new EventTrigger.TriggerEvent();
+                        exit.eventID = EventTriggerType.PointerExit;
+                        exit.callback = new EventTrigger.TriggerEvent();
+                        UnityEngine.Events.UnityAction<BaseEventData> l_callback = new UnityEngine.Events.UnityAction<BaseEventData>((eventData)=>operationManager.OnSelectOption(tip,position));
+                        entry.callback.AddListener(l_callback);
+                        UnityEngine.Events.UnityAction<BaseEventData> exit_callback = new UnityEngine.Events.UnityAction<BaseEventData>((eventData)=>operationManager.OnMouseExit());
+                        exit.callback.AddListener(exit_callback);
+                        trigger.triggers.Add(entry);
+                        trigger.triggers.Add (exit);
+
+                        // Debug.Log("ask for ride succeed!!!!!!!");
                     }
                 }
             }
@@ -531,18 +552,20 @@ public class GameManager: MonoBehaviour
         {
             int nRider = Convert.ToInt32(obj.data.ToDictionary()["nRider"]);
             if (nRider == 0){
+                Debug.Log("i'm driver, Im here!!!!!");
                 if (tileMap.tiles[fromX/6, fromZ/6]==4){
                     UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
                 }
                 if (tileMap.tiles[fromX/6,fromZ/6]==3){
                     UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                }
             }
             else{
                 confirmed = nRider;
+                Debug.Log("I'm at AskForRide_Success in gm, confirmed for" + StaticInfo.name + " who is the driver" + driver + " has confirmed :" + confirmed );
             }
         }
         // Debug.Log("confirmed:" + this.confirmed);
-        }
     }
 
     void ride(){
@@ -556,6 +579,7 @@ public class GameManager: MonoBehaviour
         ride["type"]=type.ToString();
 
         socket.Emit("StartRide",new JSONObject(ride));
+        Debug.Log("Im at startRide, the type is " + " " + type + " type 1 is ambulance" + " my name is " + StaticInfo.name + " I'm going to ride" );
     }
 
     public void ConfirmRide(SocketIOEvent obj){
@@ -563,20 +587,27 @@ public class GameManager: MonoBehaviour
         operationManager.askingForRide=false;
         if(confirmed==0)
         {
-            if(obj.data.ToString().Equals("1")){
-                UpdateEngineLocation(toX, toZ, fromX, fromZ);
-            }
-            if(obj.data.ToString().Equals("2")){
-                UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+            if(obj.data.ToDictionary()["type"].Equals("2")){
 
+                UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                UpdateLocation(toX, toZ,StaticInfo.name);        
             }
+            if(obj.data.ToDictionary()["type"].Equals("1")){
+                UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                UpdateLocation(toX, toZ,StaticInfo.name);
+            }
+            Debug.Log(obj.data.ToDictionary()["type"]);
             socket.Emit("ResetConfirmed", new JSONObject(true));
         }
+        Debug.Log("Hello, im at confirmride in gm, my name is " + StaticInfo.name + " my confirmed number is " + confirmed);
 
     }
 
     public void ResetConfirmed_Success(SocketIOEvent obj){
         this.confirmed = 0;
+        Debug.Log(StaticInfo.name + "is resetting confirmed to  " + this.confirmed);
     }
 
     public void UpdateAmbulanceLocation_Success(SocketIOEvent obj)
@@ -585,16 +616,25 @@ public class GameManager: MonoBehaviour
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
 
+
         List<string> names=parseJsonArray(obj.data["names"]);
-        foreach(var name in names){
-            if(name.Equals(StaticInfo.name)){
-                fireman.s.transform.position=new Vector3(newx*6,0.2f,newz*6);
+        if(names.Count>0)
+        {
+            foreach(var name in names){
+                if(name.Equals(StaticInfo.name)){
+                    tileMap.selectedUnit.s.transform.position=new Vector3(newx,0.2f,newz);
+                    UpdateLocation(newx, newz, StaticInfo.name);
+                }
             }
         }
 
+
+
         tileMap.ambulance.moveNextStation(newx/6, newz/6);
-        Debug.Log("update ambulance !!!!!");
-        confirmed=0;
+
+        // Debug.Log("update ambulance !!!!!");
+        Debug.Log(StaticInfo.name + "is going to next station!!!!!!!!!!!!!!!!!" + "names count is:" + names.Count + "!!!!!");
+        // confirmed=0;
     }
 
     public void UpdateEngineLocation(int newx,int newz, int origx, int origz)
@@ -604,6 +644,7 @@ public class GameManager: MonoBehaviour
         location["newz"] = newz.ToString();
         location["origx"]=origx.ToString();
         location["origz"]=origz.ToString();
+        location["name"]=StaticInfo.name;
         location["room"]=StaticInfo.roomNumber;
 
         socket.Emit("UpdateEngineLocation", new JSONObject(location));
@@ -616,10 +657,15 @@ public class GameManager: MonoBehaviour
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
 
+
         List<string> names=parseJsonArray(obj.data["names"]);
-        foreach(var name in names){
-            if(name.Equals(StaticInfo.name)){
-                fireman.s.transform.position=new Vector3(newx*6,0.2f,newz*6);
+        if(names.Count>0)
+        {
+            foreach(var name in names){
+                if(name.Equals(StaticInfo.name)){
+                    tileMap.selectedUnit.s.transform.position=new Vector3(newx,0.2f,newz);
+                    UpdateLocation(newx, newz, StaticInfo.name);
+                }
             }
         }
 

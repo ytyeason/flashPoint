@@ -488,9 +488,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
        console.log("ambbbbbbbbbbulance");
       var newx=data['newx'];
       var newz=data['newz'];
-      var origx=data['origx'];
-      var origz=data['origz'];
       var room=data['room'];
+      var driver=data['name'];
       var names=[];
 
       var participants=Games[room]["participants"];
@@ -501,6 +500,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           names.push(n);
         }
       }
+      names.push(driver);
       io.sockets.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names});
     });
 
@@ -520,18 +520,24 @@ io.on('connection', function (socket) {//default event for client connect to ser
         // console.log(player[name]);
         for(var n in participants){
           var location = participants[n]["Location"];
-          console.log(n + " is asked");
           var arrLocation = location.split(',');
-          console.log(arrLocation);
           var intX = parseInt(arrLocation[0]);
           var intZ = parseInt(arrLocation[1]);
-          console.log(intX);
-          console.log(intZ);
-          if((x-3<=intX && intX<=x+3) && (z-3<=intZ && intZ<=z+3)&&n!=name){
+          console.log("Im at server.js, the intX and intZ are :" + intX + " " + intZ + " " + n + " is asked" + " " + "arrLocation is" + arrLocation);
+          if((x-3<=intX && intX<=x+3) && (z-3<=intZ && intZ<=z+3)&&n!=name&&participants[n]["Riding"]!="1"){
             console.log("ask for ride");
             targetNames[i]=n;
             i=i+1;
           }
+<<<<<<< HEAD
+          // if(participants[n]["Riding"]=="1"){
+          //   if(participants[n]["Location"]==newx+ "," + newz){
+          //     console.log("move with");
+          //     ride[i]=n;
+          //   }
+            
+          // }
+=======
           if(participants[n]["Riding"]=="1"){
             if(participants[n]["Location"]==newx+ "," + newz){
               console.log("move with");
@@ -539,9 +545,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
             }
 
           }
+>>>>>>> 277e57162f54322337742137d23f9ff738a3b152
         }
-        console.log("sending");
+        // console.log("sending");
         io.sockets.emit('AskForRide_Success',{"targetNames":targetNames, "driver": name, "nRider": i});
+
     });
 
     socket.on('UpdateEngineLocation', function(data){
@@ -549,6 +557,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var newx=data['newx'];
       var newz=data['newz'];
       var names=[];
+      var driver=data['name'];
       var room = data['room'];
 
       var participants=Games[room]["participants"];
@@ -559,6 +568,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           names.push(n);
         }
       }
+      names.push(driver);
       socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz,"names":names});
       // socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz});
 
@@ -571,6 +581,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       Games[room]['participants'][name]["Riding"]=type;
       io.sockets.emit('ConfirmRide', {'type': type});
+      console.log("im at startride in server.js" + " player" + name + " 's riding type is " + type);
     });
 
     socket.on('ResetConfirmed', function(data){
@@ -720,7 +731,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room=data['room'];
 
       Games[room]["participants"][name]['Riding']="0";
-      io.sockets.broadcast.emit('StopDrive_Success',Games);
+      io.sockets.emit('StopDrive_Success',Games);
     });
 
     socket.on('StopCarry',function(data){

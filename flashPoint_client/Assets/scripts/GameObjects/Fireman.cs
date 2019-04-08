@@ -103,6 +103,10 @@ public class Fireman
         this.name = name;
     }
 
+    //get function
+    public GameObject get(){
+        return s;
+    }
 
     public void setAP(int in_ap)
     {
@@ -115,6 +119,7 @@ public class Fireman
         remainingSpecAp = specAP;
         gm.displayAP();
     }
+
 
     // Refresh AP while rolling over unused AP (a maximum of 4)
     public void refreshAP()
