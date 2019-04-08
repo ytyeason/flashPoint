@@ -37,9 +37,9 @@ public class LobbyManager : MonoBehaviour {
     {
         Debug.Log("load room successful");
         //SceneManager.LoadScene("DragDrop");
-        string level=obj.data["level"].ToString();
+        string level=obj.data.ToDictionary()["level"];
         string det=obj.data.ToDictionary()["status"];
-        if(level.Equals("\"Family\"")||det.Equals("false")){
+        if(level.Equals("Family")){
             SceneManager.LoadScene("Room");
             
         }else{
