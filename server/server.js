@@ -233,6 +233,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       Games[room_number]["numberOfHazmat"]=numberOfHazmat;
       Games[room_number]["numberOfHotspot"]=numberOfHotspot;
       Games[room_number]["selectedRoles"]=[];
+      Games[room_number]["confirmedPosition"]=[];
       console.log(Games[room_number]+level);
       socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
     });
@@ -783,6 +784,20 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var x=data['x'];
       var z=data['z'];
       socket.broadcast.emit('KillPOI_Success',{"x":x,"z":z});
+    });
+
+    socket.on('ConfirmPosition',function(data){
+      var x=data['x'];
+      var z=data['z'];
+      var room=data['room'];
+      var name=data['name'];
+      Games[room]["participants"][name]["Location"]=x+","+z;
+      if(!Games[room]["confirmedPosition"].includes(name)){
+        Games[room]["confirmedPosition"].push(name);
+      }
+      if(Games[room]["confirmedPosition"].length==parseInt(Games[room]["numberOfPlayer"])){
+        io.sockets.emit("ConfirmPosition_Success",{"Games":Games,"room":room})
+      }
     });
 
 });

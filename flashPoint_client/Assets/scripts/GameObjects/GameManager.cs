@@ -103,6 +103,8 @@ public class GameManager: MonoBehaviour
     public GameObject tooltipPanel;
     public Text tooltip;
 
+    public GameObject startingPositionPanel;
+
 
     void Start()
     {
@@ -145,6 +147,7 @@ public class GameManager: MonoBehaviour
         socket.On("defeat_Success",defeat_Success);
         socket.On("ResetConfirmed_Success", ResetConfirmed_Success);
         socket.On("SaveGame_Success", SaveGame_Success);
+        socket.On("ConfirmPosition_Success",confirmPosition_Success);
 
         if (game_info != null)
         {
@@ -199,6 +202,9 @@ public class GameManager: MonoBehaviour
                 if (!level.Equals("\"Family\""))
                 {
                     displayRole();
+                    if(StaticInfo.StartingPosition){
+                        changeRoleButton.SetActive(false);
+                    }
                 }
                 else
                 {
@@ -206,6 +212,7 @@ public class GameManager: MonoBehaviour
                 }
 
                 selectRolePanel.SetActive(false);
+                startingPositionPanel.SetActive(true);
             }
             else//if we're loading a game
             {
@@ -1891,6 +1898,51 @@ public class GameManager: MonoBehaviour
         Debug.Log("Game Over!");
         socket.Emit("defeat");
         SceneManager.LoadScene("gameOver");
+    }
+
+    public void confirmPosition(){
+
+        int x=(int)fireman.s.transform.position.x;
+        int z=(int)fireman.s.transform.position.z;
+
+        fireman.currentX=x;
+        fireman.currentZ=z;
+
+        StaticInfo.Location=new int[]{x,z};
+
+        Dictionary<string,string> position=new Dictionary<string, string>();
+        position["x"]=x.ToString();
+        position["z"]=z.ToString();
+        position["room"]=StaticInfo.roomNumber;
+        position["name"]=StaticInfo.name;
+
+        socket.Emit("ConfirmPosition",new JSONObject(position));
+    }
+
+    public void confirmPosition_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+        tileMap.UpdateFiremanVisual(players);
+        displayRole();
+        if(obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber)){
+            StaticInfo.StartingPosition=false;
+            startingPositionPanel.SetActive(false);
+            if(!StaticInfo.level.Equals("Family")){
+                changeRoleButton.SetActive(true);
+            }
+        }
+        
     }
 
 }
