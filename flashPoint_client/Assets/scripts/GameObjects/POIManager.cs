@@ -50,32 +50,99 @@ public class POIManager{
         }
     }
 
+    public void initiatePOI(){
+        placedPOI=new Dictionary<int[], POI>();
+        foreach(var key in poiLookup.Keys){
+            gm.DestroyObject(poiLookup[key]);
+        }
+        poiLookup=new Dictionary<int[], GameObject>();
+        gm.initializePOI();
+        replenishPOI();
+    }
+
+    public void refreshPOI(){
+        placedPOI=new Dictionary<int[], POI>();
+        foreach(var key in poiLookup.Keys){
+            gm.DestroyObject(poiLookup[key]);
+        }
+        poiLookup=new Dictionary<int[], GameObject>();
+    }
+
     public void replenishPOI()
     {
-        int size = placedPOI.Count;
-        for(int i = 0; i < 3 - size; i++)
+        int size = placedPOI.Count+movingPOI.Count+movingTreated.Count+treated.Count;
+
+        while(size<3)
         {
             int randX = rand.Next(1, 9);
             int randZ = rand.Next(1, 7);
             int[] key = new int[] { randX, randZ };
-            while (containsKey(key[0],key[1],placedPOI) || gm.tileMap.tiles[randX, randZ] == 2)
-            {
-                randX = rand.Next(1, 9);
-                randZ = rand.Next(1, 7);
-                key[0] = randX;
-                key[1] = randZ;
+            bool reveal=false;
+            if(StaticInfo.level.Equals("Family")){
+                while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated))
+                {
+                    randX = rand.Next(1, 9);
+                    randZ = rand.Next(1, 7);
+                    key[0] = randX;
+                    key[1] = randZ;
+                }
+                if(gm.tileMap.tiles[randX,randZ]==1||gm.tileMap.tiles[randX,randZ]==2){
+                    gm.tileMap.buildNewTile(randX,randZ,0);
+                    gm.UpdateTile(randX,randZ,0);
+                }
+                foreach(var o in gm.players.Keys){
+                    if(gm.players[o]["Location"].Equals("\""+randX*6+","+randZ*6+"\"")){
+                        reveal=true;
+                        break;
+                    }
+                }
+            }else{
+                bool cont=false;
+                foreach(var o in gm.players.Keys){
+                    if(gm.players[o]["Location"].Equals("\""+randX*6+","+randZ*6+"\"")){
+                        cont=true;
+                        break;
+                    }else{
+                        cont=false;
+                    }
+                }
+                Debug.Log("check fireman");
+                Debug.Log(cont);
+                while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated)||gm.tileMap.tiles[randX,randZ]==2||gm.tileMap.tiles[randX,randZ]==1||cont)
+                {
+                    randX = rand.Next(1, 9);
+                    randZ = rand.Next(1, 7);
+                    key[0] = randX;
+                    key[1] = randZ;
+                    foreach(var o in gm.players.Keys){
+                        if(gm.players[o]["Location"].Equals("\""+randX*6+","+randZ*6+"\"")){
+                            cont=true;
+                            break;
+                        }else{
+                            cont=false;
+                        }
+                    }
+                    Debug.Log("check fireman");
+                    Debug.Log(cont);
+                }
+
             }
-            
+
             int randIndex = rand.Next(0, poi.Count);
-            
+
             POI p = poi[randIndex];
             placedPOI.Add(key,p);
-            
+
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*6 - 1.5), posY, (float)((double)randZ*6 + 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
             poiLookup.Add(key, go);
             poi.Remove(p);
             gm.AddPOI(randX, randZ, (int)p.type);
+            if(reveal){
+                this.reveal(randX,randZ);
+                gm.updateRevealPOI(randX,randZ);
+            }
+            size = placedPOI.Count+movingPOI.Count+movingTreated.Count+treated.Count;
         }
     }
 
@@ -100,7 +167,7 @@ public class POIManager{
     public void kill(int x, int z)
     {
         int[] key = new int[] { x, z };
-        
+
         if(containsKey(key[0], key[1], placedPOI))
         {
             POI p = getPOI(key[0],key[1],placedPOI);
@@ -249,6 +316,31 @@ public class POIManager{
         movingTreated.Add(key, p);
         movingTreatedLookup.Add(key, obj);
         obj.transform.position = new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 + 1.5));
+    }
+
+    public void dropPOI(int x, int z){
+        if(containsKey(x,z,movingPOI)){
+            POI p=getPOI(x,z,movingPOI);
+            GameObject obj=getPOIPrefab(x,z,movingPOILookup);
+            Remove(x,z,movingPOI);
+            Remove(x,z,movingPOILookup);
+
+            int[] key=new int[]{x,z};
+            placedPOI.Add(key,p);
+            poiLookup.Add(key,obj);
+            obj.transform.position=new Vector3((float)(x*6-1.5),posY,(float)(z*6+1.5));
+        }
+        else if(containsKey(x,z,movingTreated)){
+            POI p=getPOI(x,z,movingTreated);
+            GameObject obj=getPOIPrefab(x,z,movingTreatedLookup);
+            Remove(x,z,movingTreated);
+            Remove(x,z,movingTreatedLookup);
+
+            int[] key=new int[]{x,z};
+            treated.Add(key,p);
+            treatedLookup.Add(key,obj);
+            obj.transform.position=new Vector3((float)(x*6-1.5),posY,(float)(z*6+1.5));
+        }
     }
 
     public bool containsKey(int x, int z, Dictionary<int[],POI> list)

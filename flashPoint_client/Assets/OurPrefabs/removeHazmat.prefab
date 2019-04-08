@@ -54,6 +54,7 @@ GameObject:
   - component: {fileID: 222004090625533030}
   - component: {fileID: 114318881668604262}
   - component: {fileID: 114584681148965162}
+  - component: {fileID: 114399182405162338}
   m_Layer: 5
   m_Name: removeHazmat
   m_TagString: Untagged
@@ -114,6 +115,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114399182405162338
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1386448132331476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114584681148965162
 MonoBehaviour:
   m_ObjectHideFlags: 1

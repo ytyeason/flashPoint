@@ -38,8 +38,8 @@ public class FireManager : MonoBehaviour
 		flashover();
 		
 		// Remove victims in fire & knockdown Firemen
-		if (debugMode) Debug.Log("knockDown:");
-		knockDown();
+		//if (debugMode) Debug.Log("knockDown:");
+		//knockDown();
 		
 		// Final step
 		if (debugMode) Debug.Log("extOutFire:");
@@ -57,6 +57,7 @@ public class FireManager : MonoBehaviour
 	 *	
 	 *	Ambulance coords are (mapSizeX - 1, 3) & (mapSizeX - 1, 4)
 	 */
+	/*
 	public void knockDown()
 	{
 		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
@@ -64,7 +65,7 @@ public class FireManager : MonoBehaviour
 			for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
 			{
 				if (tileMap.tiles[x_elem, z_elem] == 2 &&
-					tileMap.selectedUnit.currentX == (x_elem * 5) && tileMap.selectedUnit.currentZ == (z_elem * 5))
+					tileMap.selectedUnit.currentX == (x_elem * 6) && tileMap.selectedUnit.currentZ == (z_elem * 6))
 				{
 					Debug.Log("Reached knockdown");
 
@@ -86,6 +87,7 @@ public class FireManager : MonoBehaviour
 			}
 		}
 	}
+	*/
 
 
 	// Called to "Remove any Fire markers that were placed outside of the building"
@@ -228,8 +230,9 @@ public class FireManager : MonoBehaviour
 	// Recursive function to propagate shockwave upwards
 	public void keepGoingUp(int rng_X, int rng_Z)
     {
-                tileMap.buildNewTile(rng_X, rng_Z, 2);
-                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        tileMap.buildNewTile(rng_X, rng_Z, 2);
+        tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+
         if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
         {
             //TOP 
@@ -272,17 +275,15 @@ public class FireManager : MonoBehaviour
                 //recursion function 
                 keepGoingUp(rng_X, rng_Z + 1);
             }
-
-
-
         }
     }
 
 	// Recursive function to propagate shockwave leftwards
 	public void keepGoingLeft(int rng_X, int rng_Z)
     {
-                tileMap.buildNewTile(rng_X, rng_Z, 2);
-                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        tileMap.buildNewTile(rng_X, rng_Z, 2);
+        tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+
         if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
         {
             //TOP 
@@ -465,7 +466,7 @@ public class FireManager : MonoBehaviour
 		}
 		else if (current_type == 2)
 		{
-			Debug.Log("Explosion happens at:" + rng_X + rng_Z);
+			if (debugMode) Debug.Log("Explosion happens at:" + rng_X + rng_Z);
 			// Trigger explosion in all four directions
             keepGoingUp(rng_X, rng_Z);
             keepGoingDown(rng_X, rng_Z);
@@ -538,15 +539,5 @@ public class FireManager : MonoBehaviour
 		// We reach here if the tile should simply have a Smoke marker
 		tileMap.buildNewTile(rng_X, rng_Z, 1);
 		tileMap.gm.UpdateTile(rng_X, rng_Z, 1);
-
 	}
-
-
-
-	// Update is called once per frame
-	/*
-	void Update () {
-		
-	}
-	*/
 }

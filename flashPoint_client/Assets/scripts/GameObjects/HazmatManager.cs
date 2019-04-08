@@ -49,12 +49,12 @@ public class HazmatManager{
         }
         if (StaticInfo.level == "Random")
         {
-            if (Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
+            if (!Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
                 numOfHazmat = Int32.Parse(StaticInfo.numOfHazmat);
             }
 
-            if (Int32.TryParse(StaticInfo.numOfHotspot, out this.numOfHazmat))
+            if (!Int32.TryParse(StaticInfo.numOfHotspot, out this.numOfHazmat))
             {
                 additionalHotspot += Int32.Parse(StaticInfo.numOfHotspot);
             }
@@ -79,10 +79,28 @@ public class HazmatManager{
                 break;
         }
         //initiate();
-
+        initiateHazmat();
     }
 
-    void putHazmat(HazmatStatus status=HazmatStatus.Hazmat)
+    public void initiateHazmat(){
+        placedHazmat=new Dictionary<int[], Hazmat>();
+        foreach(var key in lookUp.Keys){
+            gm.DestroyObject(lookUp[key]);
+        }
+        lookUp=new Dictionary<int[], GameObject>();
+        gm.initializeHazmat();
+        placeHazmat();
+    }
+
+    public void refreshHazmat(){
+        placedHazmat=new Dictionary<int[], Hazmat>();
+        foreach(var key in lookUp.Keys){
+            gm.DestroyObject(lookUp[key]);
+        }
+        lookUp=new Dictionary<int[], GameObject>();
+    }
+
+    public void putHazmat(HazmatStatus status=HazmatStatus.Hazmat)
     {
         int randX = rand.Next(1, 9);
         int randZ = rand.Next(1, 7);
@@ -98,8 +116,30 @@ public class HazmatManager{
         }
 
         Hazmat h = new Hazmat(this,status);
-        placedHazmat.Add(key, h);
+        if((HazmatStatus)status==HazmatStatus.Hazmat){
+            placedHazmat.Add(key, h);
+        }else{
+            placedHotspot.Add(key, h);
+        }
         GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(randX*6 + 1.5), posY, (float)(randZ*6 - 1.5)), Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
+        if (h.status == HazmatStatus.Hazmat)
+        {
+            lookUp.Add(key, go);
+        }
+        gm.AddHazmat(randX,randZ,(int)h.status);
+    }
+
+    public void addHazmat(int x, int z, int status){
+        int[] key=new int[]{x,z};
+        Hazmat h = new Hazmat(this,(HazmatStatus)status);
+        if((HazmatStatus)status==HazmatStatus.Hazmat){
+            placedHazmat.Add(key, h);
+        }else{
+            placedHotspot.Add(key, h);
+        }
+        GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(x*6 + 1.5), posY, (float)(z*6 - 1.5)), Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
         if (h.status == HazmatStatus.Hazmat)
         {
             lookUp.Add(key, go);
@@ -117,12 +157,16 @@ public class HazmatManager{
             Remove(key[0],key[1],lookUp);
             gm.DestroyObject(get(key[0],key[1],lookUp));
             placedHotspot.Add(key, h);
-            gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+            GameObject go=gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+            go.transform.Rotate(90, 0, 0);
         }
     }
 
     public void placeHazmat()
     {
+        Debug.Log("placing Hazmat");
+        Debug.Log(numOfHazmat);
+        Debug.Log(StaticInfo.level);
         for(int i = 0; i < numOfHazmat; i++)
         {
             putHazmat();
@@ -138,7 +182,8 @@ public class HazmatManager{
         int[] key = new int[] { x, z };
         Hazmat h = new Hazmat(this, HazmatStatus.HotSpot);
         placedHotspot.Add(key, h);
-        gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+        GameObject go=gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
     }
 
     public void removeHazmat(int x, int z)
@@ -159,7 +204,7 @@ public class HazmatManager{
         GameObject obj = get(origx, origz, movingLookup);
         Remove(origx, origz, movingHazmat);
         Remove(origx, origz, movingLookup);
-        obj.transform.position = new Vector3(newx, posY, newz);
+        obj.transform.position = new Vector3((float)(newx*6-1.5), posY, (float)(newz*6-1.5));
         int[] key = new int[] { newx, newz };
         movingHazmat.Add(key, p);
         movingLookup.Add(key, obj);
@@ -175,6 +220,21 @@ public class HazmatManager{
         int[] key = new int[] { x, z };
         movingHazmat.Add(key, p);
         movingLookup.Add(key, obj);
+        obj.transform.position = new Vector3((float)(x * 6 - 1.5), posY, (float)(z * 6 - 1.5));
+    }
+
+    public void dropHazmat(int x, int z){
+        if(containsKey(x,z,movingHazmat)){
+            Hazmat p=get(x,z,movingHazmat);
+            GameObject obj=get(x,z,movingLookup);
+            Remove(x,z,movingHazmat);
+            Remove(x,z,movingLookup);
+
+            int[] key=new int[]{x,z};
+            placedHazmat.Add(key,p);
+            lookUp.Add(key,obj);
+            obj.transform.position=new Vector3((float)(x*6+1.5),posY,(float)(z*6-1.5));
+        }
     }
 
     public bool containsKey(int x, int z, Dictionary<int[], Hazmat> list)

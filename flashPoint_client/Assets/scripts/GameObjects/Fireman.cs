@@ -35,6 +35,7 @@ public class Fireman
     public int remainingSpecAp = 0;
 
     public bool carryingVictim = false;
+    public bool leadingVictim=false;
     public POI carriedPOI;
     public Hazmat carriedHazmat;
     public POI ledPOI;
@@ -83,7 +84,7 @@ public class Fireman
         //}
     }
 
-    public Fireman(int in_x, int in_z, Role role, int drive, bool carrying, string name)
+    public Fireman(int in_x, int in_z, Role role, int drive, int ride, bool carrying, bool leading, string name)
     {
         this.currentX = in_x;
         this.currentZ = in_z;
@@ -93,7 +94,12 @@ public class Fireman
             this.driving = true;
             vehicle = drive;
         }
+        if(ride!=0){
+            this.riding=true;
+            vehicle=ride;
+        }
         this.carryingVictim = carrying;
+        this.leadingVictim=leading;
         this.name = name;
     }
 
@@ -140,35 +146,38 @@ public class Fireman
     // Fireman's method call from Door.cs
     public Boolean changeDoor(int doorX, int doorZ)
     {
-        // If debugMode is enabled, better reporting is enabled
-        if (debugMode) Debug.Log("Running extuinguishFire(" + doorX + ", " + doorZ + ")");
-
-        // AP check
-        if (gm.operationManager.inCommand)
+        if(this.role!=Role.Dog)
         {
-            if (remainingSpecAp >= 1)
+            // If debugMode is enabled, better reporting is enabled
+            if (debugMode) Debug.Log("Running extuinguishFire(" + doorX + ", " + doorZ + ")");
+
+            // AP check
+            if (gm.operationManager.inCommand)
             {
-                setSpecAP(remainingSpecAp - 1);
-                return true;
+                if (remainingSpecAp >= 1)
+                {
+                    setSpecAP(remainingSpecAp - 1);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                if (FreeAP >= 1)
+                {
+                    setAP(FreeAP - 1);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
-        else
-        {
-            if (FreeAP >= 1)
-            {
-                setAP(FreeAP - 1);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        return false;
         //if (FreeAP < 1)
         //{
         //    if (debugMode) Debug.Log("ToggleDoor() failed, AP unchanged: " + FreeAP);
@@ -187,35 +196,43 @@ public class Fireman
     // Pre-condition via ClickableTiles: in_status != 0
     public int extinguishFire(int in_status)
     {
-        if (debugMode) Debug.Log("Running extuinguishFire(" + in_status + ")");
+        if(this.role!=Role.Dog)
+        {
+            if (debugMode) Debug.Log("Running extuinguishFire(" + in_status + ")");
 
-        // AP check
-        if (FreeAP < 1)
-        {
-            if (debugMode) Debug.Log("AP unchanged: " + FreeAP);
-            return -1;
+            // AP check
+            if (FreeAP < 1)
+            {
+                if (debugMode) Debug.Log("AP unchanged: " + FreeAP);
+                return -1;
+            }
+            else // Fire -> Smoke || Smoke -> Normal: 1 AP
+            {
+                setAP(FreeAP - 1);
+                if (debugMode) Debug.Log("Changed extFire: AP is now: " + FreeAP);
+                return (in_status - 1);
+            }
         }
-        else // Fire -> Smoke || Smoke -> Normal: 1 AP
-        {
-            setAP(FreeAP - 1);
-            if (debugMode) Debug.Log("Changed extFire: AP is now: " + FreeAP);
-            return (in_status - 1);
-        }
+        return -1;
     }
 
     public Boolean chopWall()
     {
-        if (FreeAP >= 2)
+        if(this.role!=Role.Dog)
         {
-            setAP(FreeAP - 2);
-            if (debugMode) Debug.Log("AP is now: " + FreeAP);
-            return true;
+            if (FreeAP >= 2)
+            {
+                setAP(FreeAP - 2);
+                if (debugMode) Debug.Log("AP is now: " + FreeAP);
+                return true;
+            }
+            else
+            {
+                if (debugMode) Debug.Log("No AP left to chop the Wall!");
+                return false;
+            }
         }
-        else
-        {
-            if (debugMode) Debug.Log("No AP left to chop the Wall!");
-            return false;
-        }
+        return false;
     }
 
     public void tryMove(int x, int z, int in_status, GameObject gmo) //int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
@@ -341,10 +358,17 @@ public class Fireman
     public void move(int x, int z)
     {
         int requiredAP = 1;
-        if (gm.tileMap.tiles[x, z] == 2 || carryingVictim)
+        if ((this.role==Role.Dog && !carryingVictim && (currentX/6-1==x&&currentZ/6==z&&!gm.wallManager.checkIfVWall_dog(currentX/6,currentZ/6)&&gm.wallManager.checkIfVWall(currentX/6,currentZ/6))
+            ||(currentX/6+1==x&&currentZ/6==z&&!gm.wallManager.checkIfVWall_dog(x,z)&&gm.wallManager.checkIfVWall(x,z))||(currentX/6==x&&currentZ/6+1==z&&!gm.wallManager.checkIfHWall_dog(x,z+1)&&gm.wallManager.checkIfHWall(x,z+1))
+            ||(this.currentX/6==x&&this.currentZ/6-1==z&&!gm.wallManager.checkIfHWall_dog(x,z)&&gm.wallManager.checkIfHWall(x,z))) || (this.role!=Role.Dog && gm.tileMap.tiles[x, z] == 2) || (this.role!=Role.Dog && carryingVictim))
         {
             requiredAP = 2;
+
         }
+        if (this.role == Role.Dog && this.carryingVictim==true)
+        {
+            requiredAP = 4;
+        } 
         if (this.role == Role.RescueSpec) // Rescue Specialist
         {
             if (remainingSpecAp >= requiredAP)
@@ -366,37 +390,42 @@ public class Fireman
             }
         }
 
-        int origX = currentX;
-        int origZ = currentZ;
+        int origX = currentX/6;
+        int origZ = currentZ/6;
 
         currentX = x * 6;
         currentZ = z * 6;
         s.transform.position = new Vector3(currentX, 0.2f, currentZ);
         gm.UpdateLocation(currentX, currentZ,StaticInfo.name);
 
+        Debug.Log(carriedPOI);
+
         if (carriedPOI != null)
         {
-            gm.pOIManager.movePOI(origX, origZ, currentX, currentZ);
-            gm.UpdatePOILocation(origX, origZ, currentX, currentZ);
+            gm.pOIManager.movePOI(origX, origZ, x, z);
+            gm.UpdatePOILocation(origX, origZ, x, z);
         }
 
         if (ledPOI != null)
         {
-            gm.pOIManager.moveTreated(origX, origZ, currentX, currentZ);
-            gm.UpdateTreatedLocation(origX, origZ, currentX, currentZ);
+            gm.pOIManager.moveTreated(origX, origZ, x, z);
+            gm.UpdateTreatedLocation(origX, origZ, x, z);
         }
 
         if (carriedHazmat != null)
         {
-            gm.hazmatManager.moveHazmat(origX, origZ, currentX, currentZ);
+            gm.hazmatManager.moveHazmat(origX, origZ, x, z);
             
         }
+
+        
 
         int[] key = new int[] { x, z };
         if (gm.pOIManager.containsKey(key[0],key[1],gm.pOIManager.placedPOI) && gm.pOIManager.getPOI(key[0],key[1],gm.pOIManager.placedPOI).status == POIStatus.Hidden)
         {
             gm.pOIManager.reveal(x, z);
-            pOIManager.gm.updateRevealPOI(x, z);
+            Debug.Log("has poi");
+            gm.updateRevealPOI(x, z);
         }
     }
 
@@ -469,57 +498,59 @@ public class Fireman
 
     public void flipPOI(int x, int z)
     {
-        pOIManager.reveal(x, z);
-        pOIManager.gm.updateRevealPOI(x, z);
+        gm.pOIManager.reveal(x, z);
+        gm.updateRevealPOI(x, z);
     }
 
 
     public void removeHazmet(int x, int z)
     {
 
-        hazamatManager.removeHazmat(x, z);
+        gm.hazmatManager.removeHazmat(x, z);
         gm.RemoveHazmat(x, z);
 
     }
 
     public void extingSmoke(int x, int z)
     {
-        int requiredAP = 1;
-        if (role.Equals(Role.CAFS))
+        if (this.role != Role.Dog)
         {
-            if (remainingSpecAp >= requiredAP)
+            int requiredAP = 1;
+            if (role.Equals(Role.CAFS))
             {
-                setSpecAP(remainingSpecAp - requiredAP);
+                if (remainingSpecAp >= requiredAP)
+                {
+                    setSpecAP(remainingSpecAp - requiredAP);
+                }
+                else
+                {
+                    setAP(FreeAP - remainingSpecAp);
+                    setSpecAP(0);
+                }
+            }
+            else if (role.Equals(Role.RescueSpec)||role==Role.Paramedic)
+            {
+                requiredAP *= 2;
+                if (FreeAP >= requiredAP)
+                {
+                    setAP(FreeAP - requiredAP);
+                }
             }
             else
             {
-                setAP(FreeAP - remainingSpecAp);
-                setSpecAP(0);
-            }
-        }
-
-        else if (role.Equals(Role.RescueSpec)||role==Role.Paramedic)
-        {
-            requiredAP *= 2;
-            if (FreeAP >= requiredAP)
-            {
                 setAP(FreeAP - requiredAP);
             }
-        }
-        else
-        {
-            setAP(FreeAP - requiredAP);
-        }
 
-        if (gm.tileMap.tiles[x, z] == 1)
-        {
-            gm.tileMap.buildNewTile(x, z, 0);
-            gm.UpdateTile(x, z, 0);
-        }
-        else if (gm.tileMap.tiles[x, z] == 2)
-        {
-            gm.tileMap.buildNewTile(x, z, 1);
-            gm.UpdateTile(x, z, 1);
+            if (gm.tileMap.tiles[x, z] == 1)
+            {
+                gm.tileMap.buildNewTile(x, z, 0);
+                gm.UpdateTile(x, z, 0);
+            }
+            else if (gm.tileMap.tiles[x, z] == 2)
+            {
+                gm.tileMap.buildNewTile(x, z, 1);
+                gm.UpdateTile(x, z, 1);
+            }
         }
     }
 
@@ -527,64 +558,77 @@ public class Fireman
 
     public void extingFire(int x, int z)
     {
-        int requiredAP = 2;
-        if (role.Equals(Role.CAFS))
+        if(this.role!=Role.Dog)
         {
-            if (remainingSpecAp >= requiredAP)
+            int requiredAP = 2;
+            if (role.Equals(Role.CAFS))
             {
-                setSpecAP(remainingSpecAp - requiredAP);
+                if (remainingSpecAp >= requiredAP)
+                {
+                    setSpecAP(remainingSpecAp - requiredAP);
+                }
+                else
+                {
+                    setAP(FreeAP - remainingSpecAp);
+                    setSpecAP(0);
+                }
+            }
+
+            else if (role.Equals(Role.RescueSpec) || role == Role.Paramedic)
+            {
+                requiredAP *= 2;
+                if (FreeAP >= requiredAP)
+                {
+                    setAP(FreeAP - requiredAP);
+                }
             }
             else
             {
-                setAP(FreeAP - remainingSpecAp);
-                setSpecAP(0);
-            }
-        }
-
-        else if (role.Equals(Role.RescueSpec) || role == Role.Paramedic)
-        {
-            requiredAP *= 2;
-            if (FreeAP >= requiredAP)
-            {
                 setAP(FreeAP - requiredAP);
             }
+            gm.tileMap.buildNewTile(x, z, 0);
+            gm.UpdateTile(x, z, 0);
         }
-        else
-        {
-            setAP(FreeAP - requiredAP);
-        }
-        gm.tileMap.buildNewTile(x, z, 0);
-        gm.UpdateTile(x, z, 0);
+        
     }
 
     public void treat(int x, int z)
     {
-        setAP(FreeAP - 1);
-        gm.pOIManager.treat(x, z);
+        if(this.role!=Role.Dog)
+        {
+            setAP(FreeAP - 1);
+            gm.pOIManager.treat(x, z);
+        }
 
     }
 
     public void carryV(int x, int z)
     {
+        
         this.carryingVictim = true;
         this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
         gm.pOIManager.carryPOI(x, z);
-        gm.startCarryV();
+        gm.startCarryV(x,z);
     }
 
     public void leadV(int x, int z)
     {
+
         this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
         gm.pOIManager.leadPOI(x, z);
-        gm.startCarryV();
+        this.leadingVictim=true;
+        gm.startLeadV(x,z);
     }
 
     public void carryHazmat(int x,int z)
     {
-        this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
-        this.carryingVictim = true;
-        gm.hazmatManager.carryHazmat(x, z);
-        gm.startCarryV();
+        if(this.role!=Role.Dog)
+        {
+            this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
+            this.carryingVictim = true;
+            gm.hazmatManager.carryHazmat(x, z);
+            gm.startCarryHazmat(x,z);
+        }
     }
 
 

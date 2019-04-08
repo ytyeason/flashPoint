@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 222289428760715080}
   - component: {fileID: 114425253436611120}
   - component: {fileID: 114935918135783918}
+  - component: {fileID: 114235152107819244}
   m_Layer: 5
   m_Name: dropV
   m_TagString: Untagged
@@ -87,6 +88,19 @@ Transform:
   m_Father: {fileID: 224949318441436016}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114235152107819244
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1845403014917932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114425253436611120
 MonoBehaviour:
   m_ObjectHideFlags: 1

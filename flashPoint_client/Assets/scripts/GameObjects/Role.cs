@@ -10,10 +10,7 @@ public enum Role{
     Generalist,
     RescueSpec,
     Driver,
-
     Dog,
-
     Veteran,
-
     None,
 }

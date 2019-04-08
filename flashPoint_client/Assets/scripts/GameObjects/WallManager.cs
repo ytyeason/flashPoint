@@ -25,7 +25,6 @@ public static class hasComponent
 [Serializable]
 public class WallManager
 {
-	
 
 	readonly int wallMapSizeX = 10;
 	readonly int wallMapSizeZ = 8;
@@ -459,6 +458,49 @@ public class WallManager
 			{
 				// This is done seperately to avoid segfaults
 				if (vwallStores[key].GetComponent<Wall>().type != 5)
+				{
+					//Debug.Log("Type != 5 for (x, z): " + x + "," + z);
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	public bool checkIfHWall_dog(int x, int z)
+	{
+		List<int[]> keyList = new List<int[]>(hwallStores.Keys);
+
+		foreach (var key in keyList)
+		{   // We check to make sure its the right wall and that its not destroyed
+			if (key[0] == x && key[1] == z && hwallStores[key].HasComponent<Wall>())
+			{
+				//Debug.Log("HasComponent TRUE for (x, z): " + x + "," + z);
+
+				// This is done seperately to avoid segfaults
+				if (hwallStores[key].GetComponent<Wall>().type ==0)
+				{
+					//Debug.Log("Type != 4 for (x, z): " + x + "," + z);
+					return true;
+				}
+			}
+		}
+
+		//Debug.Log("Returned FALSE for (x,z): " + x + "," + z);
+		return false;
+	}
+
+	// Check if there's a vertical wall on (x, z) and its not destroyed (called by FireManager.cs)
+	public bool checkIfVWall_dog(int x, int z)
+	{
+		List<int[]> keyList = new List<int[]>(vwallStores.Keys);
+
+		foreach (var key in keyList)
+		{   // We check to make sure its the right wall and that its not destroyed
+			if (key[0] == x && key[1] == z && vwallStores[key].HasComponent<Wall>())
+			{
+				// This is done seperately to avoid segfaults
+				if (vwallStores[key].GetComponent<Wall>().type ==1)
 				{
 					//Debug.Log("Type != 5 for (x, z): " + x + "," + z);
 					return true;

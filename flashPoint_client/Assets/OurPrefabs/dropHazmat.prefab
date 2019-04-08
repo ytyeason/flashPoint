@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 222591014588303956}
   - component: {fileID: 114654482743038890}
   - component: {fileID: 114264889026088796}
+  - component: {fileID: 114149897046835458}
   m_Layer: 5
   m_Name: dropHazmat
   m_TagString: Untagged
@@ -87,6 +88,19 @@ Transform:
   m_Father: {fileID: 224326588183797486}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114149897046835458
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1453445081041050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114264889026088796
 MonoBehaviour:
   m_ObjectHideFlags: 1
