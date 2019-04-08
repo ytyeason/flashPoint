@@ -166,8 +166,11 @@ public class GameManager: MonoBehaviour
                 doorManager = new DoorManager(doorTypes, this,1);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,1);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
-                //poi
-                //hazmat
+                
+                //poi -- not done
+                pOIManager = new POIManager(this);
+                //hazmat -- not done
+                hazmatManager = new HazmatManager(this);
                 
                 displayAP();
                 tileMap.GenerateFiremanVisual(players);

@@ -32,7 +32,7 @@ public class POIManager{
     public POIManager(GameManager gm)
     {
         this.gm = gm;
-        generatePOI();
+        generatePOI();//still need this when loading
         replenishPOI();
     }
 
@@ -65,9 +65,12 @@ public class POIManager{
                 key[0] = randX;
                 key[1] = randZ;
             }
+            
             int randIndex = rand.Next(0, poi.Count);
+            
             POI p = poi[randIndex];
             placedPOI.Add(key,p);
+            
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*6 - 1.5), posY, (float)((double)randZ*6 + 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
             poiLookup.Add(key, go);

@@ -192,7 +192,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var name = data['name'];
       Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
 
-      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[]};
+      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[]};
 
       // var s = [1,2];
       // Games_state[room_number]['hWallMemo'].push({[s]: 0});
