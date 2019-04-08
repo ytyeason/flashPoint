@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/DragDrop.unity
     guid: 40116c4af15e1444f8e21d1de1f4678f
   - enabled: 1
-    path: Assets/Scenes/endGame.unity
+    path: Assets/Scenes/gameOver.unity
     guid: fa0913115ac1d4fba8b9d10280f4b04d
   - enabled: 1
     path: Assets/Scenes/FlashpointUIDemo.unity
@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Room.unity
     guid: ab7a9a744fec0724199001248bf47ea6
+  - enabled: 1
+    path: Assets/Scenes/Win.unity
+    guid: c02ab9256056c5349a336b6dcb7ad441
   m_configObjects: {}

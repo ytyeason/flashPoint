@@ -6,6 +6,7 @@ using SocketIO;
 using System;
 using System.Linq;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 //using Newtonsoft.Json;
 //using System.Web.Script.Serialization;
 
@@ -55,6 +56,10 @@ public class GameManager: MonoBehaviour
 
     //drive
     public int confirmed=0;
+    public int toX;
+    public int toZ;
+    public int fromX;
+    public int fromZ;
 
 	// Dodging
 	public bool isDodging = false;
@@ -132,6 +137,9 @@ public class GameManager: MonoBehaviour
         socket.On("RescueCarried_Success",rescueCarried_Success);
         socket.On("RescueTreated_Success",rescueTreated_Success);
         socket.On("KillPOI_Success",killPOI_Success);
+        socket.On("victory_Success",victory_Success);
+        socket.On("defeat_Success",defeat_Success);
+        socket.On("ResetConfirmed_Success", ResetConfirmed_Success);
 
         if (game_info != null)
         {
@@ -372,8 +380,12 @@ public class GameManager: MonoBehaviour
 
     }
 
-    public void AskForRide(int origx, int origz)
+    public void AskForRide(int origx, int origz, int newX, int newZ)
     {
+        this.toX = newX;
+        this.toZ = newZ;
+        this.fromX = origx;
+        this.fromZ = origz;
         Dictionary<String, string> location = new Dictionary<string, string>();
         location["origx"]=origx.ToString();
         location["origz"]=origz.ToString();
@@ -383,25 +395,44 @@ public class GameManager: MonoBehaviour
     }
 
     public void AskForRide_Success(SocketIOEvent obj){
-        Debug.Log("AskForRide_Success");
-        // Debug.Log(obj.data["targetNames"]);
-        List<string> names=parseJsonArray(obj.data["targetNames"]);
-        Debug.Log("names count:" + names.Count);
-        foreach(string n in names){
-            if (n.Equals(StaticInfo.name)&& StaticInfo.level!="Family"){
-                Debug.Log("same name");
-                opPanel.SetActive(true);
-                Operation op = new Operation(operationManager, OperationType.Ride);
-                Button newObject = this.instantiateOp(op.prefab, options[0].transform, true);
-                newObject.onClick.AddListener(ride);
-                operationManager.askingForRide=true;
+        var driver = obj.data["driver"];
+        if (!StaticInfo.name.Equals(driver))
+        {
+            Debug.Log("AskForRide_Success");
+            // Debug.Log(obj.data["targetNames"]);
+            List<string> names=parseJsonArray(obj.data["targetNames"]);
+            Debug.Log("names count:" + names.Count);
+            if(names.Count>0)
+            {
+                foreach(string n in names){
+                    if (n.Equals(StaticInfo.name)&& StaticInfo.level!="Family"){
+                        Debug.Log("same name");
+                        opPanel.SetActive(true);
+                        Operation op = new Operation(operationManager, OperationType.Ride);
+                        Button newObject = this.instantiateOp(op.prefab, options[0].transform, true);
+                        newObject.onClick.AddListener(ride);
+                        operationManager.askingForRide=true;
+                        Debug.Log("ask for ride succeed!!!!!!!");
+                    }
+                } 
             }
         }
-        Debug.Log("ask for ride succeed!!!!!!!");
-        this.confirmed=Int32.Parse(StaticInfo.numberOfPlayer)-names.Count;
-
-        Debug.Log("confirmed:" + this.confirmed);
-
+        else
+        {
+            int nRider = Convert.ToInt32(obj.data.ToDictionary()["nRider"]);
+            if (nRider == 0){
+                if (tileMap.tiles[fromX/6, fromZ/6]==4){
+                    UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                }
+                if (tileMap.tiles[fromX/6,fromZ/6]==3){
+                    UpdateEngineLocation(toX, toZ, fromX, fromZ);
+            }
+            else{
+                confirmed = nRider;
+            }
+        }
+        // Debug.Log("confirmed:" + this.confirmed);
+        }
     }
 
     void ride(){
@@ -418,12 +449,24 @@ public class GameManager: MonoBehaviour
     }
 
     public void ConfirmRide(SocketIOEvent obj){
-        if(obj.data.ToString().Equals("true")){
-
-            confirmed++;
-        }
+        confirmed--;
         operationManager.askingForRide=false;
+        if(confirmed==0)
+        {
+            if(obj.data.ToString().Equals("1")){
+                UpdateEngineLocation(toX, toZ, fromX, fromZ);        
+            }
+            if(obj.data.ToString().Equals("2")){
+                UpdateAmbulanceLocation(toX, toZ, fromX, fromZ); 
+                
+            }
+            socket.Emit("ResetConfirmed", new JSONObject(true));
+        }
 
+    }
+
+    public void ResetConfirmed_Success(SocketIOEvent obj){
+        this.confirmed = 0;
     }
 
     public void UpdateAmbulanceLocation_Success(SocketIOEvent obj)
@@ -440,6 +483,7 @@ public class GameManager: MonoBehaviour
         }
 
         tileMap.ambulance.moveNextStation(newx/6, newz/6);
+        Debug.Log("update ambulance !!!!!");
         confirmed=0;
     }
 
@@ -875,7 +919,7 @@ public class GameManager: MonoBehaviour
 			pOIManager.kill(x_elem, z_elem);
 		}
 
-		// Northern Ambulance parking spot
+        // Northern parking spot
 		if (z_elem <= 3)
 		{
 			tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
@@ -924,7 +968,7 @@ public class GameManager: MonoBehaviour
 							// Need to drop Victim or Hazmat. NB Fireman can dodge if leading treated victim
 							if (fireman.carryingVictim == true)
 							{
-								operationManager.dropeV();
+								operationManager.dropV();
 							}
 							if (fireman.carriedHazmat != null)
 							{
@@ -1650,6 +1694,30 @@ public class GameManager: MonoBehaviour
     }
 
     
+    //check for victory and defeat
+    public void victory_Success(SocketIOEvent obj)
+    {
+        Debug.Log("Update victory");
+    }
+
+    public void defeat_Success(SocketIOEvent obj)
+    {
+        Debug.Log("Update defeat");
+    }
+
+    public void victory()
+    {
+        Debug.Log("You win!");
+        socket.Emit("victory");
+        SceneManager.LoadScene("Win");
+    }
+
+    public void defeat()
+    {
+        Debug.Log("Game Over!");
+        socket.Emit("defeat");
+        SceneManager.LoadScene("gameOver");
+    }
 
 }
 
@@ -1657,3 +1725,4 @@ public class Notification{
     public string msg;
     public Text textObject;
 }
+

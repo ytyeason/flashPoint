@@ -276,7 +276,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           names.push(n);
         }
       }
-      socket.broadcast.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names});
+      io.sockets.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names});
     });
       
 
@@ -307,16 +307,16 @@ io.on('connection', function (socket) {//default event for client connect to ser
             targetNames[i]=n;
             i=i+1;
           }
-          // if(participants[n]["Riding"]=="1"){
-          //   if(participants[n]["Location"]==newx+ "," + newz){
-          //     console.log("move with");
-          //     ride[i]=n;
-          //   }
+          if(participants[n]["Riding"]=="1"){
+            if(participants[n]["Location"]==newx+ "," + newz){
+              console.log("move with");
+              ride[i]=n;
+            }
             
-          // }
+          }
         }
         console.log("sending");
-       io.sockets.emit('AskForRide_Success',{"targetNames":targetNames});
+        io.sockets.emit('AskForRide_Success',{"targetNames":targetNames, "driver": name, "nRider": i});
     });
 
     socket.on('UpdateEngineLocation', function(data){
@@ -345,7 +345,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var type=data['type'];
 
       Games[room]['participants'][name]["Riding"]=type;
-      io.sockets.emit('ConfirmRide', "true");
+      io.sockets.emit('ConfirmRide', {'type': type});
+    });
+
+    socket.on('ResetConfirmed', function(data){
+      io.sockets.emit('RescueTreated_Success', true);
     });
 
     socket.on('UpdateTreatedLocation', function(data){
