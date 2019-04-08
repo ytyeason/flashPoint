@@ -967,7 +967,7 @@ public class GameManager: MonoBehaviour
 							// Need to drop Victim or Hazmat. NB Fireman can dodge if leading treated victim
 							if (fireman.carryingVictim == true)
 							{
-								operationManager.dropeV();
+								operationManager.dropV();
 							}
 							if (fireman.carriedHazmat != null)
 							{

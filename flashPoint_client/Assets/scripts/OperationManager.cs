@@ -1441,8 +1441,11 @@ public class OperationManager
             gm.pOIManager.dropPOI(x,z);
             fireman.carriedPOI=null;
             gm.StopCarry(x,z);
+            Debug.Log(StaticInfo.level);
             if(StaticInfo.level.Equals("Family")){
-                if(x==0||x==7||z==0||z==9){
+                Debug.Log(x + " " + z);
+                if(x==0||x==9||z==0||z==7){
+                    Debug.Log("Rescuing");
                     gm.pOIManager.rescueCarried(x,z);
                     gm.rescueCarried(x,z);
                 }

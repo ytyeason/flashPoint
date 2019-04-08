@@ -24,7 +24,7 @@ public class POIManager{
     private System.Random rand = new System.Random();
     private float posY = -1;
 
-    public int rescued = 6;
+    public int rescued = 0;
     public int killed = 0;
 
     public POIManager(GameManager gm)
@@ -206,14 +206,14 @@ public class POIManager{
     public void rescueCarried(int x, int z)
     {
         int[] key = new int[] { x, z };
-        if (containsKey(key[0], key[1], movingPOI))
+        if (containsKey(key[0], key[1], placedPOI))
         {
-            POI p = getPOI(key[0],key[1],movingPOI);
+            POI p = getPOI(key[0],key[1],placedPOI);
             p.setStatus(POIStatus.Removed);
             rescued++;
-            Remove(key[0],key[1],movingPOI);
-            gm.DestroyObject(getPOIPrefab(key[0],key[1], movingPOILookup));
-            Remove(key[0],key[1],movingPOILookup);
+            Remove(key[0],key[1],placedPOI);
+            gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
+            Remove(key[0],key[1],poiLookup);
 
             if (rescued >= 7) {
                 Debug.Log("Rescued 7 victims");
@@ -227,14 +227,15 @@ public class POIManager{
         int[] key = new int[] { x, z };
         if (containsKey(key[0], key[1], movingTreated))
         {
-            POI p = getPOI(key[0], key[1], movingTreated);
+            POI p = getPOI(key[0], key[1], placedPOI);
             p.setStatus(POIStatus.Removed);
             rescued++;
-            Remove(key[0], key[1], movingTreated);
-            gm.DestroyObject(getPOIPrefab(key[0], key[1], movingTreatedLookup));
-            Remove(key[0], key[1], movingTreatedLookup);
+            Remove(key[0], key[1], placedPOI);
+            gm.DestroyObject(getPOIPrefab(key[0], key[1], poiLookup));
+            Remove(key[0], key[1], poiLookup);
 
-            if (rescued >= 7) {
+            if (rescued >= 7)
+            {
                 Debug.Log("Rescued 7 victims");
                 gm.victory();
             }
