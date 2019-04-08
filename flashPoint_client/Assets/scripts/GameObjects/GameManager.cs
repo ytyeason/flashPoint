@@ -623,6 +623,8 @@ public class GameManager: MonoBehaviour
             foreach(var name in names){
                 if(name.Equals(StaticInfo.name)){
                     tileMap.selectedUnit.s.transform.position=new Vector3(newx,0.2f,newz);
+                    tileMap.selectedUnit.currentX = newx;
+                    tileMap.selectedUnit.currentZ = newz;
                     UpdateLocation(newx, newz, StaticInfo.name);
                 }
             }
@@ -664,6 +666,8 @@ public class GameManager: MonoBehaviour
             foreach(var name in names){
                 if(name.Equals(StaticInfo.name)){
                     tileMap.selectedUnit.s.transform.position=new Vector3(newx,0.2f,newz);
+                    tileMap.selectedUnit.currentX = newx;
+                    tileMap.selectedUnit.currentZ = newz;
                     UpdateLocation(newx, newz, StaticInfo.name);
                 }
             }
@@ -1090,6 +1094,9 @@ public class GameManager: MonoBehaviour
 		else // Southern/second parking spot
 		{
 			tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
+            fireman.currentX = 54;
+            fireman.currentZ = 24;
+            UpdateLocation(54, 24, fireman.name);
 		}
 	}
 
