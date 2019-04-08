@@ -47,7 +47,7 @@ public class LobbyManager : MonoBehaviour {
         Debug.Log("load room successful");
         //Debug.Log(obj.data);
         //Debug.Log(obj.data[0]);
-        Debug.Log(obj.data[1]);
+        Debug.Log(obj.data[0]);
 
         StaticInfo.LoadGame = true;
         StaticInfo.game_info = obj.data[0];
@@ -56,6 +56,10 @@ public class LobbyManager : MonoBehaviour {
         //Debug.Log(obj.data[1][1]);
         var hWall = obj.data[1][0];
         var vWall = obj.data[1][1];
+        var tiles = obj.data[1][2];
+        var hDoor = obj.data[1][3];
+        var vDoor = obj.data[1][4];
+        //Debug.Log(tiles);
         
         Dictionary<int[], int> h = new Dictionary<int[], int>();
             
@@ -85,6 +89,44 @@ public class LobbyManager : MonoBehaviour {
         }
         StaticInfo.vWallMemo = v;
         
+        int[,] t = new int[10,8];
+        foreach (var location in tiles.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                t[key[0], key[1]] = value;
+            }
+        }
+        StaticInfo.tiles = t;
+        
+        Dictionary<int[], int> hD = new Dictionary<int[], int>();
+        foreach (var location in hDoor.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                hD[key] = value;
+            }
+        }
+        StaticInfo.defaultHorizontalDoors = hD;
+        
+        Dictionary<int[], int> vD = new Dictionary<int[], int>();
+        foreach (var location in vDoor.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                vD[key] = value;
+            }
+        }
+        StaticInfo.defaultVerticalDoors = vD;
         
 
         SceneManager.LoadScene("FlashpointUIDemo");

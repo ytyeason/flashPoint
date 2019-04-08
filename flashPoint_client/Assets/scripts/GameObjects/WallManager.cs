@@ -394,7 +394,7 @@ public class WallManager
 			w.x = hWall[0] *6;
 			w.z = hWall[1] *6;
 			w.wallMap = this;
-			w.type = 0;
+			w.type = type;
 
 			//hwallStores[hWall] = go;
 			hwallStores.Add(hWall, go);
@@ -406,7 +406,7 @@ public class WallManager
 			var type = entry.Value;
 			
 			WallType wt = wallTypes[type];
-			Debug.Log(wt);
+			//Debug.Log(wt);
 			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
 			GameObject go = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(vWall[0] *6 - 3, 2, vWall[1] *6), Quaternion.Euler(0, 90, 0));
 
@@ -416,7 +416,7 @@ public class WallManager
 			w.x = vWall[0] *6;
 			w.z = vWall[1] *6;
 			w.wallMap = this;
-			w.type = 1;
+			w.type = type;
 
 			//vwallStores[vWall] = go;
 			vwallStores.Add(vWall, go);

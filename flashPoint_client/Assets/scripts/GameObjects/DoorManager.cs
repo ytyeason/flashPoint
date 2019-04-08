@@ -25,11 +25,19 @@ public class DoorManager
 
 	}
 
-	public DoorManager(DoorType[] doorTypes, GameManager gm)
+	public DoorManager(DoorType[] doorTypes, GameManager gm, int loadGame)
 	{
 		this.doorTypes = doorTypes;
 		this.gm = gm;
-		StartDoorManager();
+		if (loadGame == 0)
+		{
+			StartDoorManager();
+		}
+		else
+		{
+			loadDoorVisual();
+		}
+		
 	}
 
 
@@ -248,6 +256,53 @@ public int HorizontalDoor(int x, int z)
 			}
 		}
 	}
+
+	void loadDoorVisual()
+	{
+		Dictionary<int[], int> h = StaticInfo.defaultHorizontalDoors;
+		Dictionary<int[], int> v = StaticInfo.defaultVerticalDoors;
+
+		foreach (KeyValuePair<int[], int> entry in h)
+		{
+			var hDoor = entry.Key;
+			var type = entry.Value;
+			
+			DoorType dt = doorTypes[type];
+			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
+			GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(hDoor[0] * 6 - 3, 2, hDoor[1] * 6 - 3), Quaternion.identity);
+
+			Door d = go.GetComponent<Door>();
+			//Debug.Log(w);
+			// Assign the variables as needed
+			d.x = hDoor[0] * 6;
+			d.z = hDoor[1] * 6;
+			d.doorMap = this;
+			d.type = type;
+			hdoorStores[hDoor] = go;
+		}
+
+		foreach (KeyValuePair<int[], int> entry in v)
+		{
+			var vDoor = entry.Key;
+			var type = entry.Value;
+			
+			DoorType dt = doorTypes[type];
+			Debug.Log(dt);
+			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
+			GameObject go = gm.instantiateObject(dt.doorVisualPrefab, new Vector3(vDoor[0] * 6 - 3, 2, vDoor[1] * 6 - 3), Quaternion.Euler(0, 90, 0));
+
+			Door d = go.GetComponent<Door>();
+			//Debug.Log(w);
+			// Assign the variables as needed
+			d.x = vDoor[0] * 6;
+			d.z = vDoor[1] * 6;
+			d.doorMap = this;
+			d.type = type;
+
+			vdoorStores[vDoor] = go;
+		}
+	}
+	
 
 	void GenerateMapVisual()
 	{

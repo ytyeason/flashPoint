@@ -15,6 +15,61 @@ var clients	= [];
 
 var Games_state = {};
 
+function initialize_tile(room){//family version
+    console.log("initializing tile");
+    for (x = 0; x < 10; x++){
+        for(z = 0; z < 8 ; z++){
+            // Family fire setup:
+            if (x == 2 && z == 5) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 3 && z == 5) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 2 && z == 4) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 3 && z == 4) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 4 && z == 4) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 5 && z == 4) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 4 && z == 3) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 6 && z == 2) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 6 && z == 1) room['tileMemo'].push({[[[x],[z]]]: 2});
+            else if (x == 7 && z == 2) room['tileMemo'].push({[[[x],[z]]]: 2});
+            // parking spots
+            else if (x == 7 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 8 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 5 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 4 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 0 && z == 3) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 0 && z == 2) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 0 && z == 5) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 0 && z == 6) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 9 && z == 2) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 9 && z == 1) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 9 && z == 4) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 9 && z == 5) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 2 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 1 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 4 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 5 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else room['tileMemo'].push({[[[x],[z]]]: 0});		// 2 -> code for Fire
+
+        }
+    }
+}
+
+function initialize_hDoor(room){
+    console.log("initializing hDoor");
+    room["hDoorMemo"].push({[[5,1]]:2});
+    room["hDoorMemo"].push({[[3,3]]:0});
+    room["hDoorMemo"].push({[[6,3]]:0});
+    room["hDoorMemo"].push({[[5,4]]:0});
+    room["hDoorMemo"].push({[[6,7]]:2});
+    room["hDoorMemo"].push({[[3,5]]:0});
+}
+
+function initialize_vDoor(room){
+    console.log("initializing vDoor");
+    room["vDoorMemo"].push({[[1,3]]:3});
+    room["vDoorMemo"].push({[[6,4]]:1});
+    room["vDoorMemo"].push({[[9,3]]:3});
+}
+
 function initialize_hWall(room){
     console.log("initializing hwall");
     room['hWallMemo'].push({[[1,1]]: 0});
@@ -137,7 +192,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var name = data['name'];
       Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
 
-      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[]};
+      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[]};
 
       // var s = [1,2];
       // Games_state[room_number]['hWallMemo'].push({[s]: 0});
@@ -151,6 +206,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       initialize_hWall(Games_state[room_number]);
       initialize_vWall(Games_state[room_number]);
+      initialize_tile(Games_state[room_number]);
+      initialize_hDoor(Games_state[room_number]);
+      initialize_vDoor(Games_state[room_number]);
 
       console.log(Games);
       console.log(Games_state);
@@ -237,9 +295,23 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var x = data['x'];
         var z = data['z'];
         var type = data['type'];
+        var room = data['room'];
+        var location = x+','+z;
         console.log(x);
         console.log(z);
         console.log(type);
+
+        console.log("updating tile state");
+        var tileMemo = Games_state[room]['tileMemo'];
+        tileMemo.forEach(w => {
+            if(w[location]!= null){
+              console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
+              w[[x,z]] = parseInt(type);
+            }
+        });
+        Games_state[room]['tileMemo'] = tileMemo;
+        console.log(Games_state[room]['tileMemo']);
+
         socket.broadcast.emit('TileUpdate_Success', {"x":x, "z":z, "type":type});
     });
 
@@ -263,7 +335,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
             hWall_list.forEach(w => {
               if(w[location]!= null){
                   console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
-                  w[[x,z]] = type;
+                  w[[x,z]] = parseInt(type);
               }
             });
             Games_state[room]['hWallMemo'] = hWall_list;
@@ -274,7 +346,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
             vWall_list.forEach(w => {
               if(w[location]!= null){
                   console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
-                  w[[x,z]] = type;
+                  w[[x,z]] = parseInt(type);
               }
             });
             Games_state[room]['vWallMemo'] = vWall_list;
@@ -289,10 +361,37 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var z = data['z'];
         var type = data['type'];
         var toType = data["toType"];
+        var room = data['room'];
+        var location = x+','+z;
         console.log(x);
         console.log(z);
         console.log(type);
         console.log(toType);
+
+        if(type=='0' || type=="2"){//horizontal
+            console.log("updating horizontal Games_state door");
+            var hDoor_list = Games_state[room]['hDoorMemo'];
+            hDoor_list.forEach(w => {
+              if(w[location]!= null){
+                  console.log("updating " + x + " " + z + " to type: "+ parseInt(toType));
+                  w[[x,z]] = parseInt(toType);
+              }
+            });
+            Games_state[room]['hDoorMemo'] = hDoor_list;
+            console.log(Games_state[room]['hDoorMemo']);
+        }else{
+            console.log("updating vertical Games_state door");
+            var vDoor_list = Games_state[room]['vDoorMemo'];
+            vDoor_list.forEach(w => {
+              if(w[location]!= null){
+                  console.log("updating " + x + " " + z + " to type: "+ parseInt(toType));
+                  w[[x,z]] = parseInt(toType);
+              }
+            });
+            Games_state[room]['vDoorMemo'] = vDoor_list;
+            console.log(Games_state[room]['vDoorMemo']);
+        }
+
         socket.broadcast.emit('DoorUpdate_Success', {"x":x, "z":z, "type":type, "toType":toType});
     });
 

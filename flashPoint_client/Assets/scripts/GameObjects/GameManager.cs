@@ -108,7 +108,7 @@ public class GameManager: MonoBehaviour
             List<string> p = participants.keys;
             foreach (var v in p)
             {
-                //Debug.Log(participants[v]);
+                Debug.Log(participants[v]);
                 var o = participants[v];
                 players[v] = o;
                 //Debug.Log(players[v]);
@@ -123,16 +123,16 @@ public class GameManager: MonoBehaviour
 
         if (game_info != null)
         {
-            if (!StaticInfo.LoadGame)
+            if (!StaticInfo.LoadGame)//if creating a new game
             {
                 fireman = initializeFireman();
                 amB = initializeAmbulance();
                 enG = initializeEngine();
                 operationManager = new OperationManager(this);
                 wallManager = new WallManager(wallTypes, this,0);
-                doorManager = new DoorManager(doorTypes, this);
+                doorManager = new DoorManager(doorTypes, this,0);
                 //    vehicleManager = new VehicleManager(vehicleTypes,this);
-                tileMap = new TileMap(tileTypes, this, fireman, enG, amB);
+                tileMap = new TileMap(tileTypes, this, fireman, enG, amB,0);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
                 pOIManager = new POIManager(this);
                 hazmatManager = new HazmatManager(this);
@@ -156,13 +156,33 @@ public class GameManager: MonoBehaviour
 
                 selectRolePanel.SetActive(false);
             }
-            else
+            else//if we're loading a game
             {
                 fireman = initializeFireman();
                 amB = initializeAmbulance();
                 enG = initializeEngine();
                 operationManager = new OperationManager(this);
-                wallManager = new WallManager(wallTypes, this,1);
+                wallManager = new WallManager(wallTypes, this,1);// set to 1, generate walls based on staticInfo hWallMemo and vWallMemo
+                doorManager = new DoorManager(doorTypes, this,1);
+                tileMap = new TileMap(tileTypes, this, fireman, enG, amB,1);
+                fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+                //poi
+                //hazmat
+                
+                displayAP();
+                tileMap.GenerateFiremanVisual(players);
+                registerNewFireman(fireman);
+                checkTurn(); //initialize isMyTurn variable at start
+                if (!level.Equals("Family"))
+                {
+                    displayRole();
+                }
+                else
+                {
+                    changeRoleButton.SetActive(false);
+                }
+
+                selectRolePanel.SetActive(false);
             }
             
         }
@@ -276,8 +296,9 @@ public class GameManager: MonoBehaviour
         
         Debug.Log(obj.data[0][0].ToDictionary().Keys);
         Debug.Log(obj.data[0][1].ToDictionary().Keys);
+        Debug.Log(obj.data[0][2].ToDictionary().Keys);
 
-        foreach (KeyValuePair<string, string> entry in obj.data[0][0].ToDictionary())
+        foreach (KeyValuePair<string, string> entry in obj.data[0][2].ToDictionary())
         {
             Debug.Log(entry.Key);
             Debug.Log(entry.Value);
@@ -525,7 +546,7 @@ public class GameManager: MonoBehaviour
         int z = Convert.ToInt32(cord[1]);
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap);
+		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
         Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role,pOIManager, hazmatManager);
 
         return f;
@@ -607,6 +628,7 @@ public class GameManager: MonoBehaviour
         updateTile["x"] = x.ToString();
         updateTile["z"] = z.ToString();
         updateTile["type"] = type.ToString();
+        updateTile["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateTile", new JSONObject(updateTile));
     }
@@ -632,6 +654,7 @@ public class GameManager: MonoBehaviour
         updateDoor["z"] = z.ToString();
         updateDoor["toType"] = toType.ToString();
         updateDoor["type"] = type.ToString();
+        updateDoor["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateDoor", new JSONObject(updateDoor));
     }
