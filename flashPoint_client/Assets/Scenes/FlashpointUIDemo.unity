@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366756, g: 0.48427135, b: 0.56452316, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -547,11 +547,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -576,6 +576,10 @@ Prefab:
     - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 869e1eeb1ae9fc74285b07235db98acb, type: 3}
@@ -6475,11 +6479,11 @@ MonoBehaviour:
       type: 2}
     isWalkable: 1
   - name: parking_engin
-    tileVisualPrefab: {fileID: 1305533539631988, guid: 117916cd6514c47dc922241b0771ada5,
+    tileVisualPrefab: {fileID: 1259267309625838, guid: 329bf543f1f2b412a9a7094ccd5165f3,
       type: 2}
     isWalkable: 1
   - name: parking_ambulance
-    tileVisualPrefab: {fileID: 1259267309625838, guid: 329bf543f1f2b412a9a7094ccd5165f3,
+    tileVisualPrefab: {fileID: 1305533539631988, guid: 117916cd6514c47dc922241b0771ada5,
       type: 2}
     isWalkable: 1
   - name: hotspot
@@ -6536,6 +6540,7 @@ MonoBehaviour:
   damaged_wall_num: 0
   rescued_vict_num: 0
   fireManager: {fileID: 0}
+  vicinityManager: {fileID: 0}
   prefabs:
   - {fileID: 114907898622071792, guid: 1f03876a10ceb45b2b15fc693785c6f5, type: 2}
   - {fileID: 114175977540363872, guid: f99420df448fe42f3b388e98189aba77, type: 2}
@@ -6569,6 +6574,10 @@ MonoBehaviour:
   selectedRole: {fileID: 1749190485}
   changeRoleButton: {fileID: 2028607538}
   confirmed: 0
+  toX: 0
+  toZ: 0
+  fromX: 0
+  fromZ: 0
   isDodging: 0
   leftDodgeDown: 0
   upDodgeDown: 0
@@ -6630,7 +6639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000048160553, y: 215.4}
+  m_AnchoredPosition: {x: -0.0000500679, y: 215.4}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881
