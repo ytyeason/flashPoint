@@ -16,8 +16,10 @@ public class POIManager{
     public Dictionary<int[],POI> placedPOI=new Dictionary<int[],POI>();
     public Dictionary<int[], GameObject> poiLookup = new Dictionary<int[], GameObject>();
     public List<POI> poi = new List<POI>();
+    
     public Dictionary<int[], POI> treated = new Dictionary<int[], POI>();
     public Dictionary<int[], GameObject> treatedLookup = new Dictionary<int[], GameObject>();
+    
     public Dictionary<int[], POI> movingPOI = new Dictionary<int[], POI>();
     public Dictionary<int[], GameObject> movingPOILookup = new Dictionary<int[], GameObject>();
     public Dictionary<int[], POI> movingTreated = new Dictionary<int[], POI>();
@@ -29,11 +31,26 @@ public class POIManager{
     public int rescued = 0;
     public int killed = 0;
 
-    public POIManager(GameManager gm)
+    public POIManager(GameManager gm, int loadGame)
     {
         this.gm = gm;
+        
         generatePOI();//still need this when loading
-        initiatePOI();
+        
+        if (loadGame == 0)
+        {
+            initiatePOI();
+        }
+        else
+        {
+            var existing_poi = StaticInfo.poi;
+            foreach (KeyValuePair<int[], int> entry in existing_poi)
+            {
+                var location = entry.Key;
+                var type = entry.Value;
+                addPOI(location[0],location[1], type);
+            }
+        }
     }
 
     public void generatePOI()

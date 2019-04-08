@@ -188,7 +188,7 @@ public class GameManager: MonoBehaviour
                 //    vehicleManager = new VehicleManager(vehicleTypes,this);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,0);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,0);
                 hazmatManager = new HazmatManager(this);
 
 
@@ -226,7 +226,7 @@ public class GameManager: MonoBehaviour
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
 
                 //poi -- not done
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,1);
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this);
 
@@ -911,6 +911,7 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> revealPOI = new Dictionary<string, string>();
         revealPOI["x"] = x.ToString();
         revealPOI["z"] = z.ToString();
+        revealPOI["room"] = StaticInfo.roomNumber;
 
         socket.Emit("RevealPOI", new JSONObject(revealPOI));
     }
@@ -1350,6 +1351,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+        location["name"] = StaticInfo.name;
 
         socket.Emit("UpdatePOILocation", new JSONObject(location));
     }
@@ -1602,6 +1604,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        poi["room"] = StaticInfo.roomNumber;
 
         socket.Emit("AddPOI", new JSONObject(poi));
     }
@@ -1621,6 +1624,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        
 
         socket.Emit("AddHazmat", new JSONObject(poi));
     }
@@ -1864,6 +1868,7 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> kill=new Dictionary<string, string>();
         kill["x"]=x.ToString();
         kill["z"]=z.ToString();
+        kill["room"] = StaticInfo.roomNumber;
         socket.Emit("KillPOI",new JSONObject(kill));
     }
 
