@@ -23,7 +23,7 @@ public class VicinityManager : MonoBehaviour {
 		VeteranVicinity = new VicinityTile[gm.mapSizeX, gm.mapSizeZ];
 		for (int x = 0; x < gm.mapSizeX; x++)
 		{
-			for (int z = 0; x < gm.mapSizeZ; z++)
+			for (int z = 0; z < gm.mapSizeZ; z++)
 			{
 				VeteranVicinity[x, z] = new VicinityTile(x, z);
 			}
@@ -62,7 +62,7 @@ public class VicinityManager : MonoBehaviour {
 	//
 	public void rec_markVicinity(int x_loc, int z_loc, int numStepsTaken){
 		// Recursive calls to markVicinity
-		if(numStepsTaken < 3){
+		if(numStepsTaken <= 3){
 			// Check right
 			if (x_loc <= 8 && VeteranVicinity[x_loc + 1, z_loc].explored == false &&
 				// If the tile is not clear or an unopened door or undestroyed wall we can't continue:
