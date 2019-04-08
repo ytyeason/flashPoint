@@ -196,7 +196,7 @@ public class GameManager: MonoBehaviour
                 tileMap.GenerateFiremanVisual(players);
                 registerNewFireman(fireman);
                 checkTurn(); //initialize isMyTurn variable at start
-                if (!level.Equals("Family"))
+                if (!level.Equals("\"Family\""))
                 {
                     displayRole();
                 }
@@ -227,7 +227,7 @@ public class GameManager: MonoBehaviour
                 tileMap.GenerateFiremanVisual(players);
                 registerNewFireman(fireman);
                 checkTurn(); //initialize isMyTurn variable at start
-                if (!level.Equals("Family"))
+                if (!level.Equals("\"Family\""))
                 {
                     displayRole();
                 }
@@ -474,6 +474,7 @@ public class GameManager: MonoBehaviour
             Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
+        displayRole();
     }
 
 //for vehicles
@@ -489,7 +490,6 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("UpdateAmbulanceLocation", new JSONObject(location));
         Debug.Log("update ambulance location");
-
     }
 
     public void AskForRide(int origx, int origz, int newX, int newZ)

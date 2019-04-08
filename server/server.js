@@ -529,7 +529,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
             targetNames[i]=n;
             i=i+1;
           }
-<<<<<<< HEAD
           // if(participants[n]["Riding"]=="1"){
           //   if(participants[n]["Location"]==newx+ "," + newz){
           //     console.log("move with");
@@ -537,15 +536,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
           //   }
             
           // }
-=======
-          if(participants[n]["Riding"]=="1"){
-            if(participants[n]["Location"]==newx+ "," + newz){
-              console.log("move with");
-              ride[i]=n;
-            }
-
-          }
->>>>>>> 277e57162f54322337742137d23f9ff738a3b152
         }
         // console.log("sending");
         io.sockets.emit('AskForRide_Success',{"targetNames":targetNames, "driver": name, "nRider": i});

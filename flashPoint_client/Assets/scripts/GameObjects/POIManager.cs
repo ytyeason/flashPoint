@@ -33,7 +33,7 @@ public class POIManager{
     {
         this.gm = gm;
         generatePOI();//still need this when loading
-        replenishPOI();
+        initiatePOI();
     }
 
     public void generatePOI()
