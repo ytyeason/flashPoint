@@ -96,6 +96,8 @@ public class GameManager: MonoBehaviour
 
     public Text roles;
 
+    public Text stats;
+
     public GameObject tooltipPanel;
     public Text tooltip;
 
@@ -197,6 +199,8 @@ public class GameManager: MonoBehaviour
         Debug.Log("staticinfo "+StaticInfo.numberOfPlayer);
         selectRolePanel.SetActive(false);
 
+        displayStats();
+
     }
 
     public void displayAP(){
@@ -214,6 +218,14 @@ public class GameManager: MonoBehaviour
         {
             nameAP.text += "\n" + nameLengthSpace() + fireman.remainingSpecAp + " Movement AP";
         }
+    }
+
+    public void displayStats()
+    {
+        stats.text = "Number of Damaged Marker" + " : " + wallManager.damagedMarkerCounter;
+        stats.text+="\nRescued Victims" + " : " + pOIManager.rescued;
+        stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
+        stats.text+= "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;  
     }
 
     public void displayRole()
@@ -1696,6 +1708,7 @@ public class GameManager: MonoBehaviour
         socket.Emit("victory");
         SceneManager.LoadScene("Win");
     }
+
 
     public void defeat()
     {

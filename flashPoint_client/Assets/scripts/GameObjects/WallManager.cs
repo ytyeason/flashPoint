@@ -37,7 +37,9 @@ public class WallManager
 
 	public GameManager gm;
 
-	void StartWallManager()
+    public int damagedMarkerCounter = 0;
+
+    void StartWallManager()
 	{
 		PopulateWalls();
 
