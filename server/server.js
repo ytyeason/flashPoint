@@ -775,11 +775,10 @@ io.on('connection', function (socket) {//default event for client connect to ser
       socket.broadcast.emit('RescueTreated_Success',{"x":x,"z":z});
     });
 
-    socket.on('savedGame',function(data){
-        console.log(data);
-        console.log("in saved game");
-
-
+    socket.on('KillPOI',function(data){
+      var x=data['x'];
+      var z=data['z'];
+      socket.broadcast.emit('KillPOI_Success',{"x":x,"z":z});
     });
 
 });

@@ -150,7 +150,7 @@ public class OperationManager
                     tip="Fire DeckGun";
                     break;
                 case OperationType.DropV:
-                    newObject.onClick.AddListener(dropeV);
+                    newObject.onClick.AddListener(dropV);
                     tip="Drop Victim";
                     break;
                 case OperationType.DropHazmat:
@@ -1433,7 +1433,7 @@ public class OperationManager
         DestroyAll();
     }
 
-    public void dropeV()
+    public void dropV()
     {
         Fireman fireman=gm.fireman;
         if(fireman.carriedPOI!=null){
@@ -1441,8 +1441,11 @@ public class OperationManager
             gm.pOIManager.dropPOI(x,z);
             fireman.carriedPOI=null;
             gm.StopCarry(x,z);
+            Debug.Log(StaticInfo.level);
             if(StaticInfo.level.Equals("Family")){
-                if(x==0||x==7||z==0||z==9){
+                Debug.Log(x + " " + z);
+                if(x==0||x==9||z==0||z==7){
+                    Debug.Log("Rescuing");
                     gm.pOIManager.rescueCarried(x,z);
                     gm.rescueCarried(x,z);
                 }
