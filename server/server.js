@@ -711,8 +711,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
           Games[room]['participants'][n]['Riding']="0";
         }
       }
-      socket.broadcast.emit('StopRide_Success',{"Games":Games,"ToStop":stopride});
-      socket.emit('StopDrive_Success',Games);
+      io.sockets.emit('StopRide_Success',{"Games":Games,"ToStop":stopride});
+      io.sockets.emit('StopDrive_Success',Games);
     });
 
     socket.on('StopRide',function(data){
