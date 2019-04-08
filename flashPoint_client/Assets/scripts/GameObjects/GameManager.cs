@@ -591,11 +591,15 @@ public class GameManager: MonoBehaviour
 
                 UpdateEngineLocation(toX, toZ, fromX, fromZ);
                 fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                fireman.currentX=toX;
+                fireman.currentZ=toZ;
                 UpdateLocation(toX, toZ,StaticInfo.name);        
             }
             if(obj.data.ToDictionary()["type"].Equals("1")){
                 UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
                 fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                fireman.currentX=toX;
+                fireman.currentZ=toZ;
                 UpdateLocation(toX, toZ,StaticInfo.name);
             }
             Debug.Log(obj.data.ToDictionary()["type"]);
@@ -1196,7 +1200,8 @@ public class GameManager: MonoBehaviour
 			//yield return new WaitForSeconds(0.75f);
 
 			// Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
-			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+            //Sorry Daniel, I comment here because there's an error when running the game
+			// vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 		}
 
 		// Kill the thread

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System;
 
-[Serializable]
 public class FireManager : MonoBehaviour
 {
 
@@ -14,6 +12,8 @@ public class FireManager : MonoBehaviour
 	public GameManager gm;
 	public TileMap tileMap;
 	public Boolean debugMode = true;        // Toggle this for more descriptive Debug.Log() output
+
+    LinkedList<int[]> hazametList = new LinkedList<int[]>();
 
 
 
@@ -270,6 +270,27 @@ public class FireManager : MonoBehaviour
                 tileMap.buildNewTile(rng_X, rng_Z+1, 2);
                 tileMap.gm.UpdateTile(rng_X, rng_Z+1, 2);
             }
+            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z)){ 
+
+            int[] tmp = new int[2];
+                tmp[0] = rng_X;
+                tmp[1] = rng_Z;
+                Boolean t = true;
+                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+                {
+                    if(node.Value[0]==rng_X && node.Value[1] == rng_Z)
+                    {
+                        t = false;
+                    }
+                }
+                if (t )
+                {
+                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                    hazametList.AddLast(tmp);
+                }
+               
+            }
+
             else
             {
                 //recursion function 
@@ -320,6 +341,26 @@ public class FireManager : MonoBehaviour
             {
                 tileMap.buildNewTile(rng_X-1, rng_Z, 2);
                 tileMap.gm.UpdateTile(rng_X-1, rng_Z, 2);
+            }
+            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z))
+            {
+
+                int[] tmp = new int[2];
+                tmp[0] = rng_X;
+                tmp[1] = rng_Z;
+                Boolean t = true;
+                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+                {
+                    if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
+                    {
+                        t = false;
+                    }
+                }
+                if (t)
+                {
+                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                    hazametList.AddLast(tmp);
+                }
             }
             else
             {
@@ -374,6 +415,26 @@ public class FireManager : MonoBehaviour
                 tileMap.buildNewTile(rng_X+1, rng_Z, 2);
                 tileMap.gm.UpdateTile(rng_X+1, rng_Z, 2);
             }
+            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z))
+            {
+
+                int[] tmp = new int[2];
+                tmp[0] = rng_X;
+                tmp[1] = rng_Z;
+                Boolean t = true;
+                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+                {
+                    if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
+                    {
+                        t = false;
+                    }
+                }
+                if (t )
+                {
+                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                    hazametList.AddLast(tmp);
+                }
+            }
             else
             {
 				//recursion function 
@@ -427,6 +488,26 @@ public class FireManager : MonoBehaviour
                 tileMap.buildNewTile(rng_X, rng_Z-1, 2);
                 tileMap.gm.UpdateTile(rng_X, rng_Z-1, 2);
             }
+            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z))
+            {
+
+                int[] tmp = new int[2];
+                tmp[0] = rng_X;
+                tmp[1] = rng_Z;
+                Boolean t = true;
+                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+                {
+                    if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
+                    {
+                        t = false;
+                    }
+                }
+                if (t )
+                {
+                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                    hazametList.AddLast(tmp);
+                }
+            }
             else
             {
 				//recursion function 
@@ -476,7 +557,17 @@ public class FireManager : MonoBehaviour
             tileMap.buildNewTile(rng_X, rng_Z, 2);
             tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
 
-			return;
+            while (hazametList.Count != 0)
+            {
+                int[] tmp = hazametList.First.Value;
+                hazametList.RemoveFirst();
+                keepGoingUp(tmp[0],tmp[1]);
+                keepGoingDown(tmp[0], tmp[1]);
+                keepGoingLeft(tmp[0], tmp[1]);
+                keepGoingRight(tmp[0], tmp[1]);
+            }
+
+            return;
 		}
 
 		// Prep for adjacent Fire check:

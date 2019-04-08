@@ -504,6 +504,28 @@ io.on('connection', function (socket) {//default event for client connect to ser
       io.sockets.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names});
     });
 
+    socket.on('UpdateEngineLocation', function(data){
+      // console.log("engineeee");
+      var newx=data['newx'];
+      var newz=data['newz'];
+      var names=[];
+      var driver=data['name'];
+      var room = data['room'];
+
+      var participants=Games[room]["participants"];
+      for(var n in participants){
+        var riding=participants[n]["Riding"];
+        if(riding=="2"){
+          participants[n]["Location"]=newx+","+newz;
+          names.push(n);
+        }
+      }
+      names.push(driver);
+      io.sockets.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz,"names":names});
+      // socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz});
+
+    });
+
 
     socket.on('AskForRide', function(data){
       var origx=data['origx'];
@@ -542,27 +564,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     });
 
-    socket.on('UpdateEngineLocation', function(data){
-      // console.log("engineeee");
-      var newx=data['newx'];
-      var newz=data['newz'];
-      var names=[];
-      var driver=data['name'];
-      var room = data['room'];
 
-      var participants=Games[room]["participants"];
-      for(var n in participants){
-        var riding=participants[n]["Riding"];
-        if(riding=="2"){
-          participants[n]["Location"]=newx+","+newz;
-          names.push(n);
-        }
-      }
-      names.push(driver);
-      socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz,"names":names});
-      // socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz});
-
-    });
 
     socket.on('StartRide',function(data){
       var name=data['name'];

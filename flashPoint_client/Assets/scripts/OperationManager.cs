@@ -1254,7 +1254,7 @@ public class OperationManager
             int vz = gm.amB.z;
             gm.startDrive(1);
             gm.AskForRide(vx,vz,x*6, z*6);
-            Debug.Log("gm.confirmed = " + gm.confirmed);
+            // Debug.Log("gm.confirmed = " + gm.confirmed);
             // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer)-1);
 
             // amb.moveNextStation(x,z);
@@ -1275,7 +1275,7 @@ public class OperationManager
             int vx = gm.enG.x;
             int vz = gm.enG.z;
             gm.startDrive(2);
-            gm.AskForRide(vx,vz,eng.x, eng.z);
+            gm.AskForRide(vx,vz,x*6, z*6);
             // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer)-1);
             // eng.moveNextStation(x,z);
             // gm.UpdateEngineLocation(eng.x, eng.z, vx, vz);
