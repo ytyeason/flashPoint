@@ -43,13 +43,21 @@
             </e>
           </e>
         </e>
-        <e p="Fonts" t="Include">
-          <e p="Jupiter" t="Include">
-            <e p="LICENSE.txt" t="Include" />
+        <e p="Click.cs" t="Include" />
+        <e p="Cubism" t="Include">
+          <e p="Shader" t="Include">
+            <e p="myShader_noTransparency.shader" t="Include" />
           </e>
+        </e>
+        <e p="Flat_Ability_Icons" t="Include">
+          <e p="readme.txt" t="Include" />
         </e>
         <e p="Materials" t="Include">
           <e p="UI-Default-No-Alpha.shader" t="Include" />
+        </e>
+        <e p="Newgame.cs" t="Include" />
+        <e p="RainbowArt" t="Include">
+          <e p="readme.txt" t="Include" />
         </e>
         <e p="Scripts" t="Include">
           <e p="ActiveStateToggler.cs" t="Include" />
@@ -59,23 +67,38 @@
           <e p="DragMe.cs" t="Include" />
           <e p="DragPanel.cs" t="Include" />
           <e p="DropMe.cs" t="Include" />
+          <e p="GameData.cs" t="Include" />
           <e p="GameObjects" t="Include">
+            <e p="Ambulance.cs" t="Include" />
             <e p="ClickableTile.cs" t="Include" />
             <e p="Colors.cs" t="Include" />
             <e p="DifficultyLevel.cs" t="Include" />
             <e p="Door.cs" t="Include" />
+            <e p="DoorManager.cs" t="Include" />
             <e p="DoorStatus.cs" t="Include" />
+            <e p="DoorType.cs" t="Include" />
             <e p="EdgeObstacle.cs" t="Include" />
-            <e p="FalseAlarm.cs" t="Include" />
+            <e p="Engine.cs" t="Include" />
             <e p="Fireman.cs" t="Include" />
+            <e p="FireManager.cs" t="Include" />
+            <e p="firemanplusvictim.cs" t="Include" />
             <e p="Game.cs" t="Include" />
             <e p="GameManager.cs" t="Include" />
             <e p="GamePlayer.cs" t="Include" />
             <e p="GameStatus.cs" t="Include" />
             <e p="GameUnit.cs" t="Include" />
+            <e p="Hazmat.cs" t="Include" />
+            <e p="HazmatManager.cs" t="Include" />
+            <e p="HazmatStatus.cs" t="Include" />
+            <e p="MyClass.cs" t="Include" />
+            <e p="MyObjectArrayWrapper.cs" t="Include" />
+            <e p="playerInfo.cs" t="Include" />
             <e p="PlayerStatus.cs" t="Include" />
             <e p="POI.cs" t="Include" />
+            <e p="POIManager.cs" t="Include" />
             <e p="POIStatus.cs" t="Include" />
+            <e p="POIType.cs" t="Include" />
+            <e p="Role.cs" t="Include" />
             <e p="RootObject.cs" t="Include" />
             <e p="Space.cs" t="Include" />
             <e p="SpaceKind.cs" t="Include" />
@@ -83,8 +106,8 @@
             <e p="StaticInfo.cs" t="Include" />
             <e p="TileMap.cs" t="Include" />
             <e p="TileType.cs" t="Include" />
-            <e p="Victim.cs" t="Include" />
-            <e p="VictimStatus.cs" t="Include" />
+            <e p="VicinityManager.cs" t="Include" />
+            <e p="VicinityTile.cs" t="Include" />
             <e p="Wall.cs" t="Include" />
             <e p="WallManager.cs" t="Include" />
             <e p="WallStatus.cs" t="Include" />
@@ -95,11 +118,15 @@
           <e p="LobbyManager.cs" t="Include" />
           <e p="LoginManager.cs" t="Include" />
           <e p="LoginPanelController.cs" t="Include" />
+          <e p="Operation.cs" t="Include" />
+          <e p="OperationManager.cs" t="Include" />
+          <e p="OperationType.cs" t="Include" />
           <e p="PanelManager.cs" t="Include" />
           <e p="Player.cs" t="Include" />
           <e p="ResizePanel.cs" t="Include" />
           <e p="RoomManager.cs" t="Include" />
           <e p="ScrollDetailTexture.cs" t="Include" />
+          <e p="SelectRole.cs" t="Include" />
           <e p="ShowSliderValue.cs" t="Include" />
           <e p="TiltWindow.cs" t="Include" />
         </e>
@@ -206,19 +233,16 @@
             <e p="WebSocketStream.cs" t="Include" />
           </e>
         </e>
-        <e p="Textures and Sprites" t="Include">
-          <e p="SF UI" t="Include">
-            <e p="Background" t="Include">
-              <e p="LICENSE.txt" t="Include" />
-            </e>
-          </e>
-        </e>
+        <e p="verti.cs" t="Include" />
       </e>
       <e p="flashPoint_client.sln" t="IncludeFlat" />
+      <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="Temp/bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
     </e>
-    <e p="$USER_HOME$/Library/Caches/Rider2018.1/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_flashPoint_client.-1301861428.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/Library/Caches/Rider2018.1/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_flashPoint_client.102671090.00" t="ExcludeRecursive" />
   </component>
 </project>

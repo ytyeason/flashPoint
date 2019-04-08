@@ -5,7 +5,9 @@ using System.Text.RegularExpressions;
 using SocketIO;
 using System;
 
+using System;
 
+[Serializable]
 public class Game {
     
     private Dictionary<String, Fireman> fireman_manager = new Dictionary<string, Fireman>();

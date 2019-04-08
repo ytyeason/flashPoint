@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+
+[Serializable]
 public enum GameStatus
 {
     ReadyToJoin,

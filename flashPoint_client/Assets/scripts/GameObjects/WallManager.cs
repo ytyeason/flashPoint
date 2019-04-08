@@ -6,7 +6,9 @@ using UnityEngine;
 
 using System.Text.RegularExpressions;
 using System.Linq;
+using System;
 
+[Serializable]
 public static class hasComponent
 {
 	public static bool HasComponent<T>(this GameObject flag) where T : Component
@@ -20,7 +22,7 @@ public static class hasComponent
 		return false;
 	}
 }
-
+[Serializable]
 public class WallManager
 {
 
@@ -32,12 +34,15 @@ public class WallManager
 
 	public List<int[]> defaultHorizontalWalls = new List<int[]>();
 	public List<int[]> defaultVerticalWalls = new List<int[]>();
+	
+	//public Dictionary<int[],int> defaultHorizontalWallsMemo = new Dictionary<int[], int>();
+	//public Dictionary<int[],int> defaultVerticalWallsMemo = new Dictionary<int[], int>();
 
 	public WallType[] wallTypes;
 
 	public GameManager gm;
 
-	void StartWallManager()
+    void StartWallManager()
 	{
 		PopulateWalls();
 
@@ -100,16 +105,26 @@ public class WallManager
     }
 
 
-	public WallManager(WallType[] wallTypes, GameManager gm)
+	public WallManager(WallType[] wallTypes, GameManager gm, int loadGame)
 	{
 		this.wallTypes = wallTypes;
 		this.gm = gm;
-		StartWallManager();
+		if (loadGame == 0)//we're creating a new game
+		{
+			StartWallManager();
+		}
+		else
+		{
+			loadWallVisual();
+		}
+		
 	}
 
 	void PopulateWalls()
 	{
+		
 		defaultHorizontalWalls.Add(new int[] { 1, 1 });
+		
 		defaultHorizontalWalls.Add(new int[] { 2, 1 });
 		//
 		defaultHorizontalWalls.Add(new int[] { 4, 1 });
@@ -173,6 +188,59 @@ public class WallManager
 		defaultVerticalWalls.Add(new int[] { 9, 4 });
 		defaultVerticalWalls.Add(new int[] { 9, 5 });
 		defaultVerticalWalls.Add(new int[] { 9, 6 });
+		/* im so stupid....
+		
+		defaultHorizontalWallsMemo[new int[] {1, 1}] = 0;
+		defaultHorizontalWallsMemo[new int[] {2, 1}] = 0;
+		defaultHorizontalWallsMemo[new int[] {4, 1}] = 0;
+		defaultHorizontalWallsMemo[new int[] {3, 1}] = 0;
+		defaultHorizontalWallsMemo[new int[] {6, 1}] = 0;
+		defaultHorizontalWallsMemo[new int[] {7, 1}] = 0;
+		defaultHorizontalWallsMemo[new int[] {8, 1}] = 0;
+		defaultHorizontalWallsMemo[new int[] {1, 3}] = 0;
+		defaultHorizontalWallsMemo[new int[] {2, 3}] = 0;
+		defaultHorizontalWallsMemo[new int[] {4, 3}] = 0;
+		defaultHorizontalWallsMemo[new int[] {5, 3}] = 0;
+		defaultHorizontalWallsMemo[new int[] {4, 4}] = 0;
+		defaultHorizontalWallsMemo[new int[] {6, 4}] = 0;
+		
+		defaultHorizontalWallsMemo[new int[] {7, 4}] = 0;
+		defaultHorizontalWallsMemo[new int[] {8, 4}] = 0;
+		defaultHorizontalWallsMemo[new int[] {1, 5}] = 0;
+		defaultHorizontalWallsMemo[new int[] {2, 5}] = 0;
+		defaultHorizontalWallsMemo[new int[] {4, 6}] = 0;
+		defaultHorizontalWallsMemo[new int[] {5, 6}] = 0;
+		defaultHorizontalWallsMemo[new int[] {1, 7}] = 0;
+		defaultHorizontalWallsMemo[new int[] {2, 7}] = 0;
+		defaultHorizontalWallsMemo[new int[] {3, 7}] = 0;
+		defaultHorizontalWallsMemo[new int[] {4, 7}] = 0;
+		defaultHorizontalWallsMemo[new int[] {5, 7}] = 0;
+		defaultHorizontalWallsMemo[new int[] {7, 7}] = 0;
+		defaultHorizontalWallsMemo[new int[] {8, 7}] = 0;
+		//------------------------------------------
+		defaultVerticalWallsMemo[new int[] {1, 1}] = 0;
+		defaultVerticalWallsMemo[new int[] {1, 2}] = 0;
+		defaultVerticalWallsMemo[new int[] {1, 4}] = 0;
+		defaultVerticalWallsMemo[new int[] {1, 5}] = 0;
+		defaultVerticalWallsMemo[new int[] {1, 6}] = 0;
+		defaultVerticalWallsMemo[new int[] {4, 1}] = 0;
+		defaultVerticalWallsMemo[new int[] {4, 2}] = 0;
+		defaultVerticalWallsMemo[new int[] {4, 4}] = 0;
+		defaultVerticalWallsMemo[new int[] {4, 5}] = 0;
+		defaultVerticalWallsMemo[new int[] {4, 6}] = 0;
+		defaultVerticalWallsMemo[new int[] {6, 5}] = 0;
+		defaultVerticalWallsMemo[new int[] {6, 6}] = 0;
+		
+		defaultVerticalWallsMemo[new int[] {7, 1}] = 0;
+		defaultVerticalWallsMemo[new int[] {7, 2}] = 0;
+		defaultVerticalWallsMemo[new int[] {7, 3}] = 0;
+		defaultVerticalWallsMemo[new int[] {9, 1}] = 0;
+		defaultVerticalWallsMemo[new int[] {9, 2}] = 0;
+		defaultVerticalWallsMemo[new int[] {9, 4}] = 0;
+		defaultVerticalWallsMemo[new int[] {9, 5}] = 0;
+		defaultVerticalWallsMemo[new int[] {9, 6}] = 0;
+*/
+		
 
 	}
 
@@ -201,8 +269,14 @@ public class WallManager
 						//Destroy(old);
 						gm.DestroyObject(old);
 						gm.damaged_wall_num++;		// Increment the GUI counter to represent # of damaged walls
+                        gm.displayStats();
+                        if (gm.damaged_wall_num >= 24)
+                        {
+                            Debug.Log("24 damaged markers");
+                            gm.defeat();
+                        }
 
-						WallType wt = wallTypes[type];
+                        WallType wt = wallTypes[type];
 						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x *6, 0, z *6-2), Quaternion.identity);
 						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x *6, 2, z *6 - 3), Quaternion.identity);
 
@@ -236,8 +310,14 @@ public class WallManager
 						//Destroy(old);
 						gm.DestroyObject(old);
 						gm.damaged_wall_num++;     // Increment the GUI counter to represent # of damaged walls
+                        gm.displayStats();
+                        if (gm.damaged_wall_num >= 24)
+                        {
+                            Debug.Log("24 damaged markers");
+                            gm.defeat();
+                        }
 
-						WallType wt = wallTypes[type];
+                        WallType wt = wallTypes[type];
 						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x *6-2, 0, z *6), Quaternion.Euler(0,90,0));
 						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x *6 - 3, 2, z *6), Quaternion.Euler(0, 90, 0));
 
@@ -279,6 +359,8 @@ public class WallManager
 
             //hwallStores[hWall] = go;
             hwallStores.Add(hWall, go);
+
+
 		}
 
 		foreach (var vWall in defaultVerticalWalls)
@@ -298,8 +380,58 @@ public class WallManager
 
             //vwallStores[vWall] = go;
             vwallStores.Add(vWall, go);
+
 		}
 
+	}
+
+	public void loadWallVisual()
+	{
+		Dictionary<int[], int> h = StaticInfo.hWallMemo;
+		Dictionary<int[], int> v = StaticInfo.vWallMemo;
+
+		foreach (KeyValuePair<int[], int> entry in h)
+		{
+			var hWall = entry.Key;
+			var type = entry.Value;
+			
+			WallType wt = wallTypes[type];
+			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
+			GameObject go = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(hWall[0] *6, 2, hWall[1] *6 - 3), Quaternion.identity);
+
+			Wall w = go.GetComponent<Wall>();
+			//Debug.Log(w);
+			// Assign the variables as needed
+			w.x = hWall[0] *6;
+			w.z = hWall[1] *6;
+			w.wallMap = this;
+			w.type = type;
+
+			//hwallStores[hWall] = go;
+			hwallStores.Add(hWall, go);
+		}
+		
+		foreach (KeyValuePair<int[], int> entry in v)
+		{
+			var vWall = entry.Key;
+			var type = entry.Value;
+			
+			WallType wt = wallTypes[type];
+			//Debug.Log(wt);
+			//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(vWall[0]*5-2, 0, vWall[1]*5), Quaternion.Euler(0,90,0) );
+			GameObject go = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(vWall[0] *6 - 3, 2, vWall[1] *6), Quaternion.Euler(0, 90, 0));
+
+			Wall w = go.GetComponent<Wall>();
+			//Debug.Log(w);
+			// Assign the variables as needed
+			w.x = vWall[0] *6;
+			w.z = vWall[1] *6;
+			w.wallMap = this;
+			w.type = type;
+
+			//vwallStores[vWall] = go;
+			vwallStores.Add(vWall, go);
+		}
 	}
 
 
@@ -389,7 +521,8 @@ public class WallManager
 		}
 
 		return false;
-	}
+    }
 
+    
 
 }

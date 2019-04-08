@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SocketIO;
 using System;
+using System;
 
+[Serializable]
 public class RootObject
 {
     public List<string> participants { get; set; }

@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System;
 
+[Serializable]
 public class HazmatManager{
     public GameManager gm;
 
@@ -26,7 +28,7 @@ public class HazmatManager{
     public HazmatManager(GameManager gm){
         this.gm=gm;
 
-        //this.additionalHotspot 
+        //this.additionalHotspot
         switch (StaticInfo.level)
         {
             case "Family":
@@ -43,7 +45,7 @@ public class HazmatManager{
             case "Experienced-Heroic":
                 numOfHazmat = 5;
                 additionalHotspot += 3;
-                break; 
+                break;
         }
         if (StaticInfo.level == "Random")
         {
@@ -194,6 +196,7 @@ public class HazmatManager{
         }
         gm.DestroyObject(get(key[0],key[1],lookUp));
         removedHazmat++;
+        gm.displayStats();
     }
 
     public void moveHazmat(int origx, int origz, int newx, int newz)

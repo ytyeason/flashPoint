@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+
+[Serializable]
 public abstract class EdgeObstacle
 {
     public int id;

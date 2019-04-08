@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 //using System.Web.Script.Serialization;
 
 
+[Serializable]
 public class GameManager: MonoBehaviour
 {
     public SocketIOComponent socket;
@@ -96,6 +97,8 @@ public class GameManager: MonoBehaviour
 
     public Text roles;
 
+    public Text stats;
+
     public GameObject tooltipPanel;
     public Text tooltip;
 
@@ -140,6 +143,7 @@ public class GameManager: MonoBehaviour
         socket.On("victory_Success",victory_Success);
         socket.On("defeat_Success",defeat_Success);
         socket.On("ResetConfirmed_Success", ResetConfirmed_Success);
+        socket.On("SaveGame_Success", SaveGame_Success);
 
         if (game_info != null)
         {
@@ -153,52 +157,93 @@ public class GameManager: MonoBehaviour
             List<string> p = participants.keys;
             foreach (var v in p)
             {
-                //Debug.Log(participants[v]);
+                Debug.Log(participants[v]);
                 var o = participants[v];
                 players[v] = o;
                 Debug.Log("debug location");
                 Debug.Log(players[v]["Location"]);
             }
         }
-
-        fireman = initializeFireman();
-        amB = initializeAmbulance();
-        enG = initializeEngine();
-        operationManager = new OperationManager(this);
-        wallManager = new WallManager(wallTypes,this);
-        doorManager = new DoorManager(doorTypes,this);
-    //    vehicleManager = new VehicleManager(vehicleTypes,this);
-        tileMap = new TileMap(tileTypes,this, fireman, enG, amB);
-		fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
-        pOIManager = new POIManager(this);
-        hazmatManager=new HazmatManager(this);
-		vicinityManager = new VicinityManager(this, tileMap.tiles);
-
-        //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
-        displayAP();
-     //   vehicleManager.StartvehicleManager();
-
-        tileMap.GenerateFiremanVisual(players);
-        registerNewFireman(fireman);
-        checkTurn();	//initialize isMyTurn variable at start
-        Debug.Log(level);
-        roles.text="";
-        if (!level.Equals("\"Family\"")||(StaticInfo.level!=null)&&!StaticInfo.level.Equals("Family"))
-        {
-            displayRole();
-            changeRoleButton.SetActive(true);
-        }
         else
         {
-            changeRoleButton.SetActive(false);
-            ambulance.SetActive(false);
-            engine.SetActive(false);
+            Debug.Log("game_info is null");
+
+
         }
 
-        Debug.Log("staticinfo "+StaticInfo.numberOfPlayer);
-        selectRolePanel.SetActive(false);
+        if (game_info != null)
+        {
+            if (!StaticInfo.LoadGame)//if creating a new game
+            {
+                fireman = initializeFireman();
+                amB = initializeAmbulance();
+                enG = initializeEngine();
+                operationManager = new OperationManager(this);
+                wallManager = new WallManager(wallTypes, this,0);
+                doorManager = new DoorManager(doorTypes, this,0);
+                //    vehicleManager = new VehicleManager(vehicleTypes,this);
+                tileMap = new TileMap(tileTypes, this, fireman, enG, amB,0);
+                fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+                pOIManager = new POIManager(this);
+                hazmatManager = new HazmatManager(this);
+
+
+                //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+                displayAP();
+                //   vehicleManager.StartvehicleManager();
+
+                tileMap.GenerateFiremanVisual(players);
+                registerNewFireman(fireman);
+                checkTurn(); //initialize isMyTurn variable at start
+                if (!level.Equals("Family"))
+                {
+                    displayRole();
+                }
+                else
+                {
+                    changeRoleButton.SetActive(false);
+                }
+
+                selectRolePanel.SetActive(false);
+            }
+            else//if we're loading a game
+            {
+                fireman = initializeFireman();
+                amB = initializeAmbulance();
+                enG = initializeEngine();
+                operationManager = new OperationManager(this);
+                wallManager = new WallManager(wallTypes, this,1);// set to 1, generate walls based on staticInfo hWallMemo and vWallMemo
+                doorManager = new DoorManager(doorTypes, this,1);
+                tileMap = new TileMap(tileTypes, this, fireman, enG, amB,1);
+                fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+
+                //poi -- not done
+                pOIManager = new POIManager(this);
+                //hazmat -- not done
+                hazmatManager = new HazmatManager(this);
+
+                displayAP();
+                tileMap.GenerateFiremanVisual(players);
+                registerNewFireman(fireman);
+                checkTurn(); //initialize isMyTurn variable at start
+                if (!level.Equals("Family"))
+                {
+                    displayRole();
+                }
+                else
+                {
+                    changeRoleButton.SetActive(false);
+                }
+
+                selectRolePanel.SetActive(false);
+            }
+
+        }
+
+        displayStats();
 
     }
+
 
     public void displayAP(){
         Debug.Log(fireman.role.ToString());
@@ -215,6 +260,18 @@ public class GameManager: MonoBehaviour
         {
             nameAP.text += "\n" + nameLengthSpace() + fireman.remainingSpecAp + " Movement AP";
         }
+    }
+
+    public void displayStats()
+    {
+        stats.text = "Damaged Marker" + " : " + this.damaged_wall_num;
+        stats.text+="\nRescued Victims" + " : " + pOIManager.rescued;
+        stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
+        if (!StaticInfo.level.Equals("Family"))
+        {
+            stats.text += "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
+        }
+       
     }
 
     public void displayRole()
@@ -273,6 +330,59 @@ public class GameManager: MonoBehaviour
             s += " ";
         }
         return s;
+    }
+
+    public void saveGame()
+    {
+        Debug.Log("saveGame");
+
+        GameManager save = this;
+
+        MyClass myObject = new MyClass();
+        myObject.level = 1;
+        myObject.timeElapsed = 47.5f;
+        myObject.playerName = "Dr Charles Francis";
+        //myObject.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
+        //Debug.Log(wallManager.defaultHorizontalWallsMemo.Keys.Count);
+
+        int[] a = new int[] { 1, 1 };
+        MyObjectArrayWrapper m = new MyObjectArrayWrapper();
+        m.objects = a;
+        //m.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
+
+        socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(m)));
+    }
+
+    void SaveGame_Success(SocketIOEvent obj)
+    {
+        Debug.Log("SaveGame_Success");
+        Debug.Log(obj.data);
+        Debug.Log(obj.data[0]); // [{"1,2":0},{"2,2":0}]
+        Debug.Log(obj.data[1]);
+
+        Debug.Log(obj.data[0][0]);
+        Debug.Log(obj.data[0][1]);
+        Debug.Log(obj.data[0].Count);
+
+        Debug.Log(obj.data[0][0].ToDictionary().Keys);
+        Debug.Log(obj.data[0][1].ToDictionary().Keys);
+        Debug.Log(obj.data[0][2].ToDictionary().Keys);
+
+        foreach (KeyValuePair<string, string> entry in obj.data[0][2].ToDictionary())
+        {
+            Debug.Log(entry.Key);
+            Debug.Log(entry.Value);
+        }
+        /*
+        Dictionary<string,string> s = obj.data.ToDictionary();
+        Debug.Log(JsonUtility.FromJson<GameManager>(s["doorManager"]));
+        */
+        /*
+        GameData g = new GameData();
+        g.gm = JsonUtility.FromJson<GameManager>(s);
+        Debug.Log(g + "------------");
+        */
+
     }
 
     void revealPOI_SUCCESS(SocketIOEvent obj)
@@ -414,7 +524,7 @@ public class GameManager: MonoBehaviour
                         operationManager.askingForRide=true;
                         Debug.Log("ask for ride succeed!!!!!!!");
                     }
-                } 
+                }
             }
         }
         else
@@ -454,11 +564,11 @@ public class GameManager: MonoBehaviour
         if(confirmed==0)
         {
             if(obj.data.ToString().Equals("1")){
-                UpdateEngineLocation(toX, toZ, fromX, fromZ);        
+                UpdateEngineLocation(toX, toZ, fromX, fromZ);
             }
             if(obj.data.ToString().Equals("2")){
-                UpdateAmbulanceLocation(toX, toZ, fromX, fromZ); 
-                
+                UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+
             }
             socket.Emit("ResetConfirmed", new JSONObject(true));
         }
@@ -498,9 +608,9 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("UpdateEngineLocation", new JSONObject(location));
         Debug.Log("update eng location");
-        
+
     }
-    
+
     public void UpdateEngineLocation_Success(SocketIOEvent obj)
     {
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
@@ -620,7 +730,7 @@ public class GameManager: MonoBehaviour
         int z = Convert.ToInt32(cord[1]);
 
         int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap);
+		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
         Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role,pOIManager, hazmatManager);
 
         return f;
@@ -702,6 +812,7 @@ public class GameManager: MonoBehaviour
         updateTile["x"] = x.ToString();
         updateTile["z"] = z.ToString();
         updateTile["type"] = type.ToString();
+        updateTile["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateTile", new JSONObject(updateTile));
     }
@@ -714,6 +825,7 @@ public class GameManager: MonoBehaviour
         updateWall["z"] = z.ToString();
         updateWall["type"] = type.ToString();
         updateWall["horizontal"] = horizontal.ToString();
+        updateWall["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateWall", new JSONObject(updateWall));
     }
@@ -726,6 +838,7 @@ public class GameManager: MonoBehaviour
         updateDoor["z"] = z.ToString();
         updateDoor["toType"] = toType.ToString();
         updateDoor["type"] = type.ToString();
+        updateDoor["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateDoor", new JSONObject(updateDoor));
     }
@@ -783,7 +896,7 @@ public class GameManager: MonoBehaviour
 		}
 		else downDodgeDown = false;
 	}
-	
+
 	// Called after dodge decisions are made to reset global variables
 	public void resetDodge()
 	{
@@ -1028,7 +1141,7 @@ public class GameManager: MonoBehaviour
 		// Update vicinity check if player is playing a Veteran currently
 		if (fireman.role == Role.Veteran) {
 			//yield return new WaitForSeconds(0.75f);
-			
+
 			// Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
 			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 		}
@@ -1416,7 +1529,7 @@ public class GameManager: MonoBehaviour
         }
         pOIManager.dropPOI(x,z);
     }
-    
+
 
     public void AddPOI(int x, int z,int type)
     {
@@ -1513,6 +1626,8 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("StopRide", new JSONObject(stop));
     }
+
+
 
     public List<string> parseJsonArray(JSONObject obj)
     {
@@ -1693,7 +1808,7 @@ public class GameManager: MonoBehaviour
         pOIManager.kill(x,z);
     }
 
-    
+
     //check for victory and defeat
     public void victory_Success(SocketIOEvent obj)
     {
@@ -1712,6 +1827,7 @@ public class GameManager: MonoBehaviour
         SceneManager.LoadScene("Win");
     }
 
+
     public void defeat()
     {
         Debug.Log("Game Over!");
@@ -1725,4 +1841,3 @@ public class Notification{
     public string msg;
     public Text textObject;
 }
-
