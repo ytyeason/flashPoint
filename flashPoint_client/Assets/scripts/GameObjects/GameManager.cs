@@ -976,8 +976,19 @@ public class GameManager: MonoBehaviour
 			}
 		}
 
+		// Reset for later use
 		Debug.Log("Resetting dodge");
 		resetDodge();
+
+		// Update vicinity check if player is playing a Veteran currently
+		if (fireman.role == Role.Veteran) {
+			//yield return new WaitForSeconds(0.75f);
+			
+			// Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
+			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+		}
+
+		// Kill the thread
 		yield return 0;
 	}
 
@@ -990,6 +1001,7 @@ public class GameManager: MonoBehaviour
 
 		// advanceFire, n.b parameters only matter for testing
 		fireManager.advanceFire(1, 3, true);
+		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
 
