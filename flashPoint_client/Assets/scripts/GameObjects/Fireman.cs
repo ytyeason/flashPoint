@@ -144,35 +144,38 @@ public class Fireman
     // Fireman's method call from Door.cs
     public Boolean changeDoor(int doorX, int doorZ)
     {
-        // If debugMode is enabled, better reporting is enabled
-        if (debugMode) Debug.Log("Running extuinguishFire(" + doorX + ", " + doorZ + ")");
-
-        // AP check
-        if (gm.operationManager.inCommand)
+        if(this.role!=Role.Dog)
         {
-            if (remainingSpecAp >= 1)
+            // If debugMode is enabled, better reporting is enabled
+            if (debugMode) Debug.Log("Running extuinguishFire(" + doorX + ", " + doorZ + ")");
+
+            // AP check
+            if (gm.operationManager.inCommand)
             {
-                setSpecAP(remainingSpecAp - 1);
-                return true;
+                if (remainingSpecAp >= 1)
+                {
+                    setSpecAP(remainingSpecAp - 1);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                if (FreeAP >= 1)
+                {
+                    setAP(FreeAP - 1);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
-        else
-        {
-            if (FreeAP >= 1)
-            {
-                setAP(FreeAP - 1);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+        return false;
         //if (FreeAP < 1)
         //{
         //    if (debugMode) Debug.Log("ToggleDoor() failed, AP unchanged: " + FreeAP);
@@ -191,35 +194,43 @@ public class Fireman
     // Pre-condition via ClickableTiles: in_status != 0
     public int extinguishFire(int in_status)
     {
-        if (debugMode) Debug.Log("Running extuinguishFire(" + in_status + ")");
+        if(this.role!=Role.Dog)
+        {
+            if (debugMode) Debug.Log("Running extuinguishFire(" + in_status + ")");
 
-        // AP check
-        if (FreeAP < 1)
-        {
-            if (debugMode) Debug.Log("AP unchanged: " + FreeAP);
-            return -1;
+            // AP check
+            if (FreeAP < 1)
+            {
+                if (debugMode) Debug.Log("AP unchanged: " + FreeAP);
+                return -1;
+            }
+            else // Fire -> Smoke || Smoke -> Normal: 1 AP
+            {
+                setAP(FreeAP - 1);
+                if (debugMode) Debug.Log("Changed extFire: AP is now: " + FreeAP);
+                return (in_status - 1);
+            }
         }
-        else // Fire -> Smoke || Smoke -> Normal: 1 AP
-        {
-            setAP(FreeAP - 1);
-            if (debugMode) Debug.Log("Changed extFire: AP is now: " + FreeAP);
-            return (in_status - 1);
-        }
+        return -1;
     }
 
     public Boolean chopWall()
     {
-        if (FreeAP >= 2)
+        if(this.role!=Role.Dog)
         {
-            setAP(FreeAP - 2);
-            if (debugMode) Debug.Log("AP is now: " + FreeAP);
-            return true;
+            if (FreeAP >= 2)
+            {
+                setAP(FreeAP - 2);
+                if (debugMode) Debug.Log("AP is now: " + FreeAP);
+                return true;
+            }
+            else
+            {
+                if (debugMode) Debug.Log("No AP left to chop the Wall!");
+                return false;
+            }
         }
-        else
-        {
-            if (debugMode) Debug.Log("No AP left to chop the Wall!");
-            return false;
-        }
+        return false;
     }
 
     public void tryMove(int x, int z, int in_status, GameObject gmo) //int[] ct_key, Dictionary<int[], ClickableTile> ct_table)
@@ -345,13 +356,17 @@ public class Fireman
     public void move(int x, int z)
     {
         int requiredAP = 1;
-        if (gm.tileMap.tiles[x, z] == 2 || carryingVictim)
+        if ((this.role==Role.Dog && !carryingVictim && (currentX/6-1==x&&currentZ/6==z&&!gm.wallManager.checkIfVWall_dog(currentX/6,currentZ/6)&&gm.wallManager.checkIfVWall(currentX/6,currentZ/6))
+            ||(currentX/6+1==x&&currentZ/6==z&&!gm.wallManager.checkIfVWall_dog(x,z)&&gm.wallManager.checkIfVWall(x,z))||(currentX/6==x&&currentZ/6+1==z&&!gm.wallManager.checkIfHWall_dog(x,z+1)&&gm.wallManager.checkIfHWall(x,z+1))
+            ||(this.currentX/6==x&&this.currentZ/6-1==z&&!gm.wallManager.checkIfHWall_dog(x,z)&&gm.wallManager.checkIfHWall(x,z))) || (this.role!=Role.Dog && gm.tileMap.tiles[x, z] == 2) || (this.role!=Role.Dog && carryingVictim))
         {
             requiredAP = 2;
+
         }
-        if(carryingVictim&&role==Role.Dog){
-            requiredAP=4;
-        }
+        if (this.role == Role.Dog && this.carryingVictim==true)
+        {
+            requiredAP = 4;
+        } 
         if (this.role == Role.RescueSpec) // Rescue Specialist
         {
             if (remainingSpecAp >= requiredAP)
@@ -496,42 +511,44 @@ public class Fireman
 
     public void extingSmoke(int x, int z)
     {
-        int requiredAP = 1;
-        if (role.Equals(Role.CAFS))
+        if (this.role != Role.Dog)
         {
-            if (remainingSpecAp >= requiredAP)
+            int requiredAP = 1;
+            if (role.Equals(Role.CAFS))
             {
-                setSpecAP(remainingSpecAp - requiredAP);
+                if (remainingSpecAp >= requiredAP)
+                {
+                    setSpecAP(remainingSpecAp - requiredAP);
+                }
+                else
+                {
+                    setAP(FreeAP - remainingSpecAp);
+                    setSpecAP(0);
+                }
+            }
+            else if (role.Equals(Role.RescueSpec)||role==Role.Paramedic)
+            {
+                requiredAP *= 2;
+                if (FreeAP >= requiredAP)
+                {
+                    setAP(FreeAP - requiredAP);
+                }
             }
             else
             {
-                setAP(FreeAP - remainingSpecAp);
-                setSpecAP(0);
-            }
-        }
-
-        else if (role.Equals(Role.RescueSpec)||role==Role.Paramedic)
-        {
-            requiredAP *= 2;
-            if (FreeAP >= requiredAP)
-            {
                 setAP(FreeAP - requiredAP);
             }
-        }
-        else
-        {
-            setAP(FreeAP - requiredAP);
-        }
 
-        if (gm.tileMap.tiles[x, z] == 1)
-        {
-            gm.tileMap.buildNewTile(x, z, 0);
-            gm.UpdateTile(x, z, 0);
-        }
-        else if (gm.tileMap.tiles[x, z] == 2)
-        {
-            gm.tileMap.buildNewTile(x, z, 1);
-            gm.UpdateTile(x, z, 1);
+            if (gm.tileMap.tiles[x, z] == 1)
+            {
+                gm.tileMap.buildNewTile(x, z, 0);
+                gm.UpdateTile(x, z, 0);
+            }
+            else if (gm.tileMap.tiles[x, z] == 2)
+            {
+                gm.tileMap.buildNewTile(x, z, 1);
+                gm.UpdateTile(x, z, 1);
+            }
         }
     }
 
@@ -539,45 +556,53 @@ public class Fireman
 
     public void extingFire(int x, int z)
     {
-        int requiredAP = 2;
-        if (role.Equals(Role.CAFS))
+        if(this.role!=Role.Dog)
         {
-            if (remainingSpecAp >= requiredAP)
+            int requiredAP = 2;
+            if (role.Equals(Role.CAFS))
             {
-                setSpecAP(remainingSpecAp - requiredAP);
+                if (remainingSpecAp >= requiredAP)
+                {
+                    setSpecAP(remainingSpecAp - requiredAP);
+                }
+                else
+                {
+                    setAP(FreeAP - remainingSpecAp);
+                    setSpecAP(0);
+                }
+            }
+
+            else if (role.Equals(Role.RescueSpec) || role == Role.Paramedic)
+            {
+                requiredAP *= 2;
+                if (FreeAP >= requiredAP)
+                {
+                    setAP(FreeAP - requiredAP);
+                }
             }
             else
             {
-                setAP(FreeAP - remainingSpecAp);
-                setSpecAP(0);
-            }
-        }
-
-        else if (role.Equals(Role.RescueSpec) || role == Role.Paramedic)
-        {
-            requiredAP *= 2;
-            if (FreeAP >= requiredAP)
-            {
                 setAP(FreeAP - requiredAP);
             }
+            gm.tileMap.buildNewTile(x, z, 0);
+            gm.UpdateTile(x, z, 0);
         }
-        else
-        {
-            setAP(FreeAP - requiredAP);
-        }
-        gm.tileMap.buildNewTile(x, z, 0);
-        gm.UpdateTile(x, z, 0);
+        
     }
 
     public void treat(int x, int z)
     {
-        setAP(FreeAP - 1);
-        gm.pOIManager.treat(x, z);
+        if(this.role!=Role.Dog)
+        {
+            setAP(FreeAP - 1);
+            gm.pOIManager.treat(x, z);
+        }
 
     }
 
     public void carryV(int x, int z)
     {
+        
         this.carryingVictim = true;
         this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
         gm.pOIManager.carryPOI(x, z);
@@ -586,6 +611,7 @@ public class Fireman
 
     public void leadV(int x, int z)
     {
+
         this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
         gm.pOIManager.leadPOI(x, z);
         this.leadingVictim=true;
@@ -594,10 +620,13 @@ public class Fireman
 
     public void carryHazmat(int x,int z)
     {
-        this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
-        this.carryingVictim = true;
-        gm.hazmatManager.carryHazmat(x, z);
-        gm.startCarryHazmat(x,z);
+        if(this.role!=Role.Dog)
+        {
+            this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
+            this.carryingVictim = true;
+            gm.hazmatManager.carryHazmat(x, z);
+            gm.startCarryHazmat(x,z);
+        }
     }
 
 

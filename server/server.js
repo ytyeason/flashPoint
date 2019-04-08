@@ -324,6 +324,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var newx=data['newx'];
       var newz=data['newz'];
       var names=[];
+      var room = data['room'];
 
       var participants=Games[room]["participants"];
       for(var n in participants){
