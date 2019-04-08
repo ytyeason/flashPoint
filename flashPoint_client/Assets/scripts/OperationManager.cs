@@ -363,8 +363,8 @@ public class OperationManager
             // command move
             if(inCommand){
                 bool moveTo=false;
-                if(controlled.role!=Role.Dog&&Math.Abs(controlled.currentX-x)+Math.Abs(controlled.currentZ-z)==1&&(controlled.currentX==x&&controlled.currentZ<z&&(!gm.wallManager.checkIfHWall(x,z)&&!gm.doorManager.checkIfHDoor(x,z)||gm.doorManager.checkIfOpenHDoor(x,z))||controlled.currentX==x&&controlled.currentZ>z&&(!gm.wallManager.checkIfHWall(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfHDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenHDoor(controlled.currentX,controlled.currentZ))
-                ||controlled.currentZ==z&&(controlled.currentX<x&&!gm.wallManager.checkIfVWall(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ==z&&controlled.currentX>x&&(!gm.wallManager.checkIfVWall(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfVDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenVDoor(controlled.currentX,controlled.currentZ)))){
+                if(controlled.role!=Role.Dog&&Math.Abs(controlled.currentX/6-x)+Math.Abs(controlled.currentZ/6-z)==1&&(controlled.currentX/6==x&&controlled.currentZ/6<z&&(!gm.wallManager.checkIfHWall(x,z)&&!gm.doorManager.checkIfHDoor(x,z)||gm.doorManager.checkIfOpenHDoor(x,z))||controlled.currentX/6==x&&controlled.currentZ/6>z&&(!gm.wallManager.checkIfHWall(controlled.currentX/6,controlled.currentZ/6)&&!gm.doorManager.checkIfHDoor(controlled.currentX/6,controlled.currentZ/6)||gm.doorManager.checkIfOpenHDoor(controlled.currentX/6,controlled.currentZ/6))
+                ||controlled.currentZ/6==z&&(controlled.currentX/6<x&&!gm.wallManager.checkIfVWall(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ/6==z&&controlled.currentX/6>x&&(!gm.wallManager.checkIfVWall(controlled.currentX/6,controlled.currentZ/6)&&!gm.doorManager.checkIfVDoor(controlled.currentX/6,controlled.currentZ/6)||gm.doorManager.checkIfOpenVDoor(controlled.currentX/6,controlled.currentZ/6)))){
                     moveTo=true;
                 }
 
@@ -374,8 +374,8 @@ public class OperationManager
                     requiredAP=2;
                 }
                 //for dog
-                if(controlled.role == Role.Dog && !controlled.carryingVictim && gm.tileMap.tiles[x,z]!=2 &&Math.Abs(controlled.currentX-x)+Math.Abs(controlled.currentZ-z)==1&&(controlled.currentX==x&&controlled.currentZ<z&&(!gm.wallManager.checkIfHWall_dog(x,z)&&!gm.doorManager.checkIfHDoor(x,z)||gm.doorManager.checkIfOpenHDoor(x,z))||controlled.currentX==x&&controlled.currentZ>z&&(!gm.wallManager.checkIfHWall_dog(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfHDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenHDoor(controlled.currentX,controlled.currentZ))
-                ||controlled.currentZ==z&&(controlled.currentX<x&&!gm.wallManager.checkIfVWall_dog(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ==z&&controlled.currentX>x&&(!gm.wallManager.checkIfVWall_dog(controlled.currentX,controlled.currentZ)&&!gm.doorManager.checkIfVDoor(controlled.currentX,controlled.currentZ)||gm.doorManager.checkIfOpenVDoor(controlled.currentX,controlled.currentZ)))){
+                if(controlled.role == Role.Dog && !controlled.carryingVictim && gm.tileMap.tiles[x,z]!=2 &&Math.Abs(controlled.currentX/6-x)+Math.Abs(controlled.currentZ/6-z)==1&&(controlled.currentX/6==x&&controlled.currentZ/6<z&&(!gm.wallManager.checkIfHWall_dog(x,z)&&!gm.doorManager.checkIfHDoor(x,z)||gm.doorManager.checkIfOpenHDoor(x,z))||controlled.currentX/6==x&&controlled.currentZ/6>z&&(!gm.wallManager.checkIfHWall_dog(controlled.currentX/6,controlled.currentZ/6)&&!gm.doorManager.checkIfHDoor(controlled.currentX/6,controlled.currentZ/6)||gm.doorManager.checkIfOpenHDoor(controlled.currentX/6,controlled.currentZ/6))
+                ||controlled.currentZ/6==z&&(controlled.currentX/6<x&&!gm.wallManager.checkIfVWall_dog(x,z)&&!gm.doorManager.checkIfVDoor(x,z)||gm.doorManager.checkIfOpenVDoor(x,z))||controlled.currentZ/6==z&&controlled.currentX/6>x&&(!gm.wallManager.checkIfVWall_dog(controlled.currentX/6,controlled.currentZ/6)&&!gm.doorManager.checkIfVDoor(controlled.currentX/6,controlled.currentZ/6)||gm.doorManager.checkIfOpenVDoor(controlled.currentX/6,controlled.currentZ/6)))){
                     moveTo=true;
                     requiredAP=2;
                 }
@@ -1252,13 +1252,12 @@ public class OperationManager
             int vx = gm.amB.x;
             int vz = gm.amB.z;
             gm.startDrive(1);
-            gm.AskForRide(vx,vz);
+            gm.AskForRide(vx,vz,amb.x, amb.z);
             Debug.Log("gm.confirmed = " + gm.confirmed);
-            Debug.Log("nPlayer" + StaticInfo.numberOfPlayer);
-            // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
+            // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer)-1);
 
             amb.moveNextStation(x,z);
-            gm.UpdateAmbulanceLocation(amb.x, amb.z,vx,vz);
+            // gm.UpdateAmbulanceLocation(amb.x, amb.z,vx,vz);
             opPanel.SetActive(false);
             DestroyAll();
             int requiredAP = 2;
@@ -1275,10 +1274,10 @@ public class OperationManager
             int vx = gm.enG.x;
             int vz = gm.enG.z;
             gm.startDrive(2);
-            gm.AskForRide(vx,vz);
-            // while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer));
+            gm.AskForRide(vx,vz,eng.x, eng.z);
+            while(gm.confirmed!=Int32.Parse(StaticInfo.numberOfPlayer)-1);
             eng.moveNextStation(x,z);
-            gm.UpdateEngineLocation(eng.x, eng.z, vx, vz);
+            // gm.UpdateEngineLocation(eng.x, eng.z, vx, vz);
             opPanel.SetActive(false);
             DestroyAll();
             int requiredAP = 2;
@@ -1291,7 +1290,7 @@ public class OperationManager
             fireman.setAP(fireman.FreeAP - requiredAP);
         }
         fireman.s.transform.position = new Vector3(x*6, 0.2f, z*6);
-        gm.UpdateLocation(x*6, z*6,StaticInfo.name);
+        // gm.UpdateLocation(x*6, z*6,StaticInfo.name);
         fireman.currentX=x*6;
         fireman.currentZ=z*6;
         gm.confirmed=0;
@@ -1318,7 +1317,7 @@ public class OperationManager
             requiredAP = 4;
         }
         fireman.setAP(fireman.FreeAP - requiredAP);
-        gm.startDrive(1);
+        // gm.startDrive(1);
         amb.moveNextStation(x,z);
         gm.UpdateAmbulanceLocation(amb.x, amb.z,vx,vz);
         opPanel.SetActive(false); 
