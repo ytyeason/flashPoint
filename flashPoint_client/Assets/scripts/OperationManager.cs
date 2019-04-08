@@ -150,7 +150,7 @@ public class OperationManager
                     tip="Fire DeckGun";
                     break;
                 case OperationType.DropV:
-                    newObject.onClick.AddListener(dropeV);
+                    newObject.onClick.AddListener(dropV);
                     tip="Drop Victim";
                     break;
                 case OperationType.DropHazmat:
@@ -1434,7 +1434,7 @@ public class OperationManager
         DestroyAll();
     }
 
-    public void dropeV()
+    public void dropV()
     {
         Fireman fireman=gm.fireman;
         if(fireman.carriedPOI!=null){

@@ -24,7 +24,7 @@ public class POIManager{
     private System.Random rand = new System.Random();
     private float posY = -1;
 
-    public int rescued = 0;
+    public int rescued = 6;
     public int killed = 0;
 
     public POIManager(GameManager gm)
@@ -191,6 +191,12 @@ public class POIManager{
             gm.DestroyObject(getPOIPrefab(key[0], key[1], movingTreatedLookup));
             Remove(key[0], key[1], movingTreatedLookup);
         }
+
+        if(killed >= 4)
+        {
+            Debug.Log("Killed 4 or more victims");
+            gm.defeat();
+        }
     }
 
     public void rescueCarried(int x, int z)
@@ -204,6 +210,11 @@ public class POIManager{
             Remove(key[0],key[1],movingPOI);
             gm.DestroyObject(getPOIPrefab(key[0],key[1], movingPOILookup));
             Remove(key[0],key[1],movingPOILookup);
+
+            if (rescued >= 7) {
+                Debug.Log("Rescued 7 victims");
+                gm.victory();
+            }
         }
     }
 
@@ -218,6 +229,11 @@ public class POIManager{
             Remove(key[0], key[1], movingTreated);
             gm.DestroyObject(getPOIPrefab(key[0], key[1], movingTreatedLookup));
             Remove(key[0], key[1], movingTreatedLookup);
+
+            if (rescued >= 7) {
+                Debug.Log("Rescued 7 victims");
+                gm.victory();
+            }
         }
     }
 

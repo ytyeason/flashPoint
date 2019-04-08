@@ -6,6 +6,7 @@ using SocketIO;
 using System;
 using System.Linq;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 //using Newtonsoft.Json;
 //using System.Web.Script.Serialization;
 
@@ -131,6 +132,8 @@ public class GameManager: MonoBehaviour
         socket.On("changeRole_Success",changeRole_Success);
         socket.On("RescueCarried_Success",rescueCarried_Success);
         socket.On("RescueTreated_Success",rescueTreated_Success);
+        socket.On("victory_Success",victory_Success);
+        socket.On("defeat_Success",defeat_Success);
 
         if (game_info != null)
         {
@@ -874,7 +877,7 @@ public class GameManager: MonoBehaviour
 			pOIManager.kill(x_elem, z_elem);
 		}
 
-		// Northern Ambulance parking spot
+        // Northern parking spot
 		if (z_elem <= 3)
 		{
 			tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
@@ -1623,9 +1626,35 @@ public class GameManager: MonoBehaviour
         pOIManager.rescueTreated(x,z);
     }
 
+    //check for victory and defeat
+    public void victory_Success(SocketIOEvent obj)
+    {
+        Debug.Log("Update victory");
+    }
+
+    public void defeat_Success(SocketIOEvent obj)
+    {
+        Debug.Log("Update defeat");
+    }
+
+    public void victory()
+    {
+        Debug.Log("You win!");
+        socket.Emit("victory");
+        SceneManager.LoadScene("Win");
+    }
+
+    public void defeat()
+    {
+        Debug.Log("Game Over!");
+        socket.Emit("defeat");
+        SceneManager.LoadScene("gameOver");
+    }
+
 }
 
 public class Notification{
     public string msg;
     public Text textObject;
 }
+
