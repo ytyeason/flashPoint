@@ -131,6 +131,7 @@ public class GameManager: MonoBehaviour
         socket.On("changeRole_Success",changeRole_Success);
         socket.On("RescueCarried_Success",rescueCarried_Success);
         socket.On("RescueTreated_Success",rescueTreated_Success);
+        socket.On("KillPOI_Success",killPOI_Success);
 
         if (game_info != null)
         {
@@ -1634,6 +1635,21 @@ public class GameManager: MonoBehaviour
 
         pOIManager.rescueTreated(x,z);
     }
+
+    public void killPOI(int x, int z){
+        Dictionary<string,string> kill=new Dictionary<string, string>();
+        kill["x"]=x.ToString();
+        kill["z"]=z.ToString();
+        socket.Emit("KillPOI",new JSONObject(kill));
+    }
+
+    public void killPOI_Success(SocketIOEvent obj){
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        pOIManager.kill(x,z);
+    }
+
+    
 
 }
 
