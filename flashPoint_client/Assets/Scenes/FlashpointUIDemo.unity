@@ -7165,7 +7165,6 @@ MonoBehaviour:
   wallManager:
     wallTypes: []
     gm: {fileID: 0}
-    damagedMarkerCounter: 0
   tileMap:
     selectedUnit:
       s: {fileID: 0}
