@@ -32,13 +32,8 @@ public class POIManager{
     public POIManager(GameManager gm)
     {
         this.gm = gm;
-<<<<<<< HEAD
         generatePOI();//still need this when loading
         replenishPOI();
-=======
-        generatePOI();
-        initiatePOI();
->>>>>>> 75debf4cd8d8936e7b41b830350bcc93b4c25b0f
     }
 
     public void generatePOI()
@@ -76,11 +71,7 @@ public class POIManager{
     public void replenishPOI()
     {
         int size = placedPOI.Count+movingPOI.Count+movingTreated.Count+treated.Count;
-<<<<<<< HEAD
 
-=======
-
->>>>>>> 75debf4cd8d8936e7b41b830350bcc93b4c25b0f
         while(size<3)
         {
             int randX = rand.Next(1, 9);
@@ -134,15 +125,9 @@ public class POIManager{
                     Debug.Log("check fireman");
                     Debug.Log(cont);
                 }
-<<<<<<< HEAD
 
             }
 
-=======
-
-            }
-
->>>>>>> 75debf4cd8d8936e7b41b830350bcc93b4c25b0f
             int randIndex = rand.Next(0, poi.Count);
 
             POI p = poi[randIndex];
