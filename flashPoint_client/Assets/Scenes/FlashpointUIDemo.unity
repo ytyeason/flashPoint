@@ -603,6 +603,233 @@ MonoBehaviour:
   v: {fileID: 0}
   x: 0
   z: 0
+  map:
+    selectedUnit:
+      s: {fileID: 0}
+      fireandvictim: {fileID: 0}
+      map:
+        selectedUnit:
+          s: {fileID: 0}
+          fireandvictim: {fileID: 0}
+          map:
+            selectedUnit:
+              s: {fileID: 0}
+              fireandvictim: {fileID: 0}
+              map:
+                selectedUnit:
+                  currentX: 0
+                  currentZ: 0
+                  debugMode: 0
+                  name: 
+                  color: 0
+                  AP: 0
+                  FreeAP: 0
+                  savedAP: 0
+                  specialtyAP: 0
+                  remainingSpecAp: 0
+                  carryingVictim: 0
+                  leadingVictim: 0
+                  driving: 0
+                  vehicle: 0
+                  riding: 0
+                  role: 0
+                  level: 
+                strings: []
+                tileTypes: []
+                gm: {fileID: 0}
+                engine: {fileID: 0}
+                ambulance: {fileID: 0}
+                gmo: {fileID: 0}
+                goo: {fileID: 0}
+                goo1: {fileID: 0}
+                goo2: {fileID: 0}
+              tileTypes: []
+              currentX: 0
+              currentZ: 0
+              debugMode: 0
+              name: 
+              color: 0
+              AP: 0
+              FreeAP: 0
+              savedAP: 0
+              specialtyAP: 0
+              remainingSpecAp: 0
+              carryingVictim: 0
+              leadingVictim: 0
+              carriedPOI:
+                type: 0
+                status: 0
+                pm:
+                  rescued: 0
+                  killed: 0
+                Prefab: {fileID: 0}
+              carriedHazmat:
+                hm:
+                  numOfHazmat: 0
+                  additionalHotspot: 0
+                  removedHazmat: 0
+                status: 0
+                prefab: {fileID: 0}
+              ledPOI:
+                type: 0
+                status: 0
+                pm:
+                  rescued: 0
+                  killed: 0
+                Prefab: {fileID: 0}
+              driving: 0
+              vehicle: 0
+              riding: 0
+              gm: {fileID: 0}
+              pOIManager:
+                gm: {fileID: 0}
+                poi: []
+                rescued: 0
+                killed: 0
+              hazamatManager:
+                gm: {fileID: 0}
+                numOfHazmat: 0
+                additionalHotspot: 0
+                removedHazmat: 0
+              role: 0
+              level: 
+            strings: []
+            tileTypes: []
+            gm: {fileID: 0}
+            engine: {fileID: 0}
+            ambulance: {fileID: 0}
+            gmo: {fileID: 0}
+            goo: {fileID: 0}
+            goo1: {fileID: 0}
+            goo2: {fileID: 0}
+          tileTypes: []
+          currentX: 0
+          currentZ: 0
+          debugMode: 0
+          name: 
+          color: 0
+          AP: 0
+          FreeAP: 0
+          savedAP: 0
+          specialtyAP: 0
+          remainingSpecAp: 0
+          carryingVictim: 0
+          leadingVictim: 0
+          carriedPOI:
+            type: 0
+            status: 0
+            pm:
+              gm: {fileID: 0}
+              poi: []
+              rescued: 0
+              killed: 0
+            Prefab: {fileID: 0}
+          carriedHazmat:
+            hm:
+              gm: {fileID: 0}
+              numOfHazmat: 0
+              additionalHotspot: 0
+              removedHazmat: 0
+            status: 0
+            prefab: {fileID: 0}
+          ledPOI:
+            type: 0
+            status: 0
+            pm:
+              gm: {fileID: 0}
+              poi: []
+              rescued: 0
+              killed: 0
+            Prefab: {fileID: 0}
+          driving: 0
+          vehicle: 0
+          riding: 0
+          gm: {fileID: 0}
+          pOIManager:
+            gm: {fileID: 0}
+            poi: []
+            rescued: 0
+            killed: 0
+          hazamatManager:
+            gm: {fileID: 0}
+            numOfHazmat: 0
+            additionalHotspot: 0
+            removedHazmat: 0
+          role: 0
+          level: 
+        strings: []
+        tileTypes: []
+        gm: {fileID: 0}
+        engine: {fileID: 0}
+        ambulance: {fileID: 0}
+        gmo: {fileID: 0}
+        goo: {fileID: 0}
+        goo1: {fileID: 0}
+        goo2: {fileID: 0}
+      tileTypes: []
+      currentX: 0
+      currentZ: 0
+      debugMode: 0
+      name: 
+      color: 0
+      AP: 0
+      FreeAP: 0
+      savedAP: 0
+      specialtyAP: 0
+      remainingSpecAp: 0
+      carryingVictim: 0
+      leadingVictim: 0
+      carriedPOI:
+        type: 0
+        status: 0
+        pm:
+          gm: {fileID: 0}
+          poi: []
+          rescued: 0
+          killed: 0
+        Prefab: {fileID: 0}
+      carriedHazmat:
+        hm:
+          gm: {fileID: 0}
+          numOfHazmat: 0
+          additionalHotspot: 0
+          removedHazmat: 0
+        status: 0
+        prefab: {fileID: 0}
+      ledPOI:
+        type: 0
+        status: 0
+        pm:
+          gm: {fileID: 0}
+          poi: []
+          rescued: 0
+          killed: 0
+        Prefab: {fileID: 0}
+      driving: 0
+      vehicle: 0
+      riding: 0
+      gm: {fileID: 0}
+      pOIManager:
+        gm: {fileID: 0}
+        poi: []
+        rescued: 0
+        killed: 0
+      hazamatManager:
+        gm: {fileID: 0}
+        numOfHazmat: 0
+        additionalHotspot: 0
+        removedHazmat: 0
+      role: 0
+      level: 
+    strings: []
+    tileTypes: []
+    gm: {fileID: 0}
+    engine: {fileID: 0}
+    ambulance: {fileID: 0}
+    gmo: {fileID: 0}
+    goo: {fileID: 0}
+    goo1: {fileID: 0}
+    goo2: {fileID: 0}
   gm: {fileID: 0}
 --- !u!1 &263434994
 GameObject:
@@ -3229,6 +3456,81 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1115168361}
   m_CullTransparentMesh: 0
+--- !u!1 &1147263955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1147263956}
+  - component: {fileID: 1147263958}
+  - component: {fileID: 1147263957}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1147263956
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1147263955}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1524792033}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1147263957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1147263955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.18098079, g: 0.7830189, b: 0.7035949, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 18
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &1147263958
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1147263955}
+  m_CullTransparentMesh: 0
 --- !u!1 &1159137800
 GameObject:
   m_ObjectHideFlags: 0
@@ -3574,6 +3876,233 @@ MonoBehaviour:
   v: {fileID: 0}
   x: 0
   z: 0
+  map:
+    selectedUnit:
+      s: {fileID: 0}
+      fireandvictim: {fileID: 0}
+      map:
+        selectedUnit:
+          s: {fileID: 0}
+          fireandvictim: {fileID: 0}
+          map:
+            selectedUnit:
+              s: {fileID: 0}
+              fireandvictim: {fileID: 0}
+              map:
+                selectedUnit:
+                  currentX: 0
+                  currentZ: 0
+                  debugMode: 0
+                  name: 
+                  color: 0
+                  AP: 0
+                  FreeAP: 0
+                  savedAP: 0
+                  specialtyAP: 0
+                  remainingSpecAp: 0
+                  carryingVictim: 0
+                  leadingVictim: 0
+                  driving: 0
+                  vehicle: 0
+                  riding: 0
+                  role: 0
+                  level: 
+                strings: []
+                tileTypes: []
+                gm: {fileID: 0}
+                engine: {fileID: 0}
+                ambulance: {fileID: 0}
+                gmo: {fileID: 0}
+                goo: {fileID: 0}
+                goo1: {fileID: 0}
+                goo2: {fileID: 0}
+              tileTypes: []
+              currentX: 0
+              currentZ: 0
+              debugMode: 0
+              name: 
+              color: 0
+              AP: 0
+              FreeAP: 0
+              savedAP: 0
+              specialtyAP: 0
+              remainingSpecAp: 0
+              carryingVictim: 0
+              leadingVictim: 0
+              carriedPOI:
+                type: 0
+                status: 0
+                pm:
+                  rescued: 0
+                  killed: 0
+                Prefab: {fileID: 0}
+              carriedHazmat:
+                hm:
+                  numOfHazmat: 0
+                  additionalHotspot: 0
+                  removedHazmat: 0
+                status: 0
+                prefab: {fileID: 0}
+              ledPOI:
+                type: 0
+                status: 0
+                pm:
+                  rescued: 0
+                  killed: 0
+                Prefab: {fileID: 0}
+              driving: 0
+              vehicle: 0
+              riding: 0
+              gm: {fileID: 0}
+              pOIManager:
+                gm: {fileID: 0}
+                poi: []
+                rescued: 0
+                killed: 0
+              hazamatManager:
+                gm: {fileID: 0}
+                numOfHazmat: 0
+                additionalHotspot: 0
+                removedHazmat: 0
+              role: 0
+              level: 
+            strings: []
+            tileTypes: []
+            gm: {fileID: 0}
+            engine: {fileID: 0}
+            ambulance: {fileID: 0}
+            gmo: {fileID: 0}
+            goo: {fileID: 0}
+            goo1: {fileID: 0}
+            goo2: {fileID: 0}
+          tileTypes: []
+          currentX: 0
+          currentZ: 0
+          debugMode: 0
+          name: 
+          color: 0
+          AP: 0
+          FreeAP: 0
+          savedAP: 0
+          specialtyAP: 0
+          remainingSpecAp: 0
+          carryingVictim: 0
+          leadingVictim: 0
+          carriedPOI:
+            type: 0
+            status: 0
+            pm:
+              gm: {fileID: 0}
+              poi: []
+              rescued: 0
+              killed: 0
+            Prefab: {fileID: 0}
+          carriedHazmat:
+            hm:
+              gm: {fileID: 0}
+              numOfHazmat: 0
+              additionalHotspot: 0
+              removedHazmat: 0
+            status: 0
+            prefab: {fileID: 0}
+          ledPOI:
+            type: 0
+            status: 0
+            pm:
+              gm: {fileID: 0}
+              poi: []
+              rescued: 0
+              killed: 0
+            Prefab: {fileID: 0}
+          driving: 0
+          vehicle: 0
+          riding: 0
+          gm: {fileID: 0}
+          pOIManager:
+            gm: {fileID: 0}
+            poi: []
+            rescued: 0
+            killed: 0
+          hazamatManager:
+            gm: {fileID: 0}
+            numOfHazmat: 0
+            additionalHotspot: 0
+            removedHazmat: 0
+          role: 0
+          level: 
+        strings: []
+        tileTypes: []
+        gm: {fileID: 0}
+        engine: {fileID: 0}
+        ambulance: {fileID: 0}
+        gmo: {fileID: 0}
+        goo: {fileID: 0}
+        goo1: {fileID: 0}
+        goo2: {fileID: 0}
+      tileTypes: []
+      currentX: 0
+      currentZ: 0
+      debugMode: 0
+      name: 
+      color: 0
+      AP: 0
+      FreeAP: 0
+      savedAP: 0
+      specialtyAP: 0
+      remainingSpecAp: 0
+      carryingVictim: 0
+      leadingVictim: 0
+      carriedPOI:
+        type: 0
+        status: 0
+        pm:
+          gm: {fileID: 0}
+          poi: []
+          rescued: 0
+          killed: 0
+        Prefab: {fileID: 0}
+      carriedHazmat:
+        hm:
+          gm: {fileID: 0}
+          numOfHazmat: 0
+          additionalHotspot: 0
+          removedHazmat: 0
+        status: 0
+        prefab: {fileID: 0}
+      ledPOI:
+        type: 0
+        status: 0
+        pm:
+          gm: {fileID: 0}
+          poi: []
+          rescued: 0
+          killed: 0
+        Prefab: {fileID: 0}
+      driving: 0
+      vehicle: 0
+      riding: 0
+      gm: {fileID: 0}
+      pOIManager:
+        gm: {fileID: 0}
+        poi: []
+        rescued: 0
+        killed: 0
+      hazamatManager:
+        gm: {fileID: 0}
+        numOfHazmat: 0
+        additionalHotspot: 0
+        removedHazmat: 0
+      role: 0
+      level: 
+    strings: []
+    tileTypes: []
+    gm: {fileID: 0}
+    engine: {fileID: 0}
+    ambulance: {fileID: 0}
+    gmo: {fileID: 0}
+    goo: {fileID: 0}
+    goo1: {fileID: 0}
+    goo2: {fileID: 0}
   gm: {fileID: 0}
 --- !u!1 &1346279408
 GameObject:
@@ -4528,6 +5057,7 @@ RectTransform:
   - {fileID: 999210465}
   - {fileID: 833628329}
   - {fileID: 1415440063}
+  - {fileID: 1524792033}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4536,6 +5066,99 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1524792032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1524792033}
+  - component: {fileID: 1524792036}
+  - component: {fileID: 1524792035}
+  - component: {fileID: 1524792034}
+  m_Layer: 5
+  m_Name: StatsPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1524792033
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1524792032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0000022715}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1147263956}
+  m_Father: {fileID: 1516093583}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -512, y: 240.80005}
+  m_SizeDelta: {x: 200, y: 100}
+  m_Pivot: {x: 0, y: 1}
+--- !u!114 &1524792034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1524792032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1297475563, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 10
+    m_Right: 10
+    m_Top: 10
+    m_Bottom: 10
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+--- !u!114 &1524792035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1524792032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.5188679, g: 0.4968405, b: 0.4968405, a: 0.7254902}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1524792036
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1524792032}
+  m_CullTransparentMesh: 0
 --- !u!1 &1588239529
 GameObject:
   m_ObjectHideFlags: 0
@@ -5620,7 +6243,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 797790093}
   m_HandleRect: {fileID: 797790092}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6539,7 +7162,251 @@ MonoBehaviour:
   mapSizeZ: 8
   damaged_wall_num: 0
   rescued_vict_num: 0
+  wallManager:
+    wallTypes: []
+    gm: {fileID: 0}
+    damagedMarkerCounter: 0
+  tileMap:
+    selectedUnit:
+      s: {fileID: 0}
+      fireandvictim: {fileID: 0}
+      map:
+        selectedUnit:
+          s: {fileID: 0}
+          fireandvictim: {fileID: 0}
+          map:
+            selectedUnit:
+              s: {fileID: 0}
+              fireandvictim: {fileID: 0}
+              map:
+                selectedUnit:
+                  currentX: 0
+                  currentZ: 0
+                  debugMode: 0
+                  name: 
+                  color: 0
+                  AP: 0
+                  FreeAP: 0
+                  savedAP: 0
+                  specialtyAP: 0
+                  remainingSpecAp: 0
+                  carryingVictim: 0
+                  leadingVictim: 0
+                  driving: 0
+                  vehicle: 0
+                  riding: 0
+                  role: 0
+                  level: 
+                strings: []
+                tileTypes: []
+                gm: {fileID: 0}
+                engine: {fileID: 0}
+                ambulance: {fileID: 0}
+                gmo: {fileID: 0}
+                goo: {fileID: 0}
+                goo1: {fileID: 0}
+                goo2: {fileID: 0}
+              tileTypes: []
+              currentX: 0
+              currentZ: 0
+              debugMode: 0
+              name: 
+              color: 0
+              AP: 0
+              FreeAP: 0
+              savedAP: 0
+              specialtyAP: 0
+              remainingSpecAp: 0
+              carryingVictim: 0
+              leadingVictim: 0
+              carriedPOI:
+                type: 0
+                status: 0
+                pm:
+                  rescued: 0
+                  killed: 0
+                Prefab: {fileID: 0}
+              carriedHazmat:
+                hm:
+                  numOfHazmat: 0
+                  additionalHotspot: 0
+                  removedHazmat: 0
+                status: 0
+                prefab: {fileID: 0}
+              ledPOI:
+                type: 0
+                status: 0
+                pm:
+                  rescued: 0
+                  killed: 0
+                Prefab: {fileID: 0}
+              driving: 0
+              vehicle: 0
+              riding: 0
+              gm: {fileID: 0}
+              pOIManager:
+                gm: {fileID: 0}
+                poi: []
+                rescued: 0
+                killed: 0
+              hazamatManager:
+                gm: {fileID: 0}
+                numOfHazmat: 0
+                additionalHotspot: 0
+                removedHazmat: 0
+              role: 0
+              level: 
+            strings: []
+            tileTypes: []
+            gm: {fileID: 0}
+            engine: {fileID: 0}
+            ambulance: {fileID: 0}
+            gmo: {fileID: 0}
+            goo: {fileID: 0}
+            goo1: {fileID: 0}
+            goo2: {fileID: 0}
+          tileTypes: []
+          currentX: 0
+          currentZ: 0
+          debugMode: 0
+          name: 
+          color: 0
+          AP: 0
+          FreeAP: 0
+          savedAP: 0
+          specialtyAP: 0
+          remainingSpecAp: 0
+          carryingVictim: 0
+          leadingVictim: 0
+          carriedPOI:
+            type: 0
+            status: 0
+            pm:
+              gm: {fileID: 0}
+              poi: []
+              rescued: 0
+              killed: 0
+            Prefab: {fileID: 0}
+          carriedHazmat:
+            hm:
+              gm: {fileID: 0}
+              numOfHazmat: 0
+              additionalHotspot: 0
+              removedHazmat: 0
+            status: 0
+            prefab: {fileID: 0}
+          ledPOI:
+            type: 0
+            status: 0
+            pm:
+              gm: {fileID: 0}
+              poi: []
+              rescued: 0
+              killed: 0
+            Prefab: {fileID: 0}
+          driving: 0
+          vehicle: 0
+          riding: 0
+          gm: {fileID: 0}
+          pOIManager:
+            gm: {fileID: 0}
+            poi: []
+            rescued: 0
+            killed: 0
+          hazamatManager:
+            gm: {fileID: 0}
+            numOfHazmat: 0
+            additionalHotspot: 0
+            removedHazmat: 0
+          role: 0
+          level: 
+        strings: []
+        tileTypes: []
+        gm: {fileID: 0}
+        engine: {fileID: 0}
+        ambulance: {fileID: 0}
+        gmo: {fileID: 0}
+        goo: {fileID: 0}
+        goo1: {fileID: 0}
+        goo2: {fileID: 0}
+      tileTypes: []
+      currentX: 0
+      currentZ: 0
+      debugMode: 0
+      name: 
+      color: 0
+      AP: 0
+      FreeAP: 0
+      savedAP: 0
+      specialtyAP: 0
+      remainingSpecAp: 0
+      carryingVictim: 0
+      leadingVictim: 0
+      carriedPOI:
+        type: 0
+        status: 0
+        pm:
+          gm: {fileID: 0}
+          poi: []
+          rescued: 0
+          killed: 0
+        Prefab: {fileID: 0}
+      carriedHazmat:
+        hm:
+          gm: {fileID: 0}
+          numOfHazmat: 0
+          additionalHotspot: 0
+          removedHazmat: 0
+        status: 0
+        prefab: {fileID: 0}
+      ledPOI:
+        type: 0
+        status: 0
+        pm:
+          gm: {fileID: 0}
+          poi: []
+          rescued: 0
+          killed: 0
+        Prefab: {fileID: 0}
+      driving: 0
+      vehicle: 0
+      riding: 0
+      gm: {fileID: 0}
+      pOIManager:
+        gm: {fileID: 0}
+        poi: []
+        rescued: 0
+        killed: 0
+      hazamatManager:
+        gm: {fileID: 0}
+        numOfHazmat: 0
+        additionalHotspot: 0
+        removedHazmat: 0
+      role: 0
+      level: 
+    strings: []
+    tileTypes: []
+    gm: {fileID: 0}
+    engine: {fileID: 0}
+    ambulance: {fileID: 0}
+    gmo: {fileID: 0}
+    goo: {fileID: 0}
+    goo1: {fileID: 0}
+    goo2: {fileID: 0}
+  doorManager:
+    doorTypes: []
+    gm: {fileID: 0}
   fireManager: {fileID: 0}
+  pOIManager:
+    gm: {fileID: 0}
+    poi: []
+    rescued: 0
+    killed: 0
+  hazmatManager:
+    gm: {fileID: 0}
+    numOfHazmat: 0
+    additionalHotspot: 0
+    removedHazmat: 0
   vicinityManager: {fileID: 0}
   prefabs:
   - {fileID: 114907898622071792, guid: 1f03876a10ceb45b2b15fc693785c6f5, type: 2}
@@ -6585,6 +7452,247 @@ MonoBehaviour:
   downDodgeDown: 0
   amB: {fileID: 0}
   enG: {fileID: 0}
+  fireman:
+    s: {fileID: 0}
+    fireandvictim: {fileID: 0}
+    map:
+      selectedUnit:
+        s: {fileID: 0}
+        fireandvictim: {fileID: 0}
+        map:
+          selectedUnit:
+            s: {fileID: 0}
+            fireandvictim: {fileID: 0}
+            map:
+              selectedUnit:
+                s: {fileID: 0}
+                fireandvictim: {fileID: 0}
+                tileTypes: []
+                currentX: 0
+                currentZ: 0
+                debugMode: 0
+                name: 
+                color: 0
+                AP: 0
+                FreeAP: 0
+                savedAP: 0
+                specialtyAP: 0
+                remainingSpecAp: 0
+                carryingVictim: 0
+                leadingVictim: 0
+                carriedPOI:
+                  type: 0
+                  status: 0
+                carriedHazmat:
+                  status: 0
+                ledPOI:
+                  type: 0
+                  status: 0
+                driving: 0
+                vehicle: 0
+                riding: 0
+                gm: {fileID: 0}
+                pOIManager:
+                  rescued: 0
+                  killed: 0
+                hazamatManager:
+                  numOfHazmat: 0
+                  additionalHotspot: 0
+                  removedHazmat: 0
+                role: 0
+                level: 
+              strings: []
+              tileTypes: []
+              gm: {fileID: 0}
+              engine: {fileID: 0}
+              ambulance: {fileID: 0}
+              gmo: {fileID: 0}
+              goo: {fileID: 0}
+              goo1: {fileID: 0}
+              goo2: {fileID: 0}
+            tileTypes: []
+            currentX: 0
+            currentZ: 0
+            debugMode: 0
+            name: 
+            color: 0
+            AP: 0
+            FreeAP: 0
+            savedAP: 0
+            specialtyAP: 0
+            remainingSpecAp: 0
+            carryingVictim: 0
+            leadingVictim: 0
+            carriedPOI:
+              type: 0
+              status: 0
+              pm:
+                gm: {fileID: 0}
+                poi: []
+                rescued: 0
+                killed: 0
+              Prefab: {fileID: 0}
+            carriedHazmat:
+              hm:
+                gm: {fileID: 0}
+                numOfHazmat: 0
+                additionalHotspot: 0
+                removedHazmat: 0
+              status: 0
+              prefab: {fileID: 0}
+            ledPOI:
+              type: 0
+              status: 0
+              pm:
+                gm: {fileID: 0}
+                poi: []
+                rescued: 0
+                killed: 0
+              Prefab: {fileID: 0}
+            driving: 0
+            vehicle: 0
+            riding: 0
+            gm: {fileID: 0}
+            pOIManager:
+              gm: {fileID: 0}
+              poi: []
+              rescued: 0
+              killed: 0
+            hazamatManager:
+              gm: {fileID: 0}
+              numOfHazmat: 0
+              additionalHotspot: 0
+              removedHazmat: 0
+            role: 0
+            level: 
+          strings: []
+          tileTypes: []
+          gm: {fileID: 0}
+          engine: {fileID: 0}
+          ambulance: {fileID: 0}
+          gmo: {fileID: 0}
+          goo: {fileID: 0}
+          goo1: {fileID: 0}
+          goo2: {fileID: 0}
+        tileTypes: []
+        currentX: 0
+        currentZ: 0
+        debugMode: 0
+        name: 
+        color: 0
+        AP: 0
+        FreeAP: 0
+        savedAP: 0
+        specialtyAP: 0
+        remainingSpecAp: 0
+        carryingVictim: 0
+        leadingVictim: 0
+        carriedPOI:
+          type: 0
+          status: 0
+          pm:
+            gm: {fileID: 0}
+            poi: []
+            rescued: 0
+            killed: 0
+          Prefab: {fileID: 0}
+        carriedHazmat:
+          hm:
+            gm: {fileID: 0}
+            numOfHazmat: 0
+            additionalHotspot: 0
+            removedHazmat: 0
+          status: 0
+          prefab: {fileID: 0}
+        ledPOI:
+          type: 0
+          status: 0
+          pm:
+            gm: {fileID: 0}
+            poi: []
+            rescued: 0
+            killed: 0
+          Prefab: {fileID: 0}
+        driving: 0
+        vehicle: 0
+        riding: 0
+        gm: {fileID: 0}
+        pOIManager:
+          gm: {fileID: 0}
+          poi: []
+          rescued: 0
+          killed: 0
+        hazamatManager:
+          gm: {fileID: 0}
+          numOfHazmat: 0
+          additionalHotspot: 0
+          removedHazmat: 0
+        role: 0
+        level: 
+      strings: []
+      tileTypes: []
+      gm: {fileID: 0}
+      engine: {fileID: 0}
+      ambulance: {fileID: 0}
+      gmo: {fileID: 0}
+      goo: {fileID: 0}
+      goo1: {fileID: 0}
+      goo2: {fileID: 0}
+    tileTypes: []
+    currentX: 0
+    currentZ: 0
+    debugMode: 0
+    name: 
+    color: 0
+    AP: 0
+    FreeAP: 0
+    savedAP: 0
+    specialtyAP: 0
+    remainingSpecAp: 0
+    carryingVictim: 0
+    leadingVictim: 0
+    carriedPOI:
+      type: 0
+      status: 0
+      pm:
+        gm: {fileID: 0}
+        poi: []
+        rescued: 0
+        killed: 0
+      Prefab: {fileID: 0}
+    carriedHazmat:
+      hm:
+        gm: {fileID: 0}
+        numOfHazmat: 0
+        additionalHotspot: 0
+        removedHazmat: 0
+      status: 0
+      prefab: {fileID: 0}
+    ledPOI:
+      type: 0
+      status: 0
+      pm:
+        gm: {fileID: 0}
+        poi: []
+        rescued: 0
+        killed: 0
+      Prefab: {fileID: 0}
+    driving: 0
+    vehicle: 0
+    riding: 0
+    gm: {fileID: 0}
+    pOIManager:
+      gm: {fileID: 0}
+      poi: []
+      rescued: 0
+      killed: 0
+    hazamatManager:
+      gm: {fileID: 0}
+      numOfHazmat: 0
+      additionalHotspot: 0
+      removedHazmat: 0
+    role: 0
+    level: 
   isMyTurn: 0
   notificationPanel: {fileID: 2144112879}
   notificationText: {fileID: 1131719277342234, guid: 46617af61c9d6473aa79b68ad5c8f682,
@@ -6592,6 +7700,7 @@ MonoBehaviour:
   chat: {fileID: 529450629}
   nameAP: {fileID: 1816763135}
   roles: {fileID: 789751280}
+  stats: {fileID: 1147263957}
   tooltipPanel: {fileID: 1859356381}
   tooltip: {fileID: 328500562}
 --- !u!4 &2108558123

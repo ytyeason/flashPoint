@@ -7,7 +7,9 @@ using System.Text.RegularExpressions;
 using SocketIO;
 using System;
 
+using System;
 
+[Serializable]
 public class TileMap  {
 
    //public Fireman selectedUnit2;
@@ -45,21 +47,23 @@ public class TileMap  {
 
 
 
-	void StartTileMap() {
+	void StartTileMap(int loadGame) {
 
-		// Generate the TileTypes and ClickableTiles
-		GenerateMapData();
-		// Display them in the game world
-		GenerateMapVisual();
-		//goo  = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 5), Quaternion.identity);
-		//goo1 = gm.instantiateObject(selectedUnit.s, new Vector3(5, 0, 15), Quaternion.identity);
-		//goo2 = gm.instantiateObject(selectedUnit.s, new Vector3(40, 0, 30), Quaternion.identity);
+		if (loadGame == 0)
+		{
+			GenerateMapData();
 
-		
-
+			GenerateMapVisual();
+		}
+		else
+		{
+			tiles = StaticInfo.tiles;
+			
+			GenerateMapVisual();	
+		}
 	}
 
-	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit, Engine enG, Ambulance amB)
+	public TileMap(TileType[] tileTypes, GameManager gm, Fireman selectedUnit, Engine enG, Ambulance amB, int loadGame)
 	{
 		this.tileTypes = tileTypes;
 		this.gm = gm;
@@ -67,7 +71,7 @@ public class TileMap  {
 		this.engine = enG;
 		this.ambulance = amB;
 		
-		StartTileMap();
+		StartTileMap(loadGame);
 	}
 
 	// Populate the data structure

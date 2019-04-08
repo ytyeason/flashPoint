@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
+[Serializable]
 public class Wall : MonoBehaviour
 {
 
@@ -9,6 +11,7 @@ public class Wall : MonoBehaviour
 	public int z;
 	public WallManager wallMap;
 	public int type;
+    
 
 	// Occurs when we click the mouse:
 	void OnMouseUp()
@@ -45,6 +48,7 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
                     wallMap.BreakWall(wallX, wallZ, 2, 1, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
+                    
                 }
 
                 if (type == 1) // Vertical normal
@@ -52,6 +56,7 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
                     wallMap.BreakWall(wallX, wallZ, 3, 0, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
+               
                 }
 
                 if (type == 2) // Horizontal damaged
@@ -59,6 +64,7 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL -> DESTROYED");
                     wallMap.BreakWall(wallX, wallZ, 4, 1, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
+                   
                 }
 
                 if (type == 3) // Vertical damaged
@@ -66,9 +72,12 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL -> DESTROYED");
                     wallMap.BreakWall(wallX, wallZ, 5, 0, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
+                    
                 }
                 //      4 -> Horizontal destroyed
                 //      5 -> Vertical destroyed
+
+                
             }
 
 

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using SocketIO;
 using System;
+using System;
 
+[Serializable]
 public class GamePlayer
 {
     public String username;

@@ -1,7 +1,10 @@
 ﻿
 using System;
 using System.Runtime.InteropServices.ComTypes;
+using System;
+using System.Collections.Generic;
 
+[Serializable]
 public static class StaticInfo
 {
     public static String name;
@@ -15,4 +18,11 @@ public static class StaticInfo
 
     public static String numOfHazmat;
     public static String numOfHotspot;
+
+    public static Boolean LoadGame = false;
+    public static Dictionary<int[], int> hWallMemo;
+    public static Dictionary<int[], int> vWallMemo;
+    public static int[,] tiles;
+    public static Dictionary<int[], int> defaultHorizontalDoors;
+    public static Dictionary<int[], int> defaultVerticalDoors;
 }

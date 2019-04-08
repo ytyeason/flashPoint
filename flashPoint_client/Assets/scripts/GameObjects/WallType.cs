@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Needed for Unity to know that this data type can be modified, instantiated etc)
-[System.Serializable]
+using System;
+
+[Serializable]
 public class WallType {
     public string name;
 
