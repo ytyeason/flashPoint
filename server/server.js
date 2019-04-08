@@ -179,7 +179,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
               console.log("found participant's saved game!!!")
               var room_state = Games_state[room_num];
               console.log(room_state);
-              socket.emit("LOAD_GAME_SUCCESS", {'room':Games, 'state': room_state});
+              socket.emit("LOAD_GAME_SUCCESS",
+              {'room':Games, 'state': room_state, 'name':name, 'roomNumber':room_num, 'level':Games[data['room']]["level"], 'numberOfPlayer':Games[data['room']]["numberOfPlayer"],'numOfHazmat':Games[data['room']]["numOfHazmat"],'numOfHotspot':Games[data['room']]["numOfHotspot"] });
           }else{
             console.log("Didn't found your name!")
             socket.emit("LOAD_GAME_SUCCESS", {'status':false});

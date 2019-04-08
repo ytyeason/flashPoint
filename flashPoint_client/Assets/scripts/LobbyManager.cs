@@ -55,8 +55,9 @@ public class LobbyManager : MonoBehaviour {
         Debug.Log("load room successful");
         //Debug.Log(obj.data);
         //Debug.Log(obj.data[0]);
+        Debug.Log("Games:   ");
         Debug.Log(obj.data[0]);
-
+        
         StaticInfo.LoadGame = true;
         StaticInfo.game_info = obj.data[0];
         //var status_info = obj.data[1];
@@ -68,6 +69,21 @@ public class LobbyManager : MonoBehaviour {
         var hDoor = obj.data[1][3];
         var vDoor = obj.data[1][4];
         //Debug.Log(tiles);
+        
+        Debug.Log(obj.data[2]);
+        Debug.Log(obj.data[3].str);
+        Debug.Log(obj.data[4].str);
+        Debug.Log(obj.data[5].str);
+        //Debug.Log(obj.data[6].str);
+        //Debug.Log(obj.data[7].str);
+        
+        StaticInfo.name = obj.data[2].str;
+        StaticInfo.roomNumber = obj.data[3].str;
+        StaticInfo.level = obj.data[4].str;
+        
+        StaticInfo.numberOfPlayer = obj.data[5].str;
+        //StaticInfo.numOfHazmat = obj.data[6].str;
+        //StaticInfo.numOfHotspot = obj.data[7].str;
 
         Dictionary<int[], int> h = new Dictionary<int[], int>();
 
@@ -135,6 +151,7 @@ public class LobbyManager : MonoBehaviour {
             }
         }
         StaticInfo.defaultVerticalDoors = vD;
+        Debug.Log("------------");
 
 
         SceneManager.LoadScene("FlashpointUIDemo");
