@@ -1607,6 +1607,38 @@ public class GameManager: MonoBehaviour
         socket.Emit("StopRide", new JSONObject(stop));
     }
 
+    public void StopRide_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+
+        List<string> names=parseJsonArray(obj.data["ToStop"]);
+        foreach(string n in names){
+            if(n.Equals(StaticInfo.name)){
+                this.fireman.riding=false;
+            }
+        }
+    }
+
+    public void stopRide(string name)
+    {
+        Dictionary<string, string> stop = new Dictionary<string, string>();
+        stop["name"] = name;
+        stop["room"] = StaticInfo.roomNumber;
+
+        socket.Emit("StopRide", new JSONObject(stop));
+    }
+
 
 
     public List<string> parseJsonArray(JSONObject obj)

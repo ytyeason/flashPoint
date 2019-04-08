@@ -28,7 +28,7 @@ public class HazmatManager{
     public HazmatManager(GameManager gm){
         this.gm=gm;
 
-        //this.additionalHotspot 
+        //this.additionalHotspot
         switch (StaticInfo.level)
         {
             case "Family":
@@ -45,7 +45,7 @@ public class HazmatManager{
             case "Experienced-Heroic":
                 numOfHazmat = 5;
                 additionalHotspot += 3;
-                break; 
+                break;
         }
         if (StaticInfo.level == "Random")
         {

@@ -26,10 +26,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Room.unity
     guid: ab7a9a744fec0724199001248bf47ea6
+<<<<<<< HEAD
   - enabled: 1
     path: Assets/Scenes/FlashpointUIDemo.unity
     guid: 83a14e16e6656459ca2d71679ba7c08d
   - enabled: 0
     path:
     guid: 00000000000000000000000000000000
+=======
+>>>>>>> 75debf4cd8d8936e7b41b830350bcc93b4c25b0f
   m_configObjects: {}

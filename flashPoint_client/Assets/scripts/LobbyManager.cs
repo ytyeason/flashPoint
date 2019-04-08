@@ -43,7 +43,7 @@ public class LobbyManager : MonoBehaviour {
         string det=obj.data.ToDictionary()["status"];
         if(level.Equals("Family")){
             SceneManager.LoadScene("Room");
-            
+
         }else{
             SceneManager.LoadScene("DragDrop");
         }
@@ -68,35 +68,35 @@ public class LobbyManager : MonoBehaviour {
         var hDoor = obj.data[1][3];
         var vDoor = obj.data[1][4];
         //Debug.Log(tiles);
-        
+
         Dictionary<int[], int> h = new Dictionary<int[], int>();
-            
+
         foreach (var location in hWall.list)
         {
             //Debug.Log(location);
             foreach (KeyValuePair<string, string> entry in location.ToDictionary())
-            {        
+            {
                 var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
                 var value = Convert.ToInt32(entry.Value);
                 h[key] = value;
             }
         }
         StaticInfo.hWallMemo = h;
-        
+
         Dictionary<int[], int> v = new Dictionary<int[], int>();
-            
+
         foreach (var location in vWall.list)
         {
             //Debug.Log(location);
             foreach (KeyValuePair<string, string> entry in location.ToDictionary())
-            {        
+            {
                 var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
                 var value = Convert.ToInt32(entry.Value);
                 v[key] = value;
             }
         }
         StaticInfo.vWallMemo = v;
-        
+
         int[,] t = new int[10,8];
         foreach (var location in tiles.list)
         {
@@ -109,7 +109,7 @@ public class LobbyManager : MonoBehaviour {
             }
         }
         StaticInfo.tiles = t;
-        
+
         Dictionary<int[], int> hD = new Dictionary<int[], int>();
         foreach (var location in hDoor.list)
         {
@@ -122,7 +122,7 @@ public class LobbyManager : MonoBehaviour {
             }
         }
         StaticInfo.defaultHorizontalDoors = hD;
-        
+
         Dictionary<int[], int> vD = new Dictionary<int[], int>();
         foreach (var location in vDoor.list)
         {
@@ -135,7 +135,7 @@ public class LobbyManager : MonoBehaviour {
             }
         }
         StaticInfo.defaultVerticalDoors = vD;
-        
+
 
         SceneManager.LoadScene("FlashpointUIDemo");
     }
@@ -145,36 +145,36 @@ public class LobbyManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f);
 
         socket.Emit("USER_CONNECT");
-		
+
         yield return new WaitForSeconds(0.5f);
-		
+
     }
 
     void OnUserConnected (SocketIOEvent obj)
     {
         Debug.Log( "all user born on this client" );
     }
-    
+
     public void LOADRoom()
     {
         Debug.Log("LOAD button clicked");
         Debug.Log(roomNumber.text);
 
         StaticInfo.roomNumber = roomNumber.text;
-		
+
         Dictionary<String, String> room = new Dictionary<string, string>();
         room["room"] = StaticInfo.roomNumber;
         room["name"] = StaticInfo.name;
         socket.Emit("LOAD_ROOM",new JSONObject(room));
     }
-    
+
     public void CreateRoom()
     {
         Debug.Log("create button clicked");
         Debug.Log(roomNumber.text);
-        
+
         StaticInfo.roomNumber = roomNumber.text;
-		
+
         Dictionary<String, String> room = new Dictionary<string, string>();
         room["room"] = StaticInfo.roomNumber;
         room["name"] = StaticInfo.name;
@@ -187,7 +187,7 @@ public class LobbyManager : MonoBehaviour {
         Debug.Log(roomNumber.text);
 
         StaticInfo.roomNumber = roomNumber.text;
-		
+
         Dictionary<String, String> room = new Dictionary<string, string>();
         room["room"] = StaticInfo.roomNumber;
         room["name"] = StaticInfo.name;
