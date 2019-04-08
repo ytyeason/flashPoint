@@ -104,6 +104,8 @@ public class POIManager{
                         cont=false;
                     }
                 }
+                Debug.Log("check fireman");
+                Debug.Log(cont);
                 while (containsKey(key[0],key[1],placedPOI) || containsKey(key[0],key[1],treated)||containsKey(key[0],key[1],movingPOI)||containsKey(key[0],key[1],movingTreated)||gm.tileMap.tiles[randX,randZ]==2||gm.tileMap.tiles[randX,randZ]==1||cont)
                 {
                     randX = rand.Next(1, 9);
@@ -118,6 +120,8 @@ public class POIManager{
                             cont=false;
                         }
                     }
+                    Debug.Log("check fireman");
+                    Debug.Log(cont);
                 }
                 
             }
