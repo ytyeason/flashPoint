@@ -48,8 +48,7 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
                     wallMap.BreakWall(wallX, wallZ, 2, 1, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
-                    wallMap.damagedMarkerCounter++;
-                    wallMap.gm.displayStats();
+                    
                 }
 
                 if (type == 1) // Vertical normal
@@ -57,8 +56,7 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
                     wallMap.BreakWall(wallX, wallZ, 3, 0, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
-                    wallMap.damagedMarkerCounter++;
-                    wallMap.gm.displayStats();
+               
                 }
 
                 if (type == 2) // Horizontal damaged
@@ -66,8 +64,7 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL -> DESTROYED");
                     wallMap.BreakWall(wallX, wallZ, 4, 1, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
-                    wallMap.damagedMarkerCounter++;
-                    wallMap.gm.displayStats();
+                   
                 }
 
                 if (type == 3) // Vertical damaged
@@ -75,17 +72,12 @@ public class Wall : MonoBehaviour
                     Debug.Log("NORMAL -> DESTROYED");
                     wallMap.BreakWall(wallX, wallZ, 5, 0, false);
                     wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
-                    wallMap.damagedMarkerCounter++;
-                    wallMap.gm.displayStats();
+                    
                 }
                 //      4 -> Horizontal destroyed
                 //      5 -> Vertical destroyed
 
-                if (wallMap.damagedMarkerCounter >= 24)
-                {
-                    Debug.Log("24 damaged markers");
-                    wallMap.gm.defeat();
-                }
+                
             }
 
 

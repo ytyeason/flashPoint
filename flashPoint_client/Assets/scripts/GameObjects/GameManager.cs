@@ -264,10 +264,14 @@ public class GameManager: MonoBehaviour
 
     public void displayStats()
     {
-        stats.text = "Number of Damaged Marker" + " : " + wallManager.damagedMarkerCounter;
+        stats.text = "Damaged Marker" + " : " + this.damaged_wall_num;
         stats.text+="\nRescued Victims" + " : " + pOIManager.rescued;
         stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
-        stats.text+= "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;  
+        if (!StaticInfo.level.Equals("Family"))
+        {
+            stats.text += "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
+        }
+       
     }
 
     public void displayRole()

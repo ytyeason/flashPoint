@@ -42,8 +42,6 @@ public class WallManager
 
 	public GameManager gm;
 
-    public int damagedMarkerCounter = 0;
-
     void StartWallManager()
 	{
 		PopulateWalls();
@@ -271,8 +269,14 @@ public class WallManager
 						//Destroy(old);
 						gm.DestroyObject(old);
 						gm.damaged_wall_num++;		// Increment the GUI counter to represent # of damaged walls
+                        gm.displayStats();
+                        if (gm.damaged_wall_num >= 24)
+                        {
+                            Debug.Log("24 damaged markers");
+                            gm.defeat();
+                        }
 
-						WallType wt = wallTypes[type];
+                        WallType wt = wallTypes[type];
 						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x *6, 0, z *6-2), Quaternion.identity);
 						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x *6, 2, z *6 - 3), Quaternion.identity);
 
@@ -306,8 +310,14 @@ public class WallManager
 						//Destroy(old);
 						gm.DestroyObject(old);
 						gm.damaged_wall_num++;     // Increment the GUI counter to represent # of damaged walls
+                        gm.displayStats();
+                        if (gm.damaged_wall_num >= 24)
+                        {
+                            Debug.Log("24 damaged markers");
+                            gm.defeat();
+                        }
 
-						WallType wt = wallTypes[type];
+                        WallType wt = wallTypes[type];
 						//GameObject objectW = (GameObject)Instantiate(wt.wallVisualPrefab, new Vector3(x *6-2, 0, z *6), Quaternion.Euler(0,90,0));
 						GameObject objectW = gm.instantiateObject(wt.wallVisualPrefab, new Vector3(x *6 - 3, 2, z *6), Quaternion.Euler(0, 90, 0));
 
@@ -511,7 +521,8 @@ public class WallManager
 		}
 
 		return false;
-	}
+    }
 
+    
 
 }
