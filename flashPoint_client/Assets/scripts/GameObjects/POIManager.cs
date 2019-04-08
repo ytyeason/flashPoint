@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using SocketIO;
 using System;
+using System;
 
+[Serializable]
 public class POIManager{
 
     public GameManager gm;
@@ -30,8 +32,8 @@ public class POIManager{
     public POIManager(GameManager gm)
     {
         this.gm = gm;
-        generatePOI();
-        initiatePOI();
+        generatePOI();//still need this when loading
+        replenishPOI();
     }
 
     public void generatePOI()
@@ -69,7 +71,7 @@ public class POIManager{
     public void replenishPOI()
     {
         int size = placedPOI.Count+movingPOI.Count+movingTreated.Count+treated.Count;
-        
+
         while(size<3)
         {
             int randX = rand.Next(1, 9);
@@ -123,12 +125,14 @@ public class POIManager{
                     Debug.Log("check fireman");
                     Debug.Log(cont);
                 }
-                
+
             }
-            
+
             int randIndex = rand.Next(0, poi.Count);
+
             POI p = poi[randIndex];
             placedPOI.Add(key,p);
+
             GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)randX*6 - 1.5), posY, (float)((double)randZ*6 + 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
             poiLookup.Add(key, go);
@@ -163,7 +167,7 @@ public class POIManager{
     public void kill(int x, int z)
     {
         int[] key = new int[] { x, z };
-        
+
         if(containsKey(key[0], key[1], placedPOI))
         {
             POI p = getPOI(key[0],key[1],placedPOI);
