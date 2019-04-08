@@ -1091,11 +1091,12 @@ public class OperationManager
             if(controlled.carryingVictim&&controlled.role==Role.Dog){
                 requiredAP=4;
             }
-            if (controlled.role == Role.Paramedic || controlled.role == Role.RescueSpec)
-            {
-                requiredAP *= 2;
+            if(fireman.remainingSpecAp>=requiredAP){
+                fireman.setSpecAP(fireman.remainingSpecAp-requiredAP);
+            }else{
+                fireman.setAP(fireman.FreeAP-fireman.remainingSpecAp);
+                fireman.setSpecAP(0);
             }
-            fireman.setSpecAP(fireman.remainingSpecAp - requiredAP);
         }
         else
         {
@@ -1331,12 +1332,12 @@ public class OperationManager
         if(gm.tileMap.tiles[x, z] == 3){
             Fireman fireman = gm.tileMap.selectedUnit;
             fireman.riding = true;
-            gm.startRide(1);
+            gm.startRide(2);
         }
         if(gm.tileMap.tiles[x, z] == 4){
             Fireman fireman = gm.tileMap.selectedUnit;
             fireman.riding = true;
-            gm.startRide(2);
+            gm.startRide(1);
         }
         
         opPanel.SetActive(false); 
