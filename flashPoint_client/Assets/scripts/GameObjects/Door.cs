@@ -42,7 +42,7 @@ public class Door : MonoBehaviour
                         canDo = false;
                     }
                 }
-                if (doorMap.gm.fireman.remainingSpecAp < 1)
+                if (doorMap.gm.fireman.remainingSpecAp+doorMap.gm.fireman.FreeAP < 1)
                 {
                     canDo = false;
                 }
@@ -53,6 +53,10 @@ public class Door : MonoBehaviour
                 {
                     canDo = false;
                 }
+            }
+
+            if(doorMap.gm.fireman.role==Role.Dog){
+                canDo=false;
             }
 
             if (currentX==x&&currentZ-z==-6||currentX==x&&currentZ==z||currentZ==z&&currentX-x==-6&&canDo) // reachable door

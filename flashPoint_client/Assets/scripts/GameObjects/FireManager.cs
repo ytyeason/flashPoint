@@ -265,7 +265,7 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X, rng_Z+1, type, 1, true);
-                    gm.UpdateWall(rng_X, rng_Z+1, type, 1); // horizontal
+                    gm.UpdateWall(rng_X, rng_Z+1, type, 1,true); // horizontal
                 }
 
 
@@ -337,7 +337,7 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X, rng_Z, type, 0, true);
-                    gm.UpdateWall(rng_X, rng_Z, type, 0); // 
+                    gm.UpdateWall(rng_X, rng_Z, type, 0, true); // 
                 }
 
 
@@ -410,7 +410,7 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X+1, rng_Z, type, 0, true);
-                    gm.UpdateWall(rng_X+1, rng_Z, type, 0); // 
+                    gm.UpdateWall(rng_X+1, rng_Z, type, 0,true); // 
                 }
 
 
@@ -483,7 +483,7 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X, rng_Z, type, 1, true);
-                    gm.UpdateWall(rng_X, rng_Z, type, 1); // 
+                    gm.UpdateWall(rng_X, rng_Z, type, 1,true); // 
                 }
 
 

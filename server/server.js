@@ -335,6 +335,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var horizontal = data["horizontal"];
         var room = data['room'];
         var location = x+','+z;
+        var fromExplosion=data["fromExplosion"];
         // console.log(x);
         // console.log(z);
         // console.log(type);
@@ -364,7 +365,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
             Games_state[room]['vWallMemo'] = vWall_list;
             console.log(Games_state[room]['vWallMemo']);
         }
-        socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal});
+        socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal,"fromExplosion":fromExplosion});
     });
 
     socket.on('UpdateDoor',function(data){
