@@ -16,9 +16,10 @@ public class DoorManager
 	public DoorType[] doorTypes;
 
 	public GameManager gm;
-    public int randomBoard = 0; 
+    public static int randomBoard = UnityEngine.Random.Range(1, 6);
 
-	void StartDoorManager()
+
+    void StartDoorManager()
 	{
 		PopulateDoors();
 
@@ -99,26 +100,62 @@ public int HorizontalDoor(int x, int z)
 
         return false;
     }
+
+    /*int generateRandom()
+    {
+        randomBoard = UnityEngine.Random.Range(1, 6);
+        return randomBoard;
+    }*/
     
 	void PopulateDoors()
 	{
         if (!StaticInfo.level.Equals("Random"))
-        { 
-        defaultHorizontalDoors.Add(new int[] { 5, 1 });
-		defaultHorizontalDoors.Add(new int[] { 3, 3 });
-		defaultHorizontalDoors.Add(new int[] { 6, 3 });
-		defaultHorizontalDoors.Add(new int[] { 5, 4 });
-		defaultHorizontalDoors.Add(new int[] { 6, 7 });
-        defaultHorizontalDoors.Add(new int[] { 3, 5 });
+        {
+            //outer doors
+            //horizontal
+            defaultHorizontalDoors.Add(new int[] { 3, 1 });
+            defaultHorizontalDoors.Add(new int[] { 7, 7 });
+            //vertical
+            defaultVerticalDoors.Add(new int[] { 1, 4 });            
+            defaultVerticalDoors.Add(new int[] { 9, 3 });
 
-		defaultVerticalDoors.Add(new int[] { 1, 3 });
-		defaultVerticalDoors.Add(new int[] { 6, 4 });
-		defaultVerticalDoors.Add(new int[] { 9, 3 });
+            //specific doors for base
+            //horizontal
+            defaultHorizontalDoors.Add(new int[] { 4, 3 });
+            defaultHorizontalDoors.Add(new int[] { 8, 5 });
+            //vertial
+            defaultVerticalDoors.Add(new int[] { 3, 4 });
+            defaultVerticalDoors.Add(new int[] { 4, 6 });           
+            defaultVerticalDoors.Add(new int[] { 6, 5 });
+            defaultVerticalDoors.Add(new int[] { 6, 1 });
+            defaultVerticalDoors.Add(new int[] { 7, 3 });
+            defaultVerticalDoors.Add(new int[] { 8, 1 });
+
         }
         else
         {
-            //randomBoard = UnityEngine.Random.Range(0, 6);
-            randomDoor1();
+            Debug.Log("Random board number: " + randomBoard);
+            if (randomBoard == 1)
+            {
+                randomDoor1();
+            }
+            else if (randomBoard == 2)
+            {
+                randomDoor2();
+            }
+            else if (randomBoard == 3)
+            {
+                randomDoor3();
+            }
+            else if (randomBoard == 4)
+            {
+                randomDoor4();
+            }
+            else if (randomBoard == 5)
+            {
+                randomDoor5();
+            }
+
         }
 
 
@@ -139,7 +176,73 @@ public int HorizontalDoor(int x, int z)
         defaultVerticalDoors.Add(new int[] { 8, 5 });
     }
 
-	public void ChangeDoor(int x, int z, int toType, int type, bool fromExplosion)
+    void randomDoor2()
+    {
+        //outer doors
+        defaultHorizontalDoors.Add(new int[] { 4, 1 });
+        defaultVerticalDoors.Add(new int[] { 1, 5 });
+        defaultHorizontalDoors.Add(new int[] { 4, 7 });
+        defaultVerticalDoors.Add(new int[] { 9, 5 });
+
+        //specific doors for random1
+        defaultHorizontalDoors.Add(new int[] { 4, 4 });
+        defaultVerticalDoors.Add(new int[] { 7, 2 });
+        defaultHorizontalDoors.Add(new int[] { 6, 3 });
+    }
+
+    void randomDoor3()
+    {
+        defaultHorizontalDoors.Add(new int[] { 5, 1 });
+        defaultHorizontalDoors.Add(new int[] { 3, 3 });
+        defaultHorizontalDoors.Add(new int[] { 6, 3 });
+        defaultHorizontalDoors.Add(new int[] { 5, 4 });
+        defaultHorizontalDoors.Add(new int[] { 6, 7 });
+        defaultHorizontalDoors.Add(new int[] { 3, 5 });
+
+        defaultVerticalDoors.Add(new int[] { 1, 3 });
+        defaultVerticalDoors.Add(new int[] { 6, 4 });
+        defaultVerticalDoors.Add(new int[] { 9, 3 });
+    }
+
+    void randomDoor4()
+    {
+        //outer doors
+        defaultHorizontalDoors.Add(new int[] { 5, 1 });
+        defaultVerticalDoors.Add(new int[] { 1, 3 });
+        defaultHorizontalDoors.Add(new int[] { 6, 7 });
+        defaultVerticalDoors.Add(new int[] { 9, 3 });
+
+        //specific doors for random4
+        //horizatal
+        defaultHorizontalDoors.Add(new int[] { 4, 4 });        
+        defaultHorizontalDoors.Add(new int[] { 3, 3 });
+        //vertical
+        defaultVerticalDoors.Add(new int[] { 5, 5 });
+        defaultVerticalDoors.Add(new int[] { 7, 2 });
+        defaultVerticalDoors.Add(new int[] { 8, 3 });
+    }
+
+    void randomDoor5()
+    {
+        //outer doors
+        defaultHorizontalDoors.Add(new int[] { 5, 1 });
+        defaultVerticalDoors.Add(new int[] { 1, 3 });
+        defaultHorizontalDoors.Add(new int[] { 6, 7 });
+        defaultVerticalDoors.Add(new int[] { 9, 3 });
+
+        //specific doors for random5
+        //horizatal
+        defaultHorizontalDoors.Add(new int[] { 3, 6 });
+        defaultHorizontalDoors.Add(new int[] { 3, 4 });
+        defaultHorizontalDoors.Add(new int[] { 7, 4 });
+        defaultHorizontalDoors.Add(new int[] { 8, 4 });
+        defaultHorizontalDoors.Add(new int[] { 7, 2 });
+        //vertical
+        defaultVerticalDoors.Add(new int[] { 3, 1 });
+        defaultVerticalDoors.Add(new int[] { 6, 2 });
+    }
+
+    public void ChangeDoor(int x, int z, int toType, int type, bool fromExplosion)
 	{
 		bool can_break = (fromExplosion) ? fromExplosion : gm.fireman.changeDoor(x * 6, z * 6);
 		if (can_break)

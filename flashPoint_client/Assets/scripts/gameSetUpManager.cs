@@ -157,6 +157,7 @@ public class gameSetUpManager : MonoBehaviour {
         StaticInfo.numberOfPlayer = numberOfPlayer.text;
         StaticInfo.numOfHazmat = numOfHazmat.text;
         StaticInfo.numOfHotspot = numOfHotspot.text;
+        StaticInfo.StartingPosition = true;
         
         Debug.Log(StaticInfo.level);
         Debug.Log(StaticInfo.numberOfPlayer);

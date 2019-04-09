@@ -28,9 +28,12 @@ public class Fireman
 
     public int FreeAP = REFRESH_AP;
 
-	public int VetExpAP = 0;
+	// Veteran-related:
+	public bool inVetZone = false;
+	public bool usedVetAP = false;
+	public bool vetAPNotYetGiven = true;
 
-    public int savedAP = 0;
+	public int savedAP = 0;
 
     public int specialtyAP = 0;
 
@@ -112,8 +115,13 @@ public class Fireman
 
     public void setAP(int in_ap)
     {
-        FreeAP = in_ap;
-        gm.displayAP();
+		if(!vetAPNotYetGiven && !usedVetAP)
+		{
+			usedVetAP = true;
+		}
+
+		FreeAP = in_ap;
+		gm.displayAP();
     }
 
     public void setSpecAP(int specAP)
@@ -404,6 +412,22 @@ public class Fireman
         currentZ = z * 6;
         s.transform.position = new Vector3(currentX, 0.2f, currentZ);
         gm.UpdateLocation(currentX, currentZ,StaticInfo.name);
+
+		// Check if activePlayer is standing in Veteran's 'vicinity' and if so give one AP (only 1 time per turn):
+		if(gm.vicinityManager.checkIfInVicinity(origX, origZ))
+		{
+			if(vetAPNotYetGiven)
+			{
+				vetAPNotYetGiven = false;
+				FreeAP++;
+			}
+
+			inVetZone = true;
+		}
+		else
+		{
+			inVetZone = false;
+		}
 
         Debug.Log(carriedPOI);
 
