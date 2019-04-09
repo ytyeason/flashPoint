@@ -19,7 +19,7 @@ public static class StaticInfo
     public static String numOfHazmat;
     public static String numOfHotspot;
 
-    public static bool StartingPosition=false;//change to false after wards
+    public static bool StartingPosition=true;//change to false after wards
 
     public static Boolean LoadGame = false;
     public static Dictionary<int[], int> hWallMemo;
