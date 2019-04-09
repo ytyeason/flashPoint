@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4366756, g: 0.48427135, b: 0.56452316, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -624,6 +624,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -651,6 +652,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -701,6 +703,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -755,6 +758,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -3943,6 +3947,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -3970,6 +3975,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -4020,6 +4026,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -4074,6 +4081,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -7397,6 +7405,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -7424,6 +7433,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -7474,6 +7484,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -7528,6 +7539,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -7626,6 +7638,15 @@ MonoBehaviour:
   upDodgeDown: 0
   rightDodgeDown: 0
   downDodgeDown: 0
+  backdropL: {fileID: 352802842}
+  backdropS: {fileID: 999210464}
+  leftDodgeButton: {fileID: 1442591060}
+  upDodgeButton: {fileID: 26547857}
+  rightDodgeButton: {fileID: 1411933436}
+  downDodgeButton: {fileID: 1953816689}
+  confirmDodge: {fileID: 833628328}
+  declineDodge: {fileID: 1415440062}
+  toggleActiveDodge: {fileID: 0}
   amB: {fileID: 0}
   enG: {fileID: 0}
   fireman:
@@ -7651,6 +7672,7 @@ MonoBehaviour:
                 color: 0
                 AP: 0
                 FreeAP: 0
+                VetExpAP: 0
                 savedAP: 0
                 specialtyAP: 0
                 remainingSpecAp: 0
@@ -7690,6 +7712,7 @@ MonoBehaviour:
             color: 0
             AP: 0
             FreeAP: 0
+            VetExpAP: 0
             savedAP: 0
             specialtyAP: 0
             remainingSpecAp: 0
@@ -7744,6 +7767,7 @@ MonoBehaviour:
         color: 0
         AP: 0
         FreeAP: 0
+        VetExpAP: 0
         savedAP: 0
         specialtyAP: 0
         remainingSpecAp: 0
@@ -7798,6 +7822,7 @@ MonoBehaviour:
     color: 0
     AP: 0
     FreeAP: 0
+    VetExpAP: 0
     savedAP: 0
     specialtyAP: 0
     remainingSpecAp: 0
@@ -7891,7 +7916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000059127808, y: 215.4}
+  m_AnchoredPosition: {x: -0.000058174133, y: 215.4}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881

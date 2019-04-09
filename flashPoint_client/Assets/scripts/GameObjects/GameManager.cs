@@ -75,6 +75,17 @@ public class GameManager: MonoBehaviour
 	bool canLeft = false;
 	bool confirmDodgeDown = false;
 	bool wantDodge = false;
+	// Dodging GUI items:
+	public GameObject backdropL;    // For the dodge GameObjects
+	public GameObject backdropS;    // For dodge confirmations
+	public GameObject leftDodgeButton;
+	public GameObject upDodgeButton;
+	public GameObject rightDodgeButton;
+	public GameObject downDodgeButton;
+	public GameObject confirmDodge;
+	public GameObject declineDodge;
+	public ToggleActiveDodge toggleActiveDodge;
+
 
 	private JSONObject room;
     private JSONObject participants;
@@ -190,10 +201,12 @@ public class GameManager: MonoBehaviour
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
                 pOIManager = new POIManager(this,0);
                 hazmatManager = new HazmatManager(this);
+				// Next 2 are for dodging:
+				vicinityManager = new VicinityManager(this, tileMap.tiles);
+				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
 
-
-                //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
-                displayAP();
+				//displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+				displayAP();
                 //   vehicleManager.StartvehicleManager();
 
                 tileMap.GenerateFiremanVisual(players);
@@ -224,6 +237,7 @@ public class GameManager: MonoBehaviour
                 doorManager = new DoorManager(doorTypes, this,1);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,1);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+				vicinityManager = new VicinityManager(this, tileMap.tiles);
 
                 //poi -- not done
                 pOIManager = new POIManager(this,1);
@@ -1131,7 +1145,7 @@ public class GameManager: MonoBehaviour
 						// Allow the active player to choose/begin trying to dodge etc.
 						isDodging = true;
 
-
+						toggleActiveDodge.activateGUI();
 						// Check if player wants to dodge
 						Debug.Log("    VET (1) Please decide if you'd like to dodge or not! " + Time.time);
 						yield return new WaitUntil(() => confirmDodgeDown == true);
@@ -1190,6 +1204,8 @@ public class GameManager: MonoBehaviour
 							Debug.Log("    VET (1.5) You have decided to not dodge. " + Time.time);
 							knockDown(x_elem, z_elem);
 						}
+
+						toggleActiveDodge.deactivateGUI();
 					}
 					// Player is unable to dodge or has chosen not to dodge:
 					else
@@ -1208,9 +1224,8 @@ public class GameManager: MonoBehaviour
 		if (fireman.role == Role.Veteran) {
 			//yield return new WaitForSeconds(0.75f);
 
-			// Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
-            //Sorry Daniel, I comment here because there's an error when running the game
-			// vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+			Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
+			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 		}
 
 		// Kill the thread
@@ -1225,7 +1240,7 @@ public class GameManager: MonoBehaviour
 		// BEGIN OF WIP
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(1, 3, true);
+		fireManager.advanceFire(0, 0, true);
 		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
