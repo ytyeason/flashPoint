@@ -42,6 +42,8 @@ public class OperationManager
         prefabs = gm.prefabs;
         opPanel = gm.opPanel;
         options = gm.options;
+        inCommand = false;
+        commandMoves = 1;
 
         opPanel.SetActive(false);
 
