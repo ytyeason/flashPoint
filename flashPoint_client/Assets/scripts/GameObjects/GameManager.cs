@@ -199,7 +199,7 @@ public class GameManager: MonoBehaviour
                 //    vehicleManager = new VehicleManager(vehicleTypes,this);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,0);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,0);
                 hazmatManager = new HazmatManager(this);
 				// Next 2 are for dodging:
 				vicinityManager = new VicinityManager(this, tileMap.tiles);
@@ -240,7 +240,7 @@ public class GameManager: MonoBehaviour
 				vicinityManager = new VicinityManager(this, tileMap.tiles);
 
                 //poi -- not done
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,1);
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this);
 
@@ -291,7 +291,7 @@ public class GameManager: MonoBehaviour
         stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
         if (!StaticInfo.level.Equals("Family"))
         {
-            stats.text += "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
+            stats.text+= "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
         }
        
     }
@@ -925,6 +925,7 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> revealPOI = new Dictionary<string, string>();
         revealPOI["x"] = x.ToString();
         revealPOI["z"] = z.ToString();
+        revealPOI["room"] = StaticInfo.roomNumber;
 
         socket.Emit("RevealPOI", new JSONObject(revealPOI));
     }
@@ -1365,6 +1366,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+        location["name"] = StaticInfo.name;
 
         socket.Emit("UpdatePOILocation", new JSONObject(location));
     }
@@ -1404,6 +1406,7 @@ public class GameManager: MonoBehaviour
     public void RemoveHazmat(int x,int z)
     {
         Debug.Log("RemovingHazmat");
+        Debug.Log("Removed Hazmat" + hazmatManager.removedHazmat);
         Dictionary<String, string> hazmat = new Dictionary<string, string>();
         hazmat["x"] = x.ToString();
         hazmat["z"] = z.ToString();
@@ -1617,6 +1620,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        poi["room"] = StaticInfo.roomNumber;
 
         socket.Emit("AddPOI", new JSONObject(poi));
     }
@@ -1636,6 +1640,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        
 
         socket.Emit("AddHazmat", new JSONObject(poi));
     }
@@ -1879,6 +1884,7 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> kill=new Dictionary<string, string>();
         kill["x"]=x.ToString();
         kill["z"]=z.ToString();
+        kill["room"] = StaticInfo.roomNumber;
         socket.Emit("KillPOI",new JSONObject(kill));
     }
 

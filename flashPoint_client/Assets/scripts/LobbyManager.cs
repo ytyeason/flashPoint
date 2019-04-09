@@ -68,6 +68,8 @@ public class LobbyManager : MonoBehaviour {
         var tiles = obj.data[1][2];
         var hDoor = obj.data[1][3];
         var vDoor = obj.data[1][4];
+        var poi = obj.data[1][5];
+        Debug.Log(poi);
         //Debug.Log(tiles);
         
         Debug.Log(obj.data[2]);
@@ -151,7 +153,20 @@ public class LobbyManager : MonoBehaviour {
             }
         }
         StaticInfo.defaultVerticalDoors = vD;
-        Debug.Log("------------");
+        
+        Dictionary<int[], int> p = new Dictionary<int[], int>();
+        foreach (var location in poi.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                p[key] = value;
+            }
+        }
+        StaticInfo.poi = p;
+        
 
 
         SceneManager.LoadScene("FlashpointUIDemo");
