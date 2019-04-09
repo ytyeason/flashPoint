@@ -736,6 +736,15 @@ io.on('connection', function (socket) {//default event for client connect to ser
       io.sockets.emit('StopCarry_Success',{"Games":Games,"x":x,"z":z});
     });
 
+    socket.on('StopCarryH',function(data){
+      var name=data['name'];
+      var room=data['room'];
+      var x=data['x'];
+      var z=data['z'];
+      Games[room]["participants"][name]['Carrying']="false";
+      io.sockets.emit('StopCarryH_Success',{"Games":Games,"x":x,"z":z});
+    });
+
     socket.on('StopLead',function(data){
       var name=data['name'];
       var room=data['room'];
