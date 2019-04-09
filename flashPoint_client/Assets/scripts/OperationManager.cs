@@ -1270,11 +1270,11 @@ public class OperationManager
                 if (!Int32.TryParse(gm.players[o].ToDictionary()["Riding"], out ride)) {
                     ride = 0;
                 }
-                if (gm.players[o].ToDictionary()["Carrying"].Equals("true"))
+                if (gm.players[o].ToDictionary()["Carrying"].Equals("True"))
                 {
                     carrying = true;
                 }
-                if (gm.players[o].ToDictionary()["Leading"].Equals("true")) {
+                if (gm.players[o].ToDictionary()["Leading"].Equals("True")) {
                     leading = true;
                 }
                 name = o;
