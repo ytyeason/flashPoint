@@ -28,7 +28,7 @@ public class POIManager{
     private System.Random rand = new System.Random();
     private float posY = -1;
 
-    public int rescued = 6;
+    public int rescued = 0;
     public int killed = 0;
 
     public POIManager(GameManager gm, int loadGame)

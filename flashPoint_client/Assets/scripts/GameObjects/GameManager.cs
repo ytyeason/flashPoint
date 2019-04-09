@@ -29,7 +29,7 @@ public class GameManager: MonoBehaviour
     public GameObject[] hazPrefabs;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
-	public int damaged_wall_num = 23;
+	public int damaged_wall_num = 0;
 	public int rescued_vict_num = 0;
 
 	public JSONObject game_info = StaticInfo.game_info;
