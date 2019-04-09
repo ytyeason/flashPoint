@@ -28,6 +28,8 @@ public class Fireman
 
     public int FreeAP = REFRESH_AP;
 
+	public int VetExpAP = 0;
+
     public int savedAP = 0;
 
     public int specialtyAP = 0;

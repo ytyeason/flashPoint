@@ -20,5 +20,9 @@ public class ApplicationManager : MonoBehaviour {
     {
         Debug.Log("New game button clicked");
         SceneManager.LoadScene("Lobby");
+        StaticInfo.roomNumber = null;
+        StaticInfo.role = Role.None;
+        StaticInfo.StartingPosition = false;//change to false after wards
+        StaticInfo.LoadGame = false;
     }
 }

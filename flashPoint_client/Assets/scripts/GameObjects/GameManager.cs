@@ -29,7 +29,7 @@ public class GameManager: MonoBehaviour
     public GameObject[] hazPrefabs;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
-	public int damaged_wall_num = 0;
+	public int damaged_wall_num = 23;
 	public int rescued_vict_num = 0;
 
 	public JSONObject game_info = StaticInfo.game_info;
@@ -75,6 +75,17 @@ public class GameManager: MonoBehaviour
 	bool canLeft = false;
 	bool confirmDodgeDown = false;
 	bool wantDodge = false;
+	// Dodging GUI items:
+	public GameObject backdropL;    // For the dodge GameObjects
+	public GameObject backdropS;    // For dodge confirmations
+	public GameObject leftDodgeButton;
+	public GameObject upDodgeButton;
+	public GameObject rightDodgeButton;
+	public GameObject downDodgeButton;
+	public GameObject confirmDodge;
+	public GameObject declineDodge;
+	public ToggleActiveDodge toggleActiveDodge;
+
 
 	private JSONObject room;
     private JSONObject participants;
@@ -189,12 +200,14 @@ public class GameManager: MonoBehaviour
                 //    vehicleManager = new VehicleManager(vehicleTypes,this);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,0);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,0);
                 hazmatManager = new HazmatManager(this);
+				// Next 2 are for dodging:
+				vicinityManager = new VicinityManager(this, tileMap.tiles);
+				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
 
-
-                //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
-                displayAP();
+				//displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+				displayAP();
                 //   vehicleManager.StartvehicleManager();
 
                 tileMap.GenerateFiremanVisual(players);
@@ -237,9 +250,10 @@ public class GameManager: MonoBehaviour
                 doorManager = new DoorManager(doorTypes, this,1);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,1);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+				vicinityManager = new VicinityManager(this, tileMap.tiles);
 
                 //poi -- not done
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,1);
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this);
 
@@ -288,12 +302,13 @@ public class GameManager: MonoBehaviour
 
     public void displayStats()
     {
-        stats.text = "Damaged Marker" + " : " + this.damaged_wall_num;
+        Debug.Log("DamagedWall:" + this.damaged_wall_num);
+        stats.text = "Damaged Marker" + " : " + wallManager.damagedWalls;
         stats.text+="\nRescued Victims" + " : " + pOIManager.rescued;
         stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
         if (!StaticInfo.level.Equals("Family"))
         {
-            stats.text += "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
+            stats.text+= "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
         }
        
     }
@@ -941,6 +956,7 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> revealPOI = new Dictionary<string, string>();
         revealPOI["x"] = x.ToString();
         revealPOI["z"] = z.ToString();
+        revealPOI["room"] = StaticInfo.roomNumber;
 
         socket.Emit("RevealPOI", new JSONObject(revealPOI));
     }
@@ -1159,7 +1175,7 @@ public class GameManager: MonoBehaviour
 						// Allow the active player to choose/begin trying to dodge etc.
 						isDodging = true;
 
-
+						toggleActiveDodge.activateGUI();
 						// Check if player wants to dodge
 						Debug.Log("    VET (1) Please decide if you'd like to dodge or not! " + Time.time);
 						yield return new WaitUntil(() => confirmDodgeDown == true);
@@ -1218,6 +1234,8 @@ public class GameManager: MonoBehaviour
 							Debug.Log("    VET (1.5) You have decided to not dodge. " + Time.time);
 							knockDown(x_elem, z_elem);
 						}
+
+						toggleActiveDodge.deactivateGUI();
 					}
 					// Player is unable to dodge or has chosen not to dodge:
 					else
@@ -1236,9 +1254,8 @@ public class GameManager: MonoBehaviour
 		if (fireman.role == Role.Veteran) {
 			//yield return new WaitForSeconds(0.75f);
 
-			// Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
-            //Sorry Daniel, I comment here because there's an error when running the game
-			// vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+			Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
+			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 		}
 
 		// Kill the thread
@@ -1253,7 +1270,7 @@ public class GameManager: MonoBehaviour
 		// BEGIN OF WIP
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(1, 3, true);
+		fireManager.advanceFire(0, 0, true);
 		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
@@ -1380,6 +1397,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+        location["name"] = StaticInfo.name;
 
         socket.Emit("UpdatePOILocation", new JSONObject(location));
     }
@@ -1419,6 +1437,7 @@ public class GameManager: MonoBehaviour
     public void RemoveHazmat(int x,int z)
     {
         Debug.Log("RemovingHazmat");
+        Debug.Log("Removed Hazmat" + hazmatManager.removedHazmat);
         Dictionary<String, string> hazmat = new Dictionary<string, string>();
         hazmat["x"] = x.ToString();
         hazmat["z"] = z.ToString();
@@ -1661,6 +1680,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        poi["room"] = StaticInfo.roomNumber;
 
         socket.Emit("AddPOI", new JSONObject(poi));
     }
@@ -1680,6 +1700,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        
 
         socket.Emit("AddHazmat", new JSONObject(poi));
     }
@@ -1943,6 +1964,7 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> kill=new Dictionary<string, string>();
         kill["x"]=x.ToString();
         kill["z"]=z.ToString();
+        kill["room"] = StaticInfo.roomNumber;
         socket.Emit("KillPOI",new JSONObject(kill));
     }
 
@@ -1957,26 +1979,39 @@ public class GameManager: MonoBehaviour
     public void victory_Success(SocketIOEvent obj)
     {
         Debug.Log("Update victory");
+        if (obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber))
+        {
+            SceneManager.LoadScene("Win");
+        }
+        
     }
 
     public void defeat_Success(SocketIOEvent obj)
     {
         Debug.Log("Update defeat");
+        if (obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber))
+        {
+            SceneManager.LoadScene("gameOver");
+        }
     }
 
     public void victory()
     {
         Debug.Log("You win!");
-        socket.Emit("victory");
-        SceneManager.LoadScene("Win");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber;
+        socket.Emit("victory",new JSONObject(data));
+        //
     }
 
 
     public void defeat()
     {
         Debug.Log("Game Over!");
-        socket.Emit("defeat");
-        SceneManager.LoadScene("gameOver");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber;
+        socket.Emit("defeat", new JSONObject(data));
+        //;
     }
 
     public void confirmPosition(){

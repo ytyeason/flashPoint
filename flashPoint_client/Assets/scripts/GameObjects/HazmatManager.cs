@@ -208,6 +208,7 @@ public class HazmatManager{
         }
         gm.DestroyObject(get(key[0],key[1],lookUp));
         removedHazmat++;
+        gm.displayStats(); 
     }
 
     public void moveHazmat(int origx, int origz, int newx, int newz)
