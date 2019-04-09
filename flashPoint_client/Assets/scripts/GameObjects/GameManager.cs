@@ -1875,6 +1875,12 @@ public class GameManager: MonoBehaviour
                     hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarryH(fireman.currentX/6,fireman.currentZ/6);
                 }
+                int vx=tileMap.engine.x;
+                int vz=tileMap.engine.z;
+                fireman.currentX=vx/6*6;
+                fireman.currentZ=vz/6*6;
+                fireman.s.transform.position=new Vector3(fireman.currentX, 0.2f, fireman.currentZ);
+                UpdateLocation(fireman.currentX,fireman.currentZ,fireman.name);
                 displayRole();
                 Dictionary<string, string> change = new Dictionary<string, string>();
                 change["room"] = StaticInfo.roomNumber;
@@ -1882,12 +1888,7 @@ public class GameManager: MonoBehaviour
                 change["role"] = ((int)StaticInfo.role).ToString();
                 change["oldRole"] = ((int)oldRole).ToString();
                 socket.Emit("changeRole", new JSONObject(change));
-                int vx=this.enG.x;
-                int vz=this.enG.z;
-                fireman.currentX=vx/6;
-                fireman.currentZ=vz/6;
-                fireman.s.transform.position=new Vector3(fireman.currentX*6, 0.2f, fireman.currentZ*6);
-                UpdateLocation(fireman.currentX,fireman.currentZ,fireman.name);
+                
                 
                 break;
             }
