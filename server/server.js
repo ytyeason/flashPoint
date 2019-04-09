@@ -540,6 +540,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var z = parseInt(origz);
       var room=data['room'];
       var name=data['name'];
+      // var type = 0;
 
       var targetNames=[];
       var ride=[];
@@ -583,6 +584,13 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('ResetConfirmed', function(data){
+      var room = data['room'];
+      var participants = Games[room]["participants"];
+        // console.log(player[name]);
+        for(var n in participants){
+          participants[n]["Riding"]=0;
+          participants[n]["Driving"]=0;
+        }
       io.sockets.emit('RescueTreated_Success', true);
     });
 
