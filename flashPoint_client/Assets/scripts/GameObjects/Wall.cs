@@ -41,13 +41,17 @@ public class Wall : MonoBehaviour
                 }
             }
 
+            if(wallMap.gm.fireman.role==Role.Dog){
+                canDo=false;
+            }
+
             if (currentX == x && currentZ - z == -6 || currentX == x && currentZ == z || currentZ == z && currentX - x == -6 && canDo)
             {
                 if (type == 0) // Horizontal normal
                 {
                     Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
                     wallMap.BreakWall(wallX, wallZ, 2, 1, false);
-                    wallMap.gm.UpdateWall(wallX, wallZ, 2, 1);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 2, 1,false);
                     
                 }
 
@@ -55,7 +59,7 @@ public class Wall : MonoBehaviour
                 {
                     Debug.Log("NORMAL: Wall coord (x, z):  " + x + "," + z);
                     wallMap.BreakWall(wallX, wallZ, 3, 0, false);
-                    wallMap.gm.UpdateWall(wallX, wallZ, 3, 0);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 3, 0,false);
                
                 }
 
@@ -63,7 +67,7 @@ public class Wall : MonoBehaviour
                 {
                     Debug.Log("NORMAL -> DESTROYED");
                     wallMap.BreakWall(wallX, wallZ, 4, 1, false);
-                    wallMap.gm.UpdateWall(wallX, wallZ, 4, 1);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 4, 1,false);
                    
                 }
 
@@ -71,7 +75,7 @@ public class Wall : MonoBehaviour
                 {
                     Debug.Log("NORMAL -> DESTROYED");
                     wallMap.BreakWall(wallX, wallZ, 5, 0, false);
-                    wallMap.gm.UpdateWall(wallX, wallZ, 5, 0);
+                    wallMap.gm.UpdateWall(wallX, wallZ, 5, 0,false);
                     
                 }
                 //      4 -> Horizontal destroyed

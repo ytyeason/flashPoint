@@ -323,11 +323,17 @@ public class GameManager: MonoBehaviour
         }
         Debug.Log("displaying role");
         roles.text = StaticInfo.name+": "+roleToString(StaticInfo.role);
+        roles.text += " " + "at: " + fireman.currentX/6 + "," + fireman.currentZ/6;
         if (players != null)
         {
             foreach (string name in players.Keys)
             {
-                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
+                if(!name.Equals(StaticInfo.name))
+                {
+                  roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
+                  roles.text += "\n" + "at: " + players[name].ToDictionary()["Location"];
+
+                }
             }
         }
 
@@ -443,6 +449,14 @@ public class GameManager: MonoBehaviour
         var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
         var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
         var horizontal = Convert.ToInt32(obj.data.ToDictionary()["horizontal"]);
+        var fromExplosion=obj.data.ToDictionary()["fromExplosion"];
+        bool from=true;
+        Debug.Log("fromExplosion: "+fromExplosion);
+        if(fromExplosion.Equals("true")){
+            from=true;
+        }else{
+            from=false;
+        }
 
         //Debug.Log(x);
         //Debug.Log(z);
@@ -454,7 +468,7 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["horizontal"]);
 
 		// Bottom is temporarily commented out:
-		wallManager.BreakWall(x, z, type, horizontal, false);
+		wallManager.BreakWall(x, z, type, horizontal, from);
 	}
 
 	void DoorUpdate_Success(SocketIOEvent obj)
@@ -1009,7 +1023,7 @@ public class GameManager: MonoBehaviour
         socket.Emit("UpdateTile", new JSONObject(updateTile));
     }
 
-    public void UpdateWall(int x, int z, int type, int horizontal)
+    public void UpdateWall(int x, int z, int type, int horizontal, bool fromExplosion)
     {
         Debug.Log("Update wall");
         Dictionary<String, string> updateWall = new Dictionary<string, string>();
@@ -1018,6 +1032,7 @@ public class GameManager: MonoBehaviour
         updateWall["type"] = type.ToString();
         updateWall["horizontal"] = horizontal.ToString();
         updateWall["room"] = StaticInfo.roomNumber;
+        updateWall["fromExplosion"]=fromExplosion.ToString();
 
         socket.Emit("UpdateWall", new JSONObject(updateWall));
     }
@@ -2145,7 +2160,6 @@ public class GameManager: MonoBehaviour
                 changeRoleButton.SetActive(true);
             }
         }
-        
     }
 
     public void explodeHazmat(int x, int z){
