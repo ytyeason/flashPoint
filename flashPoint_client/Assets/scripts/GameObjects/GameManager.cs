@@ -75,6 +75,8 @@ public class GameManager: MonoBehaviour
 	bool canLeft = false;
 	bool confirmDodgeDown = false;
 	bool wantDodge = false;
+	int[,] playerLocations; // Holds all player's locations
+
 	// Dodging GUI items:
 	public GameObject backdropL;    // For the dodge GameObjects
 	public GameObject backdropS;    // For dodge confirmations
@@ -206,9 +208,11 @@ public class GameManager: MonoBehaviour
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
                 pOIManager = new POIManager(this,0);
                 hazmatManager = new HazmatManager(this);
-				// Next 2 are for dodging:
+				// Next 3 are for dodging:
 				vicinityManager = new VicinityManager(this, tileMap.tiles);
 				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
+				//Debug.Log("numberOfPlayers: { " + numberOfPlayer.Substring(1, 1) + " }");
+				playerLocations = new int[Convert.ToInt32(numberOfPlayer.Substring(1, 1)), 2];
 
 				//displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
 				displayAP();
@@ -254,10 +258,14 @@ public class GameManager: MonoBehaviour
                 doorManager = new DoorManager(doorTypes, this,1);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,1);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+				// Next 3 are for dodging:
 				vicinityManager = new VicinityManager(this, tileMap.tiles);
+				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
+				//Debug.Log("numberOfPlayers: { " + numberOfPlayer.Substring(1, 1) + " }");
+				playerLocations = new int[Convert.ToInt32(numberOfPlayer.Substring(1, 1)), 2];
 
-                //poi -- not done
-                pOIManager = new POIManager(this,1);
+				//poi -- not done
+				pOIManager = new POIManager(this,1);
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this);
 
@@ -1252,6 +1260,94 @@ public class GameManager: MonoBehaviour
 		confirmDodgeDown = true;
 	}
 
+	// Fetch players' location:
+	public void fetchLocations()
+	{
+		Debug.Log("Printing locations:");
+		int i = 0;
+
+		foreach (string o in players.Keys)
+		{
+			Debug.Log("  >" + players[o]["Location"].ToString() + "<");
+
+			var location = players[o]["Location"].ToString();
+			location = location.Substring(1, location.Length - 2);
+			var cord = location.Split(',');
+
+			playerLocations[i, 0] = Convert.ToInt32(cord[0]);
+			playerLocations[i, 1] = Convert.ToInt32(cord[1]);
+
+			Debug.Log("fetchLocations: (x, z)  ->  (" + playerLocations[i, 0] + ", " + playerLocations[i, 1] + ")");
+			i++;
+		}
+
+		/*
+		int i = 0;
+		List<string> p = participants.keys;
+		foreach (var v in p)
+		{
+			//Debug.Log("Looking at: " players[v]);
+
+			var o = participants[v];
+			players[v] = o;
+			// Debug.Log(v);
+			// Debug.Log(players[v]);
+
+			var location = players[StaticInfo.name]["Location"].ToString();
+			location = location.Substring(1, location.Length - 2);
+			var cord = location.Split(',');
+
+			playerLocations[i, 0] = Convert.ToInt32(cord[0]);
+			playerLocations[i, 1] = Convert.ToInt32(cord[0]);
+
+			Debug.Log("fetchLocations: (x, z)  ->  (" + playerLocations[i, 0] + ", " + playerLocations[i, 1] + ")");
+		}
+
+
+		string name = "";
+		foreach (string o in players.Keys)
+		{
+			if (players[o]["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
+			{
+				role = (Role)Int32.Parse(gm.players[o].ToDictionary()["Role"]);
+				if (!Int32.TryParse(gm.players[o].ToDictionary()["Driving"], out drive))
+				{
+					drive = 0;
+				}
+				if (!Int32.TryParse(gm.players[o].ToDictionary()["Riding"], out ride))
+				{
+					ride = 0;
+				}
+				if (gm.players[o].ToDictionary()["Carrying"].Equals("true"))
+				{
+					carrying = true;
+				}
+				if (gm.players[o].ToDictionary()["Leading"].Equals("true"))
+				{
+					leading = true;
+				}
+				name = o;
+			}
+		}
+
+		
+		foreach (string o in players.Keys)
+		{ }
+
+			if (players[o]["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
+		{ }
+
+
+		var location = players[StaticInfo.name]["Location"].ToString();
+		location = location.Substring(1, location.Length - 2);
+		var cord = location.Split(',');
+		
+		int x = Convert.ToInt32(cord[0]);
+		int z = Convert.ToInt32(cord[1]);
+		*/
+	}
+
+
 	// Called from below in case Fireman chooses not to dodge or cannot
 	public void knockDown(int x_elem, int z_elem)
 	{
@@ -1399,6 +1495,7 @@ public class GameManager: MonoBehaviour
         int z=rand.Next(1,6);
 		fireManager.advanceFire(x, z, true);
 		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
+		fetchLocations();
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
 
