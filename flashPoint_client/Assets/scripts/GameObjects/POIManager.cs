@@ -11,22 +11,33 @@ using System;
 [Serializable]
 public class POIManager{
 
+    [SerializeField]
     public GameManager gm;
 
+    [SerializeField]
     public Dictionary<int[],POI> placedPOI=new Dictionary<int[],POI>();
+    [SerializeField]
     public Dictionary<int[], GameObject> poiLookup = new Dictionary<int[], GameObject>();
+    [SerializeField]
     public List<POI> poi = new List<POI>();
     
+    [SerializeField]
     public Dictionary<int[], POI> treated = new Dictionary<int[], POI>();
+    [SerializeField]
     public Dictionary<int[], GameObject> treatedLookup = new Dictionary<int[], GameObject>();
     
+    [SerializeField]
     public Dictionary<int[], POI> movingPOI = new Dictionary<int[], POI>();
+    [SerializeField]
     public Dictionary<int[], GameObject> movingPOILookup = new Dictionary<int[], GameObject>();
+    
+    [SerializeField]
     public Dictionary<int[], POI> movingTreated = new Dictionary<int[], POI>();
+    [SerializeField]
     public Dictionary<int[], GameObject> movingTreatedLookup = new Dictionary<int[], GameObject>();
 
     private System.Random rand = new System.Random();
-    private float posY = -1;
+    public float posY = -1;
 
     public int rescued = 0;
     public int killed = 0;
@@ -163,7 +174,7 @@ public class POIManager{
         }
     }
 
-    public void addPOI(int x,int z, int type)
+    public void addPOI(int x,int z, int type)//--done
     {
         int[] key = new int[] { x, z };
         POI p0 = null;
@@ -181,7 +192,7 @@ public class POIManager{
         poi.Remove(p0);
     }
 
-    public void kill(int x, int z)
+    public void kill(int x, int z) // --done, but need to be tested
     {
         int[] key = new int[] { x, z };
 
@@ -267,7 +278,7 @@ public class POIManager{
         }
     }
 
-    public void reveal(int x,int z)
+    public void reveal(int x,int z)//--done
     {
         Debug.Log("reveal");
         int[] key = new int[] { x, z };

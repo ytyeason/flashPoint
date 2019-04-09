@@ -14,4 +14,5 @@ public class MyClass
     public float timeElapsed;
     public string playerName;
     public Dictionary<int[], int> defaultHorizontalWallsMemo;
+    public Dictionary<int[],POI> placedPOI=new Dictionary<int[],POI>();
 }

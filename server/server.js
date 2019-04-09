@@ -15,6 +15,8 @@ var clients	= [];
 
 var Games_state = {};
 
+var poiM = {};
+
 function initialize_tile(room){//family version
     console.log("initializing tile");
     for (x = 0; x < 10; x++){
@@ -127,8 +129,13 @@ function initialize_vWall(room){
 }
 
 function addPOI(room,x,z,type){
-    console.log("initialize POI");
+    console.log("adding in POI");
     room['POIMemo'].push({[[[x],[z]]]: type});
+}
+
+function addMovingPOIMemo(room, x, z, type){
+    console.log("adding in moving POI");
+    room['movingPOIMemo'].push({[[[x],[z]]]: type});
 }
 
 // var selectRoles=[];
@@ -185,7 +192,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
               var room_state = Games_state[room_num];
               console.log(room_state);
               socket.emit("LOAD_GAME_SUCCESS",
-              {'room':Games, 'state': room_state, 'name':name, 'roomNumber':room_num, 'level':Games[data['room']]["level"], 'numberOfPlayer':Games[data['room']]["numberOfPlayer"],'numOfHazmat':Games[data['room']]["numOfHazmat"],'numOfHotspot':Games[data['room']]["numOfHotspot"] });
+              {'room':Games, 'state': room_state, 'name':name, 'roomNumber':room_num, 'level':Games[data['room']]["level"], 'numberOfPlayer':Games[data['room']]["numberOfPlayer"],'poiM':poiM });
           }else{
             console.log("Didn't found your name!")
             socket.emit("LOAD_GAME_SUCCESS", {'status':false});
@@ -203,7 +210,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var name = data['name'];
       Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"false","Leading":"false"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
 
-      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[]};
+      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[],"movingPOIMemo":[]};
 
       // var s = [1,2];
       // Games_state[room_number]['hWallMemo'].push({[s]: 0});
@@ -465,10 +472,22 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on('RevealPOI',function(data){
         var x = data['x'];
         var z = data['z'];
+        var room_number = data['room'];
+        var location = x+","+z;
 
         console.log("revealing poi");
         console.log(x);
         console.log(z);
+
+        //deleting poi from POIMemo if type is 1(false alarm)
+        var p = Games_state[room_number]['POIMemo'];
+        var i = p.findIndex(x => x[location]==1);
+        if (i !== -1) {
+          p.splice(i, 1);
+          Games_state[room_number]['POIMemo'] = p;
+          console.log("deleting false alarm from poiMemo");
+          console.log(Games_state[room_number]['POIMemo']);
+        }
 
         socket.broadcast.emit('revealPOI_Success', {"x":x, "z":z});
 
@@ -482,10 +501,32 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('UpdatePOILocation', function(data){
+      console.log("in UpdatePOILocation");
       var origx=data['origx'];
       var origz=data['origz'];
       var newx=data['newx'];
       var newz=data['newz'];
+      var room_number = data['room'];
+
+      var location = origx+','+origz;
+      console.log(room_number);
+      console.log(Games_state[room_number]);
+
+      //updating poi from POIMemo
+      var p = Games_state[room_number]['movingPOIMemo'];
+      console.log("old poi moving Memo:");
+      console.log(p);
+      var i = p.findIndex(x => x[location]!= null);
+
+      if (i !== -1) {
+          console.log("movingPOI found")
+          var type = p[i][location];
+          p.splice(i, 1);
+          p.push({[[[newx],[newz]]]: type});
+          Games_state[room_number]['movingPOIMemo'] = p;
+          console.log("new poi moving memo");
+          console.log(p);
+      }
 
       socket.broadcast.emit('UpdatePOILocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
     });
@@ -647,8 +688,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
         socket.broadcast.emit('LocationUpdate_SUCCESS',Games );
     });
 
-    socket.on('StartCarryV',function(data){
-      var room_number = data['room'];
+    socket.on('StartCarryV',function(data){//delete from POIMemo and add in movingPOIMemo
+        console.log("in StartCarryV");
+        var room_number = data['room'];
         var Location = data['Location'];
         var name = data['name'];
         var carryV=data['carryV'];
@@ -658,7 +700,22 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
         participants[name]['Carrying']=carryV;
+
+        var location = x+','+z;
+
+        //deleting poi from POIMemo
+        var p = Games_state[room_number]['POIMemo'];
+        var i = p.findIndex(x => x[location]!= null);
+        var type = p[i][location];
+        if (i !== -1) p.splice(i, 1);
+        Games_state[room_number]['POIMemo'] = p;
+        console.log("deleting poi with location: " +location+ " and type "+type);
+
+        addMovingPOIMemo(Games_state[room_number],x,z,type);
+
         console.log(Games[room_number]);
+        console.log(Games_state[room_number]['POIMemo']);
+        console.log(Games_state[room_number]['movingPOIMemo']);
         socket.broadcast.emit('StartCarryV_Success', {"Games":Games, "x":x, "z":z} );
     });
 
@@ -697,9 +754,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var z=data['z'];
       var type=data['type'];
       var room = data['room'];
-      console.log(Games_state[room]['POIMemo']);
 
       addPOI(Games_state[room],parseInt(x),parseInt(z),parseInt(type));
+      console.log(Games_state[room]['POIMemo']);
 
       socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type});
     });
@@ -799,7 +856,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       var i = poi.findIndex(x => x[location]!= null);
 
-      if (i !== undefined) poi.splice(i, 1);
+      if (i !== -1) poi.splice(i, 1);
 
       Games_state[room]['POIMemo'] = poi;
 
@@ -818,6 +875,14 @@ io.on('connection', function (socket) {//default event for client connect to ser
       if(Games[room]["confirmedPosition"].length==parseInt(Games[room]["numberOfPlayer"])){
         io.sockets.emit("ConfirmPosition_Success",{"Games":Games,"room":room})
       }
+    });
+
+    socket.on('savedGame',function(data){
+        console.log("saved game");
+        console.log(data);
+        poiM = data;
+
+        socket.emit('SaveGame_Success',data);
     });
 
 });

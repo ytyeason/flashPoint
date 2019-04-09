@@ -171,8 +171,6 @@ public class GameManager: MonoBehaviour
         else
         {
             Debug.Log("game_info is null");
-
-
         }
 
         if (game_info != null)
@@ -226,7 +224,8 @@ public class GameManager: MonoBehaviour
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
 
                 //poi -- not done
-                pOIManager = new POIManager(this,1);
+                //pOIManager = new POIManager(this,1);
+                pOIManager = StaticInfo.poiManager;
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this);
 
@@ -244,6 +243,12 @@ public class GameManager: MonoBehaviour
                 }
 
                 selectRolePanel.SetActive(false);
+                
+                Debug.Log("===============================");
+                Debug.Log(pOIManager.placedPOI);
+                Debug.Log(pOIManager.movingPOI);
+                Debug.Log(pOIManager.posY);
+                Debug.Log("===============================");
             }
 
         }
@@ -350,20 +355,17 @@ public class GameManager: MonoBehaviour
         myObject.level = 1;
         myObject.timeElapsed = 47.5f;
         myObject.playerName = "Dr Charles Francis";
+        myObject.placedPOI = pOIManager.placedPOI;
         //myObject.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
         //Debug.Log(wallManager.defaultHorizontalWallsMemo.Keys.Count);
 
-        int[] a = new int[] { 1, 1 };
-        MyObjectArrayWrapper m = new MyObjectArrayWrapper();
-        m.objects = a;
-        //m.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
-
-        socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(m)));
+        socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(myObject)));
     }
 
     void SaveGame_Success(SocketIOEvent obj)
     {
         Debug.Log("SaveGame_Success");
+        /*
         Debug.Log(obj.data);
         Debug.Log(obj.data[0]); // [{"1,2":0},{"2,2":0}]
         Debug.Log(obj.data[1]);
@@ -381,6 +383,7 @@ public class GameManager: MonoBehaviour
             Debug.Log(entry.Key);
             Debug.Log(entry.Value);
         }
+        */
         /*
         Dictionary<string,string> s = obj.data.ToDictionary();
         Debug.Log(JsonUtility.FromJson<GameManager>(s["doorManager"]));
@@ -390,6 +393,13 @@ public class GameManager: MonoBehaviour
         g.gm = JsonUtility.FromJson<GameManager>(s);
         Debug.Log(g + "------------");
         */
+        
+        Debug.Log(obj.data.ToString());
+        Debug.Log(JsonUtility.FromJson<POIManager>(obj.data.ToString()));
+        POIManager p = JsonUtility.FromJson<POIManager>(obj.data.ToString());
+        StaticInfo.poiManager = p;
+        Debug.Log(p.posY);
+        Debug.Log(p.placedPOI);
 
     }
 
@@ -1352,6 +1362,7 @@ public class GameManager: MonoBehaviour
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
         location["name"] = StaticInfo.name;
+        location["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdatePOILocation", new JSONObject(location));
     }

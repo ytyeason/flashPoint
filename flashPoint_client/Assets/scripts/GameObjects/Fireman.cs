@@ -20,7 +20,7 @@ public class Fireman
     public Boolean debugMode = true;        // Toggle this for more descriptive Debug.Log() output
     private static int REFRESH_AP = 4;
 
-    public String name = "eason";
+    public String name = "eason"; 
 
     public Colors color = Colors.White;//default to white
 
@@ -607,7 +607,7 @@ public class Fireman
 
     }
 
-    public void carryV(int x, int z)
+    public void carryV(int x, int z) //--done
     {
         
         this.carryingVictim = true;
@@ -616,7 +616,7 @@ public class Fireman
         gm.startCarryV(x,z);
     }
 
-    public void leadV(int x, int z)
+    public void leadV(int x, int z) 
     {
 
         this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);

@@ -1138,7 +1138,7 @@ public class OperationManager
         DestroyAll();
     }
 
-    public void treat()
+    public void treat() // not calling backend yet
     {
         Debug.Log("treat");
         Fireman fireman = gm.tileMap.selectedUnit;
@@ -1149,7 +1149,7 @@ public class OperationManager
         DestroyAll();
     }
 
-    public void carryV()
+    public void carryV() //-- done
     {
         Debug.Log("carryV");
         Fireman fireman = gm.tileMap.selectedUnit;
