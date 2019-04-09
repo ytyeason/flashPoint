@@ -29,7 +29,7 @@ public class GameManager: MonoBehaviour
     public GameObject[] hazPrefabs;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
-	public int damaged_wall_num = 0;
+	public int damaged_wall_num = 23;
 	public int rescued_vict_num = 0;
 
 	public JSONObject game_info = StaticInfo.game_info;
@@ -75,6 +75,17 @@ public class GameManager: MonoBehaviour
 	bool canLeft = false;
 	bool confirmDodgeDown = false;
 	bool wantDodge = false;
+	// Dodging GUI items:
+	public GameObject backdropL;    // For the dodge GameObjects
+	public GameObject backdropS;    // For dodge confirmations
+	public GameObject leftDodgeButton;
+	public GameObject upDodgeButton;
+	public GameObject rightDodgeButton;
+	public GameObject downDodgeButton;
+	public GameObject confirmDodge;
+	public GameObject declineDodge;
+	public ToggleActiveDodge toggleActiveDodge;
+
 
 	private JSONObject room;
     private JSONObject participants;
@@ -102,6 +113,8 @@ public class GameManager: MonoBehaviour
 
     public GameObject tooltipPanel;
     public Text tooltip;
+
+    public GameObject startingPositionPanel;
 
 
     void Start()
@@ -136,6 +149,7 @@ public class GameManager: MonoBehaviour
         socket.On("StopDrive_Success",stopDrive_Success);
         socket.On("StopRide_Success",StopRide_Success);
         socket.On("StopCarry_Success",StopCarry_Success);
+        socket.On("StopCarryH_Success",StopCarryH_Success);
         socket.On("StopLead_Success",StopLead_Success);
         socket.On("changeRole_Success",changeRole_Success);
         socket.On("RescueCarried_Success",rescueCarried_Success);
@@ -145,6 +159,7 @@ public class GameManager: MonoBehaviour
         socket.On("defeat_Success",defeat_Success);
         socket.On("ResetConfirmed_Success", ResetConfirmed_Success);
         socket.On("SaveGame_Success", SaveGame_Success);
+        socket.On("ConfirmPosition_Success",confirmPosition_Success);
 
         if (game_info != null)
         {
@@ -185,12 +200,14 @@ public class GameManager: MonoBehaviour
                 //    vehicleManager = new VehicleManager(vehicleTypes,this);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,0);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,0);
                 hazmatManager = new HazmatManager(this);
+				// Next 2 are for dodging:
+				vicinityManager = new VicinityManager(this, tileMap.tiles);
+				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
 
-
-                //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
-                displayAP();
+				//displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+				displayAP();
                 //   vehicleManager.StartvehicleManager();
 
                 tileMap.GenerateFiremanVisual(players);
@@ -199,6 +216,16 @@ public class GameManager: MonoBehaviour
                 if (!level.Equals("\"Family\""))
                 {
                     displayRole();
+                    if(StaticInfo.StartingPosition){
+                        changeRoleButton.SetActive(false);
+                    }
+                    
+                    // if(!StaticInfo.StartingPosition&&isMyTurn){
+                    //     changeRoleButton.SetActive(true);
+                    // }
+                    // if(!StaticInfo.StartingPosition&&!isMyTurn){
+                    //     changeRoleButton.SetActive(false);
+                    // }
                 }
                 else
                 {
@@ -206,6 +233,12 @@ public class GameManager: MonoBehaviour
                 }
 
                 selectRolePanel.SetActive(false);
+                if(StaticInfo.StartingPosition){
+                    startingPositionPanel.SetActive(true);
+                }else{
+                    startingPositionPanel.SetActive(false);
+                }
+                
             }
             else//if we're loading a game
             {
@@ -217,9 +250,10 @@ public class GameManager: MonoBehaviour
                 doorManager = new DoorManager(doorTypes, this,1);
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,1);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
+				vicinityManager = new VicinityManager(this, tileMap.tiles);
 
                 //poi -- not done
-                pOIManager = new POIManager(this);
+                pOIManager = new POIManager(this,1);
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this);
 
@@ -237,10 +271,13 @@ public class GameManager: MonoBehaviour
                 }
 
                 selectRolePanel.SetActive(false);
+                
+                startingPositionPanel.SetActive(false);
             }
 
         }
 
+        
         displayStats();
 
     }
@@ -265,12 +302,13 @@ public class GameManager: MonoBehaviour
 
     public void displayStats()
     {
-        stats.text = "Damaged Marker" + " : " + this.damaged_wall_num;
+        Debug.Log("DamagedWall:" + this.damaged_wall_num);
+        stats.text = "Damaged Marker" + " : " + wallManager.damagedWalls;
         stats.text+="\nRescued Victims" + " : " + pOIManager.rescued;
         stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
         if (!StaticInfo.level.Equals("Family"))
         {
-            stats.text += "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
+            stats.text+= "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
         }
        
     }
@@ -745,10 +783,22 @@ public class GameManager: MonoBehaviour
         if (result.Equals("True"))
         {
             isMyTurn = true;
+            if(!StaticInfo.StartingPosition&&isMyTurn){
+                changeRoleButton.SetActive(true);
+            }
+            if(!StaticInfo.StartingPosition&&!isMyTurn){
+                changeRoleButton.SetActive(false);
+            }
         }
         else
         {
             isMyTurn = false;
+            if(!StaticInfo.StartingPosition&&isMyTurn){
+                changeRoleButton.SetActive(true);
+            }
+            if(!StaticInfo.StartingPosition&&!isMyTurn){
+                changeRoleButton.SetActive(false);
+            }
         }
     }
 
@@ -765,6 +815,7 @@ public class GameManager: MonoBehaviour
             isMyTurn = true;
 			Debug.Log("It is now your turn! Refreshing AP");
 			fireman.refreshAP();
+            changeRoleButton.SetActive(true);
 		}
         else
         {
@@ -785,6 +836,7 @@ public class GameManager: MonoBehaviour
         {
             isMyTurn = true;
             sendNotification(". It's your turn.");
+            changeRoleButton.SetActive(true);
             // fireman.refreshAP();
         }
         else
@@ -958,6 +1010,7 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> revealPOI = new Dictionary<string, string>();
         revealPOI["x"] = x.ToString();
         revealPOI["z"] = z.ToString();
+        revealPOI["room"] = StaticInfo.roomNumber;
 
         socket.Emit("RevealPOI", new JSONObject(revealPOI));
     }
@@ -1176,7 +1229,7 @@ public class GameManager: MonoBehaviour
 						// Allow the active player to choose/begin trying to dodge etc.
 						isDodging = true;
 
-
+						toggleActiveDodge.activateGUI();
 						// Check if player wants to dodge
 						Debug.Log("    VET (1) Please decide if you'd like to dodge or not! " + Time.time);
 						yield return new WaitUntil(() => confirmDodgeDown == true);
@@ -1235,6 +1288,8 @@ public class GameManager: MonoBehaviour
 							Debug.Log("    VET (1.5) You have decided to not dodge. " + Time.time);
 							knockDown(x_elem, z_elem);
 						}
+
+						toggleActiveDodge.deactivateGUI();
 					}
 					// Player is unable to dodge or has chosen not to dodge:
 					else
@@ -1252,10 +1307,9 @@ public class GameManager: MonoBehaviour
 		// Update vicinity check if player is playing a Veteran currently
 		if (fireman.role == Role.Veteran) {
 			//yield return new WaitForSeconds(0.75f);
+			Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
+			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 
-			// Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
-
-			 vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 		}
 
 		// Kill the thread
@@ -1270,7 +1324,7 @@ public class GameManager: MonoBehaviour
 		// BEGIN OF WIP
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(1, 3, true);
+		fireManager.advanceFire(0, 0, true);
 		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
@@ -1285,17 +1339,17 @@ public class GameManager: MonoBehaviour
         operationManager.DestroyAll();
 
 
-		checkTurn();
+		// checkTurn();
         //do stuff here...
 
-        //if (isMyTurn)
-        //{
-		changeTurn();
-        //}
-        //else
-        //{
-        //    Debug.Log("This not your turn! Don't click end turn!");
-        //}
+        if (isMyTurn)
+        {
+		    changeTurn();
+        }
+        else
+        {
+           Debug.Log("This not your turn! Don't click end turn!");
+        }
     }
 
     public void checkTurn()
@@ -1397,6 +1451,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+        location["name"] = StaticInfo.name;
 
         socket.Emit("UpdatePOILocation", new JSONObject(location));
     }
@@ -1436,6 +1491,7 @@ public class GameManager: MonoBehaviour
     public void RemoveHazmat(int x,int z)
     {
         Debug.Log("RemovingHazmat");
+        Debug.Log("Removed Hazmat" + hazmatManager.removedHazmat);
         Dictionary<String, string> hazmat = new Dictionary<string, string>();
         hazmat["x"] = x.ToString();
         hazmat["z"] = z.ToString();
@@ -1614,6 +1670,35 @@ public class GameManager: MonoBehaviour
         pOIManager.dropPOI(x,z);
     }
 
+    public void StopCarryH(int x, int z){
+        Dictionary<string,string> carry=new Dictionary<string, string>();
+        carry["room"]=StaticInfo.roomNumber;
+        carry["name"]=StaticInfo.name;
+        carry["x"]=x.ToString();
+        carry["z"]=z.ToString();
+        socket.Emit("StopCarry",new JSONObject(carry));
+    }
+
+    public void StopCarryH_Success(SocketIOEvent obj){
+        int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+        hazmatManager.dropHazmat(x,z);
+    }
+
     public void StopLead(int x, int z){
         Dictionary<string,string> carry=new Dictionary<string, string>();
         carry["room"]=StaticInfo.roomNumber;
@@ -1650,6 +1735,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        poi["room"] = StaticInfo.roomNumber;
 
         socket.Emit("AddPOI", new JSONObject(poi));
     }
@@ -1669,6 +1755,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
+        
 
         socket.Emit("AddHazmat", new JSONObject(poi));
     }
@@ -1832,6 +1919,18 @@ public class GameManager: MonoBehaviour
                 fireman.setRole((Role)i);
                 StaticInfo.role=(Role)i;
                 fireman.setAP(fireman.FreeAP - 2);
+                if(fireman.carriedHazmat!=null){
+                    pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
+                    this.StopCarry(fireman.currentX/6,fireman.currentZ/6);
+                }
+                if(fireman.ledPOI!=null){
+                    pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
+                    this.StopLead(fireman.currentX/6,fireman.currentZ/6);
+                }
+                if(fireman.carriedHazmat!=null){
+                    hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
+                    this.StopCarryH(fireman.currentX/6,fireman.currentZ/6);
+                }
                 displayRole();
                 Dictionary<string, string> change = new Dictionary<string, string>();
                 change["room"] = StaticInfo.roomNumber;
@@ -1839,6 +1938,13 @@ public class GameManager: MonoBehaviour
                 change["role"] = ((int)StaticInfo.role).ToString();
                 change["oldRole"] = ((int)oldRole).ToString();
                 socket.Emit("changeRole", new JSONObject(change));
+                int vx=this.enG.x;
+                int vz=this.enG.z;
+                fireman.currentX=vx/6;
+                fireman.currentZ=vz/6;
+                fireman.s.transform.position=new Vector3(fireman.currentX*6, 0.2f, fireman.currentZ*6);
+                UpdateLocation(fireman.currentX,fireman.currentZ,fireman.name);
+                
                 break;
             }
         }
@@ -1863,6 +1969,7 @@ public class GameManager: MonoBehaviour
         if(!level.Equals("Family")){
             displayRole();
         }
+        
     }
 
     public void initializePOI(){
@@ -1913,6 +2020,7 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> kill=new Dictionary<string, string>();
         kill["x"]=x.ToString();
         kill["z"]=z.ToString();
+        kill["room"] = StaticInfo.roomNumber;
         socket.Emit("KillPOI",new JSONObject(kill));
     }
 
@@ -1927,26 +2035,84 @@ public class GameManager: MonoBehaviour
     public void victory_Success(SocketIOEvent obj)
     {
         Debug.Log("Update victory");
+        if (obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber))
+        {
+            SceneManager.LoadScene("Win");
+        }
+        
     }
 
     public void defeat_Success(SocketIOEvent obj)
     {
         Debug.Log("Update defeat");
+        if (obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber))
+        {
+            SceneManager.LoadScene("gameOver");
+        }
     }
 
     public void victory()
     {
         Debug.Log("You win!");
-        socket.Emit("victory");
-        SceneManager.LoadScene("Win");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber;
+        socket.Emit("victory",new JSONObject(data));
+        //
     }
 
 
     public void defeat()
     {
         Debug.Log("Game Over!");
-        socket.Emit("defeat");
-        SceneManager.LoadScene("gameOver");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber;
+        socket.Emit("defeat", new JSONObject(data));
+        //;
+    }
+
+    public void confirmPosition(){
+
+        int x=(int)fireman.s.transform.position.x;
+        int z=(int)fireman.s.transform.position.z;
+
+        fireman.currentX=x;
+        fireman.currentZ=z;
+
+        StaticInfo.Location=new int[]{x,z};
+
+        Dictionary<string,string> position=new Dictionary<string, string>();
+        position["x"]=x.ToString();
+        position["z"]=z.ToString();
+        position["room"]=StaticInfo.roomNumber;
+        position["name"]=StaticInfo.name;
+
+        socket.Emit("ConfirmPosition",new JSONObject(position));
+    }
+
+    public void confirmPosition_Success(SocketIOEvent obj){
+        room = obj.data["Games"][StaticInfo.roomNumber];
+        participants = room["participants"];
+        level = room["level"].ToString();
+        numberOfPlayer = room["numberOfPlayer"].ToString();
+
+        List<string> p = participants.keys;
+        foreach (var v in p)
+        {
+            var o = participants[v];
+            players[v] = o;
+            // Debug.Log(v);
+            // Debug.Log(players[v]);
+        }
+        tileMap.UpdateFiremanVisual(players);
+        displayRole();
+        if(obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber)){
+            StaticInfo.StartingPosition=false;
+            startingPositionPanel.SetActive(false);
+            if(!StaticInfo.level.Equals("Family")){
+                changeRoleButton.SetActive(true);
+            }
+        }
+        
     }
 
 }

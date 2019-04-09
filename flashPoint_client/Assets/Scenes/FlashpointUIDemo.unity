@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4366756, g: 0.48427135, b: 0.56452316, a: 1}
+  m_IndirectSpecularColor: {r: 0.43667564, g: 0.48427135, b: 0.5645232, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -624,6 +624,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -651,6 +652,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -664,10 +666,6 @@ MonoBehaviour:
                   killed: 0
                 Prefab: {fileID: 0}
               carriedHazmat:
-                hm:
-                  numOfHazmat: 0
-                  additionalHotspot: 0
-                  removedHazmat: 0
                 status: 0
                 prefab: {fileID: 0}
               ledPOI:
@@ -686,11 +684,6 @@ MonoBehaviour:
                 poi: []
                 rescued: 0
                 killed: 0
-              hazamatManager:
-                gm: {fileID: 0}
-                numOfHazmat: 0
-                additionalHotspot: 0
-                removedHazmat: 0
               role: 0
               level: 
             strings: []
@@ -710,6 +703,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -725,11 +719,6 @@ MonoBehaviour:
               killed: 0
             Prefab: {fileID: 0}
           carriedHazmat:
-            hm:
-              gm: {fileID: 0}
-              numOfHazmat: 0
-              additionalHotspot: 0
-              removedHazmat: 0
             status: 0
             prefab: {fileID: 0}
           ledPOI:
@@ -750,11 +739,6 @@ MonoBehaviour:
             poi: []
             rescued: 0
             killed: 0
-          hazamatManager:
-            gm: {fileID: 0}
-            numOfHazmat: 0
-            additionalHotspot: 0
-            removedHazmat: 0
           role: 0
           level: 
         strings: []
@@ -774,6 +758,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -789,11 +774,6 @@ MonoBehaviour:
           killed: 0
         Prefab: {fileID: 0}
       carriedHazmat:
-        hm:
-          gm: {fileID: 0}
-          numOfHazmat: 0
-          additionalHotspot: 0
-          removedHazmat: 0
         status: 0
         prefab: {fileID: 0}
       ledPOI:
@@ -814,11 +794,6 @@ MonoBehaviour:
         poi: []
         rescued: 0
         killed: 0
-      hazamatManager:
-        gm: {fileID: 0}
-        numOfHazmat: 0
-        additionalHotspot: 0
-        removedHazmat: 0
       role: 0
       level: 
     strings: []
@@ -1232,6 +1207,81 @@ CanvasRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 328500560}
+  m_CullTransparentMesh: 0
+--- !u!1 &332549402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 332549403}
+  - component: {fileID: 332549405}
+  - component: {fileID: 332549404}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &332549403
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332549402}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1749941571}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &332549404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332549402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Confirm
+--- !u!222 &332549405
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 332549402}
   m_CullTransparentMesh: 0
 --- !u!1 &352802842
 GameObject:
@@ -3897,6 +3947,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -3924,6 +3975,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -3937,10 +3989,6 @@ MonoBehaviour:
                   killed: 0
                 Prefab: {fileID: 0}
               carriedHazmat:
-                hm:
-                  numOfHazmat: 0
-                  additionalHotspot: 0
-                  removedHazmat: 0
                 status: 0
                 prefab: {fileID: 0}
               ledPOI:
@@ -3959,11 +4007,6 @@ MonoBehaviour:
                 poi: []
                 rescued: 0
                 killed: 0
-              hazamatManager:
-                gm: {fileID: 0}
-                numOfHazmat: 0
-                additionalHotspot: 0
-                removedHazmat: 0
               role: 0
               level: 
             strings: []
@@ -3983,6 +4026,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -3998,11 +4042,6 @@ MonoBehaviour:
               killed: 0
             Prefab: {fileID: 0}
           carriedHazmat:
-            hm:
-              gm: {fileID: 0}
-              numOfHazmat: 0
-              additionalHotspot: 0
-              removedHazmat: 0
             status: 0
             prefab: {fileID: 0}
           ledPOI:
@@ -4023,11 +4062,6 @@ MonoBehaviour:
             poi: []
             rescued: 0
             killed: 0
-          hazamatManager:
-            gm: {fileID: 0}
-            numOfHazmat: 0
-            additionalHotspot: 0
-            removedHazmat: 0
           role: 0
           level: 
         strings: []
@@ -4047,6 +4081,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -4062,11 +4097,6 @@ MonoBehaviour:
           killed: 0
         Prefab: {fileID: 0}
       carriedHazmat:
-        hm:
-          gm: {fileID: 0}
-          numOfHazmat: 0
-          additionalHotspot: 0
-          removedHazmat: 0
         status: 0
         prefab: {fileID: 0}
       ledPOI:
@@ -4087,11 +4117,6 @@ MonoBehaviour:
         poi: []
         rescued: 0
         killed: 0
-      hazamatManager:
-        gm: {fileID: 0}
-        numOfHazmat: 0
-        additionalHotspot: 0
-        removedHazmat: 0
       role: 0
       level: 
     strings: []
@@ -5058,6 +5083,7 @@ RectTransform:
   - {fileID: 833628329}
   - {fileID: 1415440063}
   - {fileID: 1524792033}
+  - {fileID: 1913100965}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5764,6 +5790,129 @@ CanvasRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1749190483}
+  m_CullTransparentMesh: 0
+--- !u!1 &1749941570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1749941571}
+  - component: {fileID: 1749941574}
+  - component: {fileID: 1749941573}
+  - component: {fileID: 1749941572}
+  m_Layer: 5
+  m_Name: Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1749941571
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1749941570}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 332549403}
+  m_Father: {fileID: 1913100965}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1749941572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1749941570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1749941573}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2108558122}
+        m_MethodName: confirmPosition
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &1749941573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1749941570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1749941574
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1749941570}
   m_CullTransparentMesh: 0
 --- !u!1 &1759544480
 GameObject:
@@ -6519,6 +6668,76 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1870306900}
   m_CullTransparentMesh: 0
+--- !u!1 &1913100964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1913100965}
+  - component: {fileID: 1913100967}
+  - component: {fileID: 1913100966}
+  m_Layer: 5
+  m_Name: ConfirmPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1913100965
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1913100964}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1749941571}
+  m_Father: {fileID: 1516093583}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 260.00003, y: -272.00006}
+  m_SizeDelta: {x: 80, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1913100966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1913100964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &1913100967
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1913100964}
+  m_CullTransparentMesh: 0
 --- !u!1 &1953816689
 GameObject:
   m_ObjectHideFlags: 0
@@ -7186,6 +7405,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -7213,6 +7433,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -7226,10 +7447,6 @@ MonoBehaviour:
                   killed: 0
                 Prefab: {fileID: 0}
               carriedHazmat:
-                hm:
-                  numOfHazmat: 0
-                  additionalHotspot: 0
-                  removedHazmat: 0
                 status: 0
                 prefab: {fileID: 0}
               ledPOI:
@@ -7248,11 +7465,6 @@ MonoBehaviour:
                 poi: []
                 rescued: 0
                 killed: 0
-              hazamatManager:
-                gm: {fileID: 0}
-                numOfHazmat: 0
-                additionalHotspot: 0
-                removedHazmat: 0
               role: 0
               level: 
             strings: []
@@ -7272,6 +7484,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -7287,11 +7500,6 @@ MonoBehaviour:
               killed: 0
             Prefab: {fileID: 0}
           carriedHazmat:
-            hm:
-              gm: {fileID: 0}
-              numOfHazmat: 0
-              additionalHotspot: 0
-              removedHazmat: 0
             status: 0
             prefab: {fileID: 0}
           ledPOI:
@@ -7312,11 +7520,6 @@ MonoBehaviour:
             poi: []
             rescued: 0
             killed: 0
-          hazamatManager:
-            gm: {fileID: 0}
-            numOfHazmat: 0
-            additionalHotspot: 0
-            removedHazmat: 0
           role: 0
           level: 
         strings: []
@@ -7336,6 +7539,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -7351,11 +7555,6 @@ MonoBehaviour:
           killed: 0
         Prefab: {fileID: 0}
       carriedHazmat:
-        hm:
-          gm: {fileID: 0}
-          numOfHazmat: 0
-          additionalHotspot: 0
-          removedHazmat: 0
         status: 0
         prefab: {fileID: 0}
       ledPOI:
@@ -7376,11 +7575,6 @@ MonoBehaviour:
         poi: []
         rescued: 0
         killed: 0
-      hazamatManager:
-        gm: {fileID: 0}
-        numOfHazmat: 0
-        additionalHotspot: 0
-        removedHazmat: 0
       role: 0
       level: 
     strings: []
@@ -7401,11 +7595,6 @@ MonoBehaviour:
     poi: []
     rescued: 0
     killed: 0
-  hazmatManager:
-    gm: {fileID: 0}
-    numOfHazmat: 0
-    additionalHotspot: 0
-    removedHazmat: 0
   vicinityManager: {fileID: 0}
   prefabs:
   - {fileID: 114907898622071792, guid: 1f03876a10ceb45b2b15fc693785c6f5, type: 2}
@@ -7449,6 +7638,15 @@ MonoBehaviour:
   upDodgeDown: 0
   rightDodgeDown: 0
   downDodgeDown: 0
+  backdropL: {fileID: 352802842}
+  backdropS: {fileID: 999210464}
+  leftDodgeButton: {fileID: 1442591060}
+  upDodgeButton: {fileID: 26547857}
+  rightDodgeButton: {fileID: 1411933436}
+  downDodgeButton: {fileID: 1953816689}
+  confirmDodge: {fileID: 833628328}
+  declineDodge: {fileID: 1415440062}
+  toggleActiveDodge: {fileID: 0}
   amB: {fileID: 0}
   enG: {fileID: 0}
   fireman:
@@ -7474,6 +7672,7 @@ MonoBehaviour:
                 color: 0
                 AP: 0
                 FreeAP: 0
+                VetExpAP: 0
                 savedAP: 0
                 specialtyAP: 0
                 remainingSpecAp: 0
@@ -7494,10 +7693,6 @@ MonoBehaviour:
                 pOIManager:
                   rescued: 0
                   killed: 0
-                hazamatManager:
-                  numOfHazmat: 0
-                  additionalHotspot: 0
-                  removedHazmat: 0
                 role: 0
                 level: 
               strings: []
@@ -7517,6 +7712,7 @@ MonoBehaviour:
             color: 0
             AP: 0
             FreeAP: 0
+            VetExpAP: 0
             savedAP: 0
             specialtyAP: 0
             remainingSpecAp: 0
@@ -7532,11 +7728,6 @@ MonoBehaviour:
                 killed: 0
               Prefab: {fileID: 0}
             carriedHazmat:
-              hm:
-                gm: {fileID: 0}
-                numOfHazmat: 0
-                additionalHotspot: 0
-                removedHazmat: 0
               status: 0
               prefab: {fileID: 0}
             ledPOI:
@@ -7557,11 +7748,6 @@ MonoBehaviour:
               poi: []
               rescued: 0
               killed: 0
-            hazamatManager:
-              gm: {fileID: 0}
-              numOfHazmat: 0
-              additionalHotspot: 0
-              removedHazmat: 0
             role: 0
             level: 
           strings: []
@@ -7581,6 +7767,7 @@ MonoBehaviour:
         color: 0
         AP: 0
         FreeAP: 0
+        VetExpAP: 0
         savedAP: 0
         specialtyAP: 0
         remainingSpecAp: 0
@@ -7596,11 +7783,6 @@ MonoBehaviour:
             killed: 0
           Prefab: {fileID: 0}
         carriedHazmat:
-          hm:
-            gm: {fileID: 0}
-            numOfHazmat: 0
-            additionalHotspot: 0
-            removedHazmat: 0
           status: 0
           prefab: {fileID: 0}
         ledPOI:
@@ -7621,11 +7803,6 @@ MonoBehaviour:
           poi: []
           rescued: 0
           killed: 0
-        hazamatManager:
-          gm: {fileID: 0}
-          numOfHazmat: 0
-          additionalHotspot: 0
-          removedHazmat: 0
         role: 0
         level: 
       strings: []
@@ -7645,6 +7822,7 @@ MonoBehaviour:
     color: 0
     AP: 0
     FreeAP: 0
+    VetExpAP: 0
     savedAP: 0
     specialtyAP: 0
     remainingSpecAp: 0
@@ -7660,11 +7838,6 @@ MonoBehaviour:
         killed: 0
       Prefab: {fileID: 0}
     carriedHazmat:
-      hm:
-        gm: {fileID: 0}
-        numOfHazmat: 0
-        additionalHotspot: 0
-        removedHazmat: 0
       status: 0
       prefab: {fileID: 0}
     ledPOI:
@@ -7685,11 +7858,6 @@ MonoBehaviour:
       poi: []
       rescued: 0
       killed: 0
-    hazamatManager:
-      gm: {fileID: 0}
-      numOfHazmat: 0
-      additionalHotspot: 0
-      removedHazmat: 0
     role: 0
     level: 
   isMyTurn: 0
@@ -7702,6 +7870,7 @@ MonoBehaviour:
   stats: {fileID: 1147263957}
   tooltipPanel: {fileID: 1859356381}
   tooltip: {fileID: 328500562}
+  startingPositionPanel: {fileID: 1913100964}
 --- !u!4 &2108558123
 Transform:
   m_ObjectHideFlags: 0
@@ -7747,7 +7916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.00006532669, y: 215.4}
+  m_AnchoredPosition: {x: -0.000058174133, y: 215.4}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881

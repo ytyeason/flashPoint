@@ -17,7 +17,7 @@ public class Wall : MonoBehaviour
 	void OnMouseUp()
 	{
 		Debug.Log("MOUSE UP WALL");
-		if (wallMap.gm.isMyTurn)
+		if (wallMap.gm.isMyTurn&&!StaticInfo.StartingPosition)
 		{
 			int wallX = x / 6;
 			int wallZ = z / 6;

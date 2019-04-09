@@ -42,6 +42,8 @@ public class WallManager
 
 	public GameManager gm;
 
+    public int damagedWalls = 23;
+
     void StartWallManager()
 	{
 		PopulateWalls();
@@ -268,9 +270,10 @@ public class WallManager
 						GameObject old = hwallStores[key];
 						//Destroy(old);
 						gm.DestroyObject(old);
-						gm.damaged_wall_num++;		// Increment the GUI counter to represent # of damaged walls
+						damagedWalls++;		// Increment the GUI counter to represent # of damaged walls
+                        Debug.Log(damagedWalls);
                         gm.displayStats();
-                        if (gm.damaged_wall_num >= 24)
+                        if (damagedWalls >= 24)
                         {
                             Debug.Log("24 damaged markers");
                             gm.defeat();
@@ -309,9 +312,9 @@ public class WallManager
 						GameObject old = vwallStores[key];
 						//Destroy(old);
 						gm.DestroyObject(old);
-						gm.damaged_wall_num++;     // Increment the GUI counter to represent # of damaged walls
+						damagedWalls++;     // Increment the GUI counter to represent # of damaged walls
                         gm.displayStats();
-                        if (gm.damaged_wall_num >= 24)
+                        if (damagedWalls >= 24)
                         {
                             Debug.Log("24 damaged markers");
                             gm.defeat();

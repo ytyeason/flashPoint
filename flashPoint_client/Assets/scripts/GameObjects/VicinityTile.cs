@@ -12,21 +12,5 @@ public class VicinityTile : MonoBehaviour {
 	public VicinityTile(int in_x, int in_z){
 		x_coord = in_x;
 		z_coord = in_z;
-	}
-
-	public void setDist(int in_distFromVet){
-		distFromVet = in_distFromVet;
-	}
-	
-	/*
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-	*/
+	}	
 }

@@ -1113,7 +1113,10 @@ public class OperationManager
 
 
         }
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
 
     }
@@ -1124,7 +1127,10 @@ public class OperationManager
         Fireman fireman = gm.tileMap.selectedUnit;
 
         fireman.extingSmoke(x, z);
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1134,7 +1140,10 @@ public class OperationManager
         Fireman fireman = gm.tileMap.selectedUnit;
 
         fireman.extingFire(x, z);
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1145,7 +1154,10 @@ public class OperationManager
 
         fireman.treat(x, z);
 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1156,7 +1168,10 @@ public class OperationManager
 
         fireman.carryV(x, z);
 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1167,7 +1182,10 @@ public class OperationManager
 
         fireman.leadV(x, z);
 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1178,7 +1196,10 @@ public class OperationManager
 
         fireman.removeHazmet(x, z);
 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1189,7 +1210,10 @@ public class OperationManager
 
         fireman.carryHazmat(x, z);
 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1200,7 +1224,10 @@ public class OperationManager
 
         fireman.flipPOI(x, z);
 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1239,7 +1266,10 @@ public class OperationManager
         }
         controlled = new Fireman(x * 6, z * 6, role, drive, ride, carrying, leading, name);
 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1294,7 +1324,10 @@ public class OperationManager
         fireman.currentX=x*6;
         fireman.currentZ=z*6;
         // gm.confirmed=0;
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
         Debug.Log("fireman is at x:" + fireman.currentX);
         Debug.Log("fireman is at z:" + fireman.currentZ);
@@ -1321,7 +1354,10 @@ public class OperationManager
         // gm.startDrive(1);
         // amb.moveNextStation(x,z);
         gm.UpdateAmbulanceLocation(x*6, z*6,vx,vz);
-        opPanel.SetActive(false); 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
+        opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
 
     }
@@ -1350,7 +1386,10 @@ public class OperationManager
                 gm.startRide(1);
             }
         }      
-        opPanel.SetActive(false); 
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
+        opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1426,13 +1465,19 @@ public class OperationManager
             gm.tileMap.buildNewTile(rng_X, rng_Z - 1, 0);
             gm.UpdateTile(rng_X, rng_Z - 1, 0);
         }
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
     public void stopDrive()
     {
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1440,7 +1485,10 @@ public class OperationManager
     {
         Fireman fireman = gm.tileMap.selectedUnit;
         fireman.riding = false;
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
     }
 
@@ -1482,7 +1530,11 @@ public class OperationManager
                 }
             }
         }
-
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
+        opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
+        DestroyAll();
     }
 
     public void dropHazmat()
@@ -1491,18 +1543,28 @@ public class OperationManager
         fireman.carryingVictim = false;
         fireman.carriedHazmat = null;
         gm.hazmatManager.dropHazmat(x, z);
-        gm.StopCarry(x, z);
+        gm.StopCarryH(x, z);
         if (x == 0 || x == 9 || z == 0 || z == 7)
         {
             gm.hazmatManager.removeHazmat(x, z);
             gm.RemoveHazmat(x, z);
         }
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
+        opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
+        DestroyAll();
     }
 
     public void stopCommand()
     {
         controlled = null;
         inCommand = false;
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
+        opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
+        DestroyAll();
     }
 
     public void cancel()
@@ -1511,7 +1573,10 @@ public class OperationManager
             gm.fireman.riding=false;
             gm.startRide(0);
         }
+        gm.selectRolePanel.SetActive(false);
+        gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
+        gm.changeRoleButton.SetActive(false);
         DestroyAll();
         Debug.Log("cancel");
     }

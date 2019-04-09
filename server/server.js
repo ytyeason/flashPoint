@@ -126,6 +126,11 @@ function initialize_vWall(room){
 
 }
 
+function addPOI(room,x,z,type){
+    console.log("initialize POI");
+    room['POIMemo'].push({[[[x],[z]]]: type});
+}
+
 // var selectRoles=[];
 
 io.on('connection', function (socket) {//default event for client connect to server
@@ -233,6 +238,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       Games[room_number]["numberOfHazmat"]=numberOfHazmat;
       Games[room_number]["numberOfHotspot"]=numberOfHotspot;
       Games[room_number]["selectedRoles"]=[];
+      Games[room_number]["confirmedPosition"]=[];
       console.log(Games[room_number]+level);
       socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
     });
@@ -557,7 +563,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           //     console.log("move with");
           //     ride[i]=n;
           //   }
-            
+
           // }
         }
         // console.log("sending");
@@ -698,6 +704,10 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var x=data['x'];
       var z=data['z'];
       var type=data['type'];
+      var room = data['room'];
+      console.log(Games_state[room]['POIMemo']);
+
+      addPOI(Games_state[room],parseInt(x),parseInt(z),parseInt(type));
 
       socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type});
     });
@@ -741,6 +751,15 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var z=data['z'];
       Games[room]["participants"][name]['Carrying']="false";
       io.sockets.emit('StopCarry_Success',{"Games":Games,"x":x,"z":z});
+    });
+
+    socket.on('StopCarryH',function(data){
+      var name=data['name'];
+      var room=data['room'];
+      var x=data['x'];
+      var z=data['z'];
+      Games[room]["participants"][name]['Carrying']="false";
+      io.sockets.emit('StopCarryH_Success',{"Games":Games,"x":x,"z":z});
     });
 
     socket.on('StopLead',function(data){
@@ -790,7 +809,44 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on('KillPOI',function(data){
       var x=data['x'];
       var z=data['z'];
+      var room = data['room'];
+      var location = x+','+z;
+
+      var poi = Games_state[room]['POIMemo'];
+
+      var i = poi.findIndex(x => x[location]!= null);
+
+      if (i !== undefined) poi.splice(i, 1);
+
+      Games_state[room]['POIMemo'] = poi;
+
       socket.broadcast.emit('KillPOI_Success',{"x":x,"z":z});
+    });
+
+    socket.on('ConfirmPosition',function(data){
+      var x=data['x'];
+      var z=data['z'];
+      var room=data['room'];
+      var name=data['name'];
+      Games[room]["participants"][name]["Location"]=x+","+z;
+      if(!Games[room]["confirmedPosition"].includes(name)){
+        Games[room]["confirmedPosition"].push(name);
+      }
+      if(Games[room]["confirmedPosition"].length==parseInt(Games[room]["numberOfPlayer"])){
+        io.sockets.emit("ConfirmPosition_Success",{"Games":Games,"room":room})
+      }
+    });
+
+    socket.on('victory',function(data){
+      var room=data['room'];
+      Games[room]=undefined;
+      io.sockets.emit('victory_Success',{"room":room});
+    });
+
+    socket.on('defeat',function(data){
+      var room=data['room'];
+      Games[room]=undefined;
+      io.sockets.emit('defeat_Success',{"room":room});
     });
 
 });

@@ -45,7 +45,7 @@ public class HazmatManager{
                 additionalHotspot += 3;
                 break; 
         }
-        if (StaticInfo.level == "Random")
+        if (StaticInfo.level .Equals("Random") )
         {
             if (!Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
@@ -208,6 +208,7 @@ public class HazmatManager{
         }
         gm.DestroyObject(get(key[0],key[1],lookUp));
         removedHazmat++;
+        gm.displayStats(); 
     }
 
     public void moveHazmat(int origx, int origz, int newx, int newz)

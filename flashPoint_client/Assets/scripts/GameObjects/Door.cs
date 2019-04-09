@@ -19,7 +19,7 @@ public class Door : MonoBehaviour
 	void OnMouseUp()
 	{
 		Debug.Log("MOUSE UP DOOR");
-		if (doorMap.gm.isMyTurn)
+		if (doorMap.gm.isMyTurn && !StaticInfo.StartingPosition)
 		{
 			int doorX = x / 6;
 			int doorZ = z / 6;
