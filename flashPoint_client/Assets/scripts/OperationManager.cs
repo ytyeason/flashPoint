@@ -318,7 +318,7 @@ public class OperationManager
                         {
                             for (int j = minZ; j <= maxZ; j++)
                             {
-                                if (o["Location"].Equals("\"" + i * 6 + "," + j * 6 + "\""))
+                                if (o["Location"].ToString().Equals("\"" + i * 6 + "," + j * 6 + "\""))
                                 {
                                     existsF = true;
                                     Debug.Log("another fireman here");
@@ -394,7 +394,7 @@ public class OperationManager
                 }
 
                 if (moveTo) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && this.commandMoves + fireman.FreeAP >= requiredAP&&commandMoves!=0) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -411,7 +411,7 @@ public class OperationManager
                 {
                     foreach (JSONObject o in gm.players.Values)
                     {
-                        if (o["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+                        if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
                         {
                             Operation op = new Operation(this, OperationType.Command);
                             possibleOp.Add(op);
@@ -663,7 +663,7 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("\"Family\"")) // fire deck gun && ride
+            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("Family")) // fire deck gun && ride
             {
                 // Debug.Log("in deckgun");
                 double vx = (double)gm.enG.x / 6;
@@ -726,7 +726,7 @@ public class OperationManager
                             for (int j = minZ; j <= maxZ; j++)
                             {
                                 // Debug.Log(o["Location"]);
-                                if (o["Location"].Equals("\"" + i * 6 + "," + j * 6 + "\""))
+                                if (o["Location"].ToString().Equals("\"" + i * 6 + "," + j * 6 + "\""))
                                 {
                                     existsF = true;
                                     // Debug.Log("another fireman here");
@@ -738,7 +738,7 @@ public class OperationManager
                         if (existsF) break;
                     }
                     // Debug.Log(existsF);
-                    if (!existsF && fireman.FreeAP >= requiredAP && !StaticInfo.level.Equals("\"Family\"") && fireman.role != Role.Dog)
+                    if (!existsF && fireman.FreeAP >= requiredAP && !StaticInfo.level.Equals("Family") && fireman.role != Role.Dog)
                     {
                         Operation op = new Operation(this, OperationType.DeckGun);
                         possibleOp.Add(op);
@@ -758,7 +758,7 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 4 && !StaticInfo.level.Equals("\"Family\"") && gm.tileMap.selectedUnit.role != Role.Dog) // ambulance
+            if (gm.tileMap.tiles[x, z] == 4 && !StaticInfo.level.Equals("Family") && gm.tileMap.selectedUnit.role != Role.Dog) // ambulance
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
@@ -823,7 +823,7 @@ public class OperationManager
                 }
 
                 if (moveTo1) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + gm.fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && this.commandMoves + gm.fireman.FreeAP >= requiredAP&&commandMoves!=0) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -839,7 +839,8 @@ public class OperationManager
                 {
                     foreach (JSONObject o in gm.players.Values)
                     {
-                        if (o["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+                        Debug.Log(o["Location"]);
+                        if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
                         {
                             Operation op = new Operation(this, OperationType.Command);
                             possibleOp.Add(op);
@@ -864,8 +865,11 @@ public class OperationManager
             {
                 foreach (JSONObject o in gm.players.Values)
                 {
-                    if (o["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+                    Debug.Log(o["Location"]);
+                    Debug.Log("\"" + x * 6 + "," + z * 6 + "\"");
+                    if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
                     {
+                        Debug.Log("should command");
                         Operation op = new Operation(this, OperationType.Command);
                         possibleOp.Add(op);
                     }
@@ -939,15 +943,7 @@ public class OperationManager
                             requiredAP = 4;
                         }
 
-                        if (controlled.role == Role.CAFS && commandMoves >= requiredAP) // not commanded before
-                        {
-                            if (moveTo && fireman.remainingSpecAp >= requiredAP)
-                            {
-                                Operation op = new Operation(this, OperationType.Move);
-                                possibleOp.Add(op);
-                            }
-                        }
-                        if (controlled.role == Role.CAFS && commandMoves + fireman.FreeAP >= requiredAP) // not commanded before
+                        if (controlled.role == Role.CAFS && commandMoves + fireman.FreeAP >= requiredAP&&commandMoves!=0) // not commanded before
                         {
                             if (moveTo)
                             {
@@ -1082,7 +1078,9 @@ public class OperationManager
                 controlled.riding = false;
                 gm.stopRide(controlled.name);
             }
-            gm.UpdateLocation(x, z, controlled.name);
+            gm.UpdateLocation(x*6, z*6, controlled.name);
+            controlled.currentX=x*6;
+            controlled.currentZ=z*6;
             int requiredAP = 1;
             if ((gm.tileMap.tiles[x, z] == 2 && gm.fireman.role != Role.Dog) || ((controlled.carryingVictim) && gm.fireman.role != Role.Dog))
             {
@@ -1249,7 +1247,7 @@ public class OperationManager
         string name = "";
         foreach (string o in gm.players.Keys)
         {
-            if (gm.players[o]["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+            if (gm.players[o]["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
             {
                 role = (Role)Int32.Parse(gm.players[o].ToDictionary()["Role"]);
                 if (!Int32.TryParse(gm.players[o].ToDictionary()["Driving"], out drive))
