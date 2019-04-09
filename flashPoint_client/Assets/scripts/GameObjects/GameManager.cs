@@ -116,6 +116,8 @@ public class GameManager: MonoBehaviour
 
     public GameObject startingPositionPanel;
 
+    private bool endOfTurn=false;
+
 
     void Start()
     {
@@ -281,6 +283,12 @@ public class GameManager: MonoBehaviour
 
         
         displayStats();
+        if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
+            changeRoleButton.SetActive(true);
+        }
+        if(!StaticInfo.StartingPosition&&!isMyTurn||endOfTurn){
+            changeRoleButton.SetActive(false);
+        }
 
     }
 
@@ -445,14 +453,14 @@ public class GameManager: MonoBehaviour
     void WallUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("wall update successful");
-        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
-        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
-        var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
-        var horizontal = Convert.ToInt32(obj.data.ToDictionary()["horizontal"]);
-        var fromExplosion=obj.data.ToDictionary()["fromExplosion"];
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        int type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
+        int horizontal = Convert.ToInt32(obj.data.ToDictionary()["horizontal"]);
+        string fromExplosion=obj.data.ToDictionary()["fromExplosion"];
         bool from=true;
         Debug.Log("fromExplosion: "+fromExplosion);
-        if(fromExplosion.Equals("true")){
+        if(fromExplosion.Equals("True")){
             from=true;
         }else{
             from=false;
@@ -474,10 +482,18 @@ public class GameManager: MonoBehaviour
 	void DoorUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("door update successful");
-        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
-        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
-        var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
-        var toType = Convert.ToInt32(obj.data.ToDictionary()["toType"]);
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        int type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
+        int toType = Convert.ToInt32(obj.data.ToDictionary()["toType"]);
+        string fromExplosion=obj.data.ToDictionary()["fromExplosion"];
+        bool det=true;
+        Debug.Log("fromExplosion:"+fromExplosion);
+        if(fromExplosion.Equals("True")){
+            det=true;
+        }else{
+            det=false;
+        }
 
         //Debug.Log(x);
         //Debug.Log(z);
@@ -488,7 +504,7 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["type"]);
         Debug.Log(obj.data.ToDictionary()["toType"]);
 
-        doorManager.ChangeDoor(x, z, toType, type);
+        doorManager.ChangeDoor(x, z, toType, type,det);
     }
 
     void TileUpdate_Success(SocketIOEvent obj)
@@ -832,12 +848,14 @@ public class GameManager: MonoBehaviour
 			Debug.Log("It is now your turn! Refreshing AP");
 			fireman.refreshAP();
             changeRoleButton.SetActive(true);
+            endOfTurn=false;
 		}
         else
         {
             isMyTurn = false;
 			Debug.Log("It is now someone else's turn!");
             fireman.refreshAP();
+            endOfTurn=false;
 		}
 
     }
@@ -900,6 +918,7 @@ public class GameManager: MonoBehaviour
     }
 
     public void JoinGame_Success(SocketIOEvent obj){
+        Debug.Log("in join game");
         string owner=obj.data.ToDictionary()["owner"];
         string room=obj.data.ToDictionary()["room"];
         if(room.Equals(StaticInfo.roomNumber)){
@@ -910,6 +929,7 @@ public class GameManager: MonoBehaviour
     }
 
     public void InitiateBoard(){
+        Debug.Log("Initiating Board");
         if(StaticInfo.level.Equals("Family")){ // Family
             //1. Place Fire
             tileMap.InitializeFamily();
@@ -1037,7 +1057,7 @@ public class GameManager: MonoBehaviour
         socket.Emit("UpdateWall", new JSONObject(updateWall));
     }
 
-    public void UpdateDoor(int x, int z, int toType, int type)
+    public void UpdateDoor(int x, int z, int toType, int type, bool fromExplosion)
     {
         Debug.Log("Update door");
         Dictionary<String, string> updateDoor = new Dictionary<string, string>();
@@ -1046,6 +1066,7 @@ public class GameManager: MonoBehaviour
         updateDoor["toType"] = toType.ToString();
         updateDoor["type"] = type.ToString();
         updateDoor["room"] = StaticInfo.roomNumber;
+        updateDoor["fromExplosion"]=fromExplosion.ToString();
 
         socket.Emit("UpdateDoor", new JSONObject(updateDoor));
     }
@@ -1290,13 +1311,15 @@ public class GameManager: MonoBehaviour
 							Debug.Log("    VET (3) Finished!" + Time.time);
 
 							// Need to drop Victim or Hazmat. NB Fireman can dodge if leading treated victim
-							if (fireman.carryingVictim == true)
+							if (fireman.carriedPOI!=null)
 							{
-								operationManager.dropV();
+								pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
+                                StopCarry(fireman.currentX/6,fireman.currentZ/6);
 							}
 							if (fireman.carriedHazmat != null)
 							{
-								operationManager.dropHazmat();
+								hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
+                                StopCarryH(fireman.currentX/6,fireman.currentZ/6);
 							}
 
 							// Player has chosen to move to the left:
@@ -1371,7 +1394,10 @@ public class GameManager: MonoBehaviour
 		// BEGIN OF WIP
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(1, 3, true);
+        System.Random rand=new System.Random();
+        int x=rand.Next(1,8);
+        int z=rand.Next(1,6);
+		fireManager.advanceFire(x, z, true);
 		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
@@ -1385,6 +1411,7 @@ public class GameManager: MonoBehaviour
         pOIManager.replenishPOI();
         operationManager.DestroyAll();
 
+        endOfTurn=true;
 
 		checkTurn();
         //do stuff here...

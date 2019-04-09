@@ -201,7 +201,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       var room_number = data['room'];
       var name = data['name'];
-      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"false","Leading":"false"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
+      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"False","Leading":"False"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
 
       Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[]};
 
@@ -297,7 +297,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
         participants[name]["Role"]=role;
-        console.log(Games[room_number]);
+        // console.log(Games[room_number]);
         socket.emit('LocationSetUp_SUCCESS',{status: "True"} );
 
         io.sockets.emit('LocationUpdate_SUCCESS',Games);
@@ -310,22 +310,23 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var type = data['type'];
         var room = data['room'];
         var location = x+','+z;
+        socket.broadcast.emit('TileUpdate_Success', {"x":x, "z":z, "type":type});
         console.log(x);
         console.log(z);
         console.log(type);
 
-        console.log("updating tile state");
+        // console.log("updating tile state");
         var tileMemo = Games_state[room]['tileMemo'];
         tileMemo.forEach(w => {
             if(w[location]!= null){
-              console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
+              // console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
               w[[x,z]] = parseInt(type);
             }
         });
         Games_state[room]['tileMemo'] = tileMemo;
-        console.log(Games_state[room]['tileMemo']);
+        // console.log(Games_state[room]['tileMemo']);
 
-        socket.broadcast.emit('TileUpdate_Success', {"x":x, "z":z, "type":type});
+        
     });
 
     socket.on('UpdateWall',function(data){
@@ -337,10 +338,12 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room = data['room'];
         var location = x+','+z;
         var fromExplosion=data["fromExplosion"];
-        // console.log(x);
-        // console.log(z);
-        // console.log(type);
-        // console.log(horizontal);
+        socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal,"fromExplosion":fromExplosion});
+        console.log("update wall");
+        console.log(x);
+        console.log(z);
+        console.log(type);
+        console.log(horizontal);
         // console.log(room);
         // console.log(Games_state[room]);
         if(horizontal=='1'){//horizontal
@@ -348,25 +351,25 @@ io.on('connection', function (socket) {//default event for client connect to ser
             var hWall_list = Games_state[room]['hWallMemo'];
             hWall_list.forEach(w => {
               if(w[location]!= null){
-                  console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
+                  // console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
                   w[[x,z]] = parseInt(type);
               }
             });
             Games_state[room]['hWallMemo'] = hWall_list;
-            console.log(Games_state[room]['hWallMemo']);
+            // console.log(Games_state[room]['hWallMemo']);
         }else{
-            console.log("updating vertical Games_state wall");
+            // console.log("updating vertical Games_state wall");
             var vWall_list = Games_state[room]['vWallMemo'];
             vWall_list.forEach(w => {
               if(w[location]!= null){
-                  console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
+                  // console.log("updating " + x + " " + z + " to type: "+ parseInt(type));
                   w[[x,z]] = parseInt(type);
               }
             });
             Games_state[room]['vWallMemo'] = vWall_list;
-            console.log(Games_state[room]['vWallMemo']);
+            // console.log(Games_state[room]['vWallMemo']);
         }
-        socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal,"fromExplosion":fromExplosion});
+        
     });
 
     socket.on('UpdateDoor',function(data){
@@ -377,6 +380,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var toType = data["toType"];
         var room = data['room'];
         var location = x+','+z;
+        var fromExplosion=data['fromExplosion'];
+        socket.broadcast.emit('DoorUpdate_Success', {"x":x, "z":z, "type":type, "toType":toType, "fromExplosion":fromExplosion});
+        console.log("update door");
         console.log(x);
         console.log(z);
         console.log(type);
@@ -387,26 +393,26 @@ io.on('connection', function (socket) {//default event for client connect to ser
             var hDoor_list = Games_state[room]['hDoorMemo'];
             hDoor_list.forEach(w => {
               if(w[location]!= null){
-                  console.log("updating " + x + " " + z + " to type: "+ parseInt(toType));
+                  // console.log("updating " + x + " " + z + " to type: "+ parseInt(toType));
                   w[[x,z]] = parseInt(toType);
               }
             });
             Games_state[room]['hDoorMemo'] = hDoor_list;
-            console.log(Games_state[room]['hDoorMemo']);
+            // console.log(Games_state[room]['hDoorMemo']);
         }else{
-            console.log("updating vertical Games_state door");
+            // console.log("updating vertical Games_state door");
             var vDoor_list = Games_state[room]['vDoorMemo'];
             vDoor_list.forEach(w => {
               if(w[location]!= null){
-                  console.log("updating " + x + " " + z + " to type: "+ parseInt(toType));
+                  // console.log("updating " + x + " " + z + " to type: "+ parseInt(toType));
                   w[[x,z]] = parseInt(toType);
               }
             });
             Games_state[room]['vDoorMemo'] = vDoor_list;
-            console.log(Games_state[room]['vDoorMemo']);
+            // console.log(Games_state[room]['vDoorMemo']);
         }
 
-        socket.broadcast.emit('DoorUpdate_Success', {"x":x, "z":z, "type":type, "toType":toType});
+        
     });
 
     socket.on('checkingTurn',function(data){
@@ -653,7 +659,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
         participants[name]['Driving']=drive;
-        console.log(Games[room_number]);
+        // console.log(Games[room_number]);
         socket.broadcast.emit('LocationUpdate_SUCCESS',Games );
     });
 
@@ -668,7 +674,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
         participants[name]['Carrying']=carryV;
-        console.log(Games[room_number]);
+        // console.log(Games[room_number]);
         socket.broadcast.emit('StartCarryV_Success', {"Games":Games, "x":x, "z":z} );
     });
 
@@ -683,7 +689,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
         participants[name]['Leading']=carryV;
-        console.log(Games[room_number]);
+        // console.log(Games[room_number]);
         socket.broadcast.emit('StartLeadV_Success', {"Games":Games, "x":x, "z":z} );
     });
 
@@ -698,8 +704,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
         participants[name]['Carrying']=carryV;
-        console.log(Games[room_number]);
-        socket.broadcast.emit('StartCarryHazmat', {"Games":Games, "x":x, "z":z} );
+        // console.log(Games[room_number]);
+        socket.broadcast.emit('StartCarryHazmat_Success', {"Games":Games, "x":x, "z":z} );
     });
 
     socket.on('AddPOI',function(data){
@@ -707,7 +713,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var z=data['z'];
       var type=data['type'];
       var room = data['room'];
-      console.log(Games_state[room]['POIMemo']);
+      // console.log(Games_state[room]['POIMemo']);
 
       addPOI(Games_state[room],parseInt(x),parseInt(z),parseInt(type));
 
@@ -852,6 +858,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on("JoinGame",function(data){
+      console.log("in JoinGame");
       var name=data['name'];
       var room=data['room'];
       if(!Games[room]["joinedPlayers"].includes(name)){
@@ -859,6 +866,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
       if(Games[room]["joinedPlayers"].length==parseInt(Games[room]["numberOfPlayer"])){
         io.sockets.emit("JoinGame_Success",{"room":room,"owner":Games[room]["Owner"]});
+        console.log("emitting JoinGame");
       }
     });
 

@@ -312,6 +312,7 @@ public class TileMap  {
 	}
 
 	public void InitializeExperienced(){
+		Debug.Log("Initiating Experienced");
 		System.Random rand=new System.Random();
 		// First Blood
 		List<int[]> firstExplosion=new List<int[]>();
@@ -332,23 +333,29 @@ public class TileMap  {
 		gm.UpdateTile(first[0],first[1],2);
 		gm.fireManager.explosion();
 
+		Debug.Log("First Explosion");
+
 		// Second Blood
 		int numOfExplosion=2;
 		if(StaticInfo.level.Equals("Experienced-Heroic")){
 			numOfExplosion=3;
 		}
-		for(int i=0;i<numOfExplosion;i++){
-			int randX=rand.Next(1,8);
-			int randZ=rand.Next(1,6);
+		int i=0;
+		Debug.Log(numOfExplosion);
+		while(i<numOfExplosion){
+			Debug.Log("in numOfExplosion");
+			int randX=rand.Next(1,9);
+			int randZ=rand.Next(1,7);
 			while(tiles[randX,randZ]==2){
-				randX=rand.Next(1,8);
-				randZ=rand.Next(1,6);
+				randX=rand.Next(1,9);
+				randZ=rand.Next(1,7);
 			}
 			gm.hazmatManager.addHazmat(randX,randZ,(int)HazmatStatus.Hazmat);
 			gm.AddHazmat(randX,randZ,(int)HazmatStatus.Hazmat);
 			buildNewTile(randX,randZ,2);
 			gm.UpdateTile(randX,randZ,2);
 			gm.fireManager.explosion();
+			i++;
 		}
 	}
 	
