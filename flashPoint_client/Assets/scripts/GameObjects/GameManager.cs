@@ -277,7 +277,7 @@ public class GameManager: MonoBehaviour
         stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
         if (!StaticInfo.level.Equals("Family"))
         {
-            stats.text += "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
+            stats.text+= "\nRemoved Hazmat" + " : " + hazmatManager.removedHazmat;
         }
        
     }
@@ -1391,6 +1391,7 @@ public class GameManager: MonoBehaviour
     public void RemoveHazmat(int x,int z)
     {
         Debug.Log("RemovingHazmat");
+        Debug.Log("Removed Hazmat" + hazmatManager.removedHazmat);
         Dictionary<String, string> hazmat = new Dictionary<string, string>();
         hazmat["x"] = x.ToString();
         hazmat["z"] = z.ToString();
