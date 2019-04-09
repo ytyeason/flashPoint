@@ -583,34 +583,77 @@ public class GameManager: MonoBehaviour
     }
 
     public void ConfirmRide(SocketIOEvent obj){
-        confirmed--;
-        operationManager.askingForRide=false;
-        if(confirmed==0)
-        {
-            if(obj.data.ToDictionary()["type"].Equals("2")){
 
-                UpdateEngineLocation(toX, toZ, fromX, fromZ);
-                fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
-                fireman.currentX=toX;
-                fireman.currentZ=toZ;
-                UpdateLocation(toX, toZ,StaticInfo.name);        
-            }
-            if(obj.data.ToDictionary()["type"].Equals("1")){
-                UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
-                fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
-                fireman.currentX=toX;
-                fireman.currentZ=toZ;
-                UpdateLocation(toX, toZ,StaticInfo.name);
-            }
-            Debug.Log(obj.data.ToDictionary()["type"]);
-            socket.Emit("ResetConfirmed", new JSONObject(true));
-        }
-        Debug.Log("Hello, im at confirmride in gm, my name is " + StaticInfo.name + " my confirmed number is " + confirmed);
+            confirmed--;
+            operationManager.askingForRide=false;
+            if(confirmed==0)
+            {
+                // if(obj.data.ToDictionary()["type"].Equals("0"))
+                // {
+                //     if(tileMap.selectedUnit.driving==2)
+                //     {
+                //         UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                //         fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                //         fireman.currentX=toX;
+                //         fireman.currentZ=toZ;
+                //         UpdateLocation(toX, toZ,StaticInfo.name);  
+                //     }
+                //     if(tileMap.selectedUnit.driving==1)
+                //     {
+                //         UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                //         fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                //         fireman.currentX=toX;
+                //         fireman.currentZ=toZ;
+                //         UpdateLocation(toX, toZ,StaticInfo.name);
+                //     }
+                // }
+                if(obj.data.ToDictionary()["type"].Equals("2")){
 
+                    UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                    fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                    fireman.currentX=toX;
+                    fireman.currentZ=toZ;
+                    UpdateLocation(toX, toZ,StaticInfo.name);        
+                }
+                if(obj.data.ToDictionary()["type"].Equals("1")){
+                    UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                    fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                    fireman.currentX=toX;
+                    fireman.currentZ=toZ;
+                    UpdateLocation(toX, toZ,StaticInfo.name);
+                }
+                if(obj.data.ToDictionary()["type"].Equals("0")){
+                    if(tileMap.tiles[tileMap.selectedUnit.currentX/6, tileMap.selectedUnit.currentZ/6]==3)
+                    {
+                        UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                        fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                        fireman.currentX=toX;
+                        fireman.currentZ=toZ;
+                        UpdateLocation(toX, toZ,StaticInfo.name);  
+                    }
+                    if(tileMap.tiles[tileMap.selectedUnit.currentX/6, tileMap.selectedUnit.currentZ/6]==4)
+                    {
+                        UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                        fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                        fireman.currentX=toX;
+                        fireman.currentZ=toZ;
+                        UpdateLocation(toX, toZ,StaticInfo.name);
+                    }
+                }
+                Debug.Log(obj.data.ToDictionary()["type"]);
+                // Dictionary<String, string> data = new Dictionary<string, string>();
+                // data["room"] = StaticInfo.roomNumber.ToString();
+                // socket.Emit("ResetConfirmed", new JSONObject(data));
+            }
+            Debug.Log("Hello, im at confirmride in gm, my name is " + StaticInfo.name + " my confirmed number is " + confirmed);
+
+        
+        
     }
 
     public void ResetConfirmed_Success(SocketIOEvent obj){
         this.confirmed = 0;
+        // tileMap.selectedUnit.driving=0;
         Debug.Log(StaticInfo.name + "is resetting confirmed to  " + this.confirmed);
     }
 
@@ -622,25 +665,31 @@ public class GameManager: MonoBehaviour
 
 
         List<string> names=parseJsonArray(obj.data["names"]);
-        if(names.Count>0)
+        Debug.Log(" wait, the names.count is" + names.Count);
+        if(names.Count>0&&!tileMap.ambulance.isRemoted)
         {
             foreach(var name in names){
                 if(name.Equals(StaticInfo.name)){
                     tileMap.selectedUnit.s.transform.position=new Vector3(newx,0.2f,newz);
+                    Debug.Log("HELLO im driver, im in UpdateAmbulanceLocation_Success, my name is:" + StaticInfo.name);
                     tileMap.selectedUnit.currentX = newx;
                     tileMap.selectedUnit.currentZ = newz;
                     UpdateLocation(newx, newz, StaticInfo.name);
+                    tileMap.selectedUnit.riding=false;
+                    tileMap.selectedUnit.driving=false;
                 }
             }
         }
 
-
-
         tileMap.ambulance.moveNextStation(newx/6, newz/6);
+        tileMap.ambulance.isRemoted=false;
 
         // Debug.Log("update ambulance !!!!!");
         Debug.Log(StaticInfo.name + "is going to next station!!!!!!!!!!!!!!!!!" + "names count is:" + names.Count + "!!!!!");
         // confirmed=0;
+        Dictionary<String, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber.ToString();
+        socket.Emit("ResetConfirmed", new JSONObject(data));
     }
 
     public void UpdateEngineLocation(int newx,int newz, int origx, int origz)
@@ -673,12 +722,17 @@ public class GameManager: MonoBehaviour
                     tileMap.selectedUnit.currentX = newx;
                     tileMap.selectedUnit.currentZ = newz;
                     UpdateLocation(newx, newz, StaticInfo.name);
+                    tileMap.selectedUnit.riding=false;
+                    tileMap.selectedUnit.driving=false;
                 }
             }
         }
 
         tileMap.engine.moveNextStation(newx/6, newz/6);
         confirmed=0;
+        Dictionary<String, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber.ToString();
+        socket.Emit("ResetConfirmed", new JSONObject(data));
     }
 
 
@@ -1200,8 +1254,8 @@ public class GameManager: MonoBehaviour
 			//yield return new WaitForSeconds(0.75f);
 
 			// Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
-            //Sorry Daniel, I comment here because there's an error when running the game
-			// vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+
+			 vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 		}
 
 		// Kill the thread
@@ -1421,6 +1475,7 @@ public class GameManager: MonoBehaviour
 
     public void startDrive(int type)
     {
+        // tileMap.selectedUnit.driving = type;
         Dictionary<string, string> update = new Dictionary<string, string>();
         update["room"] = StaticInfo.roomNumber;
         update["name"] = StaticInfo.name;
@@ -1629,6 +1684,7 @@ public class GameManager: MonoBehaviour
 
     public void stopDrive(string name)
     {
+        // tileMap.selectedUnit.driving = 0;
         Dictionary<string, string> stop = new Dictionary<string, string>();
         stop["name"] = name;
         stop["room"] = StaticInfo.roomNumber;

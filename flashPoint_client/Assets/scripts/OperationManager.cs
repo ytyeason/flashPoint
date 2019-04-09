@@ -1307,6 +1307,7 @@ public class OperationManager
     {
         Ambulance amb = gm.tileMap.ambulance;
         Fireman fireman = gm.tileMap.selectedUnit;
+        amb.isRemoted = true;
         int vx = gm.amB.x;
         int vz = gm.amB.z;
         int requiredAP = 2;
@@ -1327,6 +1328,7 @@ public class OperationManager
 
     public void ride()
     {
+
         if(askingForRide){
             if(gm.tileMap.tiles[gm.fireman.currentX/6,gm.fireman.currentZ/6]==3){
                 gm.fireman.riding=true;
@@ -1506,6 +1508,7 @@ public class OperationManager
     public void cancel()
     {
         if(askingForRide){
+            gm.fireman.riding=false;
             gm.startRide(0);
         }
         opPanel.SetActive(false);
