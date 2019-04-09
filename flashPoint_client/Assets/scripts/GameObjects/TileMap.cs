@@ -279,6 +279,9 @@ public class TileMap  {
 						tmp[1] = z;
 						gm.fireManager.hazametList.AddLast(tmp);
 					}
+					if(gm.pOIManager.containsKey(x,z,gm.pOIManager.placedPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingTreated)||gm.pOIManager.containsKey(x,z,gm.pOIManager.treated)){
+						gm.pOIManager.kill(x,z);
+					}
 				}
 				
 			}
