@@ -22,6 +22,9 @@ public class OperationManager
 
     private int x, z;
 
+    //for deckgun
+    private int rng_X, rng_Z;
+
     public SocketIOComponent socket;
 
     public bool inCommand = false;
@@ -29,6 +32,8 @@ public class OperationManager
     public int commandMoves = 1;
 
     public bool askingForRide = false;
+
+    public bool askDeckGun = false;
 
     public OperationManager(GameManager gm)
     {
@@ -1395,13 +1400,6 @@ public class OperationManager
 
     public void deckGun()
     {
-        int requiredAP = 4;
-        if (gm.fireman.role == Role.Driver)
-        {
-            requiredAP = 2;
-        }
-        Fireman fireman = gm.tileMap.selectedUnit;
-        fireman.setAP(fireman.FreeAP - requiredAP);
 
         Debug.Log("fire deckgunnnnnnnnnnnnnnnnnnnnnnnn");
         double vx = gm.enG.x / 6;
@@ -1439,8 +1437,24 @@ public class OperationManager
             rz1 = 1;
             rz2 = 3;
         }
-        int rng_X = UnityEngine.Random.Range(rx1, rx2);
-        int rng_Z = UnityEngine.Random.Range(rz1, rz2);
+        rng_X = UnityEngine.Random.Range(rx1, rx2);
+        rng_Z = UnityEngine.Random.Range(rz1, rz2);
+        gm.sendNotification("Hello! The target coordinate is (" + rng_X + "," + rng_Z + ")");
+        gm.sendNotification("Press the deckgun button again to regenerate a target OR press the close button to confirmed");
+        askDeckGun = true;
+
+    }
+
+    public void confirmDeckGun(int rng_X, int rng_Z)
+    {
+        int requiredAP = 4;
+        Debug.Log("my role is:" + gm.fireman.role);
+        if (gm.fireman.role == Role.Driver)
+        {
+            requiredAP = 2;
+        }
+        Fireman fireman = gm.tileMap.selectedUnit;
+        fireman.setAP(fireman.FreeAP - requiredAP);
         Debug.Log("range" + rng_X + "," + rng_Z);
         //need to ask player if he is satisfied with the extinguishing area
         gm.tileMap.buildNewTile(rng_X, rng_Z, 0);
@@ -1465,6 +1479,9 @@ public class OperationManager
             gm.tileMap.buildNewTile(rng_X, rng_Z - 1, 0);
             gm.UpdateTile(rng_X, rng_Z - 1, 0);
         }
+        askDeckGun = false;
+        rng_X = 0;
+        rng_Z = 0;
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
@@ -1572,6 +1589,9 @@ public class OperationManager
         if(askingForRide){
             gm.fireman.riding=false;
             gm.startRide(0);
+        }
+        if(askDeckGun){
+            confirmDeckGun(rng_X, rng_Z);
         }
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);

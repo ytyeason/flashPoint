@@ -2112,7 +2112,6 @@ public class GameManager: MonoBehaviour
                 changeRoleButton.SetActive(true);
             }
         }
-        
     }
 
 }
