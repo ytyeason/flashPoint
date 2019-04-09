@@ -42,6 +42,8 @@ public class WallManager
 
 	public GameManager gm;
 
+    public int damagedWalls = 0;
+
     void StartWallManager()
 	{
 		PopulateWalls();
@@ -122,8 +124,9 @@ public class WallManager
 
 	void PopulateWalls()
 	{
-		
-		defaultHorizontalWalls.Add(new int[] { 1, 1 });
+        if (!StaticInfo.level.Equals("Random"))
+        {
+        defaultHorizontalWalls.Add(new int[] { 1, 1 });
 		
 		defaultHorizontalWalls.Add(new int[] { 2, 1 });
 		//
@@ -188,7 +191,13 @@ public class WallManager
 		defaultVerticalWalls.Add(new int[] { 9, 4 });
 		defaultVerticalWalls.Add(new int[] { 9, 5 });
 		defaultVerticalWalls.Add(new int[] { 9, 6 });
-		/* im so stupid....
+        }
+        else
+        {
+            randomWall1();
+        }        
+
+        /* im so stupid....
 		
 		defaultHorizontalWallsMemo[new int[] {1, 1}] = 0;
 		defaultHorizontalWallsMemo[new int[] {2, 1}] = 0;
@@ -238,13 +247,72 @@ public class WallManager
 		defaultVerticalWallsMemo[new int[] {9, 2}] = 0;
 		defaultVerticalWallsMemo[new int[] {9, 4}] = 0;
 		defaultVerticalWallsMemo[new int[] {9, 5}] = 0;
-		defaultVerticalWallsMemo[new int[] {9, 6}] = 0;
-*/
-		
+		defaultVerticalWallsMemo[new int[] {9, 6}] = 0;*/
 
-	}
+    }
 
-	public void BreakWall(int x, int z, int type, int horizontal, bool explosionIsBreaking)
+    void randomWall1()
+    {
+        //horizontal
+        //outer wall
+        defaultHorizontalWalls.Add(new int[] { 1, 1 });
+        defaultHorizontalWalls.Add(new int[] { 2, 1 });
+        defaultHorizontalWalls.Add(new int[] { 4, 1 });
+        defaultHorizontalWalls.Add(new int[] { 3, 1 });
+        defaultHorizontalWalls.Add(new int[] { 6, 1 });
+        defaultHorizontalWalls.Add(new int[] { 7, 1 });
+        defaultHorizontalWalls.Add(new int[] { 8, 1 });
+        //----------------------------------------------------
+        defaultHorizontalWalls.Add(new int[] { 1, 7 });
+        defaultHorizontalWalls.Add(new int[] { 2, 7 });
+        defaultHorizontalWalls.Add(new int[] { 3, 7 });
+        defaultHorizontalWalls.Add(new int[] { 4, 7 });
+        defaultHorizontalWalls.Add(new int[] { 5, 7 });
+        defaultHorizontalWalls.Add(new int[] { 7, 7 });
+        defaultHorizontalWalls.Add(new int[] { 8, 7 });
+
+        //Specific Horizontal for random1
+        defaultHorizontalWalls.Add(new int[] { 1, 4 });
+        defaultHorizontalWalls.Add(new int[] { 1, 3 });
+        defaultHorizontalWalls.Add(new int[] { 2, 3 });
+        defaultHorizontalWalls.Add(new int[] { 3, 4 });
+        defaultHorizontalWalls.Add(new int[] { 3, 3 });
+        defaultHorizontalWalls.Add(new int[] { 4, 4 });
+        defaultHorizontalWalls.Add(new int[] { 4, 3 });
+        defaultHorizontalWalls.Add(new int[] { 5, 4 });
+        defaultHorizontalWalls.Add(new int[] { 6, 3 });
+        defaultHorizontalWalls.Add(new int[] { 7, 3 });
+        //---------------------------------------------------
+        //vertical
+        //outer wall
+        defaultVerticalWalls.Add(new int[] { 1, 1 });
+        defaultVerticalWalls.Add(new int[] { 1, 2 });
+        defaultVerticalWalls.Add(new int[] { 1, 4 });
+        defaultVerticalWalls.Add(new int[] { 1, 5 });
+        defaultVerticalWalls.Add(new int[] { 1, 6 });
+        //---------------------------------------------
+        defaultVerticalWalls.Add(new int[] { 9, 1 });
+        defaultVerticalWalls.Add(new int[] { 9, 2 });
+        defaultVerticalWalls.Add(new int[] { 9, 4 });
+        defaultVerticalWalls.Add(new int[] { 9, 5 });
+        defaultVerticalWalls.Add(new int[] { 9, 6 });
+
+        //Specific Vertical for random1
+        defaultVerticalWalls.Add(new int[] { 5, 6 });
+        defaultVerticalWalls.Add(new int[] { 5, 5 });
+        defaultVerticalWalls.Add(new int[] { 5, 4 });
+        defaultVerticalWalls.Add(new int[] { 5, 1 });
+        defaultVerticalWalls.Add(new int[] { 6, 2 });
+        defaultVerticalWalls.Add(new int[] { 6, 1 });
+        defaultVerticalWalls.Add(new int[] { 7, 6 });
+        defaultVerticalWalls.Add(new int[] { 7, 5 });
+        defaultVerticalWalls.Add(new int[] { 7, 4 });
+        defaultVerticalWalls.Add(new int[] { 8, 6 });
+        defaultVerticalWalls.Add(new int[] { 8, 4 });
+        defaultVerticalWalls.Add(new int[] { 8, 3 });
+    }
+
+    public void BreakWall(int x, int z, int type, int horizontal, bool explosionIsBreaking)
 	{
 		Debug.Log("Trying to break the wall (" + x + "," + z +")");
 
@@ -268,9 +336,10 @@ public class WallManager
 						GameObject old = hwallStores[key];
 						//Destroy(old);
 						gm.DestroyObject(old);
-						gm.damaged_wall_num++;		// Increment the GUI counter to represent # of damaged walls
+						damagedWalls++;		// Increment the GUI counter to represent # of damaged walls
+                        Debug.Log(damagedWalls);
                         gm.displayStats();
-                        if (gm.damaged_wall_num >= 24)
+                        if (damagedWalls >= 24)
                         {
                             Debug.Log("24 damaged markers");
                             gm.defeat();
@@ -309,9 +378,9 @@ public class WallManager
 						GameObject old = vwallStores[key];
 						//Destroy(old);
 						gm.DestroyObject(old);
-						gm.damaged_wall_num++;     // Increment the GUI counter to represent # of damaged walls
+						damagedWalls++;     // Increment the GUI counter to represent # of damaged walls
                         gm.displayStats();
-                        if (gm.damaged_wall_num >= 24)
+                        if (damagedWalls >= 24)
                         {
                             Debug.Log("24 damaged markers");
                             gm.defeat();

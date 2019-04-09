@@ -13,7 +13,7 @@ public class FireManager : MonoBehaviour
 	public TileMap tileMap;
 	public Boolean debugMode = true;        // Toggle this for more descriptive Debug.Log() output
 
-    LinkedList<int[]> hazametList = new LinkedList<int[]>();
+    public LinkedList<int[]> hazametList = new LinkedList<int[]>();
 
 
 
@@ -24,6 +24,23 @@ public class FireManager : MonoBehaviour
 		this.tileMap = in_tileMap;  //initFireTileStores(in_tileMap);
 		this.mapSizeX = in_X;
 		this.mapSizeZ = in_Z;
+		hazametList=new LinkedList<int[]>();
+	}
+
+	public void explosion(){
+		while (hazametList.Count != 0)
+		{
+			int[] tmp = hazametList.First.Value;
+			hazametList.RemoveFirst();
+			Debug.Log("Check Location");
+			Debug.Log(tmp[0]+","+tmp[1]);
+			gm.hazmatManager.explodeHazmat(tmp[0], tmp[1]);
+			gm.explodeHazmat(tmp[0],tmp[1]);
+			keepGoingUp(tmp[0],tmp[1]);
+			keepGoingDown(tmp[0],tmp[1]);
+			keepGoingLeft(tmp[0],tmp[1]);
+			keepGoingRight(tmp[0],tmp[1]);
+		}
 	}
 
 	// Pseudo-controller function called by GameManager when turn is changed
@@ -36,6 +53,11 @@ public class FireManager : MonoBehaviour
 		// Flashover step:
 		if (debugMode) Debug.Log("flashover:");
 		flashover();
+
+		Debug.Log("List Count");
+		Debug.Log(hazametList.Count);
+		
+		explosion();
 		
 		// Remove victims in fire & knockdown Firemen
 		//if (debugMode) Debug.Log("knockDown:");
@@ -44,6 +66,13 @@ public class FireManager : MonoBehaviour
 		// Final step
 		if (debugMode) Debug.Log("extOutFire:");
 		extOutFire();
+
+		if(gm.hazmatManager.containsKey(in_x,in_z,gm.hazmatManager.placedHotspot)){
+			System.Random rand=new System.Random();
+			int x=rand.Next(1,8);
+			int z=rand.Next(1,6);
+			advanceFire(x,z,isATest);
+		}
 		
 	}
 
@@ -167,25 +196,25 @@ public class FireManager : MonoBehaviour
 				
 					// If the tile is next to a Fire marker; if there's an obstacle in the way then Fire isn't 'adjacent'
 					if(canUp && tileMap.tiles[x_elem, z_elem + 1] == 2 && !adjOnFire &&
-								!(dm.checkIfHDoor(x_elem, z_elem + 1) || wm.checkIfHWall(x_elem, z_elem + 1)))
+								!(dm.checkIfHDoor(x_elem, z_elem + 1)&&!dm.checkIfOpenHDoor(x_elem, z_elem + 1) || wm.checkIfHWall(x_elem, z_elem + 1)))
 					{
 							adjOnFire = true;
 					}
 				
 					if (canDown && tileMap.tiles[x_elem, z_elem - 1] == 2 && !adjOnFire &&
-								!(dm.checkIfHDoor(x_elem, z_elem) || wm.checkIfHWall(x_elem, z_elem)))
+								!(dm.checkIfHDoor(x_elem, z_elem)&&!dm.checkIfOpenHDoor(x_elem, z_elem) || wm.checkIfHWall(x_elem, z_elem)))
 					{
 							adjOnFire = true;
 					}
 	
 					if(canLeft && tileMap.tiles[x_elem - 1, z_elem] == 2 && !adjOnFire &&
-								!(dm.checkIfVDoor(x_elem, z_elem) || wm.checkIfVWall(x_elem, z_elem)))
+								!(dm.checkIfVDoor(x_elem, z_elem)&&!dm.checkIfOpenVDoor(x_elem, z_elem) || wm.checkIfVWall(x_elem, z_elem)))
 					{
 							adjOnFire = true;
 					}
 				
 					if(canRight && tileMap.tiles[x_elem + 1, z_elem] == 2 && !adjOnFire &&
-								!(dm.checkIfVDoor(x_elem + 1, z_elem) || wm.checkIfVWall(x_elem + 1, z_elem)))
+								!(dm.checkIfVDoor(x_elem + 1, z_elem)&&!dm.checkIfOpenVDoor(x_elem + 1, z_elem) || wm.checkIfVWall(x_elem + 1, z_elem)))
 					{
 							adjOnFire = true;
 					}
@@ -209,6 +238,13 @@ public class FireManager : MonoBehaviour
 						tileMap.buildNewTile(x_elem, z_elem, 2);
 						tileMap.gm.UpdateTile(x_elem, z_elem, 2);
 						flashoverTriggered = true;
+						// if(gm.hazmatManager.isHazamet(x_elem,z_elem)){
+						// 	int[] tmp = new int[2];
+                		//     tmp[0] = x_elem;
+                		//     tmp[1] = z_elem;
+					    // 	hazametList.AddLast(tmp);
+						// }
+						
 					}
 					
 				}
@@ -230,15 +266,14 @@ public class FireManager : MonoBehaviour
 	// Recursive function to propagate shockwave upwards
 	public void keepGoingUp(int rng_X, int rng_Z)
     {
-        tileMap.buildNewTile(rng_X, rng_Z, 2);
-        tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
-
+        
+		Debug.Log("Going up");
         if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
         {
             //TOP 
 
             //if this is wall
-            if (gm.wallManager.isHorizontalWall(rng_X, rng_Z+1))
+            if (gm.wallManager.checkIfHWall(rng_X, rng_Z+1))
             {
                 int type = gm.wallManager.HorizontalWall(rng_X, rng_Z+1);
                 type += 2;
@@ -246,54 +281,61 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X, rng_Z+1, type, 1, true);
-                    gm.UpdateWall(rng_X, rng_Z+1, type, 1); // horizontal
+                    gm.UpdateWall(rng_X, rng_Z+1, type, 1,true); // horizontal
                 }
 
 
             }
             //if this is door 
-            else if (gm.doorManager.isHorizontalDoor(rng_X, rng_Z+1))
+            else if (gm.doorManager.checkIfHDoor(rng_X, rng_Z+1)&&!gm.doorManager.checkIfOpenHDoor(rng_X, rng_Z+1))
                 {
                 int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z+1);
                 type += 4;
                 if (type == 4)
 
                 {
-                    gm.doorManager.ChangeDoor(rng_X, rng_Z+1, type, 1);
-                    gm.UpdateDoor(rng_X, rng_Z+1, type, 1);// horizontal
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z+1, type, 2,true);
+                    gm.UpdateDoor(rng_X, rng_Z+1, type, 2,true);// horizontal
                 }
 
             }
             //nothing or smoke
-            else if (tileMap.tiles[rng_X, rng_Z + 1] == 0 || tileMap.tiles[rng_X, rng_Z + 1] == 1)
+            else if (tileMap.tiles[rng_X, rng_Z + 1] == 0 || tileMap.tiles[rng_X, rng_Z + 1] == 1||gm.doorManager.checkIfOpenHDoor(rng_X, rng_Z+1))
             {
                 tileMap.buildNewTile(rng_X, rng_Z+1, 2);
                 tileMap.gm.UpdateTile(rng_X, rng_Z+1, 2);
+				if(gm.doorManager.checkIfOpenHDoor(rng_X, rng_Z+1)){
+					int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z+1);
+					gm.doorManager.ChangeDoor(rng_X, rng_Z+1, type+2, type,true);
+                    gm.UpdateDoor(rng_X, rng_Z+1, type+2, type,true);// horizontal
+				}
             }
-            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z)){ 
+            // else if (gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.movingHazmat)){ 
 
-            int[] tmp = new int[2];
-                tmp[0] = rng_X;
-                tmp[1] = rng_Z;
-                Boolean t = true;
-                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
-                {
-                    if(node.Value[0]==rng_X && node.Value[1] == rng_Z)
-                    {
-                        t = false;
-                    }
-                }
-                if (t )
-                {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
-                    hazametList.AddLast(tmp);
-                }
+            // int[] tmp = new int[2];
+            //     tmp[0] = rng_X;
+            //     tmp[1] = rng_Z;
+            //     Boolean t = true;
+            //     for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+            //     {
+            //         if(node.Value[0]==rng_X && node.Value[1] == rng_Z)
+            //         {
+            //             t = false;
+            //         }
+            //     }
+            //     if (t )
+            //     {
+                    
+            //         hazametList.AddLast(tmp);
+            //     }
                
-            }
+            // }
 
             else
             {
-                //recursion function 
+                //recursion function
+				// tileMap.buildNewTile(rng_X, rng_Z+1, 2);
+        		// tileMap.gm.UpdateTile(rng_X, rng_Z+1, 2);
                 keepGoingUp(rng_X, rng_Z + 1);
             }
         }
@@ -302,15 +344,14 @@ public class FireManager : MonoBehaviour
 	// Recursive function to propagate shockwave leftwards
 	public void keepGoingLeft(int rng_X, int rng_Z)
     {
-        tileMap.buildNewTile(rng_X, rng_Z, 2);
-        tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
-
+        
+		Debug.Log("Going left");
         if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
         {
             //TOP 
 
             //if this is wall
-            if (gm.wallManager.isVeritcalWall(rng_X, rng_Z))
+            if (gm.wallManager.checkIfVWall(rng_X, rng_Z))
             {
                 int type = gm.wallManager.VerticalWall(rng_X, rng_Z);
                 type += 2;
@@ -318,53 +359,60 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X, rng_Z, type, 0, true);
-                    gm.UpdateWall(rng_X, rng_Z, type, 0); // 
+                    gm.UpdateWall(rng_X, rng_Z, type, 0, true); // 
                 }
 
 
             }
             //if this is door 
-            else if (gm.doorManager.isVerticalDoor(rng_X, rng_Z))
+            else if (gm.doorManager.checkIfVDoor(rng_X, rng_Z)&&!gm.doorManager.checkIfOpenVDoor(rng_X, rng_Z))
                 {
                 int type = gm.doorManager.VerticalDoor(rng_X, rng_Z);
                 type += 4;
                 if (type == 5)
 
                 {
-                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 0);
-                    gm.UpdateDoor(rng_X, rng_Z, type, 0);// horizontal
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 3,true);
+                    gm.UpdateDoor(rng_X, rng_Z, type, 3,true);// horizontal
                 }
 
             }
             //nothing or smoke
-            else if (tileMap.tiles[rng_X-1, rng_Z ] == 0 || tileMap.tiles[rng_X-1, rng_Z ] == 1)
+            else if (tileMap.tiles[rng_X-1, rng_Z ] == 0 || tileMap.tiles[rng_X-1, rng_Z ] == 1||gm.doorManager.checkIfOpenVDoor(rng_X, rng_Z))
             {
                 tileMap.buildNewTile(rng_X-1, rng_Z, 2);
                 tileMap.gm.UpdateTile(rng_X-1, rng_Z, 2);
+				if(gm.doorManager.checkIfOpenVDoor(rng_X, rng_Z)){
+					int type = gm.doorManager.VerticalDoor(rng_X, rng_Z);
+					gm.doorManager.ChangeDoor(rng_X, rng_Z, type+2, type,true);
+                    gm.UpdateDoor(rng_X, rng_Z, type+2, type,true);// horizontal
+				}
             }
-            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z))
-            {
+            // else if (gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.movingHazmat))
+            // {
 
-                int[] tmp = new int[2];
-                tmp[0] = rng_X;
-                tmp[1] = rng_Z;
-                Boolean t = true;
-                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
-                {
-                    if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
-                    {
-                        t = false;
-                    }
-                }
-                if (t)
-                {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
-                    hazametList.AddLast(tmp);
-                }
-            }
+            //     int[] tmp = new int[2];
+            //     tmp[0] = rng_X;
+            //     tmp[1] = rng_Z;
+            //     Boolean t = true;
+            //     for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+            //     {
+            //         if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
+            //         {
+            //             t = false;
+            //         }
+            //     }
+            //     if (t)
+            //     {
+                    
+            //         hazametList.AddLast(tmp);
+            //     }
+            // }
             else
             {
                 //recursion function 
+				// tileMap.buildNewTile(rng_X-1, rng_Z, 2);
+        		// tileMap.gm.UpdateTile(rng_X-1, rng_Z, 2);
                 keepGoingLeft(rng_X-1, rng_Z );
             }
 
@@ -376,14 +424,13 @@ public class FireManager : MonoBehaviour
 	// Recursive function to propagate shockwave rightwards
 	public void keepGoingRight(int rng_X, int rng_Z)
     {
-                tileMap.buildNewTile(rng_X, rng_Z, 2);
-                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        Debug.Log("Going right");
         if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
         {
             //TOP 
 
             //if this is wall
-            if (gm.wallManager.isVeritcalWall(rng_X+1, rng_Z))
+            if (gm.wallManager.checkIfVWall(rng_X+1, rng_Z))
             {
                 int type = gm.wallManager.VerticalWall(rng_X+1, rng_Z);
                 type += 2;
@@ -391,53 +438,60 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X+1, rng_Z, type, 0, true);
-                    gm.UpdateWall(rng_X+1, rng_Z, type, 0); // 
+                    gm.UpdateWall(rng_X+1, rng_Z, type, 0,true); // 
                 }
 
 
             }
             //if this is door 
-            else if (gm.doorManager.isVerticalDoor(rng_X+1, rng_Z))
+            else if (gm.doorManager.checkIfVDoor(rng_X+1, rng_Z)&&!gm.doorManager.checkIfOpenVDoor(rng_X+1, rng_Z))
                 {
                 int type = gm.doorManager.VerticalDoor(rng_X+1, rng_Z);
                 type += 4;
                 if (type == 5)
 
                 {
-                    gm.doorManager.ChangeDoor(rng_X+1, rng_Z, type, 0);
-                    gm.UpdateDoor(rng_X+1, rng_Z, type, 0);// horizontal
+                    gm.doorManager.ChangeDoor(rng_X+1, rng_Z, type, 3,true);
+                    gm.UpdateDoor(rng_X+1, rng_Z, type, 3,true);// horizontal
                 }
 
             }
             //nothing or smoke
-            else if (tileMap.tiles[rng_X+1, rng_Z ] == 0 || tileMap.tiles[rng_X+1, rng_Z ] == 1)
+            else if (tileMap.tiles[rng_X+1, rng_Z ] == 0 || tileMap.tiles[rng_X+1, rng_Z ] == 1||gm.doorManager.checkIfOpenVDoor(rng_X+1, rng_Z))
             {
                 tileMap.buildNewTile(rng_X+1, rng_Z, 2);
                 tileMap.gm.UpdateTile(rng_X+1, rng_Z, 2);
+				if(gm.doorManager.checkIfOpenVDoor(rng_X+1, rng_Z)){
+					int type = gm.doorManager.VerticalDoor(rng_X+1, rng_Z);
+					gm.doorManager.ChangeDoor(rng_X+1, rng_Z, type+2, type,true);
+                    gm.UpdateDoor(rng_X+1, rng_Z, type+2, type,true);// horizontal
+				}
             }
-            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z))
-            {
+            // else if (gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.movingHazmat))
+            // {
 
-                int[] tmp = new int[2];
-                tmp[0] = rng_X;
-                tmp[1] = rng_Z;
-                Boolean t = true;
-                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
-                {
-                    if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
-                    {
-                        t = false;
-                    }
-                }
-                if (t )
-                {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
-                    hazametList.AddLast(tmp);
-                }
-            }
+            //     int[] tmp = new int[2];
+            //     tmp[0] = rng_X;
+            //     tmp[1] = rng_Z;
+            //     Boolean t = true;
+            //     for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+            //     {
+            //         if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
+            //         {
+            //             t = false;
+            //         }
+            //     }
+            //     if (t )
+            //     {
+                   
+            //         hazametList.AddLast(tmp);
+            //     }
+            // }
             else
             {
 				//recursion function 
+				// tileMap.buildNewTile(rng_X+1, rng_Z, 2);
+                // tileMap.gm.UpdateTile(rng_X+1, rng_Z, 2);
 				keepGoingRight(rng_X +1, rng_Z);
             }
 
@@ -449,14 +503,13 @@ public class FireManager : MonoBehaviour
 	// Recursive function to propagate shockwave downwards
     public void keepGoingDown(int rng_X, int rng_Z)
     {
-        tileMap.buildNewTile(rng_X, rng_Z, 2);
-                tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+        Debug.Log("Going down");
         if (rng_X >= 1 && rng_X <= 8 && rng_Z >= 1 && rng_Z <= 6)
         {
             //TOP 
 
             //if this is wall
-            if (gm.wallManager.isHorizontalWall(rng_X , rng_Z))
+            if (gm.wallManager.checkIfHWall(rng_X , rng_Z))
             {
                 int type = gm.wallManager.HorizontalWall(rng_X , rng_Z);
                 type += 2;
@@ -464,53 +517,64 @@ public class FireManager : MonoBehaviour
 
                 {
                     gm.wallManager.BreakWall(rng_X, rng_Z, type, 1, true);
-                    gm.UpdateWall(rng_X, rng_Z, type, 1); // 
+                    gm.UpdateWall(rng_X, rng_Z, type, 1,true); // 
                 }
 
 
             }
             //if this is door 
-            else if (gm.doorManager.isHorizontalDoor(rng_X , rng_Z))
+            else if (gm.doorManager.checkIfHDoor(rng_X , rng_Z)&&!gm.doorManager.checkIfOpenHDoor(rng_X,rng_Z))
                 {
                 int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z);
                 type += 4;
                 if (type == 4)
 
                 {
-                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 0);
-                    gm.UpdateDoor(rng_X, rng_Z, type, 1);// horizontal
+                    gm.doorManager.ChangeDoor(rng_X, rng_Z, type, 2,true);
+                    gm.UpdateDoor(rng_X, rng_Z, type, 2,true);// horizontal
                 }
+				// if(type==6){
+				// 	gm.doorManager.ChangeDoor(rng_X, rng_Z, type-2, 1);
+                //     gm.UpdateDoor(rng_X, rng_Z, type-2, 1);// horizontal
+				// }
 
             }
-            //nothing or smoke
-            else if (tileMap.tiles[rng_X , rng_Z-1] == 0 || tileMap.tiles[rng_X , rng_Z-1] == 1)
+            //nothing or smoke or open door
+            else if (tileMap.tiles[rng_X , rng_Z-1] == 0 || tileMap.tiles[rng_X , rng_Z-1] == 1||gm.doorManager.checkIfOpenHDoor(rng_X,rng_Z))
             {
                 tileMap.buildNewTile(rng_X, rng_Z-1, 2);
                 tileMap.gm.UpdateTile(rng_X, rng_Z-1, 2);
+				if(gm.doorManager.checkIfOpenHDoor(rng_X,rng_Z)){
+					int type = gm.doorManager.HorizontalDoor(rng_X, rng_Z);
+					gm.doorManager.ChangeDoor(rng_X, rng_Z, type+2, type,true);
+                    gm.UpdateDoor(rng_X, rng_Z, type+2, type,true);// horizontal
+				}
             }
-            else if (gm.hazmatManager.isHazamet(rng_X, rng_Z))
-            {
+            // else if (gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(rng_X, rng_Z,gm.hazmatManager.movingHazmat))
+            // {
 
-                int[] tmp = new int[2];
-                tmp[0] = rng_X;
-                tmp[1] = rng_Z;
-                Boolean t = true;
-                for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
-                {
-                    if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
-                    {
-                        t = false;
-                    }
-                }
-                if (t )
-                {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
-                    hazametList.AddLast(tmp);
-                }
-            }
+            //     int[] tmp = new int[2];
+            //     tmp[0] = rng_X;
+            //     tmp[1] = rng_Z;
+            //     Boolean t = true;
+            //     for (LinkedListNode<int[]> node = hazametList.First; node != null; node = node.Next)
+            //     {
+            //         if (node.Value[0] == rng_X && node.Value[1] == rng_Z)
+            //         {
+            //             t = false;
+            //         }
+            //     }
+            //     if (t )
+            //     {
+                   
+            //         hazametList.AddLast(tmp);
+            //     }
+            // }
             else
             {
 				//recursion function 
+				// tileMap.buildNewTile(rng_X, rng_Z-1, 2);
+                // tileMap.gm.UpdateTile(rng_X, rng_Z-1, 2);
 
 				keepGoingDown(rng_X , rng_Z-1);
             }
@@ -554,18 +618,10 @@ public class FireManager : MonoBehaviour
             keepGoingLeft(rng_X, rng_Z);
             keepGoingRight(rng_X, rng_Z);
 
-            tileMap.buildNewTile(rng_X, rng_Z, 2);
-            tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
+            // tileMap.buildNewTile(rng_X, rng_Z, 2);
+            // tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
 
-            while (hazametList.Count != 0)
-            {
-                int[] tmp = hazametList.First.Value;
-                hazametList.RemoveFirst();
-                keepGoingUp(tmp[0],tmp[1]);
-                keepGoingDown(tmp[0], tmp[1]);
-                keepGoingLeft(tmp[0], tmp[1]);
-                keepGoingRight(tmp[0], tmp[1]);
-            }
+           
 
             return;
 		}
@@ -599,22 +655,22 @@ public class FireManager : MonoBehaviour
 
 		// If the tile is next to a Fire marker; if there's an obstacle in the way then Fire isn't 'adjacent'
 		if (canUp && tileMap.tiles[rng_X, rng_Z + 1] == 2 && !adjOnFire &&
-				!(dm.checkIfHDoor(rng_X, rng_Z + 1) || wm.checkIfHWall(rng_X, rng_Z + 1)))
+				!(dm.checkIfHDoor(rng_X, rng_Z + 1)&&!dm.checkIfOpenHDoor(rng_X, rng_Z + 1) || wm.checkIfHWall(rng_X, rng_Z + 1)))
 		{
 			adjOnFire = true;
 		}
 		if (canDown && tileMap.tiles[rng_X, rng_Z - 1] == 2 && !adjOnFire &&
-				!(dm.checkIfHDoor(rng_X, rng_Z) || wm.checkIfHWall(rng_X, rng_Z)))
+				!(dm.checkIfHDoor(rng_X, rng_Z)&&!dm.checkIfOpenHDoor(rng_X, rng_Z) || wm.checkIfHWall(rng_X, rng_Z)))
 		{
 			adjOnFire = true;
 		}
 		if (canLeft && tileMap.tiles[rng_X - 1, rng_Z] == 2 && !adjOnFire &&
-				!(dm.checkIfVDoor(rng_X, rng_Z) || wm.checkIfVWall(rng_X, rng_Z)))
+				!(dm.checkIfVDoor(rng_X, rng_Z)&&!dm.checkIfOpenVDoor(rng_X, rng_Z) || wm.checkIfVWall(rng_X, rng_Z)))
 		{
 			adjOnFire = true;
 		}
 		if (canRight && tileMap.tiles[rng_X + 1, rng_Z] == 2 && !adjOnFire &&
-				!(dm.checkIfVDoor(rng_X + 1, rng_Z) || wm.checkIfVWall(rng_X + 1, rng_Z)))
+				!(dm.checkIfVDoor(rng_X + 1, rng_Z)&&!dm.checkIfOpenVDoor(rng_X + 1, rng_Z) || wm.checkIfVWall(rng_X + 1, rng_Z)))
 		{
 			adjOnFire = true;
 		}

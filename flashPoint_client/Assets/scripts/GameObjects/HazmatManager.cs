@@ -26,6 +26,8 @@ public class HazmatManager{
     public HazmatManager(GameManager gm){
         this.gm=gm;
 
+        Debug.Log(StaticInfo.level);
+
         //this.additionalHotspot 
         switch (StaticInfo.level)
         {
@@ -45,7 +47,7 @@ public class HazmatManager{
                 additionalHotspot += 3;
                 break; 
         }
-        if (StaticInfo.level == "Random")
+        if (StaticInfo.level.Equals("Random") )
         {
             if (!Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
@@ -77,7 +79,7 @@ public class HazmatManager{
                 break;
         }
         //initiate();
-        initiateHazmat();
+        //initiateHazmat();
     }
 
     public void initiateHazmat(){
@@ -86,7 +88,7 @@ public class HazmatManager{
             gm.DestroyObject(lookUp[key]);
         }
         lookUp=new Dictionary<int[], GameObject>();
-        gm.initializeHazmat();
+        // gm.initializeHazmat();
         placeHazmat();
     }
 
@@ -147,13 +149,30 @@ public class HazmatManager{
     public void explodeHazmat(int x, int z)
     {
         int[] key = new int[] { x, z };
+        Debug.Log("In ExplodeHazmat");
         if (containsKey(key[0],key[1],placedHazmat))
         {
+            Debug.Log("Contains Key");
             Hazmat h = get(key[0],key[1],placedHazmat);
-            h.setHazmatStatus(HazmatStatus.Hazmat);
+            h.setHazmatStatus(HazmatStatus.HotSpot);
             Remove(key[0],key[1],placedHazmat);
-            Remove(key[0],key[1],lookUp);
             gm.DestroyObject(get(key[0],key[1],lookUp));
+            Remove(key[0],key[1],lookUp);
+            placedHotspot.Add(key, h);
+            GameObject go=gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
+            go.transform.Rotate(90, 0, 0);
+        }
+
+        if (containsKey(key[0],key[1],movingHazmat))
+        {
+            Debug.Log("Contains Key");
+            this.dropHazmat(x,z);
+            gm.StopCarryH(x,z);
+            Hazmat h = get(key[0],key[1],placedHazmat);
+            h.setHazmatStatus(HazmatStatus.HotSpot);
+            Remove(key[0],key[1],placedHazmat);
+            gm.DestroyObject(get(key[0],key[1],lookUp));
+            Remove(key[0],key[1],lookUp);
             placedHotspot.Add(key, h);
             GameObject go=gm.instantiateObject(h.prefab, new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 - 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
@@ -208,6 +227,7 @@ public class HazmatManager{
         }
         gm.DestroyObject(get(key[0],key[1],lookUp));
         removedHazmat++;
+        gm.displayStats(); 
     }
 
     public void moveHazmat(int origx, int origz, int newx, int newz)

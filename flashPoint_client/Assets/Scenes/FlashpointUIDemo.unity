@@ -425,7 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.67058825}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -624,6 +624,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -651,6 +652,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -660,6 +662,7 @@ MonoBehaviour:
                 type: 0
                 status: 0
                 pm:
+                  posY: 0
                   rescued: 0
                   killed: 0
                 Prefab: {fileID: 0}
@@ -670,6 +673,7 @@ MonoBehaviour:
                 type: 0
                 status: 0
                 pm:
+                  posY: 0
                   rescued: 0
                   killed: 0
                 Prefab: {fileID: 0}
@@ -680,6 +684,7 @@ MonoBehaviour:
               pOIManager:
                 gm: {fileID: 0}
                 poi: []
+                posY: 0
                 rescued: 0
                 killed: 0
               role: 0
@@ -701,6 +706,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -712,6 +718,7 @@ MonoBehaviour:
             pm:
               gm: {fileID: 0}
               poi: []
+              posY: 0
               rescued: 0
               killed: 0
             Prefab: {fileID: 0}
@@ -724,6 +731,7 @@ MonoBehaviour:
             pm:
               gm: {fileID: 0}
               poi: []
+              posY: 0
               rescued: 0
               killed: 0
             Prefab: {fileID: 0}
@@ -734,6 +742,7 @@ MonoBehaviour:
           pOIManager:
             gm: {fileID: 0}
             poi: []
+            posY: 0
             rescued: 0
             killed: 0
           role: 0
@@ -755,6 +764,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -766,6 +776,7 @@ MonoBehaviour:
         pm:
           gm: {fileID: 0}
           poi: []
+          posY: 0
           rescued: 0
           killed: 0
         Prefab: {fileID: 0}
@@ -778,6 +789,7 @@ MonoBehaviour:
         pm:
           gm: {fileID: 0}
           poi: []
+          posY: 0
           rescued: 0
           killed: 0
         Prefab: {fileID: 0}
@@ -788,6 +800,7 @@ MonoBehaviour:
       pOIManager:
         gm: {fileID: 0}
         poi: []
+        posY: 0
         rescued: 0
         killed: 0
       role: 0
@@ -802,6 +815,7 @@ MonoBehaviour:
     goo1: {fileID: 0}
     goo2: {fileID: 0}
   gm: {fileID: 0}
+  isRemoted: 0
 --- !u!1 &263434994
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,7 +1043,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -409.4, y: -344.8}
+  m_AnchoredPosition: {x: -423, y: -344.8}
   m_SizeDelta: {x: 140.2, y: 35.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &327729385
@@ -1379,7 +1393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.13333334}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1400,81 +1414,6 @@ CanvasRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 352802842}
-  m_CullTransparentMesh: 0
---- !u!1 &444597129
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 444597130}
-  - component: {fileID: 444597132}
-  - component: {fileID: 444597131}
-  m_Layer: 5
-  m_Name: Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &444597130
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 444597129}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2023634822}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &444597131
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 444597129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 10
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 1
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Save Game
---- !u!222 &444597132
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 444597129}
   m_CullTransparentMesh: 0
 --- !u!1 &515097940
 GameObject:
@@ -2699,7 +2638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.21568628}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4018,6 +3957,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -4045,6 +3985,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -4054,6 +3995,7 @@ MonoBehaviour:
                 type: 0
                 status: 0
                 pm:
+                  posY: 0
                   rescued: 0
                   killed: 0
                 Prefab: {fileID: 0}
@@ -4064,6 +4006,7 @@ MonoBehaviour:
                 type: 0
                 status: 0
                 pm:
+                  posY: 0
                   rescued: 0
                   killed: 0
                 Prefab: {fileID: 0}
@@ -4074,6 +4017,7 @@ MonoBehaviour:
               pOIManager:
                 gm: {fileID: 0}
                 poi: []
+                posY: 0
                 rescued: 0
                 killed: 0
               role: 0
@@ -4095,6 +4039,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -4106,6 +4051,7 @@ MonoBehaviour:
             pm:
               gm: {fileID: 0}
               poi: []
+              posY: 0
               rescued: 0
               killed: 0
             Prefab: {fileID: 0}
@@ -4118,6 +4064,7 @@ MonoBehaviour:
             pm:
               gm: {fileID: 0}
               poi: []
+              posY: 0
               rescued: 0
               killed: 0
             Prefab: {fileID: 0}
@@ -4128,6 +4075,7 @@ MonoBehaviour:
           pOIManager:
             gm: {fileID: 0}
             poi: []
+            posY: 0
             rescued: 0
             killed: 0
           role: 0
@@ -4149,6 +4097,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -4160,6 +4109,7 @@ MonoBehaviour:
         pm:
           gm: {fileID: 0}
           poi: []
+          posY: 0
           rescued: 0
           killed: 0
         Prefab: {fileID: 0}
@@ -4172,6 +4122,7 @@ MonoBehaviour:
         pm:
           gm: {fileID: 0}
           poi: []
+          posY: 0
           rescued: 0
           killed: 0
         Prefab: {fileID: 0}
@@ -4182,6 +4133,7 @@ MonoBehaviour:
       pOIManager:
         gm: {fileID: 0}
         poi: []
+        posY: 0
         rescued: 0
         killed: 0
       role: 0
@@ -4570,7 +4522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6627451}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4816,7 +4768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.67058825}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -4977,7 +4929,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.725}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -392.6, y: -201.1}
+  m_AnchoredPosition: {x: -405, y: -201.1}
   m_SizeDelta: {x: 187.2, y: 232.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1499158317
@@ -5151,7 +5103,6 @@ RectTransform:
   - {fileID: 1415440063}
   - {fileID: 1524792033}
   - {fileID: 1913100965}
-  - {fileID: 2023634822}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6907,7 +6858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.67058825}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -7150,129 +7101,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1968159818}
   m_CullTransparentMesh: 0
---- !u!1 &2023634821
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2023634822}
-  - component: {fileID: 2023634825}
-  - component: {fileID: 2023634824}
-  - component: {fileID: 2023634823}
-  m_Layer: 5
-  m_Name: Save Game
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &2023634822
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2023634821}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1000085, y: 1.100009, z: 1.100009}
-  m_Children:
-  - {fileID: 444597130}
-  m_Father: {fileID: 1516093583}
-  m_RootOrder: 21
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 337, y: -347.55005}
-  m_SizeDelta: {x: 80, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2023634823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2023634821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 2023634824}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2108558122}
-        m_MethodName: saveGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
-      Culture=neutral, PublicKeyToken=null
---- !u!114 &2023634824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2023634821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
---- !u!222 &2023634825
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2023634821}
-  m_CullTransparentMesh: 0
 --- !u!1 &2028607538
 GameObject:
   m_ObjectHideFlags: 0
@@ -7377,7 +7205,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -308, y: -347.05}
+  m_AnchoredPosition: {x: -325, y: -347.05}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2064965142
@@ -7537,10 +7365,10 @@ MonoBehaviour:
     doorVisualPrefab: {fileID: 1693739390670970, guid: 300b2fd13782c4fb18a4901f630b7ab7,
       type: 2}
   - name: broken_hdoor
-    doorVisualPrefab: {fileID: 1560110503990988, guid: d851a5f6310e84d578ddfdadf58dcf2a,
+    doorVisualPrefab: {fileID: 1535394561501970, guid: 91d52adea74ff47f3a2e5da625dde644,
       type: 2}
   - name: broken_vdoor
-    doorVisualPrefab: {fileID: 1707290558386096, guid: 71dacbf7fa1784710bdfc8b1426699f3,
+    doorVisualPrefab: {fileID: 1018476570733754, guid: 9e95f99bf36f94b66a2fb00cdf1837a6,
       type: 2}
   wallTypes:
   - name: horizontal
@@ -7575,6 +7403,7 @@ MonoBehaviour:
   wallManager:
     wallTypes: []
     gm: {fileID: 0}
+    damagedWalls: 0
   tileMap:
     selectedUnit:
       s: {fileID: 0}
@@ -7596,6 +7425,7 @@ MonoBehaviour:
                   color: 0
                   AP: 0
                   FreeAP: 0
+                  VetExpAP: 0
                   savedAP: 0
                   specialtyAP: 0
                   remainingSpecAp: 0
@@ -7623,6 +7453,7 @@ MonoBehaviour:
               color: 0
               AP: 0
               FreeAP: 0
+              VetExpAP: 0
               savedAP: 0
               specialtyAP: 0
               remainingSpecAp: 0
@@ -7632,6 +7463,7 @@ MonoBehaviour:
                 type: 0
                 status: 0
                 pm:
+                  posY: 0
                   rescued: 0
                   killed: 0
                 Prefab: {fileID: 0}
@@ -7642,6 +7474,7 @@ MonoBehaviour:
                 type: 0
                 status: 0
                 pm:
+                  posY: 0
                   rescued: 0
                   killed: 0
                 Prefab: {fileID: 0}
@@ -7652,6 +7485,7 @@ MonoBehaviour:
               pOIManager:
                 gm: {fileID: 0}
                 poi: []
+                posY: 0
                 rescued: 0
                 killed: 0
               role: 0
@@ -7673,6 +7507,7 @@ MonoBehaviour:
           color: 0
           AP: 0
           FreeAP: 0
+          VetExpAP: 0
           savedAP: 0
           specialtyAP: 0
           remainingSpecAp: 0
@@ -7684,6 +7519,7 @@ MonoBehaviour:
             pm:
               gm: {fileID: 0}
               poi: []
+              posY: 0
               rescued: 0
               killed: 0
             Prefab: {fileID: 0}
@@ -7696,6 +7532,7 @@ MonoBehaviour:
             pm:
               gm: {fileID: 0}
               poi: []
+              posY: 0
               rescued: 0
               killed: 0
             Prefab: {fileID: 0}
@@ -7706,6 +7543,7 @@ MonoBehaviour:
           pOIManager:
             gm: {fileID: 0}
             poi: []
+            posY: 0
             rescued: 0
             killed: 0
           role: 0
@@ -7727,6 +7565,7 @@ MonoBehaviour:
       color: 0
       AP: 0
       FreeAP: 0
+      VetExpAP: 0
       savedAP: 0
       specialtyAP: 0
       remainingSpecAp: 0
@@ -7738,6 +7577,7 @@ MonoBehaviour:
         pm:
           gm: {fileID: 0}
           poi: []
+          posY: 0
           rescued: 0
           killed: 0
         Prefab: {fileID: 0}
@@ -7750,6 +7590,7 @@ MonoBehaviour:
         pm:
           gm: {fileID: 0}
           poi: []
+          posY: 0
           rescued: 0
           killed: 0
         Prefab: {fileID: 0}
@@ -7760,6 +7601,7 @@ MonoBehaviour:
       pOIManager:
         gm: {fileID: 0}
         poi: []
+        posY: 0
         rescued: 0
         killed: 0
       role: 0
@@ -7776,10 +7618,12 @@ MonoBehaviour:
   doorManager:
     doorTypes: []
     gm: {fileID: 0}
+    randomBoard: 0
   fireManager: {fileID: 0}
   pOIManager:
     gm: {fileID: 0}
     poi: []
+    posY: 0
     rescued: 0
     killed: 0
   vicinityManager: {fileID: 0}
@@ -7825,6 +7669,15 @@ MonoBehaviour:
   upDodgeDown: 0
   rightDodgeDown: 0
   downDodgeDown: 0
+  backdropL: {fileID: 352802842}
+  backdropS: {fileID: 999210464}
+  leftDodgeButton: {fileID: 1442591060}
+  upDodgeButton: {fileID: 26547857}
+  rightDodgeButton: {fileID: 1411933436}
+  downDodgeButton: {fileID: 1953816689}
+  confirmDodge: {fileID: 833628328}
+  declineDodge: {fileID: 1415440062}
+  toggleActiveDodge: {fileID: 0}
   amB: {fileID: 0}
   enG: {fileID: 0}
   fireman:
@@ -7850,6 +7703,7 @@ MonoBehaviour:
                 color: 0
                 AP: 0
                 FreeAP: 0
+                VetExpAP: 0
                 savedAP: 0
                 specialtyAP: 0
                 remainingSpecAp: 0
@@ -7868,6 +7722,7 @@ MonoBehaviour:
                 riding: 0
                 gm: {fileID: 0}
                 pOIManager:
+                  posY: 0
                   rescued: 0
                   killed: 0
                 role: 0
@@ -7889,6 +7744,7 @@ MonoBehaviour:
             color: 0
             AP: 0
             FreeAP: 0
+            VetExpAP: 0
             savedAP: 0
             specialtyAP: 0
             remainingSpecAp: 0
@@ -7900,6 +7756,7 @@ MonoBehaviour:
               pm:
                 gm: {fileID: 0}
                 poi: []
+                posY: 0
                 rescued: 0
                 killed: 0
               Prefab: {fileID: 0}
@@ -7912,6 +7769,7 @@ MonoBehaviour:
               pm:
                 gm: {fileID: 0}
                 poi: []
+                posY: 0
                 rescued: 0
                 killed: 0
               Prefab: {fileID: 0}
@@ -7922,6 +7780,7 @@ MonoBehaviour:
             pOIManager:
               gm: {fileID: 0}
               poi: []
+              posY: 0
               rescued: 0
               killed: 0
             role: 0
@@ -7943,6 +7802,7 @@ MonoBehaviour:
         color: 0
         AP: 0
         FreeAP: 0
+        VetExpAP: 0
         savedAP: 0
         specialtyAP: 0
         remainingSpecAp: 0
@@ -7954,6 +7814,7 @@ MonoBehaviour:
           pm:
             gm: {fileID: 0}
             poi: []
+            posY: 0
             rescued: 0
             killed: 0
           Prefab: {fileID: 0}
@@ -7966,6 +7827,7 @@ MonoBehaviour:
           pm:
             gm: {fileID: 0}
             poi: []
+            posY: 0
             rescued: 0
             killed: 0
           Prefab: {fileID: 0}
@@ -7976,6 +7838,7 @@ MonoBehaviour:
         pOIManager:
           gm: {fileID: 0}
           poi: []
+          posY: 0
           rescued: 0
           killed: 0
         role: 0
@@ -7997,6 +7860,7 @@ MonoBehaviour:
     color: 0
     AP: 0
     FreeAP: 0
+    VetExpAP: 0
     savedAP: 0
     specialtyAP: 0
     remainingSpecAp: 0
@@ -8008,6 +7872,7 @@ MonoBehaviour:
       pm:
         gm: {fileID: 0}
         poi: []
+        posY: 0
         rescued: 0
         killed: 0
       Prefab: {fileID: 0}
@@ -8020,6 +7885,7 @@ MonoBehaviour:
       pm:
         gm: {fileID: 0}
         poi: []
+        posY: 0
         rescued: 0
         killed: 0
       Prefab: {fileID: 0}
@@ -8030,6 +7896,7 @@ MonoBehaviour:
     pOIManager:
       gm: {fileID: 0}
       poi: []
+      posY: 0
       rescued: 0
       killed: 0
     role: 0
@@ -8090,7 +7957,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.00004386902, y: 215.4}
+  m_AnchoredPosition: {x: -0.00001859665, y: 215.40001}
   m_SizeDelta: {x: -7.720398, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2144112881

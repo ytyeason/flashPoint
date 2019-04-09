@@ -15,7 +15,7 @@ public class Hazmat
 
     public Hazmat(HazmatManager hm, HazmatStatus status=HazmatStatus.Hazmat){
         this.hm=hm;
-        this.prefab=hm.gm.hazPrefabs[0];
+        this.prefab=hm.gm.hazPrefabs[(int)status];
         this.status = status;
     }
 

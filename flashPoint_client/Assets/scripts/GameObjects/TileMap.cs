@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using SocketIO;
 using System;
 
-using System;
 
 [Serializable]
 public class TileMap  {
@@ -47,7 +46,7 @@ public class TileMap  {
 
 
 
-	void StartTileMap(int loadGame) {
+	public void StartTileMap(int loadGame) {
 
 		if (loadGame == 0)
 		{
@@ -83,18 +82,18 @@ public class TileMap  {
 		for(int x = 0; x < mapSizeX; x++) {
 			for(int z = 0; z < mapSizeZ; z++) {
 				// Family fire setup:
-				if (x == 2 && z == 5) tiles[x, z] = 2;
-				else if (x == 3 && z == 5) tiles[x, z] = 2;
-				else if (x == 2 && z == 4) tiles[x, z] = 2;
-				else if (x == 3 && z == 4) tiles[x, z] = 2;
-				else if (x == 4 && z == 4) tiles[x, z] = 2;
-				else if (x == 5 && z == 4) tiles[x, z] = 2;
-				else if (x == 4 && z == 3) tiles[x, z] = 2;
-				else if (x == 6 && z == 2) tiles[x, z] = 2;
-				else if (x == 6 && z == 1) tiles[x, z] = 2;
-				else if (x == 7 && z == 2) tiles[x, z] = 2;
+				// if (x == 2 && z == 5) tiles[x, z] = 2;
+				// else if (x == 3 && z == 5) tiles[x, z] = 2;
+				// else if (x == 2 && z == 4) tiles[x, z] = 2;
+				// else if (x == 3 && z == 4) tiles[x, z] = 2;
+				// else if (x == 4 && z == 4) tiles[x, z] = 2;
+				// else if (x == 5 && z == 4) tiles[x, z] = 2;
+				// else if (x == 4 && z == 3) tiles[x, z] = 2;
+				// else if (x == 6 && z == 2) tiles[x, z] = 2;
+				// else if (x == 6 && z == 1) tiles[x, z] = 2;
+				// else if (x == 7 && z == 2) tiles[x, z] = 2;
 				// parking spots
-				else if (x == 7 && z == 7) tiles[x, z] = 3;
+				if (x == 7 && z == 7) tiles[x, z] = 3;
 				else if (x == 8 && z == 7) tiles[x, z] = 3;
 				else if (x == 5 && z == 7) tiles[x, z] = 4;
 				else if (x == 6 && z == 7) tiles[x, z] = 4;
@@ -121,7 +120,7 @@ public class TileMap  {
 				else if (x == 0 && z == 1) tiles[x, z] = 2;
 				else if (x == mapSizeX - 1 && z == 1) tiles[x, z] = 2;
 				*/
-				else if (x == 1 && z == 3) tiles[x, z] = 1;
+				// else if (x == 1 && z == 3) tiles[x, z] = 1;
 				//*/
 				else
 					tiles[x, z] = 0;		// 2 -> code for Fire
@@ -131,7 +130,7 @@ public class TileMap  {
 	}
 
 	// Use GameObject.Instantiate to 'spawn' the TileType objects into the world
-	void GenerateMapVisual() {
+	public void GenerateMapVisual() {
 		for(int x=0; x < mapSizeX; x++) {
 			for(int z=0; z < mapSizeZ; z++) {
 				if(tiles[x,z]==3||tiles[x,z]==4)
@@ -271,11 +270,96 @@ public class TileMap  {
 				// Store appropriate GameObjects into their respective dictionaries
 				tileStores[key] = go;
 				//clickTileStores[key] = ct;
+				if(type==2){
+					Debug.Log("Check Hazmat");
+					Debug.Log(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat));
+					if(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(x,z,gm.hazmatManager.movingHazmat)){
+						int[] tmp = new int[2];
+						tmp[0] = x;
+						tmp[1] = z;
+						gm.fireManager.hazametList.AddLast(tmp);
+					}
+					if(gm.pOIManager.containsKey(x,z,gm.pOIManager.placedPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingTreated)||gm.pOIManager.containsKey(x,z,gm.pOIManager.treated)){
+						gm.pOIManager.kill(x,z);
+					}
+				}
+				
 			}
 		}
 
 
 		
+	}
+
+	public void InitializeFamily(){
+		buildNewTile(3,5,2);
+		gm.UpdateTile(3,5,2);
+		buildNewTile(2,4,2);
+		gm.UpdateTile(2,4,2);
+		buildNewTile(3,4,2);
+		gm.UpdateTile(3,4,2);
+		buildNewTile(4,4,2);
+		gm.UpdateTile(4,4,2);
+		buildNewTile(5,4,2);
+		gm.UpdateTile(5,4,2);
+		buildNewTile(4,3,2);
+		gm.UpdateTile(4,3,2);
+		buildNewTile(6,2,2);
+		gm.UpdateTile(6,2,2);
+		buildNewTile(6,1,2);
+		gm.UpdateTile(6,1,2);
+		buildNewTile(7,2,2);
+		gm.UpdateTile(7,2,2);
+		buildNewTile(2,5,2);
+		gm.UpdateTile(2,5,2);
+	}
+
+	public void InitializeExperienced(){
+		Debug.Log("Initiating Experienced");
+		System.Random rand=new System.Random();
+		// First Blood
+		List<int[]> firstExplosion=new List<int[]>();
+		firstExplosion.Add(new int[]{3,4});
+		firstExplosion.Add(new int[]{4,4});
+		firstExplosion.Add(new int[]{5,4});
+		firstExplosion.Add(new int[]{6,4});
+		firstExplosion.Add(new int[]{6,3});
+		firstExplosion.Add(new int[]{5,3});
+		firstExplosion.Add(new int[]{4,3});
+		firstExplosion.Add(new int[]{3,3});
+		
+		int x=rand.Next(0,8);
+		int[] first=firstExplosion[x];
+		gm.hazmatManager.addHazmat(first[0],first[1],(int)HazmatStatus.Hazmat);
+		gm.AddHazmat(first[0],first[1],(int)HazmatStatus.Hazmat);
+		buildNewTile(first[0],first[1],2);
+		gm.UpdateTile(first[0],first[1],2);
+		gm.fireManager.explosion();
+
+		Debug.Log("First Explosion");
+
+		// Second Blood
+		int numOfExplosion=2;
+		if(StaticInfo.level.Equals("Experienced-Heroic")){
+			numOfExplosion=3;
+		}
+		int i=0;
+		Debug.Log(numOfExplosion);
+		while(i<numOfExplosion){
+			Debug.Log("in numOfExplosion");
+			int randX=rand.Next(1,9);
+			int randZ=rand.Next(1,7);
+			while(tiles[randX,randZ]==2){
+				randX=rand.Next(1,9);
+				randZ=rand.Next(1,7);
+			}
+			gm.hazmatManager.addHazmat(randX,randZ,(int)HazmatStatus.Hazmat);
+			gm.AddHazmat(randX,randZ,(int)HazmatStatus.Hazmat);
+			buildNewTile(randX,randZ,2);
+			gm.UpdateTile(randX,randZ,2);
+			gm.fireManager.explosion();
+			i++;
+		}
 	}
 	
     public void MoveSelectedUnitTo(int x, int z, int in_status ) {
