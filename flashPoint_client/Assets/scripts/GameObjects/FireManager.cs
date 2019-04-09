@@ -36,6 +36,18 @@ public class FireManager : MonoBehaviour
 		// Flashover step:
 		if (debugMode) Debug.Log("flashover:");
 		flashover();
+
+		 while (hazametList.Count != 0)
+            {
+                int[] tmp = hazametList.First.Value;
+                hazametList.RemoveFirst();
+				gm.hazmatManager.explodeHazmat(tmp[0], tmp[1]);
+                keepGoingUp(tmp[0],tmp[1]);
+                keepGoingDown(tmp[0], tmp[1]);
+                keepGoingLeft(tmp[0], tmp[1]);
+                keepGoingRight(tmp[0], tmp[1]);
+            }
+
 		
 		// Remove victims in fire & knockdown Firemen
 		//if (debugMode) Debug.Log("knockDown:");
@@ -209,6 +221,13 @@ public class FireManager : MonoBehaviour
 						tileMap.buildNewTile(x_elem, z_elem, 2);
 						tileMap.gm.UpdateTile(x_elem, z_elem, 2);
 						flashoverTriggered = true;
+						if(gm.hazmatManager.isHazamet(x_elem,z_elem)){
+							int[] tmp = new int[2];
+                		    tmp[0] = x_elem;
+                		    tmp[1] = z_elem;
+					    	hazametList.AddLast(tmp);
+						}
+						
 					}
 					
 				}
@@ -285,7 +304,7 @@ public class FireManager : MonoBehaviour
                 }
                 if (t )
                 {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                    
                     hazametList.AddLast(tmp);
                 }
                
@@ -358,7 +377,7 @@ public class FireManager : MonoBehaviour
                 }
                 if (t)
                 {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                    
                     hazametList.AddLast(tmp);
                 }
             }
@@ -431,7 +450,7 @@ public class FireManager : MonoBehaviour
                 }
                 if (t )
                 {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                   
                     hazametList.AddLast(tmp);
                 }
             }
@@ -504,7 +523,7 @@ public class FireManager : MonoBehaviour
                 }
                 if (t )
                 {
-                    gm.hazmatManager.explodeHazmat(rng_X, rng_Z);
+                   
                     hazametList.AddLast(tmp);
                 }
             }
@@ -557,15 +576,7 @@ public class FireManager : MonoBehaviour
             tileMap.buildNewTile(rng_X, rng_Z, 2);
             tileMap.gm.UpdateTile(rng_X, rng_Z, 2);
 
-            while (hazametList.Count != 0)
-            {
-                int[] tmp = hazametList.First.Value;
-                hazametList.RemoveFirst();
-                keepGoingUp(tmp[0],tmp[1]);
-                keepGoingDown(tmp[0], tmp[1]);
-                keepGoingLeft(tmp[0], tmp[1]);
-                keepGoingRight(tmp[0], tmp[1]);
-            }
+           
 
             return;
 		}

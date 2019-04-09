@@ -45,7 +45,7 @@ public class HazmatManager{
                 additionalHotspot += 3;
                 break; 
         }
-        if (StaticInfo.level == "Random")
+        if (StaticInfo.level .Equals("Random") )
         {
             if (!Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
