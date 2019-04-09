@@ -39,7 +39,7 @@ public class POIManager{
         
         if (loadGame == 0)
         {
-            initiatePOI();
+            // initiatePOI();
         }
         else
         {
@@ -73,7 +73,7 @@ public class POIManager{
             gm.DestroyObject(poiLookup[key]);
         }
         poiLookup=new Dictionary<int[], GameObject>();
-        gm.initializePOI();
+        // gm.initializePOI();
         replenishPOI();
     }
 

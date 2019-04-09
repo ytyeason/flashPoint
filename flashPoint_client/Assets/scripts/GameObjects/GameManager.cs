@@ -116,6 +116,8 @@ public class GameManager: MonoBehaviour
 
     public GameObject startingPositionPanel;
 
+    private bool endOfTurn=false;
+
 
     void Start()
     {
@@ -160,6 +162,8 @@ public class GameManager: MonoBehaviour
         socket.On("ResetConfirmed_Success", ResetConfirmed_Success);
         socket.On("SaveGame_Success", SaveGame_Success);
         socket.On("ConfirmPosition_Success",confirmPosition_Success);
+        socket.On("JoinGame_Success",JoinGame_Success);
+        socket.On("ExplodeHazmat_Success",explodeHazmat_Success);
 
         if (game_info != null)
         {
@@ -279,6 +283,12 @@ public class GameManager: MonoBehaviour
 
         
         displayStats();
+        if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
+            changeRoleButton.SetActive(true);
+        }
+        if(!StaticInfo.StartingPosition&&!isMyTurn||endOfTurn){
+            changeRoleButton.SetActive(false);
+        }
 
     }
 
@@ -321,11 +331,17 @@ public class GameManager: MonoBehaviour
         }
         Debug.Log("displaying role");
         roles.text = StaticInfo.name+": "+roleToString(StaticInfo.role);
+        roles.text += " " + "at: " + fireman.currentX/6 + "," + fireman.currentZ/6;
         if (players != null)
         {
             foreach (string name in players.Keys)
             {
-                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
+                if(!name.Equals(StaticInfo.name))
+                {
+                  roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
+                  roles.text += "\n" + "at: " + players[name].ToDictionary()["Location"];
+
+                }
             }
         }
 
@@ -437,10 +453,18 @@ public class GameManager: MonoBehaviour
     void WallUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("wall update successful");
-        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
-        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
-        var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
-        var horizontal = Convert.ToInt32(obj.data.ToDictionary()["horizontal"]);
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        int type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
+        int horizontal = Convert.ToInt32(obj.data.ToDictionary()["horizontal"]);
+        string fromExplosion=obj.data.ToDictionary()["fromExplosion"];
+        bool from=true;
+        Debug.Log("fromExplosion: "+fromExplosion);
+        if(fromExplosion.Equals("True")){
+            from=true;
+        }else{
+            from=false;
+        }
 
         //Debug.Log(x);
         //Debug.Log(z);
@@ -452,16 +476,24 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["horizontal"]);
 
 		// Bottom is temporarily commented out:
-		wallManager.BreakWall(x, z, type, horizontal, false);
+		wallManager.BreakWall(x, z, type, horizontal, from);
 	}
 
 	void DoorUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("door update successful");
-        var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
-        var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
-        var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
-        var toType = Convert.ToInt32(obj.data.ToDictionary()["toType"]);
+        int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
+        int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        int type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
+        int toType = Convert.ToInt32(obj.data.ToDictionary()["toType"]);
+        string fromExplosion=obj.data.ToDictionary()["fromExplosion"];
+        bool det=true;
+        Debug.Log("fromExplosion:"+fromExplosion);
+        if(fromExplosion.Equals("True")){
+            det=true;
+        }else{
+            det=false;
+        }
 
         //Debug.Log(x);
         //Debug.Log(z);
@@ -472,7 +504,7 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["type"]);
         Debug.Log(obj.data.ToDictionary()["toType"]);
 
-        doorManager.ChangeDoor(x, z, toType, type);
+        doorManager.ChangeDoor(x, z, toType, type,det);
     }
 
     void TileUpdate_Success(SocketIOEvent obj)
@@ -621,34 +653,77 @@ public class GameManager: MonoBehaviour
     }
 
     public void ConfirmRide(SocketIOEvent obj){
-        confirmed--;
-        operationManager.askingForRide=false;
-        if(confirmed==0)
-        {
-            if(obj.data.ToDictionary()["type"].Equals("2")){
 
-                UpdateEngineLocation(toX, toZ, fromX, fromZ);
-                fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
-                fireman.currentX=toX;
-                fireman.currentZ=toZ;
-                UpdateLocation(toX, toZ,StaticInfo.name);        
-            }
-            if(obj.data.ToDictionary()["type"].Equals("1")){
-                UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
-                fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
-                fireman.currentX=toX;
-                fireman.currentZ=toZ;
-                UpdateLocation(toX, toZ,StaticInfo.name);
-            }
-            Debug.Log(obj.data.ToDictionary()["type"]);
-            socket.Emit("ResetConfirmed", new JSONObject(true));
-        }
-        Debug.Log("Hello, im at confirmride in gm, my name is " + StaticInfo.name + " my confirmed number is " + confirmed);
+            confirmed--;
+            operationManager.askingForRide=false;
+            if(confirmed==0)
+            {
+                // if(obj.data.ToDictionary()["type"].Equals("0"))
+                // {
+                //     if(tileMap.selectedUnit.driving==2)
+                //     {
+                //         UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                //         fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                //         fireman.currentX=toX;
+                //         fireman.currentZ=toZ;
+                //         UpdateLocation(toX, toZ,StaticInfo.name);  
+                //     }
+                //     if(tileMap.selectedUnit.driving==1)
+                //     {
+                //         UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                //         fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                //         fireman.currentX=toX;
+                //         fireman.currentZ=toZ;
+                //         UpdateLocation(toX, toZ,StaticInfo.name);
+                //     }
+                // }
+                if(obj.data.ToDictionary()["type"].Equals("2")){
 
+                    UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                    fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                    fireman.currentX=toX;
+                    fireman.currentZ=toZ;
+                    UpdateLocation(toX, toZ,StaticInfo.name);        
+                }
+                if(obj.data.ToDictionary()["type"].Equals("1")){
+                    UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                    fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                    fireman.currentX=toX;
+                    fireman.currentZ=toZ;
+                    UpdateLocation(toX, toZ,StaticInfo.name);
+                }
+                if(obj.data.ToDictionary()["type"].Equals("0")){
+                    if(tileMap.tiles[tileMap.selectedUnit.currentX/6, tileMap.selectedUnit.currentZ/6]==3)
+                    {
+                        UpdateEngineLocation(toX, toZ, fromX, fromZ);
+                        fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                        fireman.currentX=toX;
+                        fireman.currentZ=toZ;
+                        UpdateLocation(toX, toZ,StaticInfo.name);  
+                    }
+                    if(tileMap.tiles[tileMap.selectedUnit.currentX/6, tileMap.selectedUnit.currentZ/6]==4)
+                    {
+                        UpdateAmbulanceLocation(toX, toZ, fromX, fromZ);
+                        fireman.s.transform.position = new Vector3(toX, 0.2f, toZ);
+                        fireman.currentX=toX;
+                        fireman.currentZ=toZ;
+                        UpdateLocation(toX, toZ,StaticInfo.name);
+                    }
+                }
+                Debug.Log(obj.data.ToDictionary()["type"]);
+                // Dictionary<String, string> data = new Dictionary<string, string>();
+                // data["room"] = StaticInfo.roomNumber.ToString();
+                // socket.Emit("ResetConfirmed", new JSONObject(data));
+            }
+            Debug.Log("Hello, im at confirmride in gm, my name is " + StaticInfo.name + " my confirmed number is " + confirmed);
+
+        
+        
     }
 
     public void ResetConfirmed_Success(SocketIOEvent obj){
         this.confirmed = 0;
+        // tileMap.selectedUnit.driving=0;
         Debug.Log(StaticInfo.name + "is resetting confirmed to  " + this.confirmed);
     }
 
@@ -660,25 +735,31 @@ public class GameManager: MonoBehaviour
 
 
         List<string> names=parseJsonArray(obj.data["names"]);
-        if(names.Count>0)
+        Debug.Log(" wait, the names.count is" + names.Count);
+        if(names.Count>0&&!tileMap.ambulance.isRemoted)
         {
             foreach(var name in names){
                 if(name.Equals(StaticInfo.name)){
                     tileMap.selectedUnit.s.transform.position=new Vector3(newx,0.2f,newz);
+                    Debug.Log("HELLO im driver, im in UpdateAmbulanceLocation_Success, my name is:" + StaticInfo.name);
                     tileMap.selectedUnit.currentX = newx;
                     tileMap.selectedUnit.currentZ = newz;
                     UpdateLocation(newx, newz, StaticInfo.name);
+                    tileMap.selectedUnit.riding=false;
+                    tileMap.selectedUnit.driving=false;
                 }
             }
         }
 
-
-
         tileMap.ambulance.moveNextStation(newx/6, newz/6);
+        tileMap.ambulance.isRemoted=false;
 
         // Debug.Log("update ambulance !!!!!");
         Debug.Log(StaticInfo.name + "is going to next station!!!!!!!!!!!!!!!!!" + "names count is:" + names.Count + "!!!!!");
         // confirmed=0;
+        Dictionary<String, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber.ToString();
+        socket.Emit("ResetConfirmed", new JSONObject(data));
     }
 
     public void UpdateEngineLocation(int newx,int newz, int origx, int origz)
@@ -711,12 +792,17 @@ public class GameManager: MonoBehaviour
                     tileMap.selectedUnit.currentX = newx;
                     tileMap.selectedUnit.currentZ = newz;
                     UpdateLocation(newx, newz, StaticInfo.name);
+                    tileMap.selectedUnit.riding=false;
+                    tileMap.selectedUnit.driving=false;
                 }
             }
         }
 
         tileMap.engine.moveNextStation(newx/6, newz/6);
         confirmed=0;
+        Dictionary<String, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber.ToString();
+        socket.Emit("ResetConfirmed", new JSONObject(data));
     }
 
 
@@ -762,12 +848,14 @@ public class GameManager: MonoBehaviour
 			Debug.Log("It is now your turn! Refreshing AP");
 			fireman.refreshAP();
             changeRoleButton.SetActive(true);
+            endOfTurn=false;
 		}
         else
         {
             isMyTurn = false;
 			Debug.Log("It is now someone else's turn!");
             fireman.refreshAP();
+            endOfTurn=false;
 		}
 
     }
@@ -820,9 +908,41 @@ public class GameManager: MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         socket.Emit("USER_CONNECT");
+        Dictionary<string,string> join=new Dictionary<string, string>();
+        join["room"]=StaticInfo.roomNumber;
+        join["name"]=StaticInfo.name;
+        socket.Emit("JoinGame",new JSONObject(join));
 
         yield return new WaitForSeconds(0.5f);
 
+    }
+
+    public void JoinGame_Success(SocketIOEvent obj){
+        Debug.Log("in join game");
+        string owner=obj.data.ToDictionary()["owner"];
+        string room=obj.data.ToDictionary()["room"];
+        if(room.Equals(StaticInfo.roomNumber)){
+            if(owner.Equals(StaticInfo.name)){
+                InitiateBoard();
+            }
+        }
+    }
+
+    public void InitiateBoard(){
+        Debug.Log("Initiating Board");
+        if(StaticInfo.level.Equals("Family")){ // Family
+            //1. Place Fire
+            tileMap.InitializeFamily();
+            //2. POI
+            pOIManager.initiatePOI();
+        }else{ // Experienced
+            //1. Place Explosion
+            tileMap.InitializeExperienced();
+            //2. Hazmat/hotspot
+            hazmatManager.initiateHazmat();
+            //3. poi
+            pOIManager.initiatePOI();
+        }
     }
 
     public Fireman initializeFireman()
@@ -923,7 +1043,7 @@ public class GameManager: MonoBehaviour
         socket.Emit("UpdateTile", new JSONObject(updateTile));
     }
 
-    public void UpdateWall(int x, int z, int type, int horizontal)
+    public void UpdateWall(int x, int z, int type, int horizontal, bool fromExplosion)
     {
         Debug.Log("Update wall");
         Dictionary<String, string> updateWall = new Dictionary<string, string>();
@@ -932,11 +1052,12 @@ public class GameManager: MonoBehaviour
         updateWall["type"] = type.ToString();
         updateWall["horizontal"] = horizontal.ToString();
         updateWall["room"] = StaticInfo.roomNumber;
+        updateWall["fromExplosion"]=fromExplosion.ToString();
 
         socket.Emit("UpdateWall", new JSONObject(updateWall));
     }
 
-    public void UpdateDoor(int x, int z, int toType, int type)
+    public void UpdateDoor(int x, int z, int toType, int type, bool fromExplosion)
     {
         Debug.Log("Update door");
         Dictionary<String, string> updateDoor = new Dictionary<string, string>();
@@ -945,6 +1066,7 @@ public class GameManager: MonoBehaviour
         updateDoor["toType"] = toType.ToString();
         updateDoor["type"] = type.ToString();
         updateDoor["room"] = StaticInfo.roomNumber;
+        updateDoor["fromExplosion"]=fromExplosion.ToString();
 
         socket.Emit("UpdateDoor", new JSONObject(updateDoor));
     }
@@ -1189,13 +1311,15 @@ public class GameManager: MonoBehaviour
 							Debug.Log("    VET (3) Finished!" + Time.time);
 
 							// Need to drop Victim or Hazmat. NB Fireman can dodge if leading treated victim
-							if (fireman.carryingVictim == true)
+							if (fireman.carriedPOI!=null)
 							{
-								operationManager.dropV();
+								pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
+                                StopCarry(fireman.currentX/6,fireman.currentZ/6);
 							}
 							if (fireman.carriedHazmat != null)
 							{
-								operationManager.dropHazmat();
+								hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
+                                StopCarryH(fireman.currentX/6,fireman.currentZ/6);
 							}
 
 							// Player has chosen to move to the left:
@@ -1253,9 +1377,9 @@ public class GameManager: MonoBehaviour
 		// Update vicinity check if player is playing a Veteran currently
 		if (fireman.role == Role.Veteran) {
 			//yield return new WaitForSeconds(0.75f);
-
 			Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
 			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+
 		}
 
 		// Kill the thread
@@ -1270,7 +1394,10 @@ public class GameManager: MonoBehaviour
 		// BEGIN OF WIP
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(0, 0, true);
+        System.Random rand=new System.Random();
+        int x=rand.Next(1,8);
+        int z=rand.Next(1,6);
+		fireManager.advanceFire(x, z, true);
 		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
@@ -1284,18 +1411,19 @@ public class GameManager: MonoBehaviour
         pOIManager.replenishPOI();
         operationManager.DestroyAll();
 
+        endOfTurn=true;
 
-		// checkTurn();
+		checkTurn();
         //do stuff here...
 
-        if (isMyTurn)
-        {
+        // if (isMyTurn)
+        // {
 		    changeTurn();
-        }
-        else
-        {
-           Debug.Log("This not your turn! Don't click end turn!");
-        }
+        // }
+        // else
+        // {
+        //    Debug.Log("This not your turn! Don't click end turn!");
+        // }
     }
 
     public void checkTurn()
@@ -1477,6 +1605,7 @@ public class GameManager: MonoBehaviour
 
     public void startDrive(int type)
     {
+        // tileMap.selectedUnit.driving = type;
         Dictionary<string, string> update = new Dictionary<string, string>();
         update["room"] = StaticInfo.roomNumber;
         update["name"] = StaticInfo.name;
@@ -1716,6 +1845,7 @@ public class GameManager: MonoBehaviour
 
     public void stopDrive(string name)
     {
+        // tileMap.selectedUnit.driving = 0;
         Dictionary<string, string> stop = new Dictionary<string, string>();
         stop["name"] = name;
         stop["room"] = StaticInfo.roomNumber;
@@ -1875,6 +2005,12 @@ public class GameManager: MonoBehaviour
                     hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarryH(fireman.currentX/6,fireman.currentZ/6);
                 }
+                int vx=tileMap.engine.x;
+                int vz=tileMap.engine.z;
+                fireman.currentX=vx/6*6;
+                fireman.currentZ=vz/6*6;
+                fireman.s.transform.position=new Vector3(fireman.currentX, 0.2f, fireman.currentZ);
+                UpdateLocation(fireman.currentX,fireman.currentZ,fireman.name);
                 displayRole();
                 Dictionary<string, string> change = new Dictionary<string, string>();
                 change["room"] = StaticInfo.roomNumber;
@@ -1882,12 +2018,7 @@ public class GameManager: MonoBehaviour
                 change["role"] = ((int)StaticInfo.role).ToString();
                 change["oldRole"] = ((int)oldRole).ToString();
                 socket.Emit("changeRole", new JSONObject(change));
-                int vx=this.enG.x;
-                int vz=this.enG.z;
-                fireman.currentX=vx/6;
-                fireman.currentZ=vz/6;
-                fireman.s.transform.position=new Vector3(fireman.currentX*6, 0.2f, fireman.currentZ*6);
-                UpdateLocation(fireman.currentX,fireman.currentZ,fireman.name);
+                
                 
                 break;
             }
@@ -2056,7 +2187,23 @@ public class GameManager: MonoBehaviour
                 changeRoleButton.SetActive(true);
             }
         }
-        
+    }
+
+    public void explodeHazmat(int x, int z){
+        Dictionary<string,string> data=new Dictionary<string, string>();
+        data["x"]=x.ToString();
+        data["z"]=z.ToString();
+        data["room"]=StaticInfo.roomNumber;
+        socket.Emit("ExplodeHazmat",new JSONObject(data));
+    }
+
+    public void explodeHazmat_Success(SocketIOEvent obj){
+        string room=obj.data.ToDictionary()["room"];
+        if(room.Equals(StaticInfo.roomNumber)){
+            int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+            int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+            hazmatManager.explodeHazmat(x,z);
+        }
     }
 
 }

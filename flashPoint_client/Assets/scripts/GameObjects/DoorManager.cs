@@ -139,9 +139,10 @@ public int HorizontalDoor(int x, int z)
         defaultVerticalDoors.Add(new int[] { 8, 5 });
     }
 
-	public void ChangeDoor(int x, int z, int toType, int type)
+	public void ChangeDoor(int x, int z, int toType, int type, bool fromExplosion)
 	{
-		if (gm.fireman.changeDoor(x * 6, z * 6))
+		bool can_break = (fromExplosion) ? fromExplosion : gm.fireman.changeDoor(x * 6, z * 6);
+		if (can_break)
 		{
 			if (type == 0)//we're opening a hwall
 			{

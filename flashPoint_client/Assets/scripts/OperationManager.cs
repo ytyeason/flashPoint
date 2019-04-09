@@ -22,6 +22,9 @@ public class OperationManager
 
     private int x, z;
 
+    //for deckgun
+    private int rng_X, rng_Z;
+
     public SocketIOComponent socket;
 
     public bool inCommand = false;
@@ -29,6 +32,8 @@ public class OperationManager
     public int commandMoves = 1;
 
     public bool askingForRide = false;
+
+    public bool askDeckGun = false;
 
     public OperationManager(GameManager gm)
     {
@@ -313,7 +318,7 @@ public class OperationManager
                         {
                             for (int j = minZ; j <= maxZ; j++)
                             {
-                                if (o["Location"].Equals("\"" + i * 6 + "," + j * 6 + "\""))
+                                if (o["Location"].ToString().Equals("\"" + i * 6 + "," + j * 6 + "\""))
                                 {
                                     existsF = true;
                                     Debug.Log("another fireman here");
@@ -389,7 +394,7 @@ public class OperationManager
                 }
 
                 if (moveTo) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && this.commandMoves + fireman.FreeAP >= requiredAP&&commandMoves!=0) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -406,7 +411,7 @@ public class OperationManager
                 {
                     foreach (JSONObject o in gm.players.Values)
                     {
-                        if (o["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+                        if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
                         {
                             Operation op = new Operation(this, OperationType.Command);
                             possibleOp.Add(op);
@@ -658,7 +663,7 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("\"Family\"")) // fire deck gun && ride
+            if (gm.tileMap.tiles[x, z] == 3 && !StaticInfo.level.Equals("Family")) // fire deck gun && ride
             {
                 // Debug.Log("in deckgun");
                 double vx = (double)gm.enG.x / 6;
@@ -721,7 +726,7 @@ public class OperationManager
                             for (int j = minZ; j <= maxZ; j++)
                             {
                                 // Debug.Log(o["Location"]);
-                                if (o["Location"].Equals("\"" + i * 6 + "," + j * 6 + "\""))
+                                if (o["Location"].ToString().Equals("\"" + i * 6 + "," + j * 6 + "\""))
                                 {
                                     existsF = true;
                                     // Debug.Log("another fireman here");
@@ -733,7 +738,7 @@ public class OperationManager
                         if (existsF) break;
                     }
                     // Debug.Log(existsF);
-                    if (!existsF && fireman.FreeAP >= requiredAP && !StaticInfo.level.Equals("\"Family\"") && fireman.role != Role.Dog)
+                    if (!existsF && fireman.FreeAP >= requiredAP && !StaticInfo.level.Equals("Family") && fireman.role != Role.Dog)
                     {
                         Operation op = new Operation(this, OperationType.DeckGun);
                         possibleOp.Add(op);
@@ -753,7 +758,7 @@ public class OperationManager
                 }
             }
 
-            if (gm.tileMap.tiles[x, z] == 4 && !StaticInfo.level.Equals("\"Family\"") && gm.tileMap.selectedUnit.role != Role.Dog) // ambulance
+            if (gm.tileMap.tiles[x, z] == 4 && !StaticInfo.level.Equals("Family") && gm.tileMap.selectedUnit.role != Role.Dog) // ambulance
             {
                 double vx = (double)gm.amB.x / 6;
                 double vz = (double)gm.amB.z / 6;
@@ -818,7 +823,7 @@ public class OperationManager
                 }
 
                 if (moveTo1) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + gm.fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && this.commandMoves + gm.fireman.FreeAP >= requiredAP&&commandMoves!=0) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -834,7 +839,8 @@ public class OperationManager
                 {
                     foreach (JSONObject o in gm.players.Values)
                     {
-                        if (o["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+                        Debug.Log(o["Location"]);
+                        if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
                         {
                             Operation op = new Operation(this, OperationType.Command);
                             possibleOp.Add(op);
@@ -859,8 +865,11 @@ public class OperationManager
             {
                 foreach (JSONObject o in gm.players.Values)
                 {
-                    if (o["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+                    Debug.Log(o["Location"]);
+                    Debug.Log("\"" + x * 6 + "," + z * 6 + "\"");
+                    if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
                     {
+                        Debug.Log("should command");
                         Operation op = new Operation(this, OperationType.Command);
                         possibleOp.Add(op);
                     }
@@ -934,15 +943,7 @@ public class OperationManager
                             requiredAP = 4;
                         }
 
-                        if (controlled.role == Role.CAFS && commandMoves >= requiredAP) // not commanded before
-                        {
-                            if (moveTo && fireman.remainingSpecAp >= requiredAP)
-                            {
-                                Operation op = new Operation(this, OperationType.Move);
-                                possibleOp.Add(op);
-                            }
-                        }
-                        if (controlled.role == Role.CAFS && commandMoves + fireman.FreeAP >= requiredAP) // not commanded before
+                        if (controlled.role == Role.CAFS && commandMoves + fireman.FreeAP >= requiredAP&&commandMoves!=0) // not commanded before
                         {
                             if (moveTo)
                             {
@@ -1077,7 +1078,9 @@ public class OperationManager
                 controlled.riding = false;
                 gm.stopRide(controlled.name);
             }
-            gm.UpdateLocation(x, z, controlled.name);
+            gm.UpdateLocation(x*6, z*6, controlled.name);
+            controlled.currentX=x*6;
+            controlled.currentZ=z*6;
             int requiredAP = 1;
             if ((gm.tileMap.tiles[x, z] == 2 && gm.fireman.role != Role.Dog) || ((controlled.carryingVictim) && gm.fireman.role != Role.Dog))
             {
@@ -1244,7 +1247,7 @@ public class OperationManager
         string name = "";
         foreach (string o in gm.players.Keys)
         {
-            if (gm.players[o]["Location"].Equals("\"" + x * 6 + "," + z * 6 + "\""))
+            if (gm.players[o]["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
             {
                 role = (Role)Int32.Parse(gm.players[o].ToDictionary()["Role"]);
                 if (!Int32.TryParse(gm.players[o].ToDictionary()["Driving"], out drive))
@@ -1340,6 +1343,7 @@ public class OperationManager
     {
         Ambulance amb = gm.tileMap.ambulance;
         Fireman fireman = gm.tileMap.selectedUnit;
+        amb.isRemoted = true;
         int vx = gm.amB.x;
         int vz = gm.amB.z;
         int requiredAP = 2;
@@ -1363,6 +1367,7 @@ public class OperationManager
 
     public void ride()
     {
+
         if(askingForRide){
             if(gm.tileMap.tiles[gm.fireman.currentX/6,gm.fireman.currentZ/6]==3){
                 gm.fireman.riding=true;
@@ -1393,13 +1398,6 @@ public class OperationManager
 
     public void deckGun()
     {
-        int requiredAP = 4;
-        if (gm.fireman.role == Role.Driver)
-        {
-            requiredAP = 2;
-        }
-        Fireman fireman = gm.tileMap.selectedUnit;
-        fireman.setAP(fireman.FreeAP - requiredAP);
 
         Debug.Log("fire deckgunnnnnnnnnnnnnnnnnnnnnnnn");
         double vx = gm.enG.x / 6;
@@ -1437,8 +1435,24 @@ public class OperationManager
             rz1 = 1;
             rz2 = 3;
         }
-        int rng_X = UnityEngine.Random.Range(rx1, rx2);
-        int rng_Z = UnityEngine.Random.Range(rz1, rz2);
+        rng_X = UnityEngine.Random.Range(rx1, rx2);
+        rng_Z = UnityEngine.Random.Range(rz1, rz2);
+        gm.sendNotification("Hello! The target coordinate is (" + rng_X + "," + rng_Z + ")");
+        gm.sendNotification("Press the deckgun button again to regenerate a target OR press the close button to confirmed");
+        askDeckGun = true;
+
+    }
+
+    public void confirmDeckGun(int rng_X, int rng_Z)
+    {
+        int requiredAP = 4;
+        Debug.Log("my role is:" + gm.fireman.role);
+        if (gm.fireman.role == Role.Driver)
+        {
+            requiredAP = 2;
+        }
+        Fireman fireman = gm.tileMap.selectedUnit;
+        fireman.setAP(fireman.FreeAP - requiredAP);
         Debug.Log("range" + rng_X + "," + rng_Z);
         //need to ask player if he is satisfied with the extinguishing area
         gm.tileMap.buildNewTile(rng_X, rng_Z, 0);
@@ -1463,6 +1477,9 @@ public class OperationManager
             gm.tileMap.buildNewTile(rng_X, rng_Z - 1, 0);
             gm.UpdateTile(rng_X, rng_Z - 1, 0);
         }
+        askDeckGun = false;
+        rng_X = 0;
+        rng_Z = 0;
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);
@@ -1568,7 +1585,11 @@ public class OperationManager
     public void cancel()
     {
         if(askingForRide){
+            gm.fireman.riding=false;
             gm.startRide(0);
+        }
+        if(askDeckGun){
+            confirmDeckGun(rng_X, rng_Z);
         }
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);

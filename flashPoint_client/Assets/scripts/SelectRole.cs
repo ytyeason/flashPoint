@@ -100,7 +100,7 @@ public class SelectRole : MonoBehaviour {
             case "Cafs_Firefighter":
                 r = Role.CAFS;
                 break;
-            case "Driver_Operation":
+            case "Driver_Operator":
                 r = Role.Driver;
                 break;
             case "Fire_Captain":
@@ -112,7 +112,7 @@ public class SelectRole : MonoBehaviour {
             case "Hazmat_Technician":
                 r = Role.HazmatTech;
                 break;
-            case "Paramedic":
+            case "Parademic":
                 r = Role.Paramedic;
                 break;
             case "rescue_dog":

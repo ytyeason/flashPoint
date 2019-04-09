@@ -18,6 +18,7 @@ public class Ambulance : MonoBehaviour {
 	private float startTime;
 	int moveClockwise = 0;
 	int direction = 0;
+	public bool isRemoted = false;
 
 	// Occurs when we click the mouse:
 
