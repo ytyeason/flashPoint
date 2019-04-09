@@ -29,7 +29,7 @@ public class GameManager: MonoBehaviour
     public GameObject[] hazPrefabs;
 	public int mapSizeX = 10;
 	public int mapSizeZ = 8;
-	public int damaged_wall_num = 0;
+	public int damaged_wall_num = 23;
 	public int rescued_vict_num = 0;
 
 	public JSONObject game_info = StaticInfo.game_info;
@@ -272,7 +272,8 @@ public class GameManager: MonoBehaviour
 
     public void displayStats()
     {
-        stats.text = "Damaged Marker" + " : " + this.damaged_wall_num;
+        Debug.Log("DamagedWall:" + this.damaged_wall_num);
+        stats.text = "Damaged Marker" + " : " + wallManager.damagedWalls;
         stats.text+="\nRescued Victims" + " : " + pOIManager.rescued;
         stats.text+= "\nKilled Victims" + " : " + pOIManager.killed;
         if (!StaticInfo.level.Equals("Family"))
@@ -1884,26 +1885,39 @@ public class GameManager: MonoBehaviour
     public void victory_Success(SocketIOEvent obj)
     {
         Debug.Log("Update victory");
+        if (obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber))
+        {
+            SceneManager.LoadScene("Win");
+        }
+        
     }
 
     public void defeat_Success(SocketIOEvent obj)
     {
         Debug.Log("Update defeat");
+        if (obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber))
+        {
+            SceneManager.LoadScene("gameOver");
+        }
     }
 
     public void victory()
     {
         Debug.Log("You win!");
-        socket.Emit("victory");
-        SceneManager.LoadScene("Win");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber;
+        socket.Emit("victory",new JSONObject(data));
+        //
     }
 
 
     public void defeat()
     {
         Debug.Log("Game Over!");
-        socket.Emit("defeat");
-        SceneManager.LoadScene("gameOver");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["room"] = StaticInfo.roomNumber;
+        socket.Emit("defeat", new JSONObject(data));
+        //;
     }
 
     public void confirmPosition(){

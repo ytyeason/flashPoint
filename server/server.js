@@ -820,6 +820,18 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
     });
 
+    socket.on('victory',function(data){
+      var room=data['room'];
+      Games[room]=undefined;
+      io.sockets.emit('victory_Success',{"room":room});
+    });
+
+    socket.on('defeat',function(data){
+      var room=data['room'];
+      Games[room]=undefined;
+      io.sockets.emit('defeat_Success',{"room":room});
+    });
+
 });
 
 
