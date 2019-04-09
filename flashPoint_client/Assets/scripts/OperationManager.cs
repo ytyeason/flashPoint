@@ -1070,15 +1070,6 @@ public class OperationManager
         Fireman fireman = gm.tileMap.selectedUnit;
         if (inCommand)
         {
-            if (controlled.role == Role.CAFS)
-            {
-                if(commandMoves==0){
-                    
-                }else{
-                    commandMoves -= 1;
-                }
-                
-            }
             if (controlled.driving)
             {
                 controlled.driving = false;
@@ -1106,7 +1097,7 @@ public class OperationManager
             }
             if (controlled.role == Role.CAFS)
             {
-                if(commandMoves==0){
+                if(commandMoves<=0){
                     fireman.setAP(fireman.FreeAP-requiredAP);
                 }else{
                     commandMoves -= 1;
