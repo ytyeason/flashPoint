@@ -321,11 +321,17 @@ public class GameManager: MonoBehaviour
         }
         Debug.Log("displaying role");
         roles.text = StaticInfo.name+": "+roleToString(StaticInfo.role);
+        roles.text += " " + "at: " + fireman.currentX/6 + "," + fireman.currentZ/6;
         if (players != null)
         {
             foreach (string name in players.Keys)
             {
-                if(!name.Equals(StaticInfo.name)) roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
+                if(!name.Equals(StaticInfo.name))
+                {
+                  roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
+                  roles.text += "\n" + "at: " + players[name].ToDictionary()["Location"];
+
+                }
             }
         }
 
