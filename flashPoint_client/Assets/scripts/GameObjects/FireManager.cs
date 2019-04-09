@@ -13,7 +13,7 @@ public class FireManager : MonoBehaviour
 	public TileMap tileMap;
 	public Boolean debugMode = true;        // Toggle this for more descriptive Debug.Log() output
 
-    LinkedList<int[]> hazametList = new LinkedList<int[]>();
+    public LinkedList<int[]> hazametList = new LinkedList<int[]>();
 
 
 
@@ -24,6 +24,22 @@ public class FireManager : MonoBehaviour
 		this.tileMap = in_tileMap;  //initFireTileStores(in_tileMap);
 		this.mapSizeX = in_X;
 		this.mapSizeZ = in_Z;
+	}
+
+	public void explosion(){
+		while (hazametList.Count != 0)
+		{
+			int[] tmp = hazametList.First.Value;
+			hazametList.RemoveFirst();
+			Debug.Log("Check Location");
+			Debug.Log(tmp[0]+","+tmp[1]);
+			gm.hazmatManager.explodeHazmat(tmp[0], tmp[1]);
+			gm.explodeHazmat(tmp[0],tmp[1]);
+			keepGoingUp(tmp[0],tmp[1]);
+			keepGoingDown(tmp[0], tmp[1]);
+			keepGoingLeft(tmp[0], tmp[1]);
+			keepGoingRight(tmp[0], tmp[1]);
+		}
 	}
 
 	// Pseudo-controller function called by GameManager when turn is changed
@@ -37,17 +53,10 @@ public class FireManager : MonoBehaviour
 		if (debugMode) Debug.Log("flashover:");
 		flashover();
 
-		 while (hazametList.Count != 0)
-            {
-                int[] tmp = hazametList.First.Value;
-                hazametList.RemoveFirst();
-				gm.hazmatManager.explodeHazmat(tmp[0], tmp[1]);
-                keepGoingUp(tmp[0],tmp[1]);
-                keepGoingDown(tmp[0], tmp[1]);
-                keepGoingLeft(tmp[0], tmp[1]);
-                keepGoingRight(tmp[0], tmp[1]);
-            }
-
+		Debug.Log("List Count");
+		Debug.Log(hazametList.Count);
+		
+		explosion();
 		
 		// Remove victims in fire & knockdown Firemen
 		//if (debugMode) Debug.Log("knockDown:");
@@ -56,6 +65,13 @@ public class FireManager : MonoBehaviour
 		// Final step
 		if (debugMode) Debug.Log("extOutFire:");
 		extOutFire();
+
+		if(gm.hazmatManager.containsKey(in_x,in_z,gm.hazmatManager.placedHotspot)){
+			System.Random rand=new System.Random();
+			int x=rand.Next(1,8);
+			int z=rand.Next(1,6);
+			advanceFire(x,z,isATest);
+		}
 		
 	}
 

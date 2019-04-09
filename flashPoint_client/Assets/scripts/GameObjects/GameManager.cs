@@ -160,6 +160,8 @@ public class GameManager: MonoBehaviour
         socket.On("ResetConfirmed_Success", ResetConfirmed_Success);
         socket.On("SaveGame_Success", SaveGame_Success);
         socket.On("ConfirmPosition_Success",confirmPosition_Success);
+        socket.On("JoinGame_Success",JoinGame_Success);
+        socket.On("ExplodeHazmat_Success",explodeHazmat_Success);
 
         if (game_info != null)
         {
@@ -874,9 +876,39 @@ public class GameManager: MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         socket.Emit("USER_CONNECT");
+        Dictionary<string,string> join=new Dictionary<string, string>();
+        join["room"]=StaticInfo.roomNumber;
+        join["name"]=StaticInfo.name;
+        socket.Emit("JoinGame",new JSONObject(join));
 
         yield return new WaitForSeconds(0.5f);
 
+    }
+
+    public void JoinGame_Success(SocketIOEvent obj){
+        string owner=obj.data.ToDictionary()["owner"];
+        string room=obj.data.ToDictionary()["room"];
+        if(room.Equals(StaticInfo.roomNumber)){
+            if(owner.Equals(StaticInfo.name)){
+                InitiateBoard();
+            }
+        }
+    }
+
+    public void InitiateBoard(){
+        if(StaticInfo.level.Equals("Family")){ // Family
+            //1. Place Fire
+            tileMap.InitializeFamily();
+            //2. POI
+            pOIManager.initiatePOI();
+        }else{ // Experienced
+            //1. Place Explosion
+            tileMap.InitializeExperienced();
+            //2. Hazmat/hotspot
+            hazmatManager.initiateHazmat();
+            //3. poi
+            pOIManager.initiatePOI();
+        }
     }
 
     public Fireman initializeFireman()
@@ -1324,7 +1356,7 @@ public class GameManager: MonoBehaviour
 		// BEGIN OF WIP
 
 		// advanceFire, n.b parameters only matter for testing
-		fireManager.advanceFire(0, 0, true);
+		fireManager.advanceFire(1, 3, true);
 		//Debug.Log("SEE  ->  tiles[1, 4] = " + tileMap.tiles[1, 4]);
 		StartCoroutine(knockDown());
 		Debug.Log("Finished advFire, redistributing AP");
@@ -1339,17 +1371,17 @@ public class GameManager: MonoBehaviour
         operationManager.DestroyAll();
 
 
-		// checkTurn();
+		checkTurn();
         //do stuff here...
 
-        if (isMyTurn)
-        {
+        // if (isMyTurn)
+        // {
 		    changeTurn();
-        }
-        else
-        {
-           Debug.Log("This not your turn! Don't click end turn!");
-        }
+        // }
+        // else
+        // {
+        //    Debug.Log("This not your turn! Don't click end turn!");
+        // }
     }
 
     public void checkTurn()
@@ -2114,6 +2146,23 @@ public class GameManager: MonoBehaviour
             }
         }
         
+    }
+
+    public void explodeHazmat(int x, int z){
+        Dictionary<string,string> data=new Dictionary<string, string>();
+        data["x"]=x.ToString();
+        data["z"]=z.ToString();
+        data["room"]=StaticInfo.roomNumber;
+        socket.Emit("ExplodeHazmat",new JSONObject(data));
+    }
+
+    public void explodeHazmat_Success(SocketIOEvent obj){
+        string room=obj.data.ToDictionary()["room"];
+        if(room.Equals(StaticInfo.roomNumber)){
+            int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
+            int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+            hazmatManager.explodeHazmat(x,z);
+        }
     }
 
 }

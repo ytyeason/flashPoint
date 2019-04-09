@@ -42,7 +42,7 @@ public class WallManager
 
 	public GameManager gm;
 
-    public int damagedWalls = 23;
+    public int damagedWalls = 0;
 
     void StartWallManager()
 	{

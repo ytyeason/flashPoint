@@ -239,6 +239,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       Games[room_number]["numberOfHotspot"]=numberOfHotspot;
       Games[room_number]["selectedRoles"]=[];
       Games[room_number]["confirmedPosition"]=[];
+      Games[room_number]["joinedPlayers"]=[];
       console.log(Games[room_number]+level);
       socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
     });
@@ -425,7 +426,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
     socket.on('changingTurn', function(data){
         var room_number = data['room'];
         var name = data['name'];
-
+        console.log(room_number);
         console.log(Games[room_number]);
         // console.log(Games[room_number]['Turn']);
         var turn_name = Games[room_number]['Turn'];
@@ -847,6 +848,25 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room=data['room'];
       Games[room]=undefined;
       io.sockets.emit('defeat_Success',{"room":room});
+    });
+
+    socket.on("JoinGame",function(data){
+      var name=data['name'];
+      var room=data['room'];
+      if(!Games[room]["joinedPlayers"].includes(name)){
+        Games[room]["joinedPlayers"].push(name);
+      }
+      if(Games[room]["joinedPlayers"].length==parseInt(Games[room]["numberOfPlayer"])){
+        io.sockets.emit("JoinGame_Success",{"room":room,"owner":Games[room]["Owner"]});
+      }
+    });
+
+    socket.on("ExplodeHazmat",function(data){
+      var x=data['x'];
+      var z=data['z'];
+      var room=data['room'];
+
+      socket.broadcast.emit("ExplodeHazmat_Success",{"x":x, "z":z, "room":room});
     });
 
 });
