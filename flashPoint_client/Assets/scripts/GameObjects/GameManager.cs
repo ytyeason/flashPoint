@@ -1454,7 +1454,7 @@ public class GameManager: MonoBehaviour
         Debug.Log("knockDown -> Looking at '" + name + "'. IsCurrentPlayer  => " + currentPlayer);
 
         // Kill any POI the fireman is carrying:
-        if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)
+        if ((tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)&&currentPlayer)
         {
             pOIManager.kill(x_elem, z_elem);
             killPOI(x_elem,z_elem);
