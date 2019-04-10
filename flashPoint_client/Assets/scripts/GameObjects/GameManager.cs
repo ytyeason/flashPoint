@@ -205,8 +205,9 @@ public class GameManager: MonoBehaviour
             if (!StaticInfo.LoadGame)//if creating a new game
             {
                 fireman = initializeFireman();
-                amB = initializeAmbulance(0);
-                enG = initializeEngine(0);
+
+                amB = initializeAmbulance();
+                enG = initializeEngine();
                 operationManager = new OperationManager(this);
                 wallManager = new WallManager(wallTypes, this,0);
                 doorManager = new DoorManager(doorTypes, this,0);
@@ -274,8 +275,8 @@ public class GameManager: MonoBehaviour
             else//if we're loading a game
             {
                 fireman = initializeFireman();
-                amB = initializeAmbulance(1);
-                enG = initializeEngine(1);
+                amB = initializeAmbulance();
+                enG = initializeEngine();
                 operationManager = new OperationManager(this);
                 wallManager = new WallManager(wallTypes, this,1);// set to 1, generate walls based on staticInfo hWallMemo and vWallMemo
                 doorManager = new DoorManager(doorTypes, this,1);
@@ -342,14 +343,6 @@ public class GameManager: MonoBehaviour
 	            }else{
 		            startingEnginePositionPanel.SetActive(false);
 	            }
-
-	            fireman.FreeAP = StaticInfo.freeAP;
-	            fireman.specialtyAP = StaticInfo.specialtyAP;
-	            wallManager.damagedWalls = StaticInfo.damagedWall;
-	            pOIManager.rescued = StaticInfo.rescued;
-	            pOIManager.killed = StaticInfo.killed;
-	            hazmatManager.removedHazmat = StaticInfo.removedHazmat;
-	            
             }
 
         }
@@ -464,6 +457,22 @@ public class GameManager: MonoBehaviour
         return s;
     }
 
+    public void saveGame()
+    {
+        Debug.Log("saveGame");
+
+        GameManager save = this;
+
+        MyClass myObject = new MyClass();
+        myObject.level = 1;
+        myObject.timeElapsed = 47.5f;
+        myObject.playerName = "Dr Charles Francis";
+        myObject.placedPOI = pOIManager.placedPOI;
+        //myObject.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
+        //Debug.Log(wallManager.defaultHorizontalWallsMemo.Keys.Count);
+
+        socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(myObject)));
+    }
 
     void SaveGame_Success(SocketIOEvent obj)
     {
@@ -1054,49 +1063,23 @@ public class GameManager: MonoBehaviour
         int x = Convert.ToInt32(cord[0]);
         int z = Convert.ToInt32(cord[1]);
 
-        // int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-		// Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, this, StaticInfo.role,pOIManager, hazmatManager);
+        int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role,pOIManager, hazmatManager);
 
         return f;
     }
 
-    public Ambulance initializeAmbulance(int load)
+    public Ambulance initializeAmbulance()
     {
-	    Ambulance amb;
-	    if (load == 0)
-	    {
-		    amb = new Ambulance(ambulance, 54, 21, this);
-	    }
-	    else
-	    {
-		    Debug.Log(StaticInfo.ambulance.ToString());
-		    Debug.Log(Convert.ToInt32(StaticInfo.ambulance.ToArray()[0].Value));
-		    Debug.Log(Convert.ToInt32(StaticInfo.ambulance.ToArray()[1].Value));
-		    amb = new Ambulance(ambulance, 54, 21, this);
-		    amb.moveNextStation(Convert.ToInt32(StaticInfo.ambulance.ToArray()[0].Value)/6,Convert.ToInt32(StaticInfo.ambulance.ToArray()[1].Value)/6);
-	    }
-        
+        Ambulance amb = new Ambulance(ambulance, 54, 21, this);
 
         return amb;
     }
 
-    public Engine initializeEngine(int load)
+    public Engine initializeEngine()
     {
-        Engine eng;
-	    if (load == 0)
-	    {
-		    eng= new Engine(engine, 0, 33, this);
-	    }
-	    else
-	    {
-		    Debug.Log(Convert.ToInt32(StaticInfo.engine.ToArray()[0].Value));
-		    Debug.Log(Convert.ToInt32(StaticInfo.engine.ToArray()[1].Value));
-		    eng= new Engine(engine, 0, 33, this);
-		    eng.moveNextStation(Convert.ToInt32(StaticInfo.engine.ToArray()[0].Value)/6,
-			    Convert.ToInt32(StaticInfo.engine.ToArray()[1].Value)/6);
-	    }
-		    
+        Engine eng = new Engine(engine, 0, 33, this);
 
         return eng;
     }
@@ -1418,7 +1401,7 @@ public class GameManager: MonoBehaviour
 		Debug.Log("knockDown -> Looking at '" + name + "'. IsCurrentPlayer  => " + currentPlayer);
 
 		// Kill any POI the fireman is carrying:
-		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)
+		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
 		{
 			pOIManager.kill(x_elem, z_elem);
 		}
@@ -1503,21 +1486,16 @@ public class GameManager: MonoBehaviour
 								Debug.Log("    VET (3) Finished!" + Time.time);
 
 								// Need to drop Victim or Hazmat. NB Fireman can 'fully' dodge if leading treated victim
-								if (fireman.carryingVictim)
+								if (fireman.carriedPOI != null)
 								{
 									pOIManager.dropPOI(fireman.currentX / 6, fireman.currentZ / 6);
 									StopCarry(fireman.currentX / 6, fireman.currentZ / 6);
 								}
-								if (fireman.carryingHazmat)
+								if (fireman.carriedHazmat != null)
 								{
 									hazmatManager.dropHazmat(fireman.currentX / 6, fireman.currentZ / 6);
 									StopCarryH(fireman.currentX / 6, fireman.currentZ / 6);
 								}
-
-                                if(fireman.leadingVictim){
-                                    pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
-                                    StopLead(fireman.currentX / 6, fireman.currentZ / 6);
-                                }
 
 								// Player has chosen to move to:
 								if (leftDodgeDown)
@@ -1602,12 +1580,12 @@ public class GameManager: MonoBehaviour
             }
 
 
-            System.Random rand=new System.Random();
-            int x=rand.Next(1,8);
-            int z=rand.Next(1,6);
+            //System.Random rand=new System.Random();
+            //int x=rand.Next(1,8);
+            //int z=rand.Next(1,6);
 
             // Change the below 'true' to false if you want random. true is used to test specific values
-            fireManager.advanceFire(x, z, true);
+            fireManager.advanceFire(1, 3, true);
             //fireman.usedVetAP = false;
 
             // Update firefighter's current locations
@@ -2265,15 +2243,15 @@ public class GameManager: MonoBehaviour
                 fireman.setRole((Role)i);
                 StaticInfo.role=(Role)i;
                 fireman.setAP(fireman.FreeAP - 2);
-                if(fireman.carryingVictim){
+                if(fireman.carriedHazmat!=null){
                     pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarry(fireman.currentX/6,fireman.currentZ/6);
                 }
-                if(fireman.leadingVictim){
+                if(fireman.ledPOI!=null){
                     pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
                     this.StopLead(fireman.currentX/6,fireman.currentZ/6);
                 }
-                if(fireman.carryingHazmat){
+                if(fireman.carriedHazmat!=null){
                     hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarryH(fireman.currentX/6,fireman.currentZ/6);
                 }
@@ -2574,22 +2552,6 @@ public class GameManager: MonoBehaviour
             hazmatManager.explodeHazmat(x,z);
         }
     }
-	
-	public void saveGame()
-	{
-		Debug.Log("saveGame");
-
-		Dictionary<string,string> data=new Dictionary<string, string>();
-		data["room"]=StaticInfo.roomNumber;
-		data["freeAP"] = fireman.FreeAP.ToString();
-		data["specialtyAP"] = fireman.specialtyAP.ToString();
-		data["damagedWall"] = wallManager.damagedWalls.ToString();
-		data["rescued"] = pOIManager.rescued.ToString();
-		data["killed"] = pOIManager.killed.ToString();
-		data["removedHazmat"] = hazmatManager.removedHazmat.ToString();
-		socket.Emit("saveGame",new JSONObject(data));
-
-	}
 
 }
 
