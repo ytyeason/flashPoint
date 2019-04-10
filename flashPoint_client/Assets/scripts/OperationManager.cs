@@ -413,7 +413,7 @@ public class OperationManager
                 {
                     foreach (JSONObject o in gm.players.Values)
                     {
-                        if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\""))
+                        if (o["Location"].ToString().Equals("\"" + x * 6 + "," + z * 6 + "\"")&&!o["Location"].ToString().Equals("\""+StaticInfo.Location[0]+","+StaticInfo.Location[1]+"\""))
                         {
                             Operation op = new Operation(this, OperationType.Command);
                             possibleOp.Add(op);
@@ -1082,8 +1082,20 @@ public class OperationManager
                 gm.stopRide(controlled.name);
             }
             gm.UpdateLocation(x*6, z*6, controlled.name);
+            int origX=controlled.currentX/6;
+            int origZ=controlled.currentZ/6;
             controlled.currentX=x*6;
             controlled.currentZ=z*6;
+            if(controlled.carryingVictim){
+                gm.hazmatManager.moveHazmat(origX,origZ,x,z);
+                gm.UpdateHazmatLocation(origX,origZ,x,z);
+                gm.pOIManager.movePOI(origX,origZ,x,z);
+                gm.UpdatePOILocation(origX,origZ,x,z);
+            }
+            if(controlled.leadingVictim){
+                gm.pOIManager.moveTreated(origX,origZ,x,z);
+                gm.UpdateTreatedLocation(origX,origZ,x,z);
+            }
             int requiredAP = 1;
             if ((gm.tileMap.tiles[x, z] == 2 && gm.fireman.role != Role.Dog) || ((controlled.carryingVictim) && gm.fireman.role != Role.Dog))
             {
@@ -1102,15 +1114,20 @@ public class OperationManager
                 if(commandMoves<=0){
                     fireman.setAP(fireman.FreeAP-requiredAP);
                 }else{
-                    commandMoves -= 1;
-                    fireman.setAP(fireman.FreeAP-requiredAP+1);
+                    if(fireman.remainingSpecAp>=1){
+                        commandMoves-=1;
+                        fireman.setSpecAP(fireman.remainingSpecAp-1);
+                        fireman.setAP(fireman.FreeAP-requiredAP+1);
+                    }else{
+                        fireman.setAP(fireman.FreeAP-requiredAP);
+                    }
                 }
                 
             }else{
                 if (fireman.remainingSpecAp >= requiredAP) {
                     fireman.setSpecAP(fireman.remainingSpecAp - requiredAP);
                 } else {
-                    fireman.setAP(fireman.FreeAP - fireman.remainingSpecAp);
+                    fireman.setAP(fireman.FreeAP - requiredAP+fireman.remainingSpecAp);
                     fireman.setSpecAP(0);
                 }
             }
@@ -1171,6 +1188,7 @@ public class OperationManager
         Fireman fireman = gm.tileMap.selectedUnit;
 
         fireman.treat(x, z);
+        gm.UpdateTreatV(x,z);
 
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);

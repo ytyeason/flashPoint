@@ -446,7 +446,7 @@ public class Fireman
         if (carriedHazmat != null)
         {
             gm.hazmatManager.moveHazmat(origX, origZ, x, z);
-            
+            gm.UpdateHazmatLocation(origX,origZ,x,z);
         }
 
         
@@ -555,7 +555,7 @@ public class Fireman
                 }
                 else
                 {
-                    setAP(FreeAP - remainingSpecAp);
+                    setAP(FreeAP - requiredAP+remainingSpecAp);
                     setSpecAP(0);
                 }
             }
@@ -600,7 +600,7 @@ public class Fireman
                 }
                 else
                 {
-                    setAP(FreeAP - remainingSpecAp);
+                    setAP(FreeAP - requiredAP+remainingSpecAp);
                     setSpecAP(0);
                 }
             }
@@ -629,6 +629,7 @@ public class Fireman
         {
             setAP(FreeAP - 1);
             gm.pOIManager.treat(x, z);
+            gm.UpdateTreatV(x,z);
         }
 
     }

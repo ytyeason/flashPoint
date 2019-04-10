@@ -986,6 +986,8 @@ public class GameManager: MonoBehaviour
             //3. poi
             pOIManager.initiatePOI();
         }
+        string json=JsonUtility.ToJson(pOIManager);
+        Debug.Log(json);
     }
 
     public Fireman initializeFireman()
@@ -1688,7 +1690,7 @@ public class GameManager: MonoBehaviour
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
 
-        socket.Emit("UpdateTreatedLocation", new JSONObject(location));
+        socket.Emit("UpdateHazmatLocation", new JSONObject(location));
     }
 
     public void UpdateHazmatLocation_Success(SocketIOEvent obj)
@@ -1927,7 +1929,7 @@ public class GameManager: MonoBehaviour
         poi["x"] = x.ToString();
         poi["z"] = z.ToString();
         poi["type"] = type.ToString();
-        
+        poi["room"] = StaticInfo.roomNumber;
 
         socket.Emit("AddHazmat", new JSONObject(poi));
     }

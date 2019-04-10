@@ -230,6 +230,11 @@ public class TileMap  {
                 GameObject go = gm.instantiateObject(selectedUnit.s, new Vector3(x*6, 0, z*6), Quaternion.identity);
                 firemanSores[name] = go;
             }
+
+			if(name.Equals(StaticInfo.name)){
+				selectedUnit.currentX=x;
+				selectedUnit.currentZ=z;
+			}
         }
     }
 

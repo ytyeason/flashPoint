@@ -14,7 +14,7 @@ public class POI : GameUnit
     [SerializeField]
     public POIManager pm;
 
-    [SerializeField]
+    [NonSerialized]
     public GameObject Prefab;
 
     public POI(POIType type,POIManager pm)
