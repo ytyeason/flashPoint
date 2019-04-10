@@ -69,6 +69,8 @@ public class LobbyManager : MonoBehaviour {
         var hDoor = obj.data[1][3];
         var vDoor = obj.data[1][4];
         var poi = obj.data[1][5];
+        var treatedPOI = obj.data[1][6];
+        var movingPOI = obj.data[1][7];
         //Debug.Log(poi);
         //Debug.Log(tiles);
         /*
@@ -171,6 +173,32 @@ public class LobbyManager : MonoBehaviour {
         }
         StaticInfo.poi = p;
         
+        Dictionary<int[], int> mp = new Dictionary<int[], int>();
+        foreach (var location in movingPOI.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                mp[key] = value;
+            }
+        }
+        StaticInfo.movingPOI = mp;
+        
+        Dictionary<int[], int> tp = new Dictionary<int[], int>();
+        foreach (var location in treatedPOI.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                tp[key] = value;
+            }
+        }
+        StaticInfo.treatedPOI = tp;
+        
         //change StartingPosition
 
         SceneManager.LoadScene("FlashpointUIDemo");
@@ -208,12 +236,17 @@ public class LobbyManager : MonoBehaviour {
     {
         Debug.Log("create button clicked");
         Debug.Log(roomNumber.text);
+        
+        int rand = UnityEngine.Random.Range(1, 6);
 
         StaticInfo.roomNumber = roomNumber.text;
+        StaticInfo.random = rand;
 
         Dictionary<String, String> room = new Dictionary<string, string>();
         room["room"] = StaticInfo.roomNumber;
         room["name"] = StaticInfo.name;
+        room["level"] = StaticInfo.level;
+        room["random"] = rand.ToString();
         socket.Emit("CREATE_ROOM",new JSONObject(room));
     }
 

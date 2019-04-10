@@ -28,6 +28,9 @@ public static class StaticInfo
     public static Dictionary<int[], int> defaultHorizontalDoors;
     public static Dictionary<int[], int> defaultVerticalDoors;
     public static Dictionary<int[], int> poi;
+    public static Dictionary<int[], int> movingPOI;
+    public static Dictionary<int[], int> treatedPOI;
+    public static int random;
 
     public static POIManager poiManager;
 }

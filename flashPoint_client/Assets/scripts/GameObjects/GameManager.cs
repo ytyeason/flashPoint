@@ -955,13 +955,18 @@ public class GameManager: MonoBehaviour
 
     }
 
+	
     public void JoinGame_Success(SocketIOEvent obj){
         Debug.Log("in join game");
         string owner=obj.data.ToDictionary()["owner"];
         string room=obj.data.ToDictionary()["room"];
         if(room.Equals(StaticInfo.roomNumber)){
             if(owner.Equals(StaticInfo.name)){
-                InitiateBoard();
+	            if (!StaticInfo.LoadGame)//if load game, then dont need to initialize board, just use the board specified in start function
+	            {
+		            InitiateBoard();
+	            }
+                
             }
         }
     }
@@ -1595,7 +1600,8 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> treat = new Dictionary<string, string>();
         treat["x"] = x.ToString();
         treat["z"] = z.ToString();
-
+	    treat["room"] = StaticInfo.roomNumber;
+	    
         socket.Emit("TreatV", new JSONObject(treat));
     }
 
@@ -1639,6 +1645,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+	    location["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateTreatedLocation", new JSONObject(location));
     }
@@ -2158,6 +2165,8 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> rescue=new Dictionary<string, string>();
         rescue["x"]=x.ToString();
         rescue["z"]=z.ToString();
+	    rescue["room"] = StaticInfo.roomNumber;
+	    rescue["room"] = StaticInfo.roomNumber;
         socket.Emit("RescueCarried",new JSONObject(rescue));
     }
 
@@ -2165,6 +2174,7 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> rescue=new Dictionary<string, string>();
         rescue["x"]=x.ToString();
         rescue["z"]=z.ToString();
+	    rescue["room"] = StaticInfo.roomNumber;
         socket.Emit("RescueTreated",new JSONObject(rescue));
     }
 

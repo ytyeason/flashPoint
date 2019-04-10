@@ -61,6 +61,22 @@ public class POIManager{
                 var type = entry.Value;
                 addPOI(location[0],location[1], type);
             }
+            
+            var treated_poi = StaticInfo.treatedPOI;
+            foreach (KeyValuePair<int[], int> entry in treated_poi)
+            {
+                var location = entry.Key;
+                var type = entry.Value;
+                addPOI(location[0],location[1], type);
+            }
+            
+            var moving_poi = StaticInfo.movingPOI;
+            foreach (KeyValuePair<int[], int> entry in moving_poi)
+            {
+                var location = entry.Key;
+                var type = entry.Value;
+                addPOI(location[0],location[1], type);
+            }
         }
     }
 
