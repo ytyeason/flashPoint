@@ -581,7 +581,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     socket.on('LOAD_ROOM', function(data){
       console.log(data);
-      console.log(Games[data['room']]["participants"]);
+      //console.log(Games[data['room']]["participants"]);
       var det="true";
       if(Games[data['room']]!=undefined){
         var name = data['name'];
@@ -618,21 +618,28 @@ io.on('connection', function (socket) {//default event for client connect to ser
               var ambulance = Games[data['room']]["ambulance"];
               var engine = Games[data['room']]["engine"];
 
-              var freeAP = Games[data['room']]['freeAP'];
-              var specialtyAP = Games[data['room']]['specialtyAP'];
+              var freeAP = Games[data['room']]["participants"][name]["freeAP"];
+              var remainingSpecAp = Games[data['room']]["participants"][name]["remainingSpecAp"];
               var damagedWall=Games[data['room']]['damagedWall'];
               var rescued=Games[data['room']]['rescued'];
               var killed = Games[data['room']]['killed'];
               var removedHazmat = Games[data['room']]['removedHazmat'];
               //var joinedPlayers = Games[data['room']]["joinedPlayers"];
+              var riding = Games[data['room']]["participants"][name]["riding"];
+              var driving = Games[data['room']]["participants"][name]["driving"];
+              var carryingHazmat = Games[data['room']]["participants"][name]["carryingHazmat"];
+              var carryingVictim = Games[data['room']]["participants"][name]["carryingVictim"];
+              var leadingVictim = Games[data['room']]["participants"][name]["leadingVictim"];
 
               socket.emit("LOAD_GAME_SUCCESS",
               {'room':Games, 'state': room_state, 'name':name, 'roomNumber':room_num, 'level':level,
               'numberOfPlayer':numberOfPlayer, "numberOfHazmat":numberOfHazmat,
               "numberOfHotspot":numberOfHotspot, "selectedRoles":selectedRoles,
               "confirmedPosition":confirmedPosition, 'ambulance':ambulance, 'engine' :engine,
-              "freeAP":freeAP, "specialtyAP":specialtyAP, "damagedWall":damagedWall,
-              "rescued":rescued, "killed":killed, "removedHazmat":removedHazmat});
+              "freeAP":freeAP, "remainingSpecAp":remainingSpecAp, "damagedWall":damagedWall,
+              "rescued":rescued, "killed":killed, "removedHazmat":removedHazmat, "riding":riding,
+              "driving": driving, "carryingHazmat":carryingHazmat, "carryingVictim":carryingVictim,
+              "leadingVictim":leadingVictim});
           }else{
             console.log("Didn't found your name!")
             socket.emit("LOAD_GAME_SUCCESS", {'status':false});
@@ -1729,18 +1736,31 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room_number=data['room'];
 
         var freeAP = data['freeAP'];
-        var specialtyAP = data['specialtyAP'];
+        var remainingSpecAp = data['remainingSpecAp'];
         var damagedWall=data['damagedWall'];
         var rescued=data['rescued'];
         var killed = data['killed'];
         var removedHazmat = data['removedHazmat'];
 
-        Games[room_number]["freeAP"] = freeAP;
-        Games[room_number]["specialtyAP"] = specialtyAP;
+        var riding=data['riding'];
+        var driving = data['driving'];
+        var carryingHazmat = data['carryingHazmat'];
+        var carryingVictim = data['carryingVictim'];
+        var leadingVictim = data['leadingVictim'];
+
+
+        Games[room_number]["participants"][name]["freeAP"] = freeAP;
+        Games[room_number]["participants"][name]["remainingSpecAp"] = remainingSpecAp;
         Games[room_number]["damagedWall"]=damagedWall;
         Games[room_number]["rescued"]=rescued;
         Games[room_number]["killed"]=killed;
         Games[room_number]["removedHazmat"]=removedHazmat;
+
+        Games[room_number]["participants"][name]["riding"] = riding;
+        Games[room_number]["participants"][name]["driving"] = driving;
+        Games[room_number]["participants"][name]["carryingHazmat"] = carryingHazmat;
+        Games[room_number]["participants"][name]["carryingVictim"] = carryingVictim;
+        Games[room_number]["participants"][name]["leadingVictim"] = leadingVictim;
 
     });
 

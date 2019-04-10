@@ -343,15 +343,29 @@ public class GameManager: MonoBehaviour
 	            }else{
 		            startingEnginePositionPanel.SetActive(false);
 	            }
+
+	            fireman.FreeAP = StaticInfo.freeAP;
+	            fireman.remainingSpecAp = StaticInfo.remainingSpecAp;
+	            wallManager.damagedWalls = StaticInfo.damagedWall;
+	            pOIManager.rescued = StaticInfo.rescued;
+	            pOIManager.killed = StaticInfo.killed;
+	            hazmatManager.removedHazmat = StaticInfo.removedHazmat;
+	            
+	            fireman.riding = StaticInfo.riding;
+	            fireman.driving = StaticInfo.driving;
+	            fireman.carryingHazmat = StaticInfo.carryingHazmat;
+	            fireman.carryingVictim = StaticInfo.carryingVictim;
+	            fireman.leadingVictim = StaticInfo.leadingVictim;
+
             }
 
         }
 
         // displayAP();
         displayStats();
-        if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
-            changeRoleButton.SetActive(true);
-        }
+        // if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
+        //     changeRoleButton.SetActive(true);
+        // }
         if(!StaticInfo.StartingPosition&&!isMyTurn){
             changeRoleButton.SetActive(false);
         }
@@ -897,22 +911,23 @@ public class GameManager: MonoBehaviour
         if (result.Equals("True"))
         {
             isMyTurn = true;
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
-                changeRoleButton.SetActive(true);
-            }
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
-                changeRoleButton.SetActive(false);
-            }
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
+            //     changeRoleButton.SetActive(true);
+            // }
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
+            //     changeRoleButton.SetActive(false);
+            // }
         }
         else
         {
             isMyTurn = false;
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
-                changeRoleButton.SetActive(true);
-            }
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
-                changeRoleButton.SetActive(false);
-            }
+            changeRoleButton.SetActive(false);
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
+            //     changeRoleButton.SetActive(true);
+            // }
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
+            //     changeRoleButton.SetActive(false);
+            // }
         }
     }
 
@@ -953,6 +968,7 @@ public class GameManager: MonoBehaviour
         else
         {
             isMyTurn = false;
+            changeRoleButton.SetActive(false);
 			Debug.Log("It is now someone else's turn!");
             fireman.refreshAP();
             endOfTurn=false;
@@ -976,6 +992,7 @@ public class GameManager: MonoBehaviour
         else
         {
             isMyTurn = false;
+            changeRoleButton.SetActive(false);
         }
     }
 
@@ -2262,13 +2279,13 @@ public class GameManager: MonoBehaviour
                 fireman.s.transform.position=new Vector3(fireman.currentX, 0.2f, fireman.currentZ);
                 UpdateLocation(fireman.currentX,fireman.currentZ,fireman.name);
                 displayRole();
+                displayAP();
                 Dictionary<string, string> change = new Dictionary<string, string>();
                 change["room"] = StaticInfo.roomNumber;
                 change["name"] = StaticInfo.name;
                 change["role"] = ((int)StaticInfo.role).ToString();
                 change["oldRole"] = ((int)oldRole).ToString();
                 socket.Emit("changeRole", new JSONObject(change));
-                
                 
                 break;
             }
@@ -2552,6 +2569,30 @@ public class GameManager: MonoBehaviour
             hazmatManager.explodeHazmat(x,z);
         }
     }
+
+	public void saveGame()
+	{
+		Debug.Log("saveGame");
+
+		Dictionary<string,string> data=new Dictionary<string, string>();
+		data["room"]=StaticInfo.roomNumber;
+		data["name"] = StaticInfo.name;
+		data["freeAP"] = fireman.FreeAP.ToString();
+		data["remainingSpecAp"] = fireman.remainingSpecAp.ToString();
+		data["damagedWall"] = wallManager.damagedWalls.ToString();
+		data["rescued"] = pOIManager.rescued.ToString();
+		data["killed"] = pOIManager.killed.ToString();
+		data["removedHazmat"] = hazmatManager.removedHazmat.ToString();
+		
+		data["riding"] = fireman.riding.ToString();
+		data["driving"] = fireman.driving.ToString();
+		data["carryingHazmat"] = fireman.carryingHazmat.ToString();
+		data["carryingVictim"] = fireman.carryingVictim.ToString();
+		data["leadingVictim"] = fireman.leadingVictim.ToString();
+		
+		socket.Emit("saveGame",new JSONObject(data));
+
+	}
 
 }
 
