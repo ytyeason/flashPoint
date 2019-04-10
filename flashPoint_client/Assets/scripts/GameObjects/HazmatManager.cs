@@ -55,11 +55,11 @@ public class HazmatManager{
                 numOfHazmat = Int32.Parse(StaticInfo.numOfHazmat);
             }
 
-            if (!Int32.TryParse(StaticInfo.numOfHotspot, out this.numOfHazmat))
+            if (!Int32.TryParse(StaticInfo.numOfHotspot, out this.additionalHotspot))
             {
                 additionalHotspot += Int32.Parse(StaticInfo.numOfHotspot);
             }
-
+            
         }
 
         switch (StaticInfo.numberOfPlayer)
