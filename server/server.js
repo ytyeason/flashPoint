@@ -1437,21 +1437,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
     });
 
-<<<<<<< HEAD
-    // socket.on('ConfirmAmbulancePosition',function(data){
-    //   // var x=data['x'];
-    //   // var z=data['z'];
-    //   // var room=data['room'];
-    //   // // var name=data['name'];
-    //   // Games[room]["participants"][name]["Location"]=x+","+z;
-    //   // if(!Games[room]["confirmedPosition"].includes(name)){
-    //   //   Games[room]["confirmedPosition"].push(name);
-    //   // }
-    //   if(Games[room]["confirmedPosition"].length==parseInt(Games[room]["numberOfPlayer"])){
-    //     io.sockets.emit("ConfirmPosition_Success",{"set": true});
-    //   }
-    // });
-=======
     socket.on('savedGame',function(data){
         console.log("saved game");
         console.log(data);
@@ -1459,8 +1444,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
         socket.emit('SaveGame_Success',data);
       });
->>>>>>> 392df01bb7be6dbfd00dd5befd9bc9c73602d372
-
     socket.on('victory',function(data){
       var room=data['room'];
       Games[room]=undefined;
