@@ -236,6 +236,10 @@ public class Fireman
 
     public Boolean chopWall()
     {
+        if((this.role==Role.RescueSpec&&FreeAP>1)){
+            setAP(FreeAP-1);
+            return true;
+        }
         if(this.role!=Role.Dog)
         {
             if (FreeAP >= 2)
@@ -249,10 +253,6 @@ public class Fireman
                 if (debugMode) Debug.Log("No AP left to chop the Wall!");
                 return false;
             }
-        }
-        if((this.role==Role.RescueSpec&&FreeAP>1)){
-            setAP(FreeAP-1);
-            return true;
         }
         return false;
     }

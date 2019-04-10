@@ -7,13 +7,33 @@ var shortId 		= require('shortid');
 
 app.set('port', process.env.PORT || 3000);
 
+var fs = require('fs');
+
 var Users = {};
 
-var Games = {};
+try{
+  var Games = JSON.parse(fs.readFileSync('./Games.json', 'utf8'));
+  console.log(Games);
+  console.log("Games loaded");
+}catch(err){
+  console.log(err);
+  console.log("new Games");
+  var Games = {};
+}
+
+try{
+  var Games_state = JSON.parse(fs.readFileSync('./Games_state.json', 'utf8'));
+  console.log(Games_state);
+  console.log("Games state loaded");
+}catch(err){
+  console.log(err);
+  console.log("new Games_state");
+  var Games_state = {};
+}
+
 
 var clients	= [];
 
-var Games_state = {};
 
 var poiM = {};
 
@@ -956,26 +976,29 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room_number = data['room'];
         var name = data['name'];
         console.log(room_number);
-        console.log(Games[room_number]);
+        //console.log(Games[room_number]);
         // console.log(Games[room_number]['Turn']);
-        var turn_name = Games[room_number]['Turn'];
-        console.log("turn: "+turn_name);
-        if(turn_name.localeCompare(name)==0){//name matches
-            var participants_in_order = Games[room_number]["participants_in_order"];
-            var index = participants_in_order.indexOf(turn_name);
-            if(index == participants_in_order.length-1){
-              index = 0;
-            }else{
-              index = index+1;
-            }
-            Games[room_number]['Turn'] = participants_in_order[index];
-            console.log(Games[room_number]['Turn']);
-            socket.emit("changingTurn_Success", {"Turn": Games[room_number]['Turn'],"room":room_number});//change isMyTurn to False in frontend
-            socket.broadcast.emit("isMyTurnUpdate", {"Turn": Games[room_number]['Turn'],"room":room_number});
-        }else{
-            console.log("name doesn't match in changing turn")
-            socket.emit('changingTurn_Success', {"status": "True","room":room_number});//keep isMyTurn unchanged
+        if(Games[room_number]!= undefined){
+          var turn_name = Games[room_number]['Turn'];
+          console.log("turn: "+turn_name);
+          if(turn_name.localeCompare(name)==0){//name matches
+              var participants_in_order = Games[room_number]["participants_in_order"];
+              var index = participants_in_order.indexOf(turn_name);
+              if(index == participants_in_order.length-1){
+                index = 0;
+              }else{
+                index = index+1;
+              }
+              Games[room_number]['Turn'] = participants_in_order[index];
+              console.log(Games[room_number]['Turn']);
+              socket.emit("changingTurn_Success", {"Turn": Games[room_number]['Turn'],"room":room_number});//change isMyTurn to False in frontend
+              socket.broadcast.emit("isMyTurnUpdate", {"Turn": Games[room_number]['Turn'],"room":room_number});
+          }else{
+              console.log("name doesn't match in changing turn")
+              socket.emit('changingTurn_Success', {"status": "True","room":room_number});//keep isMyTurn unchanged
+          }
         }
+
     });
 
     socket.on('sendChat', function(data){
@@ -1029,8 +1052,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
         //deleting poi from POIMemo
         var p = Games_state[room_number]['POIMemo'];
         var i = p.findIndex(x => x[location]!= null);
-        var type = p[i][location];
+
         if (i !== -1){
+          var type = p[i][location];
           p.splice(i, 1);
           Games_state[room_number]['POIMemo'] = p;
           console.log("deleting poi with location: " +location+ " and type "+type);
@@ -1764,6 +1788,18 @@ io.on('connection', function (socket) {//default event for client connect to ser
         Games[room_number]["participants"][name]["carryingVictim"] = carryingVictim;
         Games[room_number]["participants"][name]["leadingVictim"] = leadingVictim;
 
+        var fs = require('fs');
+        fs.writeFile("./Games.json", JSON.stringify(Games),'utf-8', function(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+
+        fs.writeFile("./Games_state.json", JSON.stringify(Games_state),'utf-8', function(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
     });
 
 });

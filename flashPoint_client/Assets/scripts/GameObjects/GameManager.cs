@@ -1461,7 +1461,14 @@ public class GameManager: MonoBehaviour
         }
 
         int[] nearestAmbulance = vicinityManager.findAmbulanceSpot(x_elem, z_elem);
-        UpdateLocation(nearestAmbulance[0] * 6, nearestAmbulance[1] * 6, name);
+        if(StaticInfo.level.Equals("Family")){
+            UpdateLocation(nearestAmbulance[0] * 6, nearestAmbulance[1] * 6, name);
+        }
+        else{
+            int x = amB.x/6*6;
+            int z = amB.z/6*6;
+            UpdateLocation(x, z, name);
+        }
 
         /*
         // Northern parking spot
@@ -2385,7 +2392,7 @@ public class GameManager: MonoBehaviour
             // Debug.Log(players[v]);
         }
 
-        if(!level.Equals("Family")){
+        if(!StaticInfo.level.Equals("Family")){
             displayRole();
         }
         
