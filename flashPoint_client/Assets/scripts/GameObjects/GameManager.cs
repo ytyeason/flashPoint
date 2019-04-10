@@ -346,7 +346,7 @@ public class GameManager: MonoBehaviour
 
         }
 
-        displayAP();
+        // displayAP();
         displayStats();
         if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
             changeRoleButton.SetActive(true);
@@ -1020,6 +1020,7 @@ public class GameManager: MonoBehaviour
         Debug.Log("in join game");
         string owner=obj.data.ToDictionary()["owner"];
         string room=obj.data.ToDictionary()["room"];
+        displayAP();
         if(room.Equals(StaticInfo.roomNumber)){
             if(owner.Equals(StaticInfo.name)){
 	            if (!StaticInfo.LoadGame)//if load game, then dont need to initialize board, just use the board specified in start function

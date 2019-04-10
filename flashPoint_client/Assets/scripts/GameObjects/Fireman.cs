@@ -471,19 +471,19 @@ public class Fireman
     {
         this.role = role;
 
-        if (role.Equals(Role.Generalist))
+        if (role==Role.Generalist)
         {
             AP = 5;
             // role = "Generalist";
         }
 
-        if (role.Equals(Role.ImagingTech))
+        if (role==Role.ImagingTech)
         {
             AP = 4;
             // role = "imagingTech";
         }
 
-        if (role.Equals(Role.CAFS))
+        if (role==Role.CAFS)
         {
             AP = 3;
             specialtyAP = 3;
