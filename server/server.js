@@ -894,6 +894,19 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     });
 
+    socket.on('checkingOwner',function(data){
+      var room_number = data['room'];
+      var name = data['name'];
+
+      var owner_name = Games[room_number]['Owner'];
+      if(owner_name.localeCompare(name)==0){
+        socket.emit('checkOwner_Success', {"owner": "True"});
+      }else{
+        socket.emit('checkOwner_Success', {"owner": "False"});
+      }
+
+    });
+
     socket.on('changingTurn', function(data){
         var room_number = data['room'];
         var name = data['name'];
@@ -1445,7 +1458,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
         socket.emit('SaveGame_Success',data);
       });
-
     socket.on('victory',function(data){
       var room=data['room'];
       Games[room]=undefined;

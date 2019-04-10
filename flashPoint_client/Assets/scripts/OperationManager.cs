@@ -396,7 +396,7 @@ public class OperationManager
                 }
 
                 if (moveTo) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && commandMoves + fireman.FreeAP >= requiredAP) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -826,7 +826,7 @@ public class OperationManager
                 }
 
                 if (moveTo1) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + gm.fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && commandMoves + gm.fireman.FreeAP >= requiredAP) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -1096,6 +1096,10 @@ public class OperationManager
                 gm.pOIManager.moveTreated(origX,origZ,x,z);
                 gm.UpdateTreatedLocation(origX,origZ,x,z);
             }
+            if(gm.pOIManager.containsKey(x,z,gm.pOIManager.placedPOI)&&gm.pOIManager.getPOI(x,z,gm.pOIManager.placedPOI).status==POIStatus.Hidden){
+                gm.pOIManager.reveal(x,z);
+                gm.updateRevealPOI(x,z);
+            }
             int requiredAP = 1;
             if ((gm.tileMap.tiles[x, z] == 2 && gm.fireman.role != Role.Dog) || ((controlled.carryingVictim) && gm.fireman.role != Role.Dog))
             {
@@ -1114,8 +1118,8 @@ public class OperationManager
                 if(commandMoves<=0){
                     fireman.setAP(fireman.FreeAP-requiredAP);
                 }else{
+                    commandMoves=0;
                     if(fireman.remainingSpecAp>=1){
-                        commandMoves-=1;
                         fireman.setSpecAP(fireman.remainingSpecAp-1);
                         fireman.setAP(fireman.FreeAP-requiredAP+1);
                     }else{

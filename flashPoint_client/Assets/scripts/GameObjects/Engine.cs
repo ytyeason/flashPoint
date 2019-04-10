@@ -52,12 +52,15 @@ public class Engine : MonoBehaviour {
 		//float step = speed*Time.deltaTime;
 		//v.transform.position = Vector3.MoveTowards(new Vector3(v.transform.position.x, v.transform.position.y, v.transform.position.z), new Vector3(v.transform.position.x, v.transform.position.y, v.transform.position.z+10), step);
 		//v.transform.position = Vector3.MoveTowards(new Vector3(v.transform.position.x, v.transform.position.y, v.transform.position.z),  new Vector3(v.transform.position.x, v.transform.position.y, v.transform.position.z+10),  step);
-		if ((dx==7&&dz==7)||((dx==8&&dz==7)))
+		if ((dx==7&&dz==7)||(dx==8&&dz==7))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
 			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
+			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
 			}
 			else{
 			 v.transform.Rotate(0, angle, 0);
@@ -69,12 +72,15 @@ public class Engine : MonoBehaviour {
 			 z=dz*6;
 
 		}
-		else if ((dx==0&&dz==5)||((dx==0&&dz==6)))
+		else if ((dx==0&&dz==5)||(dx==0&&dz==6))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
 			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
+			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
 			}
 			else{
 			 v.transform.Rotate(0, angle, 0);
@@ -85,12 +91,15 @@ public class Engine : MonoBehaviour {
 			x=dx*6;
 			z=33;
 		}
-		else if ((dx==1&&dz==0)||((dx==2&&dz==0)))
+		else if ((dx==1&&dz==0)||(dx==2&&dz==0))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
 			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
+			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
 			}
 			else{
 			 v.transform.Rotate(0, angle, 0);
@@ -101,12 +110,15 @@ public class Engine : MonoBehaviour {
 			x=9;
 			z=dz*6;
 		}
-		else if((dx==9&&dz==1)||((dx==9&&dz==2)))
+		else if((dx==9&&dz==1)||(dx==9&&dz==2))
 		{
 			// v.transform.Translate(new Vector3(0,0,1)*Time.deltaTime*670);
 			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
+			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
 			}
 			else{
 			 v.transform.Rotate(0, angle, 0);

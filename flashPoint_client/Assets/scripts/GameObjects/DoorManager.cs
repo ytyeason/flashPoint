@@ -16,8 +16,8 @@ public class DoorManager
 	public DoorType[] doorTypes;
 
 	public GameManager gm;
-    public static int randomBoard = StaticInfo.random;
 
+    public static int randomBoard = StaticInfo.random;
 
     void StartDoorManager()
 	{
@@ -476,7 +476,7 @@ public int HorizontalDoor(int x, int z)
 
 		foreach (var hDoor in defaultHorizontalDoors)
 		{
-			if ((hDoor[0] == 5&&hDoor[1] == 1)||(hDoor[0] == 6&&hDoor[1] == 7))
+			if ((hDoor[0] == 5&&hDoor[1] == 1)||(hDoor[0] == 6&&hDoor[1] == 7)||(hDoor[0] == 7&&hDoor[1] == 7)||(hDoor[0] == 3&&hDoor[1] == 1))
 			{
 				DoorType dt = doorTypes[2];
 				//GameObject go = (GameObject) Instantiate( wt.wallVisualPrefab, new Vector3(hWall[0]*5, 0, hWall[1]*5-2), Quaternion.identity );
@@ -511,7 +511,7 @@ public int HorizontalDoor(int x, int z)
 
 		foreach (var vDoor in defaultVerticalDoors)
 		{
-			if ((vDoor[0] == 1&&vDoor[1] == 3)||(vDoor[0] == 9&&vDoor[1] == 3))
+			if ((vDoor[0] == 1&&vDoor[1] == 3)||(vDoor[0] == 9&&vDoor[1] == 3)||(vDoor[0] == 1&&vDoor[1] == 4)||(vDoor[0] == 9&&vDoor[1] == 3))
 			{
 				DoorType dt = doorTypes[3];
 				Debug.Log(dt);

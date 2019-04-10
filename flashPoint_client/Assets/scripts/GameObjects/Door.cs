@@ -37,15 +37,18 @@ public class Door : MonoBehaviour
                 currentZ = doorMap.gm.operationManager.controlled.currentZ;
                 if (doorMap.gm.operationManager.controlled.role == Role.CAFS)
                 {
-                    if (doorMap.gm.operationManager.commandMoves == 0)
+                    if (doorMap.gm.operationManager.commandMoves+doorMap.gm.fireman.FreeAP <1)
                     {
                         canDo = false;
+                    }else{
+                        
                     }
-                }
+                }else
                 if (doorMap.gm.fireman.remainingSpecAp+doorMap.gm.fireman.FreeAP < 1)
                 {
                     canDo = false;
                 }
+
             }
             else
             {
@@ -59,31 +62,53 @@ public class Door : MonoBehaviour
                 canDo=false;
             }
 
+            bool det=doorMap.gm.operationManager.inCommand;
+
             if (currentX==x&&currentZ-z==-6||currentX==x&&currentZ==z||currentZ==z&&currentX-x==-6&&canDo) // reachable door
             {
                 if (type == 0) // Closed horizontal
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 2, 0,false);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 2, 0,false);
+                    doorMap.ChangeDoor(doorX, doorZ, 2, 0,det);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 2, 0,det);
                 }
 
                 if (type == 1) // Closed vertical
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 3, 1,false);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 3, 1,false);
+                    doorMap.ChangeDoor(doorX, doorZ, 3, 1,det);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 3, 1,det);
                 }
 
                 if (type == 2) // Open horizontal
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 0, 2,false);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 0, 2,false);
+                    doorMap.ChangeDoor(doorX, doorZ, 0, 2,det);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 0, 2,det);
                 }
 
                 if (type == 3) // Open vertical
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 1, 3,false);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 1, 3,false);
+                    doorMap.ChangeDoor(doorX, doorZ, 1, 3,det);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 1, 3,det);
                 }
+
+                if(doorMap.gm.operationManager.controlled.role==Role.CAFS){
+                    if(doorMap.gm.operationManager.commandMoves<=0){
+                        doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
+                    }else{
+                        doorMap.gm.operationManager.commandMoves-=1;
+                        if(doorMap.gm.fireman.remainingSpecAp>=1){
+                            doorMap.gm.fireman.setSpecAP(doorMap.gm.fireman.remainingSpecAp-1);
+                        }else{
+                            doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
+                        }
+                    }
+                }else{
+                    if(doorMap.gm.fireman.remainingSpecAp>=1){
+                        doorMap.gm.fireman.setSpecAP(doorMap.gm.fireman.remainingSpecAp-1);
+                    }else{
+                        doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
+                    }
+                }
+                
             }
 
 
