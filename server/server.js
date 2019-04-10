@@ -36,7 +36,7 @@ function initialize_tile(room){//family version
             if (x == 7 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 3});
             else if (x == 8 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 3});
             else if (x == 5 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 4});
-            else if (x == 4 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 4});
+            else if (x == 6 && z == 7) room['tileMemo'].push({[[[x],[z]]]: 4});
             else if (x == 0 && z == 3) room['tileMemo'].push({[[[x],[z]]]: 4});
             else if (x == 0 && z == 4) room['tileMemo'].push({[[[x],[z]]]: 4});
             else if (x == 0 && z == 5) room['tileMemo'].push({[[[x],[z]]]: 3});
@@ -47,8 +47,8 @@ function initialize_tile(room){//family version
             else if (x == 9 && z == 3) room['tileMemo'].push({[[[x],[z]]]: 4});
             else if (x == 2 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 3});
             else if (x == 1 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 3});
+            else if (x == 3 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 4});
             else if (x == 4 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 4});
-            else if (x == 5 && z == 0) room['tileMemo'].push({[[[x],[z]]]: 4});
             else room['tileMemo'].push({[[[x],[z]]]: 0});		// 2 -> code for Fire
 
         }
@@ -607,20 +607,31 @@ io.on('connection', function (socket) {//default event for client connect to ser
           if(room['participants'][name]!= undefined){
               console.log("found participant's saved game!!!")
               var room_state = Games_state[room_num];
-              console.log(room_state);
+              console.log(room);
               var numberOfHazmat = Games[data['room']]["numberOfHazmat"];
               var numberOfPlayer = Games[data['room']]["numberOfPlayer"]
               var level = Games[data['room']]["level"];
               var numberOfHotspot = Games[data['room']]["numberOfHotspot"];
               var selectedRoles = Games[data['room']]["selectedRoles"];
               var confirmedPosition = Games[data['room']]["confirmedPosition"];
+              var ambulance = Games[data['room']]["ambulance"];
+              var engine = Games[data['room']]["engine"];
+
+              var freeAP = Games[data['room']]['freeAP'];
+              var specialtyAP = Games[data['room']]['specialtyAP'];
+              var damagedWall=Games[data['room']]['damagedWall'];
+              var rescued=Games[data['room']]['rescued'];
+              var killed = Games[data['room']]['killed'];
+              var removedHazmat = Games[data['room']]['removedHazmat'];
               //var joinedPlayers = Games[data['room']]["joinedPlayers"];
 
               socket.emit("LOAD_GAME_SUCCESS",
               {'room':Games, 'state': room_state, 'name':name, 'roomNumber':room_num, 'level':level,
               'numberOfPlayer':numberOfPlayer, "numberOfHazmat":numberOfHazmat,
               "numberOfHotspot":numberOfHotspot, "selectedRoles":selectedRoles,
-              "confirmedPosition":confirmedPosition});
+              "confirmedPosition":confirmedPosition, 'ambulance':ambulance, 'engine' :engine,
+              "freeAP":freeAP, "specialtyAP":specialtyAP, "damagedWall":damagedWall,
+              "rescued":rescued, "killed":killed, "removedHazmat":removedHazmat});
           }else{
             console.log("Didn't found your name!")
             socket.emit("LOAD_GAME_SUCCESS", {'status':false});
@@ -680,6 +691,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
       Games[room_number]["confirmedPosition"]=[];
       Games[room_number]["joinedPlayers"]=[];
       Games[room_number]["random"]=random;
+      Games[room_number]["ambulance"]={'x':54,'z':21};
+      Games[room_number]["engine"]={'x':0,'z':33};
       console.log(Games[room_number]);
 
       initialize_tile(Games_state[room_number]);
@@ -1056,6 +1069,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var newx=data['newx'];
       var newz=data['newz'];
       var room=data['room'];
+      var room_number = data['room'];
       var driver=data['name'];
       var names=[];
 
@@ -1068,6 +1082,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
         }
       }
       names.push(driver);
+
+      Games[room_number]["ambulance"] = {'x':parseInt(newx), 'z':parseInt(newz)};
+
       io.sockets.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names});
     });
 
@@ -1078,6 +1095,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var names=[];
       var driver=data['name'];
       var room = data['room'];
+      var room_number = data['room'];
 
       var participants=Games[room]["participants"];
       for(var n in participants){
@@ -1088,6 +1106,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
         }
       }
       names.push(driver);
+
+      Games[room_number]["engine"] = {'x':parseInt(newx), 'z':parseInt(newz)};
+
       io.sockets.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz,"names":names});
       // socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz});
 
@@ -1698,6 +1719,28 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
 
       socket.broadcast.emit("ExplodeHazmat_Success",{"x":x, "z":z, "room":room});
+    });
+
+    socket.on("saveGame",function(data){
+        console.log("in saveGame");
+        console.log(data);
+        var name=data['name'];
+        var room_number=data['room'];
+
+        var freeAP = data['freeAP'];
+        var specialtyAP = data['specialtyAP'];
+        var damagedWall=data['damagedWall'];
+        var rescued=data['rescued'];
+        var killed = data['killed'];
+        var removedHazmat = data['removedHazmat'];
+
+        Games[room_number]["freeAP"] = freeAP;
+        Games[room_number]["specialtyAP"] = specialtyAP;
+        Games[room_number]["damagedWall"]=damagedWall;
+        Games[room_number]["rescued"]=rescued;
+        Games[room_number]["killed"]=killed;
+        Games[room_number]["removedHazmat"]=removedHazmat;
+
     });
 
 });

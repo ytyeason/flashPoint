@@ -86,9 +86,18 @@ public class LobbyManager : MonoBehaviour {
         */
         Debug.Log(obj.data[6].ToString());
         Debug.Log(obj.data[7].ToString());
-        //Debug.Log(obj.data[8].ToString());
-        //Debug.Log(obj.data[9].ToString());
-        //Debug.Log(obj.data[10].ToString());
+        Debug.Log(obj.data[8].ToString());
+        Debug.Log(obj.data[9].ToString());
+        
+        Debug.Log(obj.data[10].ToString());
+        Debug.Log(obj.data[11].ToString());
+        
+        Debug.Log(obj.data[12]);
+        Debug.Log(obj.data[13]);
+        Debug.Log(obj.data[14]);
+        Debug.Log(obj.data[15]);
+        Debug.Log(obj.data[16]);
+        Debug.Log(obj.data[17]);
         
         StaticInfo.name = obj.data[2].str;
         StaticInfo.roomNumber = obj.data[3].str;
@@ -98,9 +107,20 @@ public class LobbyManager : MonoBehaviour {
         StaticInfo.numOfHazmat = obj.data[6].str;
         StaticInfo.numOfHotspot = obj.data[7].str;
         
-        //StaticInfo.selectedRoles = obj.data[8].ToString();
-        //StaticInfo.confirmedPosition = obj.data[9].ToString();
-        //StaticInfo.joinedPlayers = obj.data[10].ToString();
+        StaticInfo.selectedRoles = obj.data[8].str;
+        StaticInfo.confirmedPosition = obj.data[9].str;
+        //StaticInfo.joinedPlayers = obj.data[10].str;
+        
+        StaticInfo.ambulance = obj.data[10].ToDictionary();
+        StaticInfo.engine = obj.data[11].ToDictionary();
+        
+        StaticInfo.freeAP = Int32.Parse(obj.data[12].str);
+        StaticInfo.specialtyAP = Int32.Parse(obj.data[13].str);
+        
+        StaticInfo.damagedWall = Int32.Parse(obj.data[14].str);
+        StaticInfo.rescued = Int32.Parse(obj.data[15].str);
+        StaticInfo.killed = Int32.Parse(obj.data[16].str);
+        StaticInfo.removedHazmat = Int32.Parse(obj.data[17].str);
 
         Dictionary<int[], int> h = new Dictionary<int[], int>();
 
