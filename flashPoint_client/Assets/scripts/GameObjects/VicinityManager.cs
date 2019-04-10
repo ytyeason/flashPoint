@@ -30,9 +30,25 @@ public class VicinityManager : MonoBehaviour {
 		}
 	}
 
+	// Returns true if coordinates are in the Veteran's vicinity
+	public bool checkIfInVicinity(int in_x, int in_z)
+	{
+		for (int x = 0; x < gm.mapSizeX; x++)
+		{
+			for (int z = 0; z < gm.mapSizeZ; z++)
+			{
+				if (in_x == x && in_z == z && VeteranVicinity[x, z].distFromVet != -1)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	// Reset status of explored and distFromVet
-	public void resetExplored()
+	public void reset()
 	{
 		for (int x = 0; x < gm.mapSizeX; x++) {
 			for (int z = 0; z < gm.mapSizeZ; z++) {
@@ -41,7 +57,6 @@ public class VicinityManager : MonoBehaviour {
 			}
 		}
 	}
-	
 
 	// Used for sanity checks
 	public void printVicinityLocations()
@@ -58,31 +73,23 @@ public class VicinityManager : MonoBehaviour {
 	// Called after the knockdown() called during the Veteran's turn
 	public void updateVicinityArr(int in_f_x, int in_f_z)
 	{
+		// Reset explored & distFromVet
+		reset();
+
 		// Coordinates of the Veteran
 		f_x = in_f_x;
 		f_z = in_f_z;
-		Debug.Log("VIC-TEST: x, z   " + f_x + ", " + f_z);
+		//Debug.Log("VIC-TEST: x, z   " + f_x + ", " + f_z);
 
-		// Mark the vicinity TODO ADD GUI COMPONENT
+		// Mark the vicinity's propagation point
 		VeteranVicinity[f_x, f_z].explored = true;
-		VeteranVicinity[f_x, f_z].distFromVet = 0;
-
-		Debug.Log("VIC-TEST: tile[1,3] = " + tiles[1,3]);
-
+		//VeteranVicinity[f_x, f_z].distFromVet = 0;
+		// Begin recursively mapping the Veteran's vicinity
 		rec_markVicinity(f_x, f_z, 1);
 
-		/*
-		if (f_x <= 8) rec_markVicinity(f_x + 1, f_z, 1);
-		if (f_x >= 1) rec_markVicinity(f_x - 1, f_z, 1);
-		if (f_z <= 6) rec_markVicinity(f_x, f_z + 1, 1);
-		if (f_z >= 1) rec_markVicinity(f_x, f_z - 1, 1);
-		*/
 
-		// Sanity check to see
+		// Sanity check
 		printVicinityLocations();
-
-		// Reset explored status
-		resetExplored();
 	}
 
 	
