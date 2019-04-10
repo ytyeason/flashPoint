@@ -3,17 +3,38 @@ var app				= express();
 var server			= require('http').createServer(app);
 var io 				= require('socket.io').listen(server);
 var shortId 		= require('shortid');
+var save = require('./server_save.js');
 
 
 app.set('port', process.env.PORT || 3000);
 
+var fs = require('fs');
+
 var Users = {};
 
-var Games = {};
+try{
+  var Games = JSON.parse(fs.readFileSync('./Games.json', 'utf8'));
+  console.log(Games);
+  console.log("Games loaded");
+}catch(err){
+  console.log(err);
+  console.log("new Games");
+  var Games = {};
+}
+
+try{
+  var Games_state = JSON.parse(fs.readFileSync('./Games_state.json', 'utf8'));
+  console.log(Games_state);
+  console.log("Games state loaded");
+}catch(err){
+  console.log(err);
+  console.log("new Games_state");
+  var Games_state = {};
+}
+
 
 var clients	= [];
 
-var Games_state = {};
 
 var poiM = {};
 
@@ -1766,6 +1787,18 @@ io.on('connection', function (socket) {//default event for client connect to ser
         Games[room_number]["participants"][name]["carryingVictim"] = carryingVictim;
         Games[room_number]["participants"][name]["leadingVictim"] = leadingVictim;
 
+        var fs = require('fs');
+        fs.writeFile("./Games.json", JSON.stringify(Games),'utf-8', function(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+
+        fs.writeFile("./Games_state.json", JSON.stringify(Games_state),'utf-8', function(err) {
+            if (err) {
+                console.log(err);
+            }
+        });
     });
 
 });
