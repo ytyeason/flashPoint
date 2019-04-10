@@ -84,12 +84,12 @@ public class FireManager : MonoBehaviour
 			{
 				Debug.Log("Extinguishing fire on (" + x_elem + ",0)");
                 if(x_elem==3||x_elem==4){
-                    tileMap.buildNewTile(x_elem, 0, 3);
-                    tileMap.gm.UpdateTile(x_elem, 0, 3);
-                }
-                else if(x_elem==1||x_elem==2){
                     tileMap.buildNewTile(x_elem, 0, 4);
                     tileMap.gm.UpdateTile(x_elem, 0, 4);
+                }
+                else if(x_elem==1||x_elem==2){
+                    tileMap.buildNewTile(x_elem, 0, 3);
+                    tileMap.gm.UpdateTile(x_elem, 0, 3);
                 }
                 else{
                     tileMap.buildNewTile(x_elem, 0, 0);
@@ -100,12 +100,12 @@ public class FireManager : MonoBehaviour
 			{
 				Debug.Log("Extinguishing fire on (" + x_elem + "," + (mapSizeZ - 1) + ")");
                 if(x_elem==5||x_elem==6){
-                    tileMap.buildNewTile(x_elem, mapSizeZ - 1, 3);
-                    tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 3);
-                }
-                else if(x_elem==7||x_elem==8){
                     tileMap.buildNewTile(x_elem, mapSizeZ - 1, 4);
                     tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 4);
+                }
+                else if(x_elem==7||x_elem==8){
+                    tileMap.buildNewTile(x_elem, mapSizeZ - 1, 3);
+                    tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 3);
                 }
                 else{
                     tileMap.buildNewTile(x_elem, mapSizeZ - 1, 0);
@@ -121,12 +121,12 @@ public class FireManager : MonoBehaviour
 			{
 				Debug.Log("Extinguishing fire on (0," + z_elem + ")");
                 if(z_elem==3||z_elem==4){
-                    tileMap.buildNewTile(0, z_elem, 3);
-                    tileMap.gm.UpdateTile(0, z_elem, 3);
-                }
-                else if(z_elem==5||z_elem==6){
                     tileMap.buildNewTile(0, z_elem, 4);
                     tileMap.gm.UpdateTile(0, z_elem, 4);
+                }
+                else if(z_elem==5||z_elem==6){
+                    tileMap.buildNewTile(0, z_elem, 3);
+                    tileMap.gm.UpdateTile(0, z_elem, 3);
                 }
                 else{
                     tileMap.buildNewTile(0, z_elem, 0);
@@ -138,12 +138,12 @@ public class FireManager : MonoBehaviour
 			{
 				Debug.Log("Extinguishing fire on (" + (mapSizeX - 1) + "," + z_elem + ")");
                 if(z_elem==3||z_elem==4){
-                    tileMap.buildNewTile(mapSizeX - 1, z_elem, 3);
-                    tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 3);
-                }
-                else if(z_elem==1||z_elem==2){
                     tileMap.buildNewTile(mapSizeX - 1, z_elem, 4);
                     tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 4);
+                }
+                else if(z_elem==1||z_elem==2){
+                    tileMap.buildNewTile(mapSizeX - 1, z_elem, 3);
+                    tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 3);
                 }
                 else{
                     tileMap.buildNewTile(mapSizeX - 1, z_elem, 0);
