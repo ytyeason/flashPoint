@@ -367,6 +367,7 @@ public class GameManager: MonoBehaviour
 
 
     public void displayAP(){
+        Debug.Log("im" + StaticInfo.name + "in displayAp in gm, my free AP is:"+ fireman.FreeAP);
         Debug.Log(fireman.role.ToString());
         nameAP.text= StaticInfo.name + " : " + fireman.FreeAP + " AP" ;
         if (fireman.role == Role.Captain)
