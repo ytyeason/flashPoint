@@ -77,6 +77,14 @@ public class POIManager{
                 var type = entry.Value;
                 addPOI(location[0],location[1], type);
             }
+            
+            var moving_treated_poi = StaticInfo.movingTreatedMemo;
+            foreach (KeyValuePair<int[], int> entry in moving_treated_poi)
+            {
+                var location = entry.Key;
+                var type = entry.Value;
+                addPOI(location[0],location[1], type);
+            }
         }
     }
 
@@ -276,14 +284,14 @@ public class POIManager{
     public void rescueTreated(int x, int z)
     {
         int[] key = new int[] { x, z };
-        if (containsKey(key[0], key[1], movingTreated))
+        if (containsKey(key[0], key[1], treated))
         {
-            POI p = getPOI(key[0], key[1], placedPOI);
+            POI p = getPOI(key[0], key[1], treated);
             p.setStatus(POIStatus.Removed);
             rescued++;
-            Remove(key[0], key[1], placedPOI);
-            gm.DestroyObject(getPOIPrefab(key[0], key[1], poiLookup));
-            Remove(key[0], key[1], poiLookup);
+            Remove(key[0], key[1], treated);
+            gm.DestroyObject(getPOIPrefab(key[0], key[1], treatedLookup));
+            Remove(key[0], key[1], treatedLookup);
             gm.displayStats();
 
             if (rescued >= 7)

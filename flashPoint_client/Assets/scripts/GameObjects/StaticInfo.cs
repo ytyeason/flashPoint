@@ -31,6 +31,11 @@ public static class StaticInfo
     public static Dictionary<int[], int> poi;
     public static Dictionary<int[], int> movingPOI;
     public static Dictionary<int[], int> treatedPOI;
+    public static Dictionary<int[], int> movingTreatedMemo;
+    public static Dictionary<int[], int> HazmatMemo;
+    public static Dictionary<int[], int> hotSpotMemo;
+    public static Dictionary<int[], int> movingHazmatMemo;
+    
     public static int random;
 
     public static POIManager poiManager;
