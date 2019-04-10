@@ -12,6 +12,7 @@ public class ClickableTile : MonoBehaviour {
     public TileMap map;
     public TileType type;
 
+
     // Occurs when we click the mouse:
     void OnMouseUp() {
         Debug.Log("MOUSE UP CLICKABLE TILE");
