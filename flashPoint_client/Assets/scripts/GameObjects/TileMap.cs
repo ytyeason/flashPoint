@@ -9,7 +9,8 @@ using System;
 
 
 [Serializable]
-public class TileMap  {
+public class TileMap : MonoBehaviour
+{
 
    //public Fireman selectedUnit2;
 	public Fireman selectedUnit;
@@ -237,8 +238,9 @@ public class TileMap  {
 			}
         }
     }
+	
 
-    public void buildNewTile(int x, int z, int type)
+	public void buildNewTile(int x, int z, int type)
 	{
         //Debug.Log(tileStores.Keys);
         //Debug.Log("Building new tile");
@@ -317,6 +319,18 @@ public class TileMap  {
 						if(gm.pOIManager.containsKey(x,z,gm.pOIManager.placedPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingTreated)||gm.pOIManager.containsKey(x,z,gm.pOIManager.treated)){
 							gm.pOIManager.kill(x,z);
 						}
+
+						/*
+						if(x==0||x==9||z==0||z==7){
+
+						}else{
+							// Check if can dodge
+							if(gm.fireman.currentX / 6 == x && z == gm.fireman.currentZ / 6){
+								gm.coroutWrap(x, z);	
+							//StartCoroutine(gm.knockDownTM(x, z));
+							}
+						}
+						*/
 					}
 				}
 			
