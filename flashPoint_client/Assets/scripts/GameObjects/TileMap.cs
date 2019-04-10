@@ -261,7 +261,7 @@ public class TileMap  {
 				TileType tt = tileTypes[ tiles[x,z] ];
 
 				//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
-				if((x==9&&z==1)||(x==9&&z==2)||(x==9&&z==3)||(x==9&&z==4)||(x==1&&z==0)||(x==2&&z==0)||(x==3&&z==0)||(x==4&&z==0)||(x==0&&z==3)||(x==0&&z==4)||(x==0&&z==5)||(x==0&&z==6)){
+				if((x==9&&z==1)||(x==9&&z==2)||(x==9&&z==3)||(x==9&&z==4)||(x==1&&z==0)||(x==2&&z==0)||(x==3&&z==0)||(x==4&&z==0)||(x==0&&z==3)||(x==0&&z==4)||(x==0&&z==5)||(x==0&&z==6)||(x==5&&z==7)||(x==6&&z==7)||(x==7&&z==7)||(x==8&&z==7)){
 					GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x*6, -2, z*6), Quaternion.identity );
 					// Connect a ClickableTile to each TileType
 					ClickableTile ct = go.GetComponent<ClickableTile>();
