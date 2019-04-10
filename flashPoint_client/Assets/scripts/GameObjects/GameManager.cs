@@ -88,7 +88,8 @@ public class GameManager: MonoBehaviour
 	public GameObject confirmDodge;
 	public GameObject declineDodge;
 	public ToggleActiveDodge toggleActiveDodge;
-
+	String[] names;
+	String[] rolesArr;
 
 	private JSONObject room;
     private JSONObject participants;
@@ -219,6 +220,8 @@ public class GameManager: MonoBehaviour
 				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
 				numPlayers = Convert.ToInt32(numberOfPlayer.Substring(1, 1));
 				playerLocations = new int[numPlayers, 2];
+				names = new String[numPlayers];
+				rolesArr = new String[numPlayers];
 
 				//displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
 				displayAP();
@@ -286,6 +289,8 @@ public class GameManager: MonoBehaviour
 				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
 				numPlayers = Convert.ToInt32(numberOfPlayer.Substring(1, 1));
 				playerLocations = new int[numPlayers, 2];
+				names = new String[numPlayers];
+				rolesArr = new String[numPlayers];
 
 				//poi -- not done
 				pOIManager = new POIManager(this,1);
@@ -1343,9 +1348,13 @@ public class GameManager: MonoBehaviour
 			location = location.Substring(1, location.Length - 2);
 			var cord = location.Split(',');
 
-			// Update gm's global arry
-			playerLocations[i, 0] = Convert.ToInt32(cord[0]);
-			playerLocations[i, 1] = Convert.ToInt32(cord[1]);
+			// Parse name
+			names[i] = o;
+
+			// Parse role
+			rolesArr[i] = players[o]["Role"].ToString();
+			rolesArr[i] = rolesArr[i].Substring(1, rolesArr[i].Length - 2);
+			Debug.Log("roleArr[" + i + "]  ->  \"" + rolesArr[i] + "\"");
 
 			//Debug.Log("fetchLocations: (x, z)  ->  (" + playerLocations[i, 0] + ", " + playerLocations[i, 1] + ")");
 			i++;
@@ -1394,15 +1403,16 @@ public class GameManager: MonoBehaviour
 					//Debug.Log("p_elem.(x, z)  ->  " + p_elem + ".(" + playerLocations[p_elem, 0]  + ", " + playerLocations[p_elem, 1] +")");
 
 					// Setup local/temp variables to check all players:
-					int x_coord = playerLocations[p_elem, 0];
-					int z_coord = playerLocations[p_elem, 1];
-					
+					int x_coord = playerLocations[p_elem, 0] / 6;
+					int z_coord = playerLocations[p_elem, 1] / 6;
+
+					if (x_coord == x_elem && z_elem == z_coord) Debug.Log("Coordinates are the same: " + x_coord + ", " + z_coord);
 
 					if (x_coord == x_elem && z_elem == z_coord && tileMap.tiles[x_elem, z_elem] == 2)
 					//tileMap.selectedUnit.currentX == (x_elem * 6) && tileMap.selectedUnit.currentZ == (z_elem * 6))
 						{
 						// Check if the player is able to dodge:
-						if ((fireman.role == Role.Veteran ||  fireman.inVetZone) && canDodge(x_elem, z_elem) && Math.Min(fireman.FreeAP, 4) >= 1)
+						if ((rolesArr[p_elem] == "9" || vicinityManager.checkIfInVicinity(x_coord, z_coord)) && canDodge(x_elem, z_elem) && Math.Min(fireman.FreeAP, 4) >= 1)
 						{
 							// Allow the active player to choose/begin trying to dodge etc.
 							isDodging = true;
@@ -1543,15 +1553,15 @@ public class GameManager: MonoBehaviour
 		checkTurn();
         //do stuff here...
 
-        // if (isMyTurn)
-        // {
+        if (isMyTurn)
+        {
 		    changeTurn();
-        // }
+        }
 	    
-        // else
-        // {
-        //    Debug.Log("This not your turn! Don't click end turn!");
-        // }
+        else
+        {
+            Debug.Log("This not your turn! Don't click end turn!");
+        }
     }
 
     public void checkTurn()
