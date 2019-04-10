@@ -206,7 +206,7 @@ public class OperationManager
             //------ POI---------------
             if (gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.placedPOI))
             {
-                if (!fireman.carryingVictim)
+                if (!fireman.carryingVictim&&!fireman.carryingHazmat)
                 {
                     Operation op = new Operation(this, OperationType.CarryV);
                     possibleOp.Add(op);
@@ -231,7 +231,7 @@ public class OperationManager
 
             if (!gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.placedPOI) && !gm.pOIManager.containsKey(key[0], key[1], gm.pOIManager.treated))
             {
-                if (fireman.carriedPOI != null || fireman.ledPOI != null)
+                if (fireman.carryingVictim|| fireman.leadingVictim)
                 {
                     Operation op = new Operation(this, OperationType.DropV);
                     possibleOp.Add(op);
@@ -247,7 +247,7 @@ public class OperationManager
                     Operation op = new Operation(this, OperationType.RemoveHazmat);
                     possibleOp.Add(op);
                 }
-                if (!fireman.carryingVictim && fireman.role != Role.Dog)
+                if (!fireman.carryingHazmat && fireman.role != Role.Dog)
                 {
                     Operation op = new Operation(this, OperationType.CarryHazmat);
                     possibleOp.Add(op);
@@ -256,7 +256,7 @@ public class OperationManager
 
             if (!gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHazmat) && !gm.hazmatManager.containsKey(key[0], key[1], gm.hazmatManager.placedHotspot) && fireman.role != Role.Dog)
             {
-                if (fireman.carriedHazmat != null)
+                if (fireman.carryingHazmat)
                 {
                     Operation op = new Operation(this, OperationType.DropHazmat);
                     possibleOp.Add(op);
@@ -375,9 +375,9 @@ public class OperationManager
                     moveTo = true;
                 }
 
-                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim || controlled.ledPOI != null))) moveTo = false;
+                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim || controlled.leadingVictim||controlled.carryingHazmat))) moveTo = false;
                 int requiredAP = 1;
-                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role != Role.Dog) || (controlled.carryingVictim && controlled.role != Role.Dog)) {
+                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role != Role.Dog) || ((controlled.carryingVictim||controlled.carryingHazmat) && controlled.role != Role.Dog)) {
                     requiredAP = 2;
                 }
                 //for dog
@@ -391,7 +391,7 @@ public class OperationManager
                     requiredAP = 4;
                 }
 
-                if (controlled.carriedPOI != null && controlled.role == Role.Dog) {
+                if (controlled.carryingVictim && controlled.role == Role.Dog) {
                     requiredAP = 4;
                 }
 
@@ -601,7 +601,7 @@ public class OperationManager
 
                 }
             }
-            if ((gm.tileMap.tiles[x, z] == 2 && gm.fireman.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (gm.tileMap.selectedUnit.carryingVictim || gm.tileMap.selectedUnit.ledPOI != null))) moveTo = false;
+            if ((gm.tileMap.tiles[x, z] == 2 && gm.fireman.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (gm.tileMap.selectedUnit.carryingVictim || gm.tileMap.selectedUnit.leadingVictim||gm.fireman.carryingHazmat))) moveTo = false;
             if(inCommand) moveTo=false;
             //if (gm.tileMap.selectedUnit.driving) moveTo = false;
             // if (inCommand)
@@ -620,7 +620,7 @@ public class OperationManager
             if (moveTo) {
                 Fireman fireman = gm.tileMap.selectedUnit;
                 int requiredAP = 1;
-                if (fireman.carryingVictim || extingFire) {
+                if (fireman.carryingVictim || extingFire||fireman.carryingHazmat) {
                     requiredAP = 2;
                 }
                 //DOG: not need here?
@@ -806,11 +806,11 @@ public class OperationManager
                     moveTo1 = true;
                 }
 
-                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim || controlled.ledPOI != null))) moveTo1 = false;
+                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim || controlled.leadingVictim||controlled.carryingHazmat))) moveTo1 = false;
 
                 int requiredAP = 1;
 
-                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role != Role.Dog) || controlled.carryingVictim && controlled.role != Role.Dog) {
+                if ((gm.tileMap.tiles[x, z] == 2 && controlled.role != Role.Dog) || (controlled.carryingVictim||controlled.carryingHazmat) && controlled.role != Role.Dog) {
                     requiredAP = 2;
                 }
 
@@ -936,13 +936,13 @@ public class OperationManager
 
                             }
                         }
-                        if ((gm.tileMap.tiles[x, z] == 2 && controlled.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim || controlled.ledPOI != null))) {
+                        if ((gm.tileMap.tiles[x, z] == 2 && controlled.role == Role.Dog) || (gm.tileMap.tiles[x, z] == 2 && (controlled.carryingVictim || controlled.leadingVictim||controlled.carryingHazmat))) {
                             moveTo = false;
                         }
                         //if (controlled.driving) moveTo = false;
                         int ap = fireman.remainingSpecAp;
                         int requiredAP = 1;
-                        if ((gm.tileMap.tiles[x, z] == 2 && controlled.role != Role.Dog) || (controlled.carryingVictim && controlled.role != Role.Dog))
+                        if ((gm.tileMap.tiles[x, z] == 2 && controlled.role != Role.Dog) || ((controlled.carryingVictim||controlled.carryingHazmat) && controlled.role != Role.Dog))
                         {
                             requiredAP = 2;
                         }
@@ -1090,10 +1090,13 @@ public class OperationManager
             controlled.currentX=x*6;
             controlled.currentZ=z*6;
             if(controlled.carryingVictim){
-                gm.hazmatManager.moveHazmat(origX,origZ,x,z);
-                gm.UpdateHazmatLocation(origX,origZ,x,z);
+                
                 gm.pOIManager.movePOI(origX,origZ,x,z);
                 gm.UpdatePOILocation(origX,origZ,x,z);
+            }
+            if(controlled.carryingHazmat){
+                gm.hazmatManager.moveHazmat(origX,origZ,x,z);
+                gm.UpdateHazmatLocation(origX,origZ,x,z);
             }
             if(controlled.leadingVictim){
                 gm.pOIManager.moveTreated(origX,origZ,x,z);
@@ -1287,6 +1290,7 @@ public class OperationManager
         int ride = 0;
         bool carrying = false;
         bool leading = false;
+        bool carryingH=false;
         string name = "";
         foreach (string o in gm.players.Keys)
         {
@@ -1307,10 +1311,13 @@ public class OperationManager
                 if (gm.players[o].ToDictionary()["Leading"].Equals("True")) {
                     leading = true;
                 }
+                if(gm.players[o].ToDictionary()["CarryingH"].Equals("True")){
+                    carryingH=false;
+                }
                 name = o;
             }
         }
-        controlled = new Fireman(x * 6, z * 6, role, drive, ride, carrying, leading, name);
+        controlled = new Fireman(x * 6, z * 6, role, drive, ride, carrying, leading, carryingH, name);
         Debug.Log(controlled.role);
 
         gm.selectRolePanel.SetActive(false);
@@ -1554,10 +1561,9 @@ public class OperationManager
     public void dropV()
     {
         Fireman fireman = gm.fireman;
-        if (fireman.carriedPOI != null) {
+        if (fireman.carryingVictim) {
             fireman.carryingVictim = false;
             gm.pOIManager.dropPOI(x, z);
-            fireman.carriedPOI = null;
             gm.StopCarry(x, z);
             Debug.Log(StaticInfo.level);
             if (StaticInfo.level.Equals("Family")) {
@@ -1573,9 +1579,9 @@ public class OperationManager
                     gm.rescueCarried(x, z);
                 }
             }
-        } else if (fireman.ledPOI != null) {
+        } else if (fireman.leadingVictim) {
             gm.pOIManager.dropPOI(x, z);
-            fireman.ledPOI = null;
+            fireman.leadingVictim=false;
             gm.StopLead(x, z);
             if (StaticInfo.level.Equals("Family")) {
                 if (x == 0 || x == 7 || z == 0 || z == 9) {
@@ -1599,8 +1605,7 @@ public class OperationManager
     public void dropHazmat()
     {
         Fireman fireman = gm.fireman;
-        fireman.carryingVictim = false;
-        fireman.carriedHazmat = null;
+        fireman.carryingHazmat = false;
         gm.hazmatManager.dropHazmat(x, z);
         gm.StopCarryH(x, z);
         if (x == 0 || x == 9 || z == 0 || z == 7)

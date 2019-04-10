@@ -95,6 +95,7 @@
             <e p="playerInfo.cs" t="Include" />
             <e p="PlayerStatus.cs" t="Include" />
             <e p="POI.cs" t="Include" />
+            <e p="POIData.cs" t="Include" />
             <e p="POIManager.cs" t="Include" />
             <e p="POIStatus.cs" t="Include" />
             <e p="POIType.cs" t="Include" />
@@ -106,6 +107,7 @@
             <e p="StaticInfo.cs" t="Include" />
             <e p="TileMap.cs" t="Include" />
             <e p="TileType.cs" t="Include" />
+            <e p="ToggleActiveDodge.cs" t="Include" />
             <e p="VicinityManager.cs" t="Include" />
             <e p="VicinityTile.cs" t="Include" />
             <e p="Wall.cs" t="Include" />
@@ -239,9 +241,7 @@
       <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp/bin" t="ExcludeRecursive" />
     </e>
     <e p="$USER_HOME$/Library/Caches/Rider2018.1/resharper-host/local/Transient/ReSharperHost/v12/SolutionCaches/_flashPoint_client.102671090.00" t="ExcludeRecursive" />
   </component>

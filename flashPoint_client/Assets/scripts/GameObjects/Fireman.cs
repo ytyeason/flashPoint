@@ -41,9 +41,10 @@ public class Fireman
 
     public bool carryingVictim = false;
     public bool leadingVictim=false;
-    public POI carriedPOI;
-    public Hazmat carriedHazmat;
-    public POI ledPOI;
+    public bool carryingHazmat=false;
+    // public POI carriedPOI;
+    // public Hazmat carriedHazmat;
+    // public POI ledPOI;
 
     public bool driving = false;
     public int vehicle = 0;
@@ -65,7 +66,7 @@ public class Fireman
 
     public String level = StaticInfo.level;
 
-    public Fireman(String name, Colors color, GameObject s, GameObject firemanplusvictim, int in_x, int in_z, int AP, GameManager gm, Role role, POIManager
+    public Fireman(String name, Colors color, GameObject s, GameObject firemanplusvictim, int in_x, int in_z, GameManager gm, Role role, POIManager
     pOIManager, HazmatManager hazmatManager)
     {
         this.name = name;
@@ -90,7 +91,7 @@ public class Fireman
         //}
     }
 
-    public Fireman(int in_x, int in_z, Role role, int drive, int ride, bool carrying, bool leading, string name)
+    public Fireman(int in_x, int in_z, Role role, int drive, int ride, bool carrying, bool leading, bool carryingH, string name)
     {
         this.currentX = in_x;
         this.currentZ = in_z;
@@ -106,6 +107,7 @@ public class Fireman
         }
         this.carryingVictim = carrying;
         this.leadingVictim=leading;
+        this.carryingHazmat=carryingH;
         this.name = name;
     }
 
@@ -434,21 +436,19 @@ public class Fireman
 			inVetZone = false;
 		}
 
-        Debug.Log(carriedPOI);
-
-        if (carriedPOI != null)
+        if (carryingVictim)
         {
             gm.pOIManager.movePOI(origX, origZ, x, z);
             gm.UpdatePOILocation(origX, origZ, x, z);
         }
 
-        if (ledPOI != null)
+        if (leadingVictim)
         {
             gm.pOIManager.moveTreated(origX, origZ, x, z);
             gm.UpdateTreatedLocation(origX, origZ, x, z);
         }
 
-        if (carriedHazmat != null)
+        if (carryingHazmat)
         {
             gm.hazmatManager.moveHazmat(origX, origZ, x, z);
             gm.UpdateHazmatLocation(origX,origZ,x,z);
@@ -643,15 +643,15 @@ public class Fireman
     {
         
         this.carryingVictim = true;
-        this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
+        // this.carriedPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.placedPOI);
         gm.pOIManager.carryPOI(x, z);
         gm.startCarryV(x,z);
     }
 
     public void leadV(int x, int z) 
     {
-
-        this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
+        // this.leadingVictim=true;
+        // this.ledPOI = gm.pOIManager.getPOI(x, z, gm.pOIManager.treated);
         gm.pOIManager.leadPOI(x, z);
         this.leadingVictim=true;
         gm.startLeadV(x,z);
@@ -661,8 +661,8 @@ public class Fireman
     {
         if(this.role!=Role.Dog)
         {
-            this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
-            this.carryingVictim = true;
+            // this.carriedHazmat = gm.hazmatManager.get(x, z, gm.hazmatManager.placedHazmat);
+            this.carryingHazmat = true;
             gm.hazmatManager.carryHazmat(x, z);
             gm.startCarryHazmat(x,z);
         }
