@@ -16,7 +16,7 @@ public class DoorManager
 	public DoorType[] doorTypes;
 
 	public GameManager gm;
-    public static int randomBoard = UnityEngine.Random.Range(1, 6);
+    public static int randomBoard = StaticInfo.random;
 
 
     void StartDoorManager()

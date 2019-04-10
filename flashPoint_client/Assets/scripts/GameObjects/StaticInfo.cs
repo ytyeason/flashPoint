@@ -33,4 +33,8 @@ public static class StaticInfo
     public static int random;
 
     public static POIManager poiManager;
+    
+    public static String joinedPlayers;
+    public static String confirmedPosition;
+    public static String selectedRoles;
 }
