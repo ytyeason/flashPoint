@@ -1072,6 +1072,7 @@ public class OperationManager
         Fireman fireman = gm.tileMap.selectedUnit;
         if (inCommand)
         {
+            Debug.Log("Move: "+commandMoves);
             if (controlled.driving)
             {
                 controlled.driving = false;
@@ -1082,6 +1083,8 @@ public class OperationManager
                 gm.stopRide(controlled.name);
             }
             gm.UpdateLocation(x*6, z*6, controlled.name);
+            Debug.Log("Controlled name: "+controlled.name);
+            Debug.Log("StaticInfo.name: "+StaticInfo.name);
             int origX=controlled.currentX/6;
             int origZ=controlled.currentZ/6;
             controlled.currentX=x*6;
@@ -1113,6 +1116,7 @@ public class OperationManager
             if (controlled.carryingVictim && controlled.role == Role.Dog) {
                 requiredAP = 4;
             }
+            Debug.Log(controlled.role);
             if (controlled.role == Role.CAFS)
             {
                 if(commandMoves<=0){
@@ -1274,6 +1278,7 @@ public class OperationManager
     public void command()
     {
         Debug.Log("command");
+        Debug.Log("Command: "+commandMoves);
 
         this.inCommand = true;
         Role role = Role.None;
@@ -1305,6 +1310,7 @@ public class OperationManager
             }
         }
         controlled = new Fireman(x * 6, z * 6, role, drive, ride, carrying, leading, name);
+        Debug.Log(controlled.role);
 
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);
@@ -1612,6 +1618,7 @@ public class OperationManager
     {
         controlled = null;
         inCommand = false;
+        Debug.Log("Stop Command:" + commandMoves);
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);
         opPanel.SetActive(false);

@@ -1102,7 +1102,7 @@ public class GameManager: MonoBehaviour
         update["name"] = StaticInfo.name;
         if (!name.Equals(StaticInfo.name)) update["name"] = name;
         update["Location"] = StaticInfo.Location[0] + "," + StaticInfo.Location[1];
-        update["role"] = ((int)StaticInfo.role).ToString();
+        // update["role"] = ((int)StaticInfo.role).ToString();
 
         socket.Emit("Location", new JSONObject(update));
     }
