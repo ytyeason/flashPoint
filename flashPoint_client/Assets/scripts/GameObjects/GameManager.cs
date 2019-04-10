@@ -2575,6 +2575,7 @@ public class GameManager: MonoBehaviour
 
 		Dictionary<string,string> data=new Dictionary<string, string>();
 		data["room"]=StaticInfo.roomNumber;
+		data["name"] = StaticInfo.name;
 		data["freeAP"] = fireman.FreeAP.ToString();
 		data["specialtyAP"] = fireman.specialtyAP.ToString();
 		data["damagedWall"] = wallManager.damagedWalls.ToString();

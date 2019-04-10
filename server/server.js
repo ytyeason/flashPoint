@@ -618,8 +618,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
               var ambulance = Games[data['room']]["ambulance"];
               var engine = Games[data['room']]["engine"];
 
-              var freeAP = Games[data['room']]['freeAP'];
-              var specialtyAP = Games[data['room']]['specialtyAP'];
+              var freeAP = Games[data['room']]["participants"][name]["freeAP"];
+              var specialtyAP = Games[data['room']]["participants"][name]["specialtyAP"];
               var damagedWall=Games[data['room']]['damagedWall'];
               var rescued=Games[data['room']]['rescued'];
               var killed = Games[data['room']]['killed'];
@@ -1735,8 +1735,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var killed = data['killed'];
         var removedHazmat = data['removedHazmat'];
 
-        Games[room_number]["freeAP"] = freeAP;
-        Games[room_number]["specialtyAP"] = specialtyAP;
+        Games[room_number]["participants"][name]["freeAP"] = freeAP;
+        Games[room_number]["participants"][name]["specialtyAP"] = specialtyAP;
         Games[room_number]["damagedWall"]=damagedWall;
         Games[room_number]["rescued"]=rescued;
         Games[room_number]["killed"]=killed;
