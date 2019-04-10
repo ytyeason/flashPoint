@@ -247,6 +247,8 @@ public class GameManager: MonoBehaviour
                 else
                 {
                     changeRoleButton.SetActive(false);
+                    ambulance.SetActive(false);
+                    engine.SetActive(false);
                 }
 
                 selectRolePanel.SetActive(false);
@@ -384,8 +386,8 @@ public class GameManager: MonoBehaviour
                   roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
                   string location = players[name].ToDictionary()["Location"];
                     var cord = location.Split(',');
-                    int cord_x = Convert.ToInt32(cord[0]);
-                    int cord_z = Convert.ToInt32(cord[1]);
+                    int cord_x = Convert.ToInt32(cord[0])/6;
+                    int cord_z = Convert.ToInt32(cord[1])/6;
                   roles.text += " " + "at: " + cord_x.ToString() + "," + cord_z.ToString();
                 }
             }
@@ -2353,6 +2355,7 @@ public class GameManager: MonoBehaviour
         position["room"]=StaticInfo.roomNumber;
         position["name"]=StaticInfo.name;
 
+
         socket.Emit("ConfirmPosition",new JSONObject(position));
     }
 
@@ -2374,16 +2377,15 @@ public class GameManager: MonoBehaviour
         displayRole();
         if(obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber)){
             StaticInfo.StartingPosition=false;
-            if(isOwner){
-                StaticInfo.StartingAmbulancePosition=true;
-                startingAmbulancePositionPanel.SetActive(true);
-                if(!StaticInfo.level.Equals("Family")){
-                changeRoleButton.SetActive(true);
-            }
-            }
             startingPositionPanel.SetActive(false);
 
-            
+            if(!StaticInfo.level.Equals("Family")){
+                if(isOwner){
+                    StaticInfo.StartingAmbulancePosition=true;
+                    startingAmbulancePositionPanel.SetActive(true);
+                    changeRoleButton.SetActive(true);
+                }
+            }
         }
     }
 
