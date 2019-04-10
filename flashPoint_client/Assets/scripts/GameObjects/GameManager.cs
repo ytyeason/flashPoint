@@ -69,14 +69,14 @@ public class GameManager: MonoBehaviour
     public bool upDodgeDown = false;
     public bool rightDodgeDown = false;
     public bool downDodgeDown = false;
-    bool canUp = false;
-    bool canRight = false;
-    bool canDown = false;
-    bool canLeft = false;
-    bool confirmDodgeDown = false;
-    bool wantDodge = false;
-    int[,] playerLocations; // Holds all player's locations
-    int numPlayers;
+	public bool canUp = false;
+	public bool canRight = false;
+	public bool canDown = false;
+	public bool canLeft = false;
+	public bool confirmDodgeDown = false;
+	public bool wantDodge = false;
+    public int[,] playerLocations; // Holds all player's locations
+    public int numPlayers;
 
     // Dodging GUI items:
     public GameObject backdropL;    // For the dodge GameObjects
@@ -88,8 +88,8 @@ public class GameManager: MonoBehaviour
     public GameObject confirmDodge;
     public GameObject declineDodge;
     public ToggleActiveDodge toggleActiveDodge;
-    String[] names;
-    String[] rolesArr;
+    public String[] names;
+    public String[] rolesArr;
 
     private JSONObject room;
     private JSONObject participants;
@@ -1454,7 +1454,7 @@ public class GameManager: MonoBehaviour
         Debug.Log("knockDown -> Looking at '" + name + "'. IsCurrentPlayer  => " + currentPlayer);
 
         // Kill any POI the fireman is carrying:
-        if ((tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)&&currentPlayer)
+        if ((tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim) && currentPlayer)
         {
             pOIManager.kill(x_elem, z_elem);
             killPOI(x_elem,z_elem);
@@ -1469,34 +1469,144 @@ public class GameManager: MonoBehaviour
             int z = amB.z/6*6;
             UpdateLocation(x, z, name);
         }
-
-        /*
-        // Northern parking spot
-        if (z_elem <= 3)
-        {
-            if (currentPlayer)
-            {
-                //tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
-                fireman.currentX = 0;
-                fireman.currentZ = 18;
-            }
-            UpdateLocation(0 * 6, 3 * 6, name);
-        }
-        else // Southern/second parking spot
-        {
-            if (currentPlayer)
-            {
-                //tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
-                fireman.currentX = 54;
-                fireman.currentZ = 24;
-            }
-            UpdateLocation(9 * 6, 4 * 6, name);
-        }
-        */
     }
 
-    // Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)
-    public IEnumerator knockDown()
+	// Called from TileMap
+	public void knockDown(int x_elem, int z_elem)
+	{
+		Debug.Log("knockDown -> Looking at '" + StaticInfo.name + "'");
+
+		// Kill any POI the fireman is carrying:
+		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)
+		{
+			pOIManager.kill(x_elem, z_elem);
+			killPOI(x_elem, z_elem);
+		}
+
+		int[] nearestAmbulance = vicinityManager.findAmbulanceSpot(x_elem, z_elem);
+		if (StaticInfo.level.Equals("Family"))
+		{
+			UpdateLocation(nearestAmbulance[0] * 6, nearestAmbulance[1] * 6, StaticInfo.name);
+		}
+		else
+		{
+			int x = amB.x / 6 * 6;
+			int z = amB.z / 6 * 6;
+			UpdateLocation(x, z, StaticInfo.name);
+		}
+	}
+
+	public void coroutWrap(int x, int z) {
+		StartCoroutine(knockDownTM(x, z));
+	}
+
+	// Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)
+	public IEnumerator knockDownTM(int x_coord, int z_coord)
+	{
+		Debug.Log("");
+		Debug.Log("");
+
+
+		// Check if the player is able to dodge:
+		if ((StaticInfo.role == Role.Veteran || vicinityManager.checkIfInVicinity(x_coord, z_coord)) && canDodge(x_coord, z_coord) && Math.Min(fireman.FreeAP, 4) >= 1)
+		{
+			// Allow the active player to choose/begin trying to dodge etc.
+			isDodging = true;
+
+			toggleActiveDodge.activateGUI();
+			// Check if player wants to dodge
+			Debug.Log("    VET (1) Please decide if you'd like to dodge or not! " + Time.time);
+			yield return new WaitUntil(() => confirmDodgeDown == true);
+
+			// Player has chosen to dodge
+			if (wantDodge)
+			{
+				Debug.Log("    VET (2) Please press a dodge button: " + Time.time);
+				yield return new WaitUntil(() => buttonDown() == true);
+				fireman.setAP(fireman.FreeAP - 1);      // Spending the 1AP
+				Debug.Log("    VET (3) Finished!" + Time.time);
+
+				// Need to drop Victim or Hazmat. NB Fireman can 'fully' dodge if leading treated victim
+				if (fireman.carryingVictim)
+				{
+					pOIManager.dropPOI(fireman.currentX / 6, fireman.currentZ / 6);
+					StopCarry(fireman.currentX / 6, fireman.currentZ / 6);
+				}
+				if (fireman.carryingHazmat)
+				{
+					hazmatManager.dropHazmat(fireman.currentX / 6, fireman.currentZ / 6);
+					StopCarryH(fireman.currentX / 6, fireman.currentZ / 6);
+				}
+
+				if (fireman.leadingVictim)
+				{
+					pOIManager.dropPOI(fireman.currentX / 6, fireman.currentZ / 6);
+					StopLead(fireman.currentX / 6, fireman.currentZ / 6);
+				}
+
+				// Player has chosen to move to:
+				if (leftDodgeDown)
+				{
+					Debug.Log("Moving left");
+					UpdateLocation(fireman.currentX - 6, fireman.currentZ, fireman.name);
+					fireman.currentX = fireman.currentX - 6;
+				}
+				else if (downDodgeDown)
+				{
+					Debug.Log("Moving down");
+					UpdateLocation(fireman.currentX, fireman.currentZ - 6, fireman.name);
+					fireman.currentZ = fireman.currentZ - 6;
+				}
+				else if (rightDodgeDown)
+				{
+					Debug.Log("Moving right");
+					UpdateLocation(fireman.currentX + 6, fireman.currentZ, fireman.name);
+					fireman.currentX = fireman.currentX + 6;
+
+				}
+				else if (upDodgeDown)
+				{
+					Debug.Log("Moving up");
+					UpdateLocation(fireman.currentX, fireman.currentZ + 6, fireman.name);
+					fireman.currentZ = fireman.currentZ + 6;
+				}
+			}
+			else
+			{
+				Debug.Log("    VET (1.5) You have decided to not dodge. " + Time.time);
+				knockDown(x_coord, z_coord);
+			}
+
+			toggleActiveDodge.deactivateGUI();
+		}
+		// Player is unable to dodge:
+		else
+		{
+			Debug.Log("Unable to dodge");
+			knockDown(x_coord, z_coord);
+		}
+
+
+
+		// Reset for later use
+		Debug.Log("Resetting dodge");
+		resetDodge();
+
+		// Update vicinity check if player is playing a Veteran currently
+		if (fireman.role == Role.Veteran)
+		{
+			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+		}
+
+		Debug.Log("");
+		Debug.Log("");
+
+		// Kill the thread
+		yield return 0;
+	}
+
+	// Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)
+	public IEnumerator knockDownGM()
     {
         Debug.Log("");
         Debug.Log("");
@@ -1515,7 +1625,7 @@ public class GameManager: MonoBehaviour
                     // Sanity checks:
                     //Debug.Log("p_elem.(x, z)  ->  " + p_elem + ".(" + playerLocations[p_elem, 0]  + ", " + playerLocations[p_elem, 1] +")");
                     //Debug.Log("tileMap.tiles[" + x_elem + ", " + z_elem + "] -> " + tileMap.tiles[x_elem, z_elem]);
-                    if (x_coord == x_elem && z_elem == z_coord) Debug.Log("Coordinates are the same: " + x_coord + ", " + z_coord);
+                    //if (x_coord == x_elem && z_elem == z_coord) Debug.Log("Coordinates are the same: " + x_coord + ", " + z_coord);
 
                     if (x_coord == x_elem && z_elem == z_coord && tileMap.tiles[x_elem, z_elem] == 2)
                     {
@@ -1643,23 +1753,24 @@ public class GameManager: MonoBehaviour
                 fireman.setAP(fireman.FreeAP - 1);
             }
 
-
+			/*
             System.Random rand=new System.Random();
             int x=rand.Next(1,8);
             int z=rand.Next(1,6);
+			*/
 
-            // Change the below 'true' to false if you want random. true is used to test specific values
-            fireManager.advanceFire(x, z, true);
+			// Update firefighter's current locations
+			fetchLocations();
+
+			// Change the below 'true' to false if you want random. true is used to test specific values
+			fireManager.advanceFire(1, 3, true);
             //fireman.usedVetAP = false;
 
-            // Update firefighter's current locations
-            fetchLocations();
-
             // Check if someone is knocked down
-            StartCoroutine(knockDown());
+            StartCoroutine(knockDownGM());
 
             // Re-check:
-            fetchLocations();
+            //fetchLocations();
 
             Debug.Log("Finished advFire, redistributing AP");
 

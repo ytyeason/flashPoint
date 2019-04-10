@@ -31,7 +31,7 @@ public class VicinityManager : MonoBehaviour {
 			{
 				VeteranVicinity[x, z] = new VicinityTile(x, z);
 				distArr[x, z] = new VicinityTile(x, z);
-				//distArr[x, z].distFromVet = -100;
+				distArr[x, z].distFromVet = 100;
 			}
 		}
 	}
@@ -39,18 +39,12 @@ public class VicinityManager : MonoBehaviour {
 	// Returns true if coordinates are in the Veteran's vicinity
 	public bool checkIfInVicinity(int in_x, int in_z)
 	{
-		for (int x = 0; x < gm.mapSizeX; x++)
+		if ( VeteranVicinity[in_x, in_z].distFromVet != -1)
 		{
-			for (int z = 0; z < gm.mapSizeZ; z++)
-			{
-				if (in_x == x && in_z == z && VeteranVicinity[x, z].distFromVet != -1)
-				{
-					return true;
-				}
-			}
+			return true;
 		}
-
-		return false;
+		else
+			return false;
 	}
 
 	// Reset status of explored and distFromVet
