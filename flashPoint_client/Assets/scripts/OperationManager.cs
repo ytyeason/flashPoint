@@ -1267,6 +1267,7 @@ public class OperationManager
         Fireman fireman = gm.tileMap.selectedUnit;
 
         fireman.flipPOI(x, z);
+        fireman.setAP(fireman.FreeAP-1);
 
         gm.selectRolePanel.SetActive(false);
         gm.tooltipPanel.SetActive(false);

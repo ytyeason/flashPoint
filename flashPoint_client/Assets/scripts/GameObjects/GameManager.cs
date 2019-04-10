@@ -329,7 +329,7 @@ public class GameManager: MonoBehaviour
         if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
             changeRoleButton.SetActive(true);
         }
-        if(!StaticInfo.StartingPosition&&!isMyTurn||endOfTurn){
+        if(!StaticInfo.StartingPosition&&!isMyTurn){
             changeRoleButton.SetActive(false);
         }
 
@@ -1510,58 +1510,104 @@ public class GameManager: MonoBehaviour
     {
 		Debug.Log("Ending Turn");
 
+        checkTurn();
+        if(isMyTurn){
+            // BEGIN OF WIP
+
+            // Veteran-given AP cannot be saved:
+            if (fireman.inVetZone && !fireman.usedVetAP)
+            {
+                Debug.Log("Unable to save AP from 'experience'");
+                fireman.setAP(fireman.FreeAP - 1);
+            }
+
+
+            //System.Random rand=new System.Random();
+            //int x=rand.Next(1,8);
+            //int z=rand.Next(1,6);
+
+            // Change the below 'true' to false if you want random. true is used to test specific values
+            fireManager.advanceFire(1, 3, true);
+            //fireman.usedVetAP = false;
+
+            // Update firefighter's current locations
+            fetchLocations();
+
+            // Check if someone is knocked down
+            StartCoroutine(knockDown());
+
+            // Re-check:
+            fetchLocations();
+
+            Debug.Log("Finished advFire, redistributing AP");
+
+            // END OF WIP
+
+            operationManager.commandMoves = 1;
+            operationManager.controlled = null;
+            operationManager.inCommand = false;
+
+            pOIManager.replenishPOI();
+            operationManager.DestroyAll();
+
+            endOfTurn=true;
+
+            changeTurn();
+
+        }
+
 		// BEGIN OF WIP
 
 		// Veteran-given AP cannot be saved:
-		if (fireman.inVetZone && !fireman.usedVetAP)
-		{
-			Debug.Log("Unable to save AP from 'experience'");
-			fireman.setAP(fireman.FreeAP - 1);
-		}
+		// if (fireman.inVetZone && !fireman.usedVetAP)
+		// {
+		// 	Debug.Log("Unable to save AP from 'experience'");
+		// 	fireman.setAP(fireman.FreeAP - 1);
+		// }
 
 
-		//System.Random rand=new System.Random();
-		//int x=rand.Next(1,8);
-		//int z=rand.Next(1,6);
+		// //System.Random rand=new System.Random();
+		// //int x=rand.Next(1,8);
+		// //int z=rand.Next(1,6);
 
-		// Change the below 'true' to false if you want random. true is used to test specific values
-		fireManager.advanceFire(1, 3, true);
-		//fireman.usedVetAP = false;
+		// // Change the below 'true' to false if you want random. true is used to test specific values
+		// fireManager.advanceFire(1, 3, true);
+		// //fireman.usedVetAP = false;
 
-		// Update firefighter's current locations
-		fetchLocations();
+		// // Update firefighter's current locations
+		// fetchLocations();
 
-		// Check if someone is knocked down
-		StartCoroutine(knockDown());
+		// // Check if someone is knocked down
+		// StartCoroutine(knockDown());
 
-		// Re-check:
-		fetchLocations();
+		// // Re-check:
+		// fetchLocations();
 
-		Debug.Log("Finished advFire, redistributing AP");
+		// Debug.Log("Finished advFire, redistributing AP");
 
-		// END OF WIP
+		// // END OF WIP
 
-		operationManager.commandMoves = 1;
-        operationManager.controlled = null;
-        operationManager.inCommand = false;
+		// operationManager.commandMoves = 1;
+        // operationManager.controlled = null;
+        // operationManager.inCommand = false;
 
-        pOIManager.replenishPOI();
-        operationManager.DestroyAll();
+        // pOIManager.replenishPOI();
+        // operationManager.DestroyAll();
 
-        endOfTurn=true;
+        // endOfTurn=true;
 
-		checkTurn();
-        //do stuff here...
+		// checkTurn();
+        // //do stuff here...
 
-        if (isMyTurn)
-        {
-		    changeTurn();
-        }
+        // if (isMyTurn)
+        // {
+		//     changeTurn();
+        // }
 	    
-        else
-        {
-            Debug.Log("This not your turn! Don't click end turn!");
-        }
+        // else
+        // {
+        //     Debug.Log("This not your turn! Don't click end turn!");
+        // }
     }
 
     public void checkTurn()
@@ -2331,12 +2377,13 @@ public class GameManager: MonoBehaviour
             if(isOwner){
                 StaticInfo.StartingAmbulancePosition=true;
                 startingAmbulancePositionPanel.SetActive(true);
+                if(!StaticInfo.level.Equals("Family")){
+                changeRoleButton.SetActive(true);
+            }
             }
             startingPositionPanel.SetActive(false);
 
-            if(!StaticInfo.level.Equals("Family")){
-                changeRoleButton.SetActive(true);
-            }
+            
         }
     }
 

@@ -247,6 +247,10 @@ public class Fireman
                 return false;
             }
         }
+        if((this.role==Role.RescueSpec&&FreeAP>1)){
+            setAP(FreeAP-1);
+            return true;
+        }
         return false;
     }
 
