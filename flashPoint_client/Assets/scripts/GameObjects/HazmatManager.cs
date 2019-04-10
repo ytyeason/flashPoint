@@ -50,6 +50,7 @@ public class HazmatManager{
         }
         if (StaticInfo.level.Equals("Random") )
         {
+            
             if (!Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {
                 numOfHazmat = Int32.Parse(StaticInfo.numOfHazmat);
