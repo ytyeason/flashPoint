@@ -540,7 +540,7 @@ public class Fireman
 
     public void removeHazmet(int x, int z)
     {
-
+        setAP(FreeAP-2);
         gm.hazmatManager.removeHazmat(x, z);
         gm.RemoveHazmat(x, z);
 
