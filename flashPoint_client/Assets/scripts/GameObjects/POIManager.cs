@@ -13,6 +13,7 @@ public class POIManager{
 
     public GameManager gm;
 
+    
     public Dictionary<int[],POI> placedPOI=new Dictionary<int[],POI>();
     public Dictionary<int[], GameObject> poiLookup = new Dictionary<int[], GameObject>();
     public List<POI> poi = new List<POI>();
@@ -272,21 +273,24 @@ public class POIManager{
         Debug.Log("reveal");
         int[] key = new int[] { x, z };
         POI p = getPOI(key[0],key[1],placedPOI);
-        p.setStatus(POIStatus.Revealed);
-        gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
-        Remove(key[0],key[1],poiLookup);
-        if (p.type == POIType.FalseAlarm)
-        {
-            Remove(key[0],key[1],placedPOI);
-            p.setStatus(POIStatus.Removed);
-        }
-        else
-        {
-            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
+        if(p!=null){
+            p.setStatus(POIStatus.Revealed);
+            gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
+            Remove(key[0],key[1],poiLookup);
+            if (p.type == POIType.FalseAlarm)
+            {
+                Remove(key[0],key[1],placedPOI);
+                p.setStatus(POIStatus.Removed);
+            }
+            else
+            {
+                GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
 
-            go.transform.Rotate(90, 0, 0);
-            poiLookup.Add(key, go);
+                go.transform.Rotate(90, 0, 0);
+                poiLookup.Add(key, go);
+            }
         }
+        
 
     }
 
@@ -294,66 +298,81 @@ public class POIManager{
     {
         int[] key = new int[] { x, z };
         POI p = getPOI(key[0],key[1],placedPOI);
-        if (p.type == POIType.Victim)
-        {
-            p.setStatus(POIStatus.Treated);
-            treated.Add(key, p);
+        if(p!=null){
+            if (p.type == POIType.Victim)
+            {
+                p.setStatus(POIStatus.Treated);
+                treated.Add(key, p);
+            }
+            gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
+            Remove(key[0], key[1], poiLookup);
+            GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
+            go.transform.Rotate(90, 0, 0);
+            treatedLookup.Add(key, go);
         }
-        gm.DestroyObject(getPOIPrefab(key[0],key[1], poiLookup));
-        Remove(key[0], key[1], poiLookup);
-        GameObject go = gm.instantiateObject(p.Prefab, new Vector3((float)((double)x*6 - 1.5), posY, (float)((double)z*6 + 1.5)), Quaternion.identity);
-        go.transform.Rotate(90, 0, 0);
-        treatedLookup.Add(key, go);
+        
     }
 
     public void movePOI(int origx, int origz, int newx, int newz)
     {
         POI p = getPOI(origx, origz, movingPOI);
         GameObject obj = getPOIPrefab(origx, origz, movingPOILookup);
-        Remove(origx, origz, gm.pOIManager.movingPOI);
-        Remove(origx, origz, gm.pOIManager.movingPOILookup);
-        obj.transform.position = new Vector3((float)(newx*6-1.5), posY, (float)(newz*6-1.5));
-        int[] key = new int[] { newx, newz };
-        movingPOI.Add(key, p);
-        movingPOILookup.Add(key, obj);
+        if(p!=null){
+            Remove(origx, origz, gm.pOIManager.movingPOI);
+            Remove(origx, origz, gm.pOIManager.movingPOILookup);
+            obj.transform.position = new Vector3((float)(newx*6-1.5), posY, (float)(newz*6-1.5));
+            int[] key = new int[] { newx, newz };
+            movingPOI.Add(key, p);
+            movingPOILookup.Add(key, obj);
+        }
+        
     }
 
     public void moveTreated(int origx, int origz, int newx, int newz)
     {
         POI p = getPOI(origx, origz, movingTreated);
         GameObject obj = getPOIPrefab(origx, origz, movingTreatedLookup);
-        Remove(origx, origz, gm.pOIManager.movingTreated);
-        Remove(origx, origz, gm.pOIManager.movingTreatedLookup);
-        obj.transform.position = new Vector3((float)(newx * 6 + 1.5), posY, (float)(newz * 6 + 1.5));
-        int[] key = new int[] { newx, newz };
-        movingTreated.Add(key, p);
-        movingTreatedLookup.Add(key, obj);
+        if(p!= null){
+            Remove(origx, origz, gm.pOIManager.movingTreated);
+            Remove(origx, origz, gm.pOIManager.movingTreatedLookup);
+            obj.transform.position = new Vector3((float)(newx * 6 + 1.5), posY, (float)(newz * 6 + 1.5));
+            int[] key = new int[] { newx, newz };
+            movingTreated.Add(key, p);
+            movingTreatedLookup.Add(key, obj);
+        }
+        
     }
 
     public void carryPOI(int x,int z)
     {
         POI p = getPOI(x, z, placedPOI);
         GameObject obj = getPOIPrefab(x, z, poiLookup);
-        Remove(x, z, gm.pOIManager.placedPOI);
-        Remove(x, z, gm.pOIManager.poiLookup);
+        if(p!=null){
+            Remove(x, z, gm.pOIManager.placedPOI);
+            Remove(x, z, gm.pOIManager.poiLookup);
 
-        int[] key = new int[] { x, z };
-        movingPOI.Add(key, p);
-        movingPOILookup.Add(key, obj);
-        obj.transform.position = new Vector3((float)(x * 6 - 1.5), posY, (float)(z * 6 - 1.5));
+            int[] key = new int[] { x, z };
+            movingPOI.Add(key, p);
+            movingPOILookup.Add(key, obj);
+            obj.transform.position = new Vector3((float)(x * 6 - 1.5), posY, (float)(z * 6 - 1.5));
+        }
+        
     }
 
     public void leadPOI(int x, int z)
     {
         POI p = getPOI(x, z, treated);
         GameObject obj = getPOIPrefab(x, z, treatedLookup);
-        Remove(x, z, gm.pOIManager.treated);
-        Remove(x, z, gm.pOIManager.treatedLookup);
+        if(p!=null){
+            Remove(x, z, gm.pOIManager.treated);
+            Remove(x, z, gm.pOIManager.treatedLookup);
 
-        int[] key = new int[] { x, z };
-        movingTreated.Add(key, p);
-        movingTreatedLookup.Add(key, obj);
-        obj.transform.position = new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 + 1.5));
+            int[] key = new int[] { x, z };
+            movingTreated.Add(key, p);
+            movingTreatedLookup.Add(key, obj);
+            obj.transform.position = new Vector3((float)(x * 6 + 1.5), posY, (float)(z * 6 + 1.5));
+        }
+        
     }
 
     public void dropPOI(int x, int z){

@@ -943,6 +943,8 @@ public class GameManager: MonoBehaviour
             //3. poi
             pOIManager.initiatePOI();
         }
+        string json=JsonUtility.ToJson(pOIManager);
+        Debug.Log(json);
     }
 
     public Fireman initializeFireman()
