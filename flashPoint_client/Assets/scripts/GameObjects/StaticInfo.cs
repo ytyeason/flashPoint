@@ -43,4 +43,14 @@ public static class StaticInfo
     public static String joinedPlayers;
     public static String confirmedPosition;
     public static String selectedRoles;
+    
+    public static Dictionary<string, string> ambulance;
+    public static Dictionary<string, string> engine;
+    public static int freeAP;
+    public static int specialtyAP;
+    public static int damagedWall;
+    public static int rescued;
+    public static int killed;
+    public static int removedHazmat;
+
 }
