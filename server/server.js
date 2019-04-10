@@ -593,7 +593,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
           det="false";
         }
         console.log(Games);
-        socket.emit('LOAD_ROOM_SUCCESS',{"status": det, "level":Games[data['room']]["level"]} );
+        socket.emit('LOAD_ROOM_SUCCESS',{"status": det, "level":Games[data['room']]["level"], "rand":Games[data['room']]["random"], 'numberOfPlayer':Games[data['room']]["numberOfPlayer"], "numberOfHazmat":Games[data['room']]["numberOfHazmat"],
+        "numberOfHotspot":Games[data['room']]["numberOfHotspot"]} );
       }
     });
 

@@ -41,6 +41,10 @@ public class LobbyManager : MonoBehaviour {
         //SceneManager.LoadScene("DragDrop");
         string level=obj.data.ToDictionary()["level"];
         string det=obj.data.ToDictionary()["status"];
+        string rand=obj.data.ToDictionary()["rand"];
+        string numOfHazmat=obj.data.ToDictionary()["numberOfHazmat"];
+        string numOfHotspot=obj.data.ToDictionary()["numberOfHotspot"];
+        string numOfPlayer=obj.data.ToDictionary()["numberOfPlayer"];
         if(level.Equals("Family")){
             SceneManager.LoadScene("Room");
 
@@ -48,6 +52,10 @@ public class LobbyManager : MonoBehaviour {
             SceneManager.LoadScene("DragDrop");
         }
         StaticInfo.level=level;
+        StaticInfo.random=Int32.Parse(rand);
+        StaticInfo.numberOfPlayer=numOfPlayer;
+        StaticInfo.numOfHazmat=numOfHazmat;
+        StaticInfo.numOfHotspot=numOfHotspot;
     }
 
     void LOADGAMESuccessful(SocketIOEvent obj)
