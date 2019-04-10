@@ -24,6 +24,6 @@ public class ApplicationManager : MonoBehaviour {
         StaticInfo.role = Role.None;
         StaticInfo.StartingPosition = false;//change to false after wards
         StaticInfo.LoadGame = false;
-	    SceneManager.LoadScene("Lobby");
+	    SceneManager.LoadScene("FirstUI");
     }
 }
