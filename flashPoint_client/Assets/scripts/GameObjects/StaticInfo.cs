@@ -47,10 +47,16 @@ public static class StaticInfo
     public static Dictionary<string, string> ambulance;
     public static Dictionary<string, string> engine;
     public static int freeAP;
-    public static int specialtyAP;
+    public static int remainingSpecAp;
     public static int damagedWall;
     public static int rescued;
     public static int killed;
     public static int removedHazmat;
+    
+    public static bool riding;
+    public static bool driving;
+    public static bool carryingHazmat;
+    public static bool carryingVictim;
+    public static bool leadingVictim;
 
 }

@@ -344,12 +344,18 @@ public class GameManager: MonoBehaviour
 	            }
 
 	            fireman.FreeAP = StaticInfo.freeAP;
-	            fireman.specialtyAP = StaticInfo.specialtyAP;
+	            fireman.remainingSpecAp = StaticInfo.remainingSpecAp;
 	            wallManager.damagedWalls = StaticInfo.damagedWall;
 	            pOIManager.rescued = StaticInfo.rescued;
 	            pOIManager.killed = StaticInfo.killed;
 	            hazmatManager.removedHazmat = StaticInfo.removedHazmat;
 	            
+	            fireman.riding = StaticInfo.riding;
+	            fireman.driving = StaticInfo.driving;
+	            fireman.carryingHazmat = StaticInfo.carryingHazmat;
+	            fireman.carryingVictim = StaticInfo.carryingVictim;
+	            fireman.leadingVictim = StaticInfo.leadingVictim;
+
             }
 
         }
@@ -2582,11 +2588,18 @@ public class GameManager: MonoBehaviour
 		data["room"]=StaticInfo.roomNumber;
 		data["name"] = StaticInfo.name;
 		data["freeAP"] = fireman.FreeAP.ToString();
-		data["specialtyAP"] = fireman.specialtyAP.ToString();
+		data["remainingSpecAp"] = fireman.remainingSpecAp.ToString();
 		data["damagedWall"] = wallManager.damagedWalls.ToString();
 		data["rescued"] = pOIManager.rescued.ToString();
 		data["killed"] = pOIManager.killed.ToString();
 		data["removedHazmat"] = hazmatManager.removedHazmat.ToString();
+		
+		data["riding"] = fireman.riding.ToString();
+		data["driving"] = fireman.driving.ToString();
+		data["carryingHazmat"] = fireman.carryingHazmat.ToString();
+		data["carryingVictim"] = fireman.carryingVictim.ToString();
+		data["leadingVictim"] = fireman.leadingVictim.ToString();
+		
 		socket.Emit("saveGame",new JSONObject(data));
 
 	}

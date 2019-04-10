@@ -123,12 +123,18 @@ public class LobbyManager : MonoBehaviour {
         StaticInfo.engine = obj.data[11].ToDictionary();
         
         StaticInfo.freeAP = Int32.Parse(obj.data[12].str);
-        StaticInfo.specialtyAP = Int32.Parse(obj.data[13].str);
+        StaticInfo.remainingSpecAp = Int32.Parse(obj.data[13].str);
         
         StaticInfo.damagedWall = Int32.Parse(obj.data[14].str);
         StaticInfo.rescued = Int32.Parse(obj.data[15].str);
         StaticInfo.killed = Int32.Parse(obj.data[16].str);
         StaticInfo.removedHazmat = Int32.Parse(obj.data[17].str);
+        
+        StaticInfo.riding = Convert.ToBoolean(obj.data[18].str);
+        StaticInfo.driving = Convert.ToBoolean(obj.data[19].str);
+        StaticInfo.carryingHazmat = Convert.ToBoolean(obj.data[20].str);
+        StaticInfo.carryingVictim = Convert.ToBoolean(obj.data[21].str);
+        StaticInfo.leadingVictim = Convert.ToBoolean(obj.data[22].str);
 
         Dictionary<int[], int> h = new Dictionary<int[], int>();
 
