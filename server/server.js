@@ -586,7 +586,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       if(Games[data['room']]!=undefined){
         var name = data['name'];
         if(Games[data['room']]["participants"][name]==undefined){
-          Games[data['room']]["participants"][name]={"Location": "0,0", "AP":4, "Role":"10","Driving":"0", "Riding":"0","Carrying":"false","Leading":"false"};
+          Games[data['room']]["participants"][name]={"Location": "0,0", "AP":4, "Role":"10","Driving":"0", "Riding":"0","Carrying":"False","Leading":"False","CarryingH":"False"};
           Games[data['room']]["participants_in_order"].push(name);
           det="true";
         }else{
@@ -652,7 +652,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var level = data['level'];
       console.log(level);
 
-      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"False","Leading":"False"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
+      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"False","Leading":"False","CarryingH":"False"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
 
       Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[],
        "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[],
@@ -1375,7 +1375,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
-        participants[name]['Carrying']=carryV;
+        participants[name]['CarryingH']=carryV;
         // console.log(Games[room_number]);
 
         var location = x+','+z;
@@ -1457,7 +1457,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room_number = data['room'];
       var x=data['x'];
       var z=data['z'];
-      Games[room]["participants"][name]['Carrying']="false";
+      Games[room]["participants"][name]['Carrying']="False";
 
       var location = x+','+z;
 
@@ -1487,7 +1487,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room_number = data["room"];
       var x=data['x'];
       var z=data['z'];
-      Games[room]["participants"][name]['Carrying']="false";
+      Games[room]["participants"][name]['CarryingH']="False";
 
       var location = x+','+z;
 
@@ -1517,7 +1517,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room_number = data['room'];
       var x=data['x'];
       var z=data['z'];
-      Games[room]["participants"][name]['Leading']="false";
+      Games[room]["participants"][name]['Leading']="False";
 
       var location = x+','+z;
 

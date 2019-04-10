@@ -1053,9 +1053,9 @@ public class GameManager: MonoBehaviour
         int x = Convert.ToInt32(cord[0]);
         int z = Convert.ToInt32(cord[1]);
 
-        int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role,pOIManager, hazmatManager);
+        // int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+		// Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, this, StaticInfo.role,pOIManager, hazmatManager);
 
         return f;
     }
@@ -1417,7 +1417,7 @@ public class GameManager: MonoBehaviour
 		Debug.Log("knockDown -> Looking at '" + name + "'. IsCurrentPlayer  => " + currentPlayer);
 
 		// Kill any POI the fireman is carrying:
-		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
+		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)
 		{
 			pOIManager.kill(x_elem, z_elem);
 		}
@@ -1502,16 +1502,21 @@ public class GameManager: MonoBehaviour
 								Debug.Log("    VET (3) Finished!" + Time.time);
 
 								// Need to drop Victim or Hazmat. NB Fireman can 'fully' dodge if leading treated victim
-								if (fireman.carriedPOI != null)
+								if (fireman.carryingVictim)
 								{
 									pOIManager.dropPOI(fireman.currentX / 6, fireman.currentZ / 6);
 									StopCarry(fireman.currentX / 6, fireman.currentZ / 6);
 								}
-								if (fireman.carriedHazmat != null)
+								if (fireman.carryingHazmat)
 								{
 									hazmatManager.dropHazmat(fireman.currentX / 6, fireman.currentZ / 6);
 									StopCarryH(fireman.currentX / 6, fireman.currentZ / 6);
 								}
+
+                                if(fireman.leadingVictim){
+                                    pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
+                                    StopLead(fireman.currentX / 6, fireman.currentZ / 6);
+                                }
 
 								// Player has chosen to move to:
 								if (leftDodgeDown)
@@ -1596,12 +1601,12 @@ public class GameManager: MonoBehaviour
             }
 
 
-            //System.Random rand=new System.Random();
-            //int x=rand.Next(1,8);
-            //int z=rand.Next(1,6);
+            System.Random rand=new System.Random();
+            int x=rand.Next(1,8);
+            int z=rand.Next(1,6);
 
             // Change the below 'true' to false if you want random. true is used to test specific values
-            fireManager.advanceFire(1, 3, true);
+            fireManager.advanceFire(x, z, true);
             //fireman.usedVetAP = false;
 
             // Update firefighter's current locations
@@ -2259,15 +2264,15 @@ public class GameManager: MonoBehaviour
                 fireman.setRole((Role)i);
                 StaticInfo.role=(Role)i;
                 fireman.setAP(fireman.FreeAP - 2);
-                if(fireman.carriedHazmat!=null){
+                if(fireman.carryingVictim){
                     pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarry(fireman.currentX/6,fireman.currentZ/6);
                 }
-                if(fireman.ledPOI!=null){
+                if(fireman.leadingVictim){
                     pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
                     this.StopLead(fireman.currentX/6,fireman.currentZ/6);
                 }
-                if(fireman.carriedHazmat!=null){
+                if(fireman.carryingHazmat){
                     hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarryH(fireman.currentX/6,fireman.currentZ/6);
                 }
