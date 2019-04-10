@@ -26,6 +26,8 @@ public class HazmatManager{
     public HazmatManager(GameManager gm){
         this.gm=gm;
 
+        Debug.Log(StaticInfo.level);
+
         //this.additionalHotspot 
         switch (StaticInfo.level)
         {
@@ -45,7 +47,7 @@ public class HazmatManager{
                 additionalHotspot += 3;
                 break; 
         }
-        if (StaticInfo.level .Equals("Random") )
+        if (StaticInfo.level.Equals("Random") )
         {
             if (!Int32.TryParse(StaticInfo.numOfHazmat, out this.numOfHazmat))
             {

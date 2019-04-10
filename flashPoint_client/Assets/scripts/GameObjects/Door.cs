@@ -63,26 +63,26 @@ public class Door : MonoBehaviour
             {
                 if (type == 0) // Closed horizontal
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 2, 0);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 2, 0);
+                    doorMap.ChangeDoor(doorX, doorZ, 2, 0,false);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 2, 0,false);
                 }
 
                 if (type == 1) // Closed vertical
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 3, 1);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 3, 1);
+                    doorMap.ChangeDoor(doorX, doorZ, 3, 1,false);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 3, 1,false);
                 }
 
                 if (type == 2) // Open horizontal
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 0, 2);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 0, 2);
+                    doorMap.ChangeDoor(doorX, doorZ, 0, 2,false);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 0, 2,false);
                 }
 
                 if (type == 3) // Open vertical
                 {
-                    doorMap.ChangeDoor(doorX, doorZ, 1, 3);
-                    doorMap.gm.UpdateDoor(doorX, doorZ, 1, 3);
+                    doorMap.ChangeDoor(doorX, doorZ, 1, 3,false);
+                    doorMap.gm.UpdateDoor(doorX, doorZ, 1, 3,false);
                 }
             }
 

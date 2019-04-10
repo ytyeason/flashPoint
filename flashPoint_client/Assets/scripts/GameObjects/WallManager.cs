@@ -124,73 +124,88 @@ public class WallManager
 
 	void PopulateWalls()
 	{
-		
-		defaultHorizontalWalls.Add(new int[] { 1, 1 });
-		
-		defaultHorizontalWalls.Add(new int[] { 2, 1 });
-		//
-		defaultHorizontalWalls.Add(new int[] { 4, 1 });
-		defaultHorizontalWalls.Add(new int[] { 3, 1 });
-		defaultHorizontalWalls.Add(new int[] { 6, 1 });
-		defaultHorizontalWalls.Add(new int[] { 7, 1 });
-		defaultHorizontalWalls.Add(new int[] { 8, 1 });
+        if (!StaticInfo.level.Equals("Random"))
+        {
+            //horizontal
+            //outer wall
+            defaultHorizontalWalls.Add(new int[] { 1, 1 });
+            defaultHorizontalWalls.Add(new int[] { 2, 1 });
+            defaultHorizontalWalls.Add(new int[] { 4, 1 });
+            defaultHorizontalWalls.Add(new int[] { 5, 1 });
+            defaultHorizontalWalls.Add(new int[] { 6, 1 });
+            defaultHorizontalWalls.Add(new int[] { 7, 1 });
+            defaultHorizontalWalls.Add(new int[] { 8, 1 });
+            //----------------------------------------------------
+            defaultHorizontalWalls.Add(new int[] { 1, 7 });
+            defaultHorizontalWalls.Add(new int[] { 2, 7 });
+            defaultHorizontalWalls.Add(new int[] { 3, 7 });
+            defaultHorizontalWalls.Add(new int[] { 4, 7 });
+            defaultHorizontalWalls.Add(new int[] { 5, 7 });
+            defaultHorizontalWalls.Add(new int[] { 6, 7 });
+            defaultHorizontalWalls.Add(new int[] { 8, 7 });
 
-		defaultHorizontalWalls.Add(new int[] { 1, 3 });
-		defaultHorizontalWalls.Add(new int[] { 2, 3 });
-		//
-		defaultHorizontalWalls.Add(new int[] { 4, 3 });
-		defaultHorizontalWalls.Add(new int[] { 5, 3 });
-		//
+            //Specific Horizontal for base
+            defaultHorizontalWalls.Add(new int[] { 3, 5 });
+            defaultHorizontalWalls.Add(new int[] { 4, 5 });
+            defaultHorizontalWalls.Add(new int[] { 5, 5 });
+            defaultHorizontalWalls.Add(new int[] { 6, 5 });
+            defaultHorizontalWalls.Add(new int[] { 7, 5 });
+            defaultHorizontalWalls.Add(new int[] { 1, 3 });
+            defaultHorizontalWalls.Add(new int[] { 2, 3 });
+            defaultHorizontalWalls.Add(new int[] { 3, 3 });
+            defaultHorizontalWalls.Add(new int[] { 5, 3 });
+            defaultHorizontalWalls.Add(new int[] { 6, 3 });
+            defaultHorizontalWalls.Add(new int[] { 7, 3 });
+            defaultHorizontalWalls.Add(new int[] { 8, 3 });
+            //---------------------------------------------------
+            //vertical
+            //outer wall
+            defaultVerticalWalls.Add(new int[] { 1, 1 });
+            defaultVerticalWalls.Add(new int[] { 1, 2 });
+            defaultVerticalWalls.Add(new int[] { 1, 3 });
+            defaultVerticalWalls.Add(new int[] { 1, 5 });
+            defaultVerticalWalls.Add(new int[] { 1, 6 });
+            //---------------------------------------------
+            defaultVerticalWalls.Add(new int[] { 9, 1 });
+            defaultVerticalWalls.Add(new int[] { 9, 2 });
+            defaultVerticalWalls.Add(new int[] { 9, 4 });
+            defaultVerticalWalls.Add(new int[] { 9, 5 });
+            defaultVerticalWalls.Add(new int[] { 9, 6 });
 
-		defaultHorizontalWalls.Add(new int[] { 4, 4 });
-		//
-		defaultHorizontalWalls.Add(new int[] { 6, 4 });
-		defaultHorizontalWalls.Add(new int[] { 7, 4 });
-		defaultHorizontalWalls.Add(new int[] { 8, 4 });
+            //Specific Vertical for base
+            defaultVerticalWalls.Add(new int[] { 3, 3 });
+            defaultVerticalWalls.Add(new int[] { 4, 5 });
+            defaultVerticalWalls.Add(new int[] { 6, 6 });
+            defaultVerticalWalls.Add(new int[] { 7, 4 });
+            defaultVerticalWalls.Add(new int[] { 6, 2 });
+            defaultVerticalWalls.Add(new int[] { 8, 2 });
+        }
+        else
+        {
+            Debug.Log("Random board number: " + DoorManager.randomBoard);
+            if (DoorManager.randomBoard == 1)
+            {
+                randomWall1();
+            }
+            else if (DoorManager.randomBoard == 2)
+            {
+                randomWall2();
+            }
+            else if (DoorManager.randomBoard == 3)
+            {
+                randomWall3();
+            }
+            else if (DoorManager.randomBoard == 4)
+            {
+                randomWall4();
+            }
+            else if (DoorManager.randomBoard == 5)
+            {
+                randomWall5();
+            }
+        }        
 
-		defaultHorizontalWalls.Add(new int[] { 1, 5 });
-		defaultHorizontalWalls.Add(new int[] { 2, 5 });
-
-		defaultHorizontalWalls.Add(new int[] { 4, 6 });
-		defaultHorizontalWalls.Add(new int[] { 5, 6 });
-
-		defaultHorizontalWalls.Add(new int[] { 1, 7 });
-		defaultHorizontalWalls.Add(new int[] { 2, 7 });
-		defaultHorizontalWalls.Add(new int[] { 3, 7 });
-		defaultHorizontalWalls.Add(new int[] { 4, 7 });
-		defaultHorizontalWalls.Add(new int[] { 5, 7 });
-		//
-		defaultHorizontalWalls.Add(new int[] { 7, 7 });
-		defaultHorizontalWalls.Add(new int[] { 8, 7 });
-
-		defaultVerticalWalls.Add(new int[] { 1, 1 });
-		defaultVerticalWalls.Add(new int[] { 1, 2 });
-		defaultVerticalWalls.Add(new int[] { 1, 4 });
-		//
-		defaultVerticalWalls.Add(new int[] { 1, 5 });
-		defaultVerticalWalls.Add(new int[] { 1, 6 });
-
-		defaultVerticalWalls.Add(new int[] { 4, 1 });
-		defaultVerticalWalls.Add(new int[] { 4, 2 });
-		defaultVerticalWalls.Add(new int[] { 4, 4 });
-		defaultVerticalWalls.Add(new int[] { 4, 5 });
-		defaultVerticalWalls.Add(new int[] { 4, 6 });
-
-		//
-		defaultVerticalWalls.Add(new int[] { 6, 5 });
-		defaultVerticalWalls.Add(new int[] { 6, 6 });
-
-		defaultVerticalWalls.Add(new int[] { 7, 1 });
-		defaultVerticalWalls.Add(new int[] { 7, 2 });
-		defaultVerticalWalls.Add(new int[] { 7, 3 });
-
-		defaultVerticalWalls.Add(new int[] { 9, 1 });
-		defaultVerticalWalls.Add(new int[] { 9, 2 });
-		//
-		defaultVerticalWalls.Add(new int[] { 9, 4 });
-		defaultVerticalWalls.Add(new int[] { 9, 5 });
-		defaultVerticalWalls.Add(new int[] { 9, 6 });
-		/* im so stupid....
+        /* im so stupid....
 		
 		defaultHorizontalWallsMemo[new int[] {1, 1}] = 0;
 		defaultHorizontalWallsMemo[new int[] {2, 1}] = 0;
@@ -240,13 +255,322 @@ public class WallManager
 		defaultVerticalWallsMemo[new int[] {9, 2}] = 0;
 		defaultVerticalWallsMemo[new int[] {9, 4}] = 0;
 		defaultVerticalWallsMemo[new int[] {9, 5}] = 0;
-		defaultVerticalWallsMemo[new int[] {9, 6}] = 0;
-*/
-		
+		defaultVerticalWallsMemo[new int[] {9, 6}] = 0;*/
 
-	}
+    }
 
-	public void BreakWall(int x, int z, int type, int horizontal, bool explosionIsBreaking)
+    void randomWall1()
+    {
+        //horizontal
+        //outer wall
+        defaultHorizontalWalls.Add(new int[] { 1, 1 });
+        defaultHorizontalWalls.Add(new int[] { 2, 1 });
+        defaultHorizontalWalls.Add(new int[] { 4, 1 });
+        defaultHorizontalWalls.Add(new int[] { 3, 1 });
+        defaultHorizontalWalls.Add(new int[] { 6, 1 });
+        defaultHorizontalWalls.Add(new int[] { 7, 1 });
+        defaultHorizontalWalls.Add(new int[] { 8, 1 });
+        //----------------------------------------------------
+        defaultHorizontalWalls.Add(new int[] { 1, 7 });
+        defaultHorizontalWalls.Add(new int[] { 2, 7 });
+        defaultHorizontalWalls.Add(new int[] { 3, 7 });
+        defaultHorizontalWalls.Add(new int[] { 4, 7 });
+        defaultHorizontalWalls.Add(new int[] { 5, 7 });
+        defaultHorizontalWalls.Add(new int[] { 7, 7 });
+        defaultHorizontalWalls.Add(new int[] { 8, 7 });
+
+        //Specific Horizontal for random1
+        defaultHorizontalWalls.Add(new int[] { 1, 4 });
+        defaultHorizontalWalls.Add(new int[] { 1, 3 });
+        defaultHorizontalWalls.Add(new int[] { 2, 3 });
+        defaultHorizontalWalls.Add(new int[] { 3, 4 });
+        defaultHorizontalWalls.Add(new int[] { 3, 3 });
+        defaultHorizontalWalls.Add(new int[] { 4, 4 });
+        defaultHorizontalWalls.Add(new int[] { 4, 3 });
+        defaultHorizontalWalls.Add(new int[] { 5, 4 });
+        defaultHorizontalWalls.Add(new int[] { 6, 3 });
+        defaultHorizontalWalls.Add(new int[] { 7, 3 });
+        //---------------------------------------------------
+        //vertical
+        //outer wall
+        defaultVerticalWalls.Add(new int[] { 1, 1 });
+        defaultVerticalWalls.Add(new int[] { 1, 2 });
+        defaultVerticalWalls.Add(new int[] { 1, 4 });
+        defaultVerticalWalls.Add(new int[] { 1, 5 });
+        defaultVerticalWalls.Add(new int[] { 1, 6 });
+        //---------------------------------------------
+        defaultVerticalWalls.Add(new int[] { 9, 1 });
+        defaultVerticalWalls.Add(new int[] { 9, 2 });
+        defaultVerticalWalls.Add(new int[] { 9, 4 });
+        defaultVerticalWalls.Add(new int[] { 9, 5 });
+        defaultVerticalWalls.Add(new int[] { 9, 6 });
+
+        //Specific Vertical for random1
+        defaultVerticalWalls.Add(new int[] { 4, 6 });
+        defaultVerticalWalls.Add(new int[] { 5, 6 });
+        defaultVerticalWalls.Add(new int[] { 5, 5 });
+        defaultVerticalWalls.Add(new int[] { 5, 4 });
+        defaultVerticalWalls.Add(new int[] { 5, 1 });
+        defaultVerticalWalls.Add(new int[] { 6, 2 });
+        defaultVerticalWalls.Add(new int[] { 6, 1 });
+        defaultVerticalWalls.Add(new int[] { 7, 6 });
+        defaultVerticalWalls.Add(new int[] { 7, 5 });
+        defaultVerticalWalls.Add(new int[] { 7, 4 });
+        defaultVerticalWalls.Add(new int[] { 8, 6 });
+        defaultVerticalWalls.Add(new int[] { 8, 4 });
+        defaultVerticalWalls.Add(new int[] { 8, 3 });
+    }
+
+    void randomWall2()
+    {
+        //horizontal
+        //outer wall
+        defaultHorizontalWalls.Add(new int[] { 1, 1 });
+        defaultHorizontalWalls.Add(new int[] { 2, 1 });
+        defaultHorizontalWalls.Add(new int[] { 4, 1 });
+        defaultHorizontalWalls.Add(new int[] { 3, 1 });
+        defaultHorizontalWalls.Add(new int[] { 6, 1 });
+        defaultHorizontalWalls.Add(new int[] { 7, 1 });
+        defaultHorizontalWalls.Add(new int[] { 8, 1 });
+        //----------------------------------------------------
+        defaultHorizontalWalls.Add(new int[] { 1, 7 });
+        defaultHorizontalWalls.Add(new int[] { 2, 7 });
+        defaultHorizontalWalls.Add(new int[] { 3, 7 });
+        defaultHorizontalWalls.Add(new int[] { 4, 7 });
+        defaultHorizontalWalls.Add(new int[] { 5, 7 });
+        defaultHorizontalWalls.Add(new int[] { 7, 7 });
+        defaultHorizontalWalls.Add(new int[] { 8, 7 });
+
+        //Specific Horizontal for random2
+        defaultHorizontalWalls.Add(new int[] { 1, 5 });
+        defaultHorizontalWalls.Add(new int[] { 2, 5 });
+        defaultHorizontalWalls.Add(new int[] { 3, 5 });
+        defaultHorizontalWalls.Add(new int[] { 5, 5 });
+        defaultHorizontalWalls.Add(new int[] { 7, 5 });
+        defaultHorizontalWalls.Add(new int[] { 8, 5 });
+        defaultHorizontalWalls.Add(new int[] { 5, 4 });
+        defaultHorizontalWalls.Add(new int[] { 7, 4 });
+        defaultHorizontalWalls.Add(new int[] { 5, 3 });
+        defaultHorizontalWalls.Add(new int[] { 7, 3 });
+        defaultHorizontalWalls.Add(new int[] { 6, 2 });
+        //---------------------------------------------------
+        //vertical
+        //outer wall
+        defaultVerticalWalls.Add(new int[] { 1, 1 });
+        defaultVerticalWalls.Add(new int[] { 1, 2 });
+        defaultVerticalWalls.Add(new int[] { 1, 4 });
+        defaultVerticalWalls.Add(new int[] { 1, 5 });
+        defaultVerticalWalls.Add(new int[] { 1, 6 });
+        //---------------------------------------------
+        defaultVerticalWalls.Add(new int[] { 9, 1 });
+        defaultVerticalWalls.Add(new int[] { 9, 2 });
+        defaultVerticalWalls.Add(new int[] { 9, 4 });
+        defaultVerticalWalls.Add(new int[] { 9, 5 });
+        defaultVerticalWalls.Add(new int[] { 9, 6 });
+
+        //Specific Vertical for random2
+        defaultVerticalWalls.Add(new int[] { 5, 6 });
+        defaultVerticalWalls.Add(new int[] { 5, 5 });
+        defaultVerticalWalls.Add(new int[] { 6, 4 });
+        defaultVerticalWalls.Add(new int[] { 7, 4 });
+        defaultVerticalWalls.Add(new int[] { 4, 3 });
+        defaultVerticalWalls.Add(new int[] { 5, 3 });
+        defaultVerticalWalls.Add(new int[] { 8, 3 });
+        defaultVerticalWalls.Add(new int[] { 4, 2 });
+        defaultVerticalWalls.Add(new int[] { 4, 1 });
+        defaultVerticalWalls.Add(new int[] { 6, 1 });
+        defaultVerticalWalls.Add(new int[] { 8, 1 });
+    }
+
+    void randomWall3()
+    {
+        defaultHorizontalWalls.Add(new int[] { 1, 1 });
+
+        defaultHorizontalWalls.Add(new int[] { 2, 1 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 4, 1 });
+        defaultHorizontalWalls.Add(new int[] { 3, 1 });
+        defaultHorizontalWalls.Add(new int[] { 6, 1 });
+        defaultHorizontalWalls.Add(new int[] { 7, 1 });
+        defaultHorizontalWalls.Add(new int[] { 8, 1 });
+
+        defaultHorizontalWalls.Add(new int[] { 1, 3 });
+        defaultHorizontalWalls.Add(new int[] { 2, 3 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 4, 3 });
+        defaultHorizontalWalls.Add(new int[] { 5, 3 });
+        //
+
+        defaultHorizontalWalls.Add(new int[] { 4, 4 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 6, 4 });
+        defaultHorizontalWalls.Add(new int[] { 7, 4 });
+        defaultHorizontalWalls.Add(new int[] { 8, 4 });
+
+        defaultHorizontalWalls.Add(new int[] { 1, 5 });
+        defaultHorizontalWalls.Add(new int[] { 2, 5 });
+
+        defaultHorizontalWalls.Add(new int[] { 4, 6 });
+        defaultHorizontalWalls.Add(new int[] { 5, 6 });
+
+        defaultHorizontalWalls.Add(new int[] { 1, 7 });
+        defaultHorizontalWalls.Add(new int[] { 2, 7 });
+        defaultHorizontalWalls.Add(new int[] { 3, 7 });
+        defaultHorizontalWalls.Add(new int[] { 4, 7 });
+        defaultHorizontalWalls.Add(new int[] { 5, 7 });
+        //
+        defaultHorizontalWalls.Add(new int[] { 7, 7 });
+        defaultHorizontalWalls.Add(new int[] { 8, 7 });
+
+        defaultVerticalWalls.Add(new int[] { 1, 1 });
+        defaultVerticalWalls.Add(new int[] { 1, 2 });
+        defaultVerticalWalls.Add(new int[] { 1, 4 });
+        //
+        defaultVerticalWalls.Add(new int[] { 1, 5 });
+        defaultVerticalWalls.Add(new int[] { 1, 6 });
+
+        defaultVerticalWalls.Add(new int[] { 4, 1 });
+        defaultVerticalWalls.Add(new int[] { 4, 2 });
+        defaultVerticalWalls.Add(new int[] { 4, 4 });
+        defaultVerticalWalls.Add(new int[] { 4, 5 });
+        defaultVerticalWalls.Add(new int[] { 4, 6 });
+
+        //
+        defaultVerticalWalls.Add(new int[] { 6, 5 });
+        defaultVerticalWalls.Add(new int[] { 6, 6 });
+
+        defaultVerticalWalls.Add(new int[] { 7, 1 });
+        defaultVerticalWalls.Add(new int[] { 7, 2 });
+        defaultVerticalWalls.Add(new int[] { 7, 3 });
+
+        defaultVerticalWalls.Add(new int[] { 9, 1 });
+        defaultVerticalWalls.Add(new int[] { 9, 2 });
+        //
+        defaultVerticalWalls.Add(new int[] { 9, 4 });
+        defaultVerticalWalls.Add(new int[] { 9, 5 });
+        defaultVerticalWalls.Add(new int[] { 9, 6 });
+    }
+
+    void randomWall4()
+    {
+        //horizontal
+        //outer wall
+        defaultHorizontalWalls.Add(new int[] { 1, 1 });
+        defaultHorizontalWalls.Add(new int[] { 2, 1 });
+        defaultHorizontalWalls.Add(new int[] { 4, 1 });
+        defaultHorizontalWalls.Add(new int[] { 3, 1 });
+        defaultHorizontalWalls.Add(new int[] { 6, 1 });
+        defaultHorizontalWalls.Add(new int[] { 7, 1 });
+        defaultHorizontalWalls.Add(new int[] { 8, 1 });
+        //----------------------------------------------------
+        defaultHorizontalWalls.Add(new int[] { 1, 7 });
+        defaultHorizontalWalls.Add(new int[] { 2, 7 });
+        defaultHorizontalWalls.Add(new int[] { 3, 7 });
+        defaultHorizontalWalls.Add(new int[] { 4, 7 });
+        defaultHorizontalWalls.Add(new int[] { 5, 7 });
+        defaultHorizontalWalls.Add(new int[] { 7, 7 });
+        defaultHorizontalWalls.Add(new int[] { 8, 7 });
+
+        //Specific Horizontal for random4
+        defaultHorizontalWalls.Add(new int[] { 5, 6 });
+        defaultHorizontalWalls.Add(new int[] { 7, 6 });
+        defaultHorizontalWalls.Add(new int[] { 1, 5 });
+        defaultHorizontalWalls.Add(new int[] { 2, 4 });
+        defaultHorizontalWalls.Add(new int[] { 3, 4 });
+        defaultHorizontalWalls.Add(new int[] { 5, 4 });
+        defaultHorizontalWalls.Add(new int[] { 6, 4 });
+        defaultHorizontalWalls.Add(new int[] { 7, 4 });
+        defaultHorizontalWalls.Add(new int[] { 7, 3 });
+        defaultHorizontalWalls.Add(new int[] { 8, 3 });
+        defaultHorizontalWalls.Add(new int[] { 4, 2 });
+        defaultHorizontalWalls.Add(new int[] { 6, 2 });
+        //---------------------------------------------------
+        //vertical
+        //outer wall
+        defaultVerticalWalls.Add(new int[] { 1, 1 });
+        defaultVerticalWalls.Add(new int[] { 1, 2 });
+        defaultVerticalWalls.Add(new int[] { 1, 4 });
+        defaultVerticalWalls.Add(new int[] { 1, 5 });
+        defaultVerticalWalls.Add(new int[] { 1, 6 });
+        //---------------------------------------------
+        defaultVerticalWalls.Add(new int[] { 9, 1 });
+        defaultVerticalWalls.Add(new int[] { 9, 2 });
+        defaultVerticalWalls.Add(new int[] { 9, 4 });
+        defaultVerticalWalls.Add(new int[] { 9, 5 });
+        defaultVerticalWalls.Add(new int[] { 9, 6 });
+
+        //Specific Vertical for random4
+        defaultVerticalWalls.Add(new int[] { 2, 4 });
+        defaultVerticalWalls.Add(new int[] { 3, 3 });
+        defaultVerticalWalls.Add(new int[] { 4, 2 });
+        defaultVerticalWalls.Add(new int[] { 5, 4 });
+        defaultVerticalWalls.Add(new int[] { 5, 1 });
+        defaultVerticalWalls.Add(new int[] { 6, 6 });
+        defaultVerticalWalls.Add(new int[] { 6, 1 });
+        defaultVerticalWalls.Add(new int[] { 7, 6 });
+        defaultVerticalWalls.Add(new int[] { 8, 5 });
+        defaultVerticalWalls.Add(new int[] { 8, 4 });
+    }
+
+    void randomWall5()
+    {
+        //horizontal
+        //outer wall
+        defaultHorizontalWalls.Add(new int[] { 1, 1 });
+        defaultHorizontalWalls.Add(new int[] { 2, 1 });
+        defaultHorizontalWalls.Add(new int[] { 4, 1 });
+        defaultHorizontalWalls.Add(new int[] { 3, 1 });
+        defaultHorizontalWalls.Add(new int[] { 6, 1 });
+        defaultHorizontalWalls.Add(new int[] { 7, 1 });
+        defaultHorizontalWalls.Add(new int[] { 8, 1 });
+        //----------------------------------------------------
+        defaultHorizontalWalls.Add(new int[] { 1, 7 });
+        defaultHorizontalWalls.Add(new int[] { 2, 7 });
+        defaultHorizontalWalls.Add(new int[] { 3, 7 });
+        defaultHorizontalWalls.Add(new int[] { 4, 7 });
+        defaultHorizontalWalls.Add(new int[] { 5, 7 });
+        defaultHorizontalWalls.Add(new int[] { 7, 7 });
+        defaultHorizontalWalls.Add(new int[] { 8, 7 });
+
+        //Specific Horizontal for random5
+        defaultHorizontalWalls.Add(new int[] { 2, 6 });
+        defaultHorizontalWalls.Add(new int[] { 1, 4 });
+        defaultHorizontalWalls.Add(new int[] { 2, 4 });
+        defaultHorizontalWalls.Add(new int[] { 4, 4 });
+        defaultHorizontalWalls.Add(new int[] { 5, 4 });
+        defaultHorizontalWalls.Add(new int[] { 6, 4 });
+        defaultHorizontalWalls.Add(new int[] { 8, 2 });
+        //---------------------------------------------------
+        //vertical
+        //outer wall
+        defaultVerticalWalls.Add(new int[] { 1, 1 });
+        defaultVerticalWalls.Add(new int[] { 1, 2 });
+        defaultVerticalWalls.Add(new int[] { 1, 4 });
+        defaultVerticalWalls.Add(new int[] { 1, 5 });
+        defaultVerticalWalls.Add(new int[] { 1, 6 });
+        //---------------------------------------------
+        defaultVerticalWalls.Add(new int[] { 9, 1 });
+        defaultVerticalWalls.Add(new int[] { 9, 2 });
+        defaultVerticalWalls.Add(new int[] { 9, 4 });
+        defaultVerticalWalls.Add(new int[] { 9, 5 });
+        defaultVerticalWalls.Add(new int[] { 9, 6 });
+
+        //Specific Vertical for random5
+        defaultVerticalWalls.Add(new int[] { 2, 6 });
+        defaultVerticalWalls.Add(new int[] { 3, 3 });
+        defaultVerticalWalls.Add(new int[] { 3, 2 });
+        defaultVerticalWalls.Add(new int[] { 5, 6 });
+        defaultVerticalWalls.Add(new int[] { 5, 5 });
+        defaultVerticalWalls.Add(new int[] { 5, 4 });
+        defaultVerticalWalls.Add(new int[] { 6, 3 });
+        defaultVerticalWalls.Add(new int[] { 6, 1 });
+        defaultVerticalWalls.Add(new int[] { 7, 1 });
+        defaultVerticalWalls.Add(new int[] { 8, 6 });
+        defaultVerticalWalls.Add(new int[] { 8, 4 });
+        defaultVerticalWalls.Add(new int[] { 8, 5 });
+    }
+
+    public void BreakWall(int x, int z, int type, int horizontal, bool explosionIsBreaking)
 	{
 		Debug.Log("Trying to break the wall (" + x + "," + z +")");
 
