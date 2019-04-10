@@ -70,7 +70,7 @@ public class SelectRole : MonoBehaviour {
         }
         Debug.Log("selectRole successful: " + StaticInfo.role);
         SceneManager.LoadScene("Room");
-
+        
     }
 
     IEnumerator ConnectToServer()
