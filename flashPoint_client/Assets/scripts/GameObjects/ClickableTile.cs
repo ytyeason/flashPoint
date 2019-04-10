@@ -21,7 +21,48 @@ public class ClickableTile : MonoBehaviour {
             if(x==0||x==9||z==0||z==7){    // outside tiles
                 map.gm.fireman.s.transform.position=new Vector3(tileX,0.2f,tileZ);
             }
-        }else{
+        }
+        else if(StaticInfo.StartingAmbulancePosition){
+            int x = tileX/6;
+            int z = tileZ/6;
+            if((x==9&&z==3)||(x==9&&z==4)){
+                map.ambulance.moveNextStation(9,3);
+                // map.gm.UpdateAmbulanceLocation(54,21,-5,-5);
+            }
+            if((x==4&&z==0)||(x==3&&z==0)){
+                map.ambulance.moveNextStation(3,0);
+                // map.gm.UpdateAmbulanceLocation(21,0,-5,-5);
+            }
+            if((x==0&&z==4)||(x==0&&z==3)){
+                map.ambulance.moveNextStation(0,3);
+                // map.gm.UpdateAmbulanceLocation(0,21,-5,-5);
+            }
+            if((x==6&&z==7)||(x==5&&z==7)){
+                map.ambulance.moveNextStation(5,7);
+                // map.gm.UpdateAmbulanceLocation(33,42,-5,-5);
+            }
+        }
+        else if(StaticInfo.StartingEnginePosition){
+            int x = tileX/6;
+            int z = tileZ/6;
+            if((x==7&&z==7)||(x==8&&z==7)){
+                map.engine.moveNextStation(7, 7);
+                // map.gm.UpdateEngineLocation(45,42,-5,-5);
+            }
+            if((x==0&&z==5)||(x==0&&z==6)){
+                map.engine.moveNextStation(0, 5);
+                // map.gm.UpdateEngineLocation(0,33,-5,-5);
+            }
+            if((x==1&&z==0)||(x==2&&z==0)){
+                map.engine.moveNextStation(1, 0);
+                // map.gm.UpdateEngineLocation(9,0,-5,-5);
+            }
+            if((x==9&&z==1)||(x==9&&z==2)){
+                map.engine.moveNextStation(9, 1);
+                // map.gm.UpdateEngineLocation(9,0,-5,-5);
+            }
+        }
+        else{
             if (map.gm.isMyTurn)
             {
                 //Debug.Log(this);
