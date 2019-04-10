@@ -446,7 +446,7 @@ public class Fireman
         if (carriedHazmat != null)
         {
             gm.hazmatManager.moveHazmat(origX, origZ, x, z);
-            
+            gm.UpdateHazmatLocation(origX,origZ,x,z);
         }
 
         
