@@ -162,10 +162,10 @@ public class HazmatManager{
             var type = entry.Value;
             
             Hazmat h = new Hazmat(this,HazmatStatus.Hazmat);
-            GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(key[0]*6 + 1.5), posY, (float)(key[1]*6 - 1.5)), Quaternion.identity);
+            GameObject go = gm.instantiateObject(h.prefab, new Vector3((float)(key[0]*6 - 1.5), posY, (float)(key[1]*6 - 1.5)), Quaternion.identity);
             go.transform.Rotate(90, 0, 0);
             
-            lookUp.Add(key, go);
+            movingLookup.Add(key, go);
             movingHazmat.Add(key, h);
         }
         

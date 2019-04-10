@@ -956,26 +956,29 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room_number = data['room'];
         var name = data['name'];
         console.log(room_number);
-        console.log(Games[room_number]);
+        //console.log(Games[room_number]);
         // console.log(Games[room_number]['Turn']);
-        var turn_name = Games[room_number]['Turn'];
-        console.log("turn: "+turn_name);
-        if(turn_name.localeCompare(name)==0){//name matches
-            var participants_in_order = Games[room_number]["participants_in_order"];
-            var index = participants_in_order.indexOf(turn_name);
-            if(index == participants_in_order.length-1){
-              index = 0;
-            }else{
-              index = index+1;
-            }
-            Games[room_number]['Turn'] = participants_in_order[index];
-            console.log(Games[room_number]['Turn']);
-            socket.emit("changingTurn_Success", {"Turn": Games[room_number]['Turn']});//change isMyTurn to False in frontend
-            socket.broadcast.emit("isMyTurnUpdate", {"Turn": Games[room_number]['Turn']});
-        }else{
-            console.log("name doesn't match in changing turn")
-            socket.emit('changingTurn_Success', {"status": "True"});//keep isMyTurn unchanged
+        if(Games[room_number]!= undefined){
+          var turn_name = Games[room_number]['Turn'];
+          console.log("turn: "+turn_name);
+          if(turn_name.localeCompare(name)==0){//name matches
+              var participants_in_order = Games[room_number]["participants_in_order"];
+              var index = participants_in_order.indexOf(turn_name);
+              if(index == participants_in_order.length-1){
+                index = 0;
+              }else{
+                index = index+1;
+              }
+              Games[room_number]['Turn'] = participants_in_order[index];
+              console.log(Games[room_number]['Turn']);
+              socket.emit("changingTurn_Success", {"Turn": Games[room_number]['Turn']});//change isMyTurn to False in frontend
+              socket.broadcast.emit("isMyTurnUpdate", {"Turn": Games[room_number]['Turn']});
+          }else{
+              console.log("name doesn't match in changing turn")
+              socket.emit('changingTurn_Success', {"status": "True"});//keep isMyTurn unchanged
+          }
         }
+
     });
 
     socket.on('sendChat', function(data){
@@ -1027,7 +1030,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
         //deleting poi from POIMemo
         var p = Games_state[room_number]['POIMemo'];
         var i = p.findIndex(x => x[location]!= null);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 8539b54b334b0816c065f66bdcd8011d905ee56d
         if (i !== -1){
           var type = p[i][location];
           p.splice(i, 1);
