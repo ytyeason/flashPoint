@@ -424,6 +424,19 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
     });
 
+    socket.on('checkingOwner',function(data){
+      var room_number = data['room'];
+      var name = data['name'];
+
+      var owner_name = Games[room_number]['Owner'];
+      if(owner_name.localeCompare(name)==0){
+        socket.emit('checkOwner_Success', {"owner": "True"});
+      }else{
+        socket.emit('checkOwner_Success', {"owner": "False"});
+      }
+
+    });
+
     socket.on('changingTurn', function(data){
         var room_number = data['room'];
         var name = data['name'];
@@ -838,6 +851,20 @@ io.on('connection', function (socket) {//default event for client connect to ser
         io.sockets.emit("ConfirmPosition_Success",{"Games":Games,"room":room})
       }
     });
+
+    // socket.on('ConfirmAmbulancePosition',function(data){
+    //   // var x=data['x'];
+    //   // var z=data['z'];
+    //   // var room=data['room'];
+    //   // // var name=data['name'];
+    //   // Games[room]["participants"][name]["Location"]=x+","+z;
+    //   // if(!Games[room]["confirmedPosition"].includes(name)){
+    //   //   Games[room]["confirmedPosition"].push(name);
+    //   // }
+    //   if(Games[room]["confirmedPosition"].length==parseInt(Games[room]["numberOfPlayer"])){
+    //     io.sockets.emit("ConfirmPosition_Success",{"set": true});
+    //   }
+    // });
 
     socket.on('victory',function(data){
       var room=data['room'];

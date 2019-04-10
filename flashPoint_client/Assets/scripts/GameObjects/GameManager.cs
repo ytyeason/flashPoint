@@ -98,7 +98,8 @@ public class GameManager: MonoBehaviour
     public Engine enG;
     public Fireman fireman;
 
-    public Boolean isMyTurn = false;
+    public bool isMyTurn = false;
+    public bool isOwner = false;
 
     public List<Notification> chatLog = new List<Notification>();
     public GameObject notificationPanel, notificationText;
@@ -115,6 +116,8 @@ public class GameManager: MonoBehaviour
     public Text tooltip;
 
     public GameObject startingPositionPanel;
+    public GameObject startingAmbulancePositionPanel;
+    public GameObject startingEnginePositionPanel;
 
 
     void Start()
@@ -162,6 +165,10 @@ public class GameManager: MonoBehaviour
         socket.On("ConfirmPosition_Success",confirmPosition_Success);
         socket.On("JoinGame_Success",JoinGame_Success);
         socket.On("ExplodeHazmat_Success",explodeHazmat_Success);
+        socket.On("checkOwner_Success", checkOwner_Success);
+
+        //check owner
+        checkOwner(StaticInfo.name);
 
         if (game_info != null)
         {
@@ -218,7 +225,7 @@ public class GameManager: MonoBehaviour
                 if (!level.Equals("\"Family\""))
                 {
                     displayRole();
-                    if(StaticInfo.StartingPosition){
+                    if(StaticInfo.StartingPosition||StaticInfo.StartingAmbulancePosition||StaticInfo.StartingEnginePosition){
                         changeRoleButton.SetActive(false);
                     }
                     
@@ -239,6 +246,18 @@ public class GameManager: MonoBehaviour
                     startingPositionPanel.SetActive(true);
                 }else{
                     startingPositionPanel.SetActive(false);
+                }
+
+                if(StaticInfo.StartingAmbulancePosition){
+                    startingAmbulancePositionPanel.SetActive(true);
+                }else{
+                    startingAmbulancePositionPanel.SetActive(false);
+                }
+
+                if(StaticInfo.StartingEnginePosition){
+                    startingEnginePositionPanel.SetActive(true);
+                }else{
+                    startingEnginePositionPanel.SetActive(false);
                 }
                 
             }
@@ -275,6 +294,8 @@ public class GameManager: MonoBehaviour
                 selectRolePanel.SetActive(false);
                 
                 startingPositionPanel.SetActive(false);
+                startingAmbulancePositionPanel.SetActive(false);
+                startingEnginePositionPanel.SetActive(false);
             }
 
         }
@@ -331,8 +352,11 @@ public class GameManager: MonoBehaviour
                 if(!name.Equals(StaticInfo.name))
                 {
                   roles.text += "\n" + name + ": " + roleToString((Role)Int32.Parse(players[name].ToDictionary()["Role"]));
-                  roles.text += "\n" + "at: " + players[name].ToDictionary()["Location"];
-
+                  string location = players[name].ToDictionary()["Location"];
+                    var cord = location.Split(',');
+                    int cord_x = Convert.ToInt32(cord[0]);
+                    int cord_z = Convert.ToInt32(cord[1]);
+                  roles.text += " " + "at: " + cord_x.ToString() + "," + cord_z.ToString();
                 }
             }
         }
@@ -720,7 +744,7 @@ public class GameManager: MonoBehaviour
 
         List<string> names=parseJsonArray(obj.data["names"]);
         Debug.Log(" wait, the names.count is" + names.Count);
-        if(names.Count>0&&!tileMap.ambulance.isRemoted)
+        if(names.Count>0&&!tileMap.ambulance.isRemoted&&!StaticInfo.StartingAmbulancePosition)
         {
             foreach(var name in names){
                 if(name.Equals(StaticInfo.name)){
@@ -735,9 +759,11 @@ public class GameManager: MonoBehaviour
             }
         }
 
-        tileMap.ambulance.moveNextStation(newx/6, newz/6);
+        if(!StaticInfo.StartingAmbulancePosition){
+            tileMap.ambulance.moveNextStation(newx/6, newz/6);
+        }
         tileMap.ambulance.isRemoted=false;
-
+        confirmed=0;
         // Debug.Log("update ambulance !!!!!");
         Debug.Log(StaticInfo.name + "is going to next station!!!!!!!!!!!!!!!!!" + "names count is:" + names.Count + "!!!!!");
         // confirmed=0;
@@ -771,7 +797,7 @@ public class GameManager: MonoBehaviour
         if(names.Count>0)
         {
             foreach(var name in names){
-                if(name.Equals(StaticInfo.name)){
+                if(name.Equals(StaticInfo.name)&&!StaticInfo.StartingEnginePosition){
                     tileMap.selectedUnit.s.transform.position=new Vector3(newx,0.2f,newz);
                     tileMap.selectedUnit.currentX = newx;
                     tileMap.selectedUnit.currentZ = newz;
@@ -782,7 +808,9 @@ public class GameManager: MonoBehaviour
             }
         }
 
-        tileMap.engine.moveNextStation(newx/6, newz/6);
+        if(!StaticInfo.StartingEnginePosition){
+            tileMap.engine.moveNextStation(newx/6, newz/6);
+        }
         confirmed=0;
         Dictionary<String, string> data = new Dictionary<string, string>();
         data["room"] = StaticInfo.roomNumber.ToString();
@@ -799,20 +827,20 @@ public class GameManager: MonoBehaviour
         if (result.Equals("True"))
         {
             isMyTurn = true;
-            if(!StaticInfo.StartingPosition&&isMyTurn){
+            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
                 changeRoleButton.SetActive(true);
             }
-            if(!StaticInfo.StartingPosition&&!isMyTurn){
+            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
                 changeRoleButton.SetActive(false);
             }
         }
         else
         {
             isMyTurn = false;
-            if(!StaticInfo.StartingPosition&&isMyTurn){
+            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
                 changeRoleButton.SetActive(true);
             }
-            if(!StaticInfo.StartingPosition&&!isMyTurn){
+            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
                 changeRoleButton.SetActive(false);
             }
         }
@@ -1419,6 +1447,8 @@ public class GameManager: MonoBehaviour
 
         socket.Emit("changingTurn", new JSONObject(changingTurn));
     }
+
+
 
     public void SendChat()
     {
@@ -2155,12 +2185,107 @@ public class GameManager: MonoBehaviour
         displayRole();
         if(obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber)){
             StaticInfo.StartingPosition=false;
+            if(isOwner){
+                StaticInfo.StartingAmbulancePosition=true;
+                startingAmbulancePositionPanel.SetActive(true);
+            }
             startingPositionPanel.SetActive(false);
+
             if(!StaticInfo.level.Equals("Family")){
                 changeRoleButton.SetActive(true);
             }
         }
     }
+
+    public void confirmAmbulancePosition(){
+
+        int x=(int)amB.v.transform.position.x;
+        int z=(int)amB.v.transform.position.z;
+
+        UpdateAmbulanceLocation(x, z, -5, -5);
+        startingAmbulancePositionPanel.SetActive(false);
+        StaticInfo.StartingEnginePosition=true;
+        startingEnginePositionPanel.SetActive(true);
+        StaticInfo.StartingAmbulancePosition=false;
+
+        // tileMap.ambulance.x=x;
+        // tileMap.ambulance.z=z;
+
+        // StaticInfo.Location=new int[]{x,z};
+
+        // Dictionary<string,string> position=new Dictionary<string, string>();
+        // position["x"]=x.ToString();
+        // position["z"]=z.ToString();
+        // position["room"]=StaticInfo.roomNumber;
+        // // position["name"]=StaticInfo.name;
+
+        // socket.Emit("ConfirmAmbulancePosition",new JSONObject(position));
+    }
+
+    public void checkOwner(string name){
+        Debug.Log("checking owner");
+        Dictionary<String, String> checkingOwner = new Dictionary<string, string>();
+        checkingOwner["room"] = StaticInfo.roomNumber;
+        checkingOwner["name"] = StaticInfo.name;
+        socket.Emit("checkingOwner", new JSONObject(checkingOwner));
+    }
+
+    public void checkOwner_Success(SocketIOEvent obj){
+        //accept value here
+        var result = obj.data.ToDictionary()["owner"];
+        // Debug.Log(result);
+
+        if (result.Equals("True"))
+        {
+            isOwner = true;
+        }
+        else
+        {
+            isOwner = false;
+        }
+        Debug.Log(StaticInfo.name + " is the owner? " + isOwner);
+    }
+
+
+
+    public void confirmEnginePosition(){
+        int x = (int)enG.v.transform.position.x;
+        int z = (int)enG.v.transform.position.z;
+
+        UpdateEngineLocation(x,z, -5, -5);
+
+        startingEnginePositionPanel.SetActive(false);
+        StaticInfo.StartingEnginePosition=false;
+    }
+
+    // public void confirmAmbulancePosition_Success(SocketIOEvent obj){
+
+    //     StaticInfo.StartingAmbulancePosition=false;
+    //     StaticInfo.StartingEnginePosition=true;
+    //     // room = obj.data["Games"][StaticInfo.roomNumber];
+    //     // participants = room["participants"];
+    //     // level = room["level"].ToString();
+    //     // numberOfPlayer = room["numberOfPlayer"].ToString();
+
+    //     // List<string> p = participants.keys;
+    //     // foreach (var v in p)
+    //     // {
+    //     //     var o = participants[v];
+    //     //     players[v] = o;
+    //     //     // Debug.Log(v);
+    //     //     // Debug.Log(players[v]);
+    //     // }
+    //     // tileMap.UpdateFiremanVisual(players);
+    //     // displayRole();
+    //     // if(obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber)){
+    //     //     StaticInfo.StartingPosition=false;
+    //     //     startingPositionPanel.SetActive(false);
+    //     //     if(!StaticInfo.level.Equals("Family")){
+    //     //         changeRoleButton.SetActive(true);
+    //     //     }
+    //     // }
+    // }
+
 
     public void explodeHazmat(int x, int z){
         Dictionary<string,string> data=new Dictionary<string, string>();
