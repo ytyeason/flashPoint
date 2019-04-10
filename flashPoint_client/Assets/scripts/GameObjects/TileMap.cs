@@ -259,35 +259,67 @@ public class TileMap  {
 				//Debug.Log("Building new tile");
 				tiles[x, z] = type;
 				TileType tt = tileTypes[ tiles[x,z] ];
+
 				//GameObject go = (GameObject) Instantiate( tt.tileVisualPrefab, new Vector3(x*5, 0, z*5), Quaternion.identity );
-				GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x*6, 0, z*6), Quaternion.identity );
+				if((x==9&&z==1)||(x==9&&z==2)||(x==9&&z==3)||(x==9&&z==4)||(x==1&&z==0)||(x==2&&z==0)||(x==3&&z==0)||(x==4&&z==0)||(x==0&&z==3)||(x==0&&z==4)||(x==0&&z==5)||(x==0&&z==6)){
+					GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x*6, -2, z*6), Quaternion.identity );
+					// Connect a ClickableTile to each TileType
+					ClickableTile ct = go.GetComponent<ClickableTile>();
+					// Assign the variables as needed
+					ct.tileX = x*6;
+					ct.tileZ = z*6;
+					ct.map = this;
+					ct.type = tt;	// Change type to reflect new state
+					
+					//Debug.Log("(DEBUG) TileMap.buildNewTile(" + x + ", " + z + ")'s spaceState is: " + ct.spaceState);
 
-				// Connect a ClickableTile to each TileType
-				ClickableTile ct = go.GetComponent<ClickableTile>();
-				// Assign the variables as needed
-				ct.tileX = x*6;
-				ct.tileZ = z*6;
-				ct.map = this;
-				ct.type = tt;	// Change type to reflect new state
-				
-				//Debug.Log("(DEBUG) TileMap.buildNewTile(" + x + ", " + z + ")'s spaceState is: " + ct.spaceState);
-
-				// Store appropriate GameObjects into their respective dictionaries
-				tileStores[key] = go;
-				//clickTileStores[key] = ct;
-				if(type==2){
-					Debug.Log("Check Hazmat");
-					Debug.Log(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat));
-					if(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(x,z,gm.hazmatManager.movingHazmat)){
-						int[] tmp = new int[2];
-						tmp[0] = x;
-						tmp[1] = z;
-						gm.fireManager.hazametList.AddLast(tmp);
-					}
-					if(gm.pOIManager.containsKey(x,z,gm.pOIManager.placedPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingTreated)||gm.pOIManager.containsKey(x,z,gm.pOIManager.treated)){
-						gm.pOIManager.kill(x,z);
+					// Store appropriate GameObjects into their respective dictionaries
+					tileStores[key] = go;
+					//clickTileStores[key] = ct;
+					if(type==2){
+						Debug.Log("Check Hazmat");
+						Debug.Log(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat));
+						if(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(x,z,gm.hazmatManager.movingHazmat)){
+							int[] tmp = new int[2];
+							tmp[0] = x;
+							tmp[1] = z;
+							gm.fireManager.hazametList.AddLast(tmp);
+						}
+						if(gm.pOIManager.containsKey(x,z,gm.pOIManager.placedPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingTreated)||gm.pOIManager.containsKey(x,z,gm.pOIManager.treated)){
+							gm.pOIManager.kill(x,z);
+						}
 					}
 				}
+				else{
+					GameObject go = gm.instantiateObject(tt.tileVisualPrefab, new Vector3(x*6, 0, z*6), Quaternion.identity );
+					// Connect a ClickableTile to each TileType
+					ClickableTile ct = go.GetComponent<ClickableTile>();
+					// Assign the variables as needed
+					ct.tileX = x*6;
+					ct.tileZ = z*6;
+					ct.map = this;
+					ct.type = tt;	// Change type to reflect new state
+					
+					//Debug.Log("(DEBUG) TileMap.buildNewTile(" + x + ", " + z + ")'s spaceState is: " + ct.spaceState);
+
+					// Store appropriate GameObjects into their respective dictionaries
+					tileStores[key] = go;
+					//clickTileStores[key] = ct;
+					if(type==2){
+						Debug.Log("Check Hazmat");
+						Debug.Log(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat));
+						if(gm.hazmatManager.containsKey(x,z,gm.hazmatManager.placedHazmat)||gm.hazmatManager.containsKey(x,z,gm.hazmatManager.movingHazmat)){
+							int[] tmp = new int[2];
+							tmp[0] = x;
+							tmp[1] = z;
+							gm.fireManager.hazametList.AddLast(tmp);
+						}
+						if(gm.pOIManager.containsKey(x,z,gm.pOIManager.placedPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingPOI)||gm.pOIManager.containsKey(x,z,gm.pOIManager.movingTreated)||gm.pOIManager.containsKey(x,z,gm.pOIManager.treated)){
+							gm.pOIManager.kill(x,z);
+						}
+					}
+				}
+			
 				
 			}
 		}
@@ -340,6 +372,7 @@ public class TileMap  {
 		buildNewTile(first[0],first[1],2);
 		gm.UpdateTile(first[0],first[1],2);
 		gm.fireManager.explosion();
+		gm.fireManager.extOutFire();
 
 		Debug.Log("First Explosion");
 
@@ -363,6 +396,7 @@ public class TileMap  {
 			buildNewTile(randX,randZ,2);
 			gm.UpdateTile(randX,randZ,2);
 			gm.fireManager.explosion();
+			gm.fireManager.extOutFire();
 			i++;
 		}
 	}
