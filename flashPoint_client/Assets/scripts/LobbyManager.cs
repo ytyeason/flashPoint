@@ -79,19 +79,23 @@ public class LobbyManager : MonoBehaviour {
         Debug.Log(obj.data[4].str);
         Debug.Log(obj.data[5].str);
         */
-        Debug.Log(obj.data[6]);
-        //Debug.Log(obj.data[7]);
-        //Debug.Log(obj.data[8]);
+        Debug.Log(obj.data[6].ToString());
+        Debug.Log(obj.data[7].ToString());
+        //Debug.Log(obj.data[8].ToString());
+        //Debug.Log(obj.data[9].ToString());
+        //Debug.Log(obj.data[10].ToString());
         
         StaticInfo.name = obj.data[2].str;
         StaticInfo.roomNumber = obj.data[3].str;
         StaticInfo.level = obj.data[4].str;
         
         StaticInfo.numberOfPlayer = obj.data[5].str;
-        //StaticInfo.numOfHazmat = obj.data[6].str;
-        //StaticInfo.numOfHotspot = obj.data[7].str;
-        POIManager o = JsonUtility.FromJson<POIManager>(obj.data[6].ToString());
-        StaticInfo.poiManager = o;
+        StaticInfo.numOfHazmat = obj.data[6].str;
+        StaticInfo.numOfHotspot = obj.data[7].str;
+        
+        //StaticInfo.selectedRoles = obj.data[8].ToString();
+        //StaticInfo.confirmedPosition = obj.data[9].ToString();
+        //StaticInfo.joinedPlayers = obj.data[10].ToString();
 
         Dictionary<int[], int> h = new Dictionary<int[], int>();
 
@@ -237,16 +241,16 @@ public class LobbyManager : MonoBehaviour {
         Debug.Log("create button clicked");
         Debug.Log(roomNumber.text);
         
-        int rand = UnityEngine.Random.Range(1, 6);
+        
 
         StaticInfo.roomNumber = roomNumber.text;
-        StaticInfo.random = rand;
+        
 
         Dictionary<String, String> room = new Dictionary<string, string>();
         room["room"] = StaticInfo.roomNumber;
         room["name"] = StaticInfo.name;
         room["level"] = StaticInfo.level;
-        room["random"] = rand.ToString();
+        
         socket.Emit("CREATE_ROOM",new JSONObject(room));
     }
 
