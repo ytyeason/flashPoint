@@ -1027,8 +1027,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
         //deleting poi from POIMemo
         var p = Games_state[room_number]['POIMemo'];
         var i = p.findIndex(x => x[location]!= null);
-        var type = p[i][location];
+        
         if (i !== -1){
+          var type = p[i][location];
           p.splice(i, 1);
           Games_state[room_number]['POIMemo'] = p;
           console.log("deleting poi with location: " +location+ " and type "+type);
