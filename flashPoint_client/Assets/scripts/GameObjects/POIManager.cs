@@ -67,7 +67,7 @@ public class POIManager{
             {
                 var location = entry.Key;
                 var type = entry.Value;
-                addPOI(location[0],location[1], type);
+                loadTreated(location[0],location[1], type);
             }
 
             var moving_poi = StaticInfo.movingPOI;
@@ -75,7 +75,7 @@ public class POIManager{
             {
                 var location = entry.Key;
                 var type = entry.Value;
-                addPOI(location[0],location[1], type);
+                loadCarriedPOI(location[0],location[1], type);
             }
             
             var moving_treated_poi = StaticInfo.movingTreatedMemo;
@@ -83,7 +83,7 @@ public class POIManager{
             {
                 var location = entry.Key;
                 var type = entry.Value;
-                addPOI(location[0],location[1], type);
+                loadLedTreated(location[0],location[1], type);
             }
         }
     }
@@ -213,6 +213,63 @@ public class POIManager{
         GameObject go = gm.instantiateObject(p0.Prefab, new Vector3((float)((double)x * 6 - 1.5), posY, (float)((double)z * 6 + 1.5)),Quaternion.identity);
         go.transform.Rotate(90, 0, 0);
         poiLookup.Add(key, go);
+        poi.Remove(p0);
+    }
+
+    public void loadCarriedPOI(int x,int z, int type)//--done
+    {
+        int[] key = new int[] { x, z };
+        POI p0 = null;
+        foreach(POI p in poi)
+        {
+            if (p.type == (POIType)type)
+            {
+                p0 = p;
+            }
+        }
+        p0.setStatus(POIStatus.Revealed);
+        movingPOI.Add(key, p0);
+        GameObject go = gm.instantiateObject(p0.Prefab, new Vector3((float)((double)x * 6 - 1.5), posY, (float)((double)z * 6 - 1.5)),Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
+        movingPOILookup.Add(key, go);
+        poi.Remove(p0);
+    }
+
+    public void loadTreated(int x,int z, int type)//--done
+    {
+        int[] key = new int[] { x, z };
+        POI p0 = null;
+        foreach(POI p in poi)
+        {
+            if (p.type == (POIType)type)
+            {
+                p0 = p;
+            }
+        }
+        p0.setStatus(POIStatus.Treated);
+        treated.Add(key, p0);
+        GameObject go = gm.instantiateObject(p0.Prefab, new Vector3((float)((double)x * 6 - 1.5), posY, (float)((double)z * 6 + 1.5)),Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
+        treatedLookup.Add(key, go);
+        poi.Remove(p0);
+    }
+
+    public void loadLedTreated(int x,int z, int type)//--done
+    {
+        int[] key = new int[] { x, z };
+        POI p0 = null;
+        foreach(POI p in poi)
+        {
+            if (p.type == (POIType)type)
+            {
+                p0 = p;
+            }
+        }
+        p0.setStatus(POIStatus.Treated);
+        movingTreated.Add(key, p0);
+        GameObject go = gm.instantiateObject(p0.Prefab, new Vector3((float)((double)x * 6 + 1.5), posY, (float)((double)z * 6 + 1.5)),Quaternion.identity);
+        go.transform.Rotate(90, 0, 0);
+        movingTreatedLookup.Add(key, go);
         poi.Remove(p0);
     }
 

@@ -922,27 +922,27 @@ public class GameManager: MonoBehaviour
         if (name.Equals(StaticInfo.name))
         {
             isMyTurn = true;
-            Debug.Log("It is now your turn! Refreshing AP");
-            fireman.refreshAP();
-            // Extinguish any fire that might be outside (should only trigger on first turn)
-            fireManager.extOutFire();
+			Debug.Log("It is now your turn! Refreshing AP");
+			fireman.refreshAP();
+			// Extinguish any fire that might be outside (should only trigger on first turn)
+			fireManager.extOutFire();
 
-            // Vicinity related checks until just after else:
-            if (vicinityManager.checkIfInVicinity(fireman.currentX / 6, fireman.currentZ / 6))
-            {
-                // Fireman starts turn in vicinity of Veteran
-                fireman.vetAPNotYetGiven = false;
-                fireman.FreeAP++;
-                fireman.inVetZone = true;
-            }
-            else  // This might be needed after a knockdown:
-            {
-                fireman.vetAPNotYetGiven = true;
-                fireman.inVetZone = false;
-            }
-            fireman.usedVetAP = false;
+			// Vicinity related checks until just after else:
+			if (vicinityManager.checkIfInVicinity(fireman.currentX / 6, fireman.currentZ / 6))
+			{
+				// Fireman starts turn in vicinity of Veteran
+				fireman.vetAPNotYetGiven = false;
+				fireman.FreeAP++;
+				fireman.inVetZone = true;
+			}
+			else  // This might be needed after a knockdown:
+			{
+				fireman.vetAPNotYetGiven = true;
+				fireman.inVetZone = false;
+			}
+			fireman.usedVetAP = false;
 
-            changeRoleButton.SetActive(true);
+			if(!StaticInfo.level.Equals("Family")) changeRoleButton.SetActive(true);
             endOfTurn=false;
         }
         else
@@ -966,7 +966,10 @@ public class GameManager: MonoBehaviour
         {
             isMyTurn = true;
             sendNotification(". It's your turn.");
-            changeRoleButton.SetActive(true);
+            if(!StaticInfo.level.Equals("Family")){
+                changeRoleButton.SetActive(true);
+            }
+            
             // fireman.refreshAP();
         }
         else
