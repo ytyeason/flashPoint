@@ -362,9 +362,9 @@ public class GameManager: MonoBehaviour
 
         // displayAP();
         displayStats();
-        if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
-            changeRoleButton.SetActive(true);
-        }
+        // if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
+        //     changeRoleButton.SetActive(true);
+        // }
         if(!StaticInfo.StartingPosition&&!isMyTurn){
             changeRoleButton.SetActive(false);
         }
@@ -373,6 +373,7 @@ public class GameManager: MonoBehaviour
 
 
     public void displayAP(){
+        Debug.Log("im" + StaticInfo.name + "in displayAp in gm, my free AP is:"+ fireman.FreeAP);
         Debug.Log(fireman.role.ToString());
         nameAP.text= StaticInfo.name + " : " + fireman.FreeAP + " AP" ;
         if (fireman.role == Role.Captain)
@@ -893,22 +894,23 @@ public class GameManager: MonoBehaviour
         if (result.Equals("True"))
         {
             isMyTurn = true;
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
-                changeRoleButton.SetActive(true);
-            }
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
-                changeRoleButton.SetActive(false);
-            }
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
+            //     changeRoleButton.SetActive(true);
+            // }
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
+            //     changeRoleButton.SetActive(false);
+            // }
         }
         else
         {
             isMyTurn = false;
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
-                changeRoleButton.SetActive(true);
-            }
-            if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
-                changeRoleButton.SetActive(false);
-            }
+            changeRoleButton.SetActive(false);
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&isMyTurn){
+            //     changeRoleButton.SetActive(true);
+            // }
+            // if(!StaticInfo.StartingPosition&&!StaticInfo.StartingAmbulancePosition&&!StaticInfo.StartingEnginePosition&&!isMyTurn){
+            //     changeRoleButton.SetActive(false);
+            // }
         }
     }
 
@@ -949,6 +951,7 @@ public class GameManager: MonoBehaviour
         else
         {
             isMyTurn = false;
+            changeRoleButton.SetActive(false);
 			Debug.Log("It is now someone else's turn!");
             fireman.refreshAP();
             endOfTurn=false;
@@ -972,6 +975,7 @@ public class GameManager: MonoBehaviour
         else
         {
             isMyTurn = false;
+            changeRoleButton.SetActive(false);
         }
     }
 
@@ -2289,13 +2293,13 @@ public class GameManager: MonoBehaviour
                 fireman.s.transform.position=new Vector3(fireman.currentX, 0.2f, fireman.currentZ);
                 UpdateLocation(fireman.currentX,fireman.currentZ,fireman.name);
                 displayRole();
+                displayAP();
                 Dictionary<string, string> change = new Dictionary<string, string>();
                 change["room"] = StaticInfo.roomNumber;
                 change["name"] = StaticInfo.name;
                 change["role"] = ((int)StaticInfo.role).ToString();
                 change["oldRole"] = ((int)oldRole).ToString();
                 socket.Emit("changeRole", new JSONObject(change));
-                
                 
                 break;
             }
