@@ -27,22 +27,22 @@ public class GameManager: MonoBehaviour
  //   public VehicleType[] vehicleTypes;
     public GameObject[] poiPrefabs;
     public GameObject[] hazPrefabs;
-	public int mapSizeX = 10;
-	public int mapSizeZ = 8;
-	public int damaged_wall_num = 0;
-	public int rescued_vict_num = 0;
+    public int mapSizeX = 10;
+    public int mapSizeZ = 8;
+    public int damaged_wall_num = 0;
+    public int rescued_vict_num = 0;
 
-	public JSONObject game_info = StaticInfo.game_info;
+    public JSONObject game_info = StaticInfo.game_info;
 
     public WallManager wallManager;
  //   public VehicleManager vehicleManager;
     public TileMap tileMap;
     public DoorManager doorManager;
-	public FireManager fireManager;
+    public FireManager fireManager;
     public POIManager pOIManager;
     public HazmatManager hazmatManager;
     public OperationManager operationManager;
-	public VicinityManager vicinityManager;
+    public VicinityManager vicinityManager;
 
     // --op
     public List<Button> prefabs = new List<Button>();
@@ -63,35 +63,35 @@ public class GameManager: MonoBehaviour
     public int fromX;
     public int fromZ;
 
-	// Dodging
-	public bool isDodging = false;
-	public bool leftDodgeDown = false;
-	public bool upDodgeDown = false;
-	public bool rightDodgeDown = false;
-	public bool downDodgeDown = false;
-	bool canUp = false;
-	bool canRight = false;
-	bool canDown = false;
-	bool canLeft = false;
-	bool confirmDodgeDown = false;
-	bool wantDodge = false;
-	int[,] playerLocations; // Holds all player's locations
-	int numPlayers;
+    // Dodging
+    public bool isDodging = false;
+    public bool leftDodgeDown = false;
+    public bool upDodgeDown = false;
+    public bool rightDodgeDown = false;
+    public bool downDodgeDown = false;
+    bool canUp = false;
+    bool canRight = false;
+    bool canDown = false;
+    bool canLeft = false;
+    bool confirmDodgeDown = false;
+    bool wantDodge = false;
+    int[,] playerLocations; // Holds all player's locations
+    int numPlayers;
 
-	// Dodging GUI items:
-	public GameObject backdropL;    // For the dodge GameObjects
-	public GameObject backdropS;    // For dodge confirmations
-	public GameObject leftDodgeButton;
-	public GameObject upDodgeButton;
-	public GameObject rightDodgeButton;
-	public GameObject downDodgeButton;
-	public GameObject confirmDodge;
-	public GameObject declineDodge;
-	public ToggleActiveDodge toggleActiveDodge;
-	String[] names;
-	String[] rolesArr;
+    // Dodging GUI items:
+    public GameObject backdropL;    // For the dodge GameObjects
+    public GameObject backdropS;    // For dodge confirmations
+    public GameObject leftDodgeButton;
+    public GameObject upDodgeButton;
+    public GameObject rightDodgeButton;
+    public GameObject downDodgeButton;
+    public GameObject confirmDodge;
+    public GameObject declineDodge;
+    public ToggleActiveDodge toggleActiveDodge;
+    String[] names;
+    String[] rolesArr;
 
-	private JSONObject room;
+    private JSONObject room;
     private JSONObject participants;
     private String level;
     private String numberOfPlayer;
@@ -205,9 +205,8 @@ public class GameManager: MonoBehaviour
             if (!StaticInfo.LoadGame)//if creating a new game
             {
                 fireman = initializeFireman();
-
-                amB = initializeAmbulance();
-                enG = initializeEngine();
+                amB = initializeAmbulance(0);
+                enG = initializeEngine(0);
                 operationManager = new OperationManager(this);
                 wallManager = new WallManager(wallTypes, this,0);
                 doorManager = new DoorManager(doorTypes, this,0);
@@ -216,16 +215,16 @@ public class GameManager: MonoBehaviour
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
                 pOIManager = new POIManager(this,0);
                 hazmatManager = new HazmatManager(this,0);
-				// Next 3 are for dodging:
-				vicinityManager = new VicinityManager(this, tileMap.tiles);
-				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
-				numPlayers = Convert.ToInt32(numberOfPlayer.Substring(1, 1));
-				playerLocations = new int[numPlayers, 2];
-				names = new String[numPlayers];
-				rolesArr = new String[numPlayers];
+                // Next 3 are for dodging:
+                vicinityManager = new VicinityManager(this, tileMap.tiles);
+                toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
+                numPlayers = Convert.ToInt32(numberOfPlayer.Substring(1, 1));
+                playerLocations = new int[numPlayers, 2];
+                names = new String[numPlayers];
+                rolesArr = new String[numPlayers];
 
-				//displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
-				
+                //displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
+                
                 //   vehicleManager.StartvehicleManager();
 
                 tileMap.GenerateFiremanVisual(players);
@@ -275,8 +274,8 @@ public class GameManager: MonoBehaviour
             else//if we're loading a game
             {
                 fireman = initializeFireman();
-                amB = initializeAmbulance();
-                enG = initializeEngine();
+                amB = initializeAmbulance(1);
+                enG = initializeEngine(1);
                 operationManager = new OperationManager(this);
                 wallManager = new WallManager(wallTypes, this,1);// set to 1, generate walls based on staticInfo hWallMemo and vWallMemo
                 doorManager = new DoorManager(doorTypes, this,1);
@@ -287,16 +286,16 @@ public class GameManager: MonoBehaviour
                 //pOIManager = new POIManager(this,1);
                 //pOIManager = StaticInfo.poiManager;
 
-				// Next 3 are for dodging:
-				vicinityManager = new VicinityManager(this, tileMap.tiles);
-				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
-				numPlayers = Convert.ToInt32(numberOfPlayer.Substring(1, 1));
-				playerLocations = new int[numPlayers, 2];
-				names = new String[numPlayers];
-				rolesArr = new String[numPlayers];
+                // Next 3 are for dodging:
+                vicinityManager = new VicinityManager(this, tileMap.tiles);
+                toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
+                numPlayers = Convert.ToInt32(numberOfPlayer.Substring(1, 1));
+                playerLocations = new int[numPlayers, 2];
+                names = new String[numPlayers];
+                rolesArr = new String[numPlayers];
 
-				//poi -- not done
-				pOIManager = new POIManager(this,1);
+                //poi -- not done
+                pOIManager = new POIManager(this,1);
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this,1);
 
@@ -304,58 +303,58 @@ public class GameManager: MonoBehaviour
                 tileMap.GenerateFiremanVisual(players);
                 registerNewFireman(fireman);
                 checkTurn(); //initialize isMyTurn variable at start
-	            if (!level.Equals("\"Family\""))
-	            {
-		            displayRole();
-		            if(StaticInfo.StartingPosition||StaticInfo.StartingAmbulancePosition||StaticInfo.StartingEnginePosition){
-			            changeRoleButton.SetActive(false);
-		            }
+                if (!level.Equals("\"Family\""))
+                {
+                    displayRole();
+                    if(StaticInfo.StartingPosition||StaticInfo.StartingAmbulancePosition||StaticInfo.StartingEnginePosition){
+                        changeRoleButton.SetActive(false);
+                    }
                     
-		            // if(!StaticInfo.StartingPosition&&isMyTurn){
-		            //     changeRoleButton.SetActive(true);
-		            // }
-		            // if(!StaticInfo.StartingPosition&&!isMyTurn){
-		            //     changeRoleButton.SetActive(false);
-		            // }
-	            }
-	            else
-	            {
-		            changeRoleButton.SetActive(false);
-		            ambulance.SetActive(false);
-		            engine.SetActive(false);
-	            }
+                    // if(!StaticInfo.StartingPosition&&isMyTurn){
+                    //     changeRoleButton.SetActive(true);
+                    // }
+                    // if(!StaticInfo.StartingPosition&&!isMyTurn){
+                    //     changeRoleButton.SetActive(false);
+                    // }
+                }
+                else
+                {
+                    changeRoleButton.SetActive(false);
+                    ambulance.SetActive(false);
+                    engine.SetActive(false);
+                }
 
-	            selectRolePanel.SetActive(false);
-	            if(StaticInfo.StartingPosition){
-		            startingPositionPanel.SetActive(true);
-	            }else{
-		            startingPositionPanel.SetActive(false);
-	            }
+                selectRolePanel.SetActive(false);
+                if(StaticInfo.StartingPosition){
+                    startingPositionPanel.SetActive(true);
+                }else{
+                    startingPositionPanel.SetActive(false);
+                }
 
-	            if(StaticInfo.StartingAmbulancePosition){
-		            startingAmbulancePositionPanel.SetActive(true);
-	            }else{
-		            startingAmbulancePositionPanel.SetActive(false);
-	            }
+                if(StaticInfo.StartingAmbulancePosition){
+                    startingAmbulancePositionPanel.SetActive(true);
+                }else{
+                    startingAmbulancePositionPanel.SetActive(false);
+                }
 
-	            if(StaticInfo.StartingEnginePosition){
-		            startingEnginePositionPanel.SetActive(true);
-	            }else{
-		            startingEnginePositionPanel.SetActive(false);
-	            }
+                if(StaticInfo.StartingEnginePosition){
+                    startingEnginePositionPanel.SetActive(true);
+                }else{
+                    startingEnginePositionPanel.SetActive(false);
+                }
 
-	            fireman.FreeAP = StaticInfo.freeAP;
-	            fireman.remainingSpecAp = StaticInfo.remainingSpecAp;
-	            wallManager.damagedWalls = StaticInfo.damagedWall;
-	            pOIManager.rescued = StaticInfo.rescued;
-	            pOIManager.killed = StaticInfo.killed;
-	            hazmatManager.removedHazmat = StaticInfo.removedHazmat;
-	            
-	            fireman.riding = StaticInfo.riding;
-	            fireman.driving = StaticInfo.driving;
-	            fireman.carryingHazmat = StaticInfo.carryingHazmat;
-	            fireman.carryingVictim = StaticInfo.carryingVictim;
-	            fireman.leadingVictim = StaticInfo.leadingVictim;
+                fireman.FreeAP = StaticInfo.freeAP;
+                fireman.remainingSpecAp = StaticInfo.remainingSpecAp;
+                wallManager.damagedWalls = StaticInfo.damagedWall;
+                pOIManager.rescued = StaticInfo.rescued;
+                pOIManager.killed = StaticInfo.killed;
+                hazmatManager.removedHazmat = StaticInfo.removedHazmat;
+                
+                fireman.riding = StaticInfo.riding;
+                fireman.driving = StaticInfo.driving;
+                fireman.carryingHazmat = StaticInfo.carryingHazmat;
+                fireman.carryingVictim = StaticInfo.carryingVictim;
+                fireman.leadingVictim = StaticInfo.leadingVictim;
 
             }
 
@@ -471,22 +470,6 @@ public class GameManager: MonoBehaviour
         return s;
     }
 
-    // public void saveGame()
-    // {
-    //     Debug.Log("saveGame");
-
-    //     GameManager save = this;
-
-    //     MyClass myObject = new MyClass();
-    //     myObject.level = 1;
-    //     myObject.timeElapsed = 47.5f;
-    //     myObject.playerName = "Dr Charles Francis";
-    //     myObject.placedPOI = pOIManager.placedPOI;
-    //     //myObject.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
-    //     //Debug.Log(wallManager.defaultHorizontalWallsMemo.Keys.Count);
-
-    //     socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(myObject)));
-    // }
 
     void SaveGame_Success(SocketIOEvent obj)
     {
@@ -495,15 +478,12 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data);
         Debug.Log(obj.data[0]); // [{"1,2":0},{"2,2":0}]
         Debug.Log(obj.data[1]);
-
         Debug.Log(obj.data[0][0]);
         Debug.Log(obj.data[0][1]);
         Debug.Log(obj.data[0].Count);
-
         Debug.Log(obj.data[0][0].ToDictionary().Keys);
         Debug.Log(obj.data[0][1].ToDictionary().Keys);
         Debug.Log(obj.data[0][2].ToDictionary().Keys);
-
         foreach (KeyValuePair<string, string> entry in obj.data[0][2].ToDictionary())
         {
             Debug.Log(entry.Key);
@@ -564,11 +544,11 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["type"]);
         Debug.Log(obj.data.ToDictionary()["horizontal"]);
 
-		// Bottom is temporarily commented out:
-		wallManager.BreakWall(x, z, type, horizontal, from);
-	}
+        // Bottom is temporarily commented out:
+        wallManager.BreakWall(x, z, type, horizontal, from);
+    }
 
-	void DoorUpdate_Success(SocketIOEvent obj)
+    void DoorUpdate_Success(SocketIOEvent obj)
     {
         Debug.Log("door update successful");
         int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
@@ -610,8 +590,8 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["z"]);
         Debug.Log(obj.data.ToDictionary()["type"]);
 
-		// Bottom is temporarily commented out:
-		tileMap.buildNewTile(x, z,type);
+        // Bottom is temporarily commented out:
+        tileMap.buildNewTile(x, z,type);
     }
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
@@ -942,37 +922,37 @@ public class GameManager: MonoBehaviour
         if (name.Equals(StaticInfo.name))
         {
             isMyTurn = true;
-			Debug.Log("It is now your turn! Refreshing AP");
-			fireman.refreshAP();
-			// Extinguish any fire that might be outside (should only trigger on first turn)
-			fireManager.extOutFire();
+            Debug.Log("It is now your turn! Refreshing AP");
+            fireman.refreshAP();
+            // Extinguish any fire that might be outside (should only trigger on first turn)
+            fireManager.extOutFire();
 
-			// Vicinity related checks until just after else:
-			if (vicinityManager.checkIfInVicinity(fireman.currentX / 6, fireman.currentZ / 6))
-			{
-				// Fireman starts turn in vicinity of Veteran
-				fireman.vetAPNotYetGiven = false;
-				fireman.FreeAP++;
-				fireman.inVetZone = true;
-			}
-			else  // This might be needed after a knockdown:
-			{
-				fireman.vetAPNotYetGiven = true;
-				fireman.inVetZone = false;
-			}
-			fireman.usedVetAP = false;
+            // Vicinity related checks until just after else:
+            if (vicinityManager.checkIfInVicinity(fireman.currentX / 6, fireman.currentZ / 6))
+            {
+                // Fireman starts turn in vicinity of Veteran
+                fireman.vetAPNotYetGiven = false;
+                fireman.FreeAP++;
+                fireman.inVetZone = true;
+            }
+            else  // This might be needed after a knockdown:
+            {
+                fireman.vetAPNotYetGiven = true;
+                fireman.inVetZone = false;
+            }
+            fireman.usedVetAP = false;
 
-			changeRoleButton.SetActive(true);
+            changeRoleButton.SetActive(true);
             endOfTurn=false;
-		}
+        }
         else
         {
             isMyTurn = false;
             changeRoleButton.SetActive(false);
-			Debug.Log("It is now someone else's turn!");
+            Debug.Log("It is now someone else's turn!");
             fireman.refreshAP();
             endOfTurn=false;
-		}
+        }
 
     }
 
@@ -1034,7 +1014,7 @@ public class GameManager: MonoBehaviour
 
     }
 
-	
+    
     public void JoinGame_Success(SocketIOEvent obj){
         Debug.Log("in join game");
         string owner=obj.data.ToDictionary()["owner"];
@@ -1042,10 +1022,10 @@ public class GameManager: MonoBehaviour
         displayAP();
         if(room.Equals(StaticInfo.roomNumber)){
             if(owner.Equals(StaticInfo.name)){
-	            if (!StaticInfo.LoadGame)//if load game, then dont need to initialize board, just use the board specified in start function
-	            {
-		            InitiateBoard();
-	            }
+                if (!StaticInfo.LoadGame)//if load game, then dont need to initialize board, just use the board specified in start function
+                {
+                    InitiateBoard();
+                }
                 
             }
         }
@@ -1080,23 +1060,49 @@ public class GameManager: MonoBehaviour
         int x = Convert.ToInt32(cord[0]);
         int z = Convert.ToInt32(cord[1]);
 
-        int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
-		Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
-        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, ap, this, StaticInfo.role,pOIManager, hazmatManager);
+        // int ap = Convert.ToInt32(players[StaticInfo.name]["AP"].ToString());
+        // Debug.Log("Created '" + StaticInfo.name + "' with AP =" + ap + "in location " + x + " " + z);
+        Fireman f = new Fireman(StaticInfo.name, Colors.Blue, firemanObject, firemanplusObject, x, z, this, StaticInfo.role,pOIManager, hazmatManager);
 
         return f;
     }
 
-    public Ambulance initializeAmbulance()
+    public Ambulance initializeAmbulance(int load)
     {
-        Ambulance amb = new Ambulance(ambulance, 54, 21, this);
+        Ambulance amb;
+        if (load == 0)
+        {
+            amb = new Ambulance(ambulance, 54, 21, this);
+        }
+        else
+        {
+            Debug.Log(StaticInfo.ambulance.ToString());
+            Debug.Log(Convert.ToInt32(StaticInfo.ambulance.ToArray()[0].Value));
+            Debug.Log(Convert.ToInt32(StaticInfo.ambulance.ToArray()[1].Value));
+            amb = new Ambulance(ambulance, 54, 21, this);
+            amb.moveNextStation(Convert.ToInt32(StaticInfo.ambulance.ToArray()[0].Value)/6,Convert.ToInt32(StaticInfo.ambulance.ToArray()[1].Value)/6);
+        }
+        
 
         return amb;
     }
 
-    public Engine initializeEngine()
+    public Engine initializeEngine(int load)
     {
-        Engine eng = new Engine(engine, 0, 33, this);
+        Engine eng;
+        if (load == 0)
+        {
+            eng= new Engine(engine, 0, 33, this);
+        }
+        else
+        {
+            Debug.Log(Convert.ToInt32(StaticInfo.engine.ToArray()[0].Value));
+            Debug.Log(Convert.ToInt32(StaticInfo.engine.ToArray()[1].Value));
+            eng= new Engine(engine, 0, 33, this);
+            eng.moveNextStation(Convert.ToInt32(StaticInfo.engine.ToArray()[0].Value)/6,
+                Convert.ToInt32(StaticInfo.engine.ToArray()[1].Value)/6);
+        }
+            
 
         return eng;
     }
@@ -1209,381 +1215,384 @@ public class GameManager: MonoBehaviour
     }
 
 
-	// ---------------
-	// --	DODGE	--
-	// ---------------
+    // ---------------
+    // --   DODGE   --
+    // ---------------
 
-	// Next 4 are checks for dodging:
-	public void leftDodge()
-	{
-		if (isDodging && canLeft)
-		{
-			Debug.Log("LEFT DODGE");
-			leftDodgeDown = true;
-		}
-		else leftDodgeDown = false;
-	}
-	public void upDodge()
-	{
-		if (isDodging && canUp)
-		{
-			Debug.Log("UP DODGE");
-			upDodgeDown = true;
-		}
-		else upDodgeDown = false;
-	}
-	public void rightDodge()
-	{
-		if (isDodging && canRight)
-		{
-			Debug.Log("RIGHT DODGE");
-			rightDodgeDown = true;
-		}
-		else rightDodgeDown = false;
-	}
-	public void downDodge()
-	{
-		if (isDodging && canDown)
-		{
-			Debug.Log("DOWN DODGE");
-			downDodgeDown = true;
-		}
-		else downDodgeDown = false;
-	}
-
-	// Called after dodge decisions are made to reset global variables
-	public void resetDodge()
-	{
-		downDodgeDown = false;
-		rightDodgeDown = false;
-		upDodgeDown = false;
-		leftDodgeDown = false;
-		isDodging = false;
-		confirmDodgeDown = false;
-	}
-
-	// Used for a WaitUntil coroutine
-	public bool buttonDown()
-	{
-		return (leftDodgeDown || upDodgeDown || rightDodgeDown || downDodgeDown);
-	}
-
-	// Check if player can dodge in a direction
-	public bool canDodge(int in_x, int in_z)
-	{
-		// Can dodge up
-		if (tileMap.tiles[in_x, in_z + 1] != 2)
-		{
-			Debug.Log("No fire above!");
-
-			// Check if a door is between fireman and safety. If its open, allow dodge
-			if (doorManager.checkIfHDoor(in_x, in_z + 1))
-			{
-				if (doorManager.checkIfOpenHDoor(in_x, in_z + 1))
-				{
-					canUp = true;
-				}
-				else canUp = false;
-			}
-			// If an unbroken wall is between fireman and safety then they cannot dodge that way
-			else if (wallManager.checkIfHWall(in_x, in_z + 1))
-			{
-				canUp = false;
-			}
-			else canUp = true;
-		}
-
-		// Can dodge right
-		if (tileMap.tiles[in_x + 1, in_z] != 2)
-		{
-			Debug.Log("No fire right!");
-
-			// Check if a door is between fireman and safety. If its open, allow dodge
-			if (doorManager.checkIfVDoor(in_x + 1, in_z))
-			{
-				if (doorManager.checkIfOpenVDoor(in_x + 1, in_z))
-				{
-					canRight = true;
-				}
-				else canRight = false;
-			}
-			// If an unbroken wall is between fireman and safety then they cannot dodge that way
-			else if (wallManager.checkIfVWall(in_x + 1, in_z))
-			{
-				canRight = false;
-			}
-			else canRight = true;
-		}
-
-		// Can dodge down
-		if (tileMap.tiles[in_x, in_z - 1] != 2)
-		{
-			Debug.Log("No fire down!");
-
-			if (doorManager.checkIfHDoor(in_x, in_z))
-			{
-				if (doorManager.checkIfOpenHDoor(in_x, in_z))
-				{
-					canDown = true;
-				}
-				else canDown = false;
-			}
-			else if (wallManager.checkIfHWall(in_x, in_z))
-			{
-				canDown = false;
-			}
-			else canDown = true;
-		}
-
-		// Can dodge left
-		if (tileMap.tiles[in_x - 1, in_z] != 2)
-		{
-			Debug.Log("No fire left!");
-
-			if (doorManager.checkIfVDoor(in_x, in_z))
-			{
-				if (doorManager.checkIfOpenVDoor(in_x, in_z))
-				{
-					canLeft = true;
-				}
-				else canLeft = false;
-			}
-			else if (wallManager.checkIfVWall(in_x, in_z))
-			{
-				canLeft = false;
-			}
-			else canLeft = true;
-		}
-
-		// Print to console
-		Debug.Log("canLeft: " + canLeft);
-		Debug.Log("canDown: " + canDown);
-		Debug.Log("canRight: " + canRight);
-		Debug.Log("canUp: " + canUp);
-
-		// Return true iff at least one direction is available
-		return (canUp || canRight || canDown || canLeft);
-	}
-
-	// Used for the player to decide whether they want to dodge or not
-	public void confirmDodgeYes()
-	{
-		wantDodge = true;
-		confirmDodgeDown = true;
-	}
-	public void confirmDodgeNo()
-	{
-		wantDodge = false;
-		confirmDodgeDown = true;
-	}
-
-	// Fetch players' location:
-	public void fetchLocations()
-	{
-		Debug.Log("Printing locations:");
-		int i = 0;
-
-		foreach (string o in players.Keys)
-		{
-			//Debug.Log("  >" + players[o]["Location"].ToString() + "<");
-
-			// Parse data from players' JSON object
-			var location = players[o]["Location"].ToString();
-			location = location.Substring(1, location.Length - 2);
-			var cord = location.Split(',');
-
-			// Update gm's global arry
-			playerLocations[i, 0] = Convert.ToInt32(cord[0]);
-			playerLocations[i, 1] = Convert.ToInt32(cord[1]);
-
-			// Parse name
-			names[i] = o;
-
-			// Parse role
-			rolesArr[i] = players[o]["Role"].ToString();
-			rolesArr[i] = rolesArr[i].Substring(1, rolesArr[i].Length - 2);
-			
-			//Debug.Log("roleArr[" + i + "]  ->  \"" + rolesArr[i] + "\"");
-			//Debug.Log("fetchLocations: (x, z)  ->  (" + playerLocations[i, 0] + ", " + playerLocations[i, 1] + ")");
-			
-			// Iterate
-			i++;
-		}
-	}
-
-
-	// Called from below in case Fireman chooses not to dodge or cannot: knock them out & send them to lower ambulance unit
-	public void knockDown(int x_elem, int z_elem, bool currentPlayer, String name)
-	{
-		Debug.Log("knockDown -> Looking at '" + name + "'. IsCurrentPlayer  => " + currentPlayer);
-
-		// Kill any POI the fireman is carrying:
-		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
-		{
-			pOIManager.kill(x_elem, z_elem);
-		}
-
-		int[] nearestAmbulance = vicinityManager.findAmbulanceSpot(x_elem, z_elem);
-		UpdateLocation(nearestAmbulance[0] * 6, nearestAmbulance[1] * 6, name);
-
-		/*
-		// Northern parking spot
-		if (z_elem <= 3)
-		{
-			if (currentPlayer)
-			{
-				//tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
-				fireman.currentX = 0;
-				fireman.currentZ = 18;
-			}
-
-			UpdateLocation(0 * 6, 3 * 6, name);
-		}
-		else // Southern/second parking spot
-		{
-			if (currentPlayer)
-			{
-				//tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
-				fireman.currentX = 54;
-				fireman.currentZ = 24;
-			}
-
-			UpdateLocation(9 * 6, 4 * 6, name);
-		}
-		*/
-	}
-
-	// Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)
-	public IEnumerator knockDown()
-	{
-		Debug.Log("");
-		Debug.Log("");
-
-		// Check the whole grid:
-		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
-		{
-			for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
-			{
-				// Check each player:
-				for (int p_elem = 0; p_elem < numPlayers; p_elem++) {
-					// Setup local/temp variables to check all players:
-					int x_coord = playerLocations[p_elem, 0] / 6;
-					int z_coord = playerLocations[p_elem, 1] / 6;
-
-					// Sanity checks:
-					//Debug.Log("p_elem.(x, z)  ->  " + p_elem + ".(" + playerLocations[p_elem, 0]  + ", " + playerLocations[p_elem, 1] +")");
-					//Debug.Log("tileMap.tiles[" + x_elem + ", " + z_elem + "] -> " + tileMap.tiles[x_elem, z_elem]);
-					if (x_coord == x_elem && z_elem == z_coord) Debug.Log("Coordinates are the same: " + x_coord + ", " + z_coord);
-
-					if (x_coord == x_elem && z_elem == z_coord && tileMap.tiles[x_elem, z_elem] == 2)
-					{
-						// Used later to know which player to move:
-						bool currentPlayer = (x_coord == fireman.currentX / 6 && z_coord == fireman.currentZ / 6) ? true : false;
-						Debug.Log("currentPlayer -> " + currentPlayer);
-						Debug.Log("Can dodge  -> " + canDodge(x_elem, z_elem));
-						Debug.Log("In vicinity  -> " + vicinityManager.checkIfInVicinity(x_coord, z_coord));
-
-						// Check if the player is able to dodge:
-						if ((rolesArr[p_elem] == "9" || vicinityManager.checkIfInVicinity(x_coord, z_coord)) && canDodge(x_elem, z_elem) && Math.Min(fireman.FreeAP, 4) >= 1)
-						{
-							// Allow the active player to choose/begin trying to dodge etc.
-							isDodging = true;
-
-							toggleActiveDodge.activateGUI();
-							// Check if player wants to dodge
-							Debug.Log("    VET (1) Please decide if you'd like to dodge or not! " + Time.time);
-							yield return new WaitUntil(() => confirmDodgeDown == true);
-
-							// Player has chosen to dodge
-							if (wantDodge)
-							{
-								Debug.Log("    VET (2) Please press a dodge button: " + Time.time);
-								yield return new WaitUntil(() => buttonDown() == true);
-								fireman.setAP(fireman.FreeAP - 1);      // Spending the 1AP
-								Debug.Log("    VET (3) Finished!" + Time.time);
-
-								// Need to drop Victim or Hazmat. NB Fireman can 'fully' dodge if leading treated victim
-								if (fireman.carriedPOI != null)
-								{
-									pOIManager.dropPOI(fireman.currentX / 6, fireman.currentZ / 6);
-									StopCarry(fireman.currentX / 6, fireman.currentZ / 6);
-								}
-								if (fireman.carriedHazmat != null)
-								{
-									hazmatManager.dropHazmat(fireman.currentX / 6, fireman.currentZ / 6);
-									StopCarryH(fireman.currentX / 6, fireman.currentZ / 6);
-								}
-
-								// Player has chosen to move to:
-								if (leftDodgeDown)
-								{
-									Debug.Log("Moving left");
-									tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX - 6, 0.2f, fireman.currentZ);
-									UpdateLocation(fireman.currentX - 6, fireman.currentZ, fireman.name);
-									fireman.currentX = fireman.currentX - 6;
-								}
-								else if (downDodgeDown)
-								{
-									Debug.Log("Moving down");
-									tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX, 0.2f, fireman.currentZ - 6);
-									UpdateLocation(fireman.currentX, fireman.currentZ - 6, fireman.name);
-									fireman.currentZ = fireman.currentZ - 6;
-								}
-								else if (rightDodgeDown)
-								{
-									Debug.Log("Moving right");
-									tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX + 6, 0.2f, fireman.currentZ);
-									UpdateLocation(fireman.currentX + 6, fireman.currentZ, fireman.name);
-									fireman.currentX = fireman.currentX + 6;
-
-								}
-								else if (upDodgeDown)
-								{
-									Debug.Log("Moving up");
-									tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX, 0.2f, fireman.currentZ + 6);
-									UpdateLocation(fireman.currentX, fireman.currentZ + 6, fireman.name);
-									fireman.currentZ = fireman.currentZ + 6;
-								}
-							}
-							else
-							{
-								Debug.Log("    VET (1.5) You have decided to not dodge. " + Time.time);
-								knockDown(x_elem, z_elem, currentPlayer, names[p_elem]);
-							}
-
-							toggleActiveDodge.deactivateGUI();
-						}
-						// Player is unable to dodge:
-						else
-						{
-							Debug.Log("Unable to dodge");
-							knockDown(x_elem, z_elem, currentPlayer, names[p_elem]);
-						}
-					}
-				}
-			}
-		}
-
-		// Reset for later use
-		Debug.Log("Resetting dodge");
-		resetDodge();
-
-		// Update vicinity check if player is playing a Veteran currently
-		if (fireman.role == Role.Veteran) {
-			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
-		}
-
-		Debug.Log("");
-		Debug.Log("");
-
-		// Kill the thread
-		yield return 0;
-	}
-
-	// Function to end/pass the turn - launches a coroutine to check for knockdowns
-	public void EndTurn()
+    // Next 4 are checks for dodging:
+    public void leftDodge()
     {
-		Debug.Log("Ending Turn");
+        if (isDodging && canLeft)
+        {
+            Debug.Log("LEFT DODGE");
+            leftDodgeDown = true;
+        }
+        else leftDodgeDown = false;
+    }
+    public void upDodge()
+    {
+        if (isDodging && canUp)
+        {
+            Debug.Log("UP DODGE");
+            upDodgeDown = true;
+        }
+        else upDodgeDown = false;
+    }
+    public void rightDodge()
+    {
+        if (isDodging && canRight)
+        {
+            Debug.Log("RIGHT DODGE");
+            rightDodgeDown = true;
+        }
+        else rightDodgeDown = false;
+    }
+    public void downDodge()
+    {
+        if (isDodging && canDown)
+        {
+            Debug.Log("DOWN DODGE");
+            downDodgeDown = true;
+        }
+        else downDodgeDown = false;
+    }
+
+    // Called after dodge decisions are made to reset global variables
+    public void resetDodge()
+    {
+        downDodgeDown = false;
+        rightDodgeDown = false;
+        upDodgeDown = false;
+        leftDodgeDown = false;
+        isDodging = false;
+        confirmDodgeDown = false;
+    }
+
+    // Used for a WaitUntil coroutine
+    public bool buttonDown()
+    {
+        return (leftDodgeDown || upDodgeDown || rightDodgeDown || downDodgeDown);
+    }
+
+    // Check if player can dodge in a direction
+    public bool canDodge(int in_x, int in_z)
+    {
+        // Can dodge up
+        if (tileMap.tiles[in_x, in_z + 1] != 2)
+        {
+            Debug.Log("No fire above!");
+
+            // Check if a door is between fireman and safety. If its open, allow dodge
+            if (doorManager.checkIfHDoor(in_x, in_z + 1))
+            {
+                if (doorManager.checkIfOpenHDoor(in_x, in_z + 1))
+                {
+                    canUp = true;
+                }
+                else canUp = false;
+            }
+            // If an unbroken wall is between fireman and safety then they cannot dodge that way
+            else if (wallManager.checkIfHWall(in_x, in_z + 1))
+            {
+                canUp = false;
+            }
+            else canUp = true;
+        }
+
+        // Can dodge right
+        if (tileMap.tiles[in_x + 1, in_z] != 2)
+        {
+            Debug.Log("No fire right!");
+
+            // Check if a door is between fireman and safety. If its open, allow dodge
+            if (doorManager.checkIfVDoor(in_x + 1, in_z))
+            {
+                if (doorManager.checkIfOpenVDoor(in_x + 1, in_z))
+                {
+                    canRight = true;
+                }
+                else canRight = false;
+            }
+            // If an unbroken wall is between fireman and safety then they cannot dodge that way
+            else if (wallManager.checkIfVWall(in_x + 1, in_z))
+            {
+                canRight = false;
+            }
+            else canRight = true;
+        }
+
+        // Can dodge down
+        if (tileMap.tiles[in_x, in_z - 1] != 2)
+        {
+            Debug.Log("No fire down!");
+
+            if (doorManager.checkIfHDoor(in_x, in_z))
+            {
+                if (doorManager.checkIfOpenHDoor(in_x, in_z))
+                {
+                    canDown = true;
+                }
+                else canDown = false;
+            }
+            else if (wallManager.checkIfHWall(in_x, in_z))
+            {
+                canDown = false;
+            }
+            else canDown = true;
+        }
+
+        // Can dodge left
+        if (tileMap.tiles[in_x - 1, in_z] != 2)
+        {
+            Debug.Log("No fire left!");
+
+            if (doorManager.checkIfVDoor(in_x, in_z))
+            {
+                if (doorManager.checkIfOpenVDoor(in_x, in_z))
+                {
+                    canLeft = true;
+                }
+                else canLeft = false;
+            }
+            else if (wallManager.checkIfVWall(in_x, in_z))
+            {
+                canLeft = false;
+            }
+            else canLeft = true;
+        }
+
+        // Print to console
+        Debug.Log("canLeft: " + canLeft);
+        Debug.Log("canDown: " + canDown);
+        Debug.Log("canRight: " + canRight);
+        Debug.Log("canUp: " + canUp);
+
+        // Return true iff at least one direction is available
+        return (canUp || canRight || canDown || canLeft);
+    }
+
+    // Used for the player to decide whether they want to dodge or not
+    public void confirmDodgeYes()
+    {
+        wantDodge = true;
+        confirmDodgeDown = true;
+    }
+    public void confirmDodgeNo()
+    {
+        wantDodge = false;
+        confirmDodgeDown = true;
+    }
+
+    // Fetch players' location:
+    public void fetchLocations()
+    {
+        Debug.Log("Printing locations:");
+        int i = 0;
+
+        foreach (string o in players.Keys)
+        {
+            //Debug.Log("  >" + players[o]["Location"].ToString() + "<");
+
+            // Parse data from players' JSON object
+            var location = players[o]["Location"].ToString();
+            location = location.Substring(1, location.Length - 2);
+            var cord = location.Split(',');
+
+            // Update gm's global arry
+            playerLocations[i, 0] = Convert.ToInt32(cord[0]);
+            playerLocations[i, 1] = Convert.ToInt32(cord[1]);
+
+            // Parse name
+            names[i] = o;
+
+            // Parse role
+            rolesArr[i] = players[o]["Role"].ToString();
+            rolesArr[i] = rolesArr[i].Substring(1, rolesArr[i].Length - 2);
+            
+            //Debug.Log("roleArr[" + i + "]  ->  \"" + rolesArr[i] + "\"");
+            //Debug.Log("fetchLocations: (x, z)  ->  (" + playerLocations[i, 0] + ", " + playerLocations[i, 1] + ")");
+            
+            // Iterate
+            i++;
+        }
+    }
+
+
+    // Called from below in case Fireman chooses not to dodge or cannot: knock them out & send them to lower ambulance unit
+    public void knockDown(int x_elem, int z_elem, bool currentPlayer, String name)
+    {
+        Debug.Log("knockDown -> Looking at '" + name + "'. IsCurrentPlayer  => " + currentPlayer);
+
+        // Kill any POI the fireman is carrying:
+        if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)
+        {
+            pOIManager.kill(x_elem, z_elem);
+        }
+
+        int[] nearestAmbulance = vicinityManager.findAmbulanceSpot(x_elem, z_elem);
+        UpdateLocation(nearestAmbulance[0] * 6, nearestAmbulance[1] * 6, name);
+
+        /*
+        // Northern parking spot
+        if (z_elem <= 3)
+        {
+            if (currentPlayer)
+            {
+                //tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
+                fireman.currentX = 0;
+                fireman.currentZ = 18;
+            }
+            UpdateLocation(0 * 6, 3 * 6, name);
+        }
+        else // Southern/second parking spot
+        {
+            if (currentPlayer)
+            {
+                //tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
+                fireman.currentX = 54;
+                fireman.currentZ = 24;
+            }
+            UpdateLocation(9 * 6, 4 * 6, name);
+        }
+        */
+    }
+
+    // Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)
+    public IEnumerator knockDown()
+    {
+        Debug.Log("");
+        Debug.Log("");
+
+        // Check the whole grid:
+        for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
+        {
+            for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
+            {
+                // Check each player:
+                for (int p_elem = 0; p_elem < numPlayers; p_elem++) {
+                    // Setup local/temp variables to check all players:
+                    int x_coord = playerLocations[p_elem, 0] / 6;
+                    int z_coord = playerLocations[p_elem, 1] / 6;
+
+                    // Sanity checks:
+                    //Debug.Log("p_elem.(x, z)  ->  " + p_elem + ".(" + playerLocations[p_elem, 0]  + ", " + playerLocations[p_elem, 1] +")");
+                    //Debug.Log("tileMap.tiles[" + x_elem + ", " + z_elem + "] -> " + tileMap.tiles[x_elem, z_elem]);
+                    if (x_coord == x_elem && z_elem == z_coord) Debug.Log("Coordinates are the same: " + x_coord + ", " + z_coord);
+
+                    if (x_coord == x_elem && z_elem == z_coord && tileMap.tiles[x_elem, z_elem] == 2)
+                    {
+                        // Used later to know which player to move:
+                        bool currentPlayer = (x_coord == fireman.currentX / 6 && z_coord == fireman.currentZ / 6) ? true : false;
+                        Debug.Log("currentPlayer -> " + currentPlayer);
+                        Debug.Log("Can dodge  -> " + canDodge(x_elem, z_elem));
+                        Debug.Log("In vicinity  -> " + vicinityManager.checkIfInVicinity(x_coord, z_coord));
+
+                        // Check if the player is able to dodge:
+                        if ((rolesArr[p_elem] == "9" || vicinityManager.checkIfInVicinity(x_coord, z_coord)) && canDodge(x_elem, z_elem) && Math.Min(fireman.FreeAP, 4) >= 1)
+                        {
+                            // Allow the active player to choose/begin trying to dodge etc.
+                            isDodging = true;
+
+                            toggleActiveDodge.activateGUI();
+                            // Check if player wants to dodge
+                            Debug.Log("    VET (1) Please decide if you'd like to dodge or not! " + Time.time);
+                            yield return new WaitUntil(() => confirmDodgeDown == true);
+
+                            // Player has chosen to dodge
+                            if (wantDodge)
+                            {
+                                Debug.Log("    VET (2) Please press a dodge button: " + Time.time);
+                                yield return new WaitUntil(() => buttonDown() == true);
+                                fireman.setAP(fireman.FreeAP - 1);      // Spending the 1AP
+                                Debug.Log("    VET (3) Finished!" + Time.time);
+
+                                // Need to drop Victim or Hazmat. NB Fireman can 'fully' dodge if leading treated victim
+                                if (fireman.carryingVictim)
+                                {
+                                    pOIManager.dropPOI(fireman.currentX / 6, fireman.currentZ / 6);
+                                    StopCarry(fireman.currentX / 6, fireman.currentZ / 6);
+                                }
+                                if (fireman.carryingHazmat)
+                                {
+                                    hazmatManager.dropHazmat(fireman.currentX / 6, fireman.currentZ / 6);
+                                    StopCarryH(fireman.currentX / 6, fireman.currentZ / 6);
+                                }
+
+                                if(fireman.leadingVictim){
+                                    pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
+                                    StopLead(fireman.currentX / 6, fireman.currentZ / 6);
+                                }
+
+                                // Player has chosen to move to:
+                                if (leftDodgeDown)
+                                {
+                                    Debug.Log("Moving left");
+                                    tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX - 6, 0.2f, fireman.currentZ);
+                                    UpdateLocation(fireman.currentX - 6, fireman.currentZ, fireman.name);
+                                    fireman.currentX = fireman.currentX - 6;
+                                }
+                                else if (downDodgeDown)
+                                {
+                                    Debug.Log("Moving down");
+                                    tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX, 0.2f, fireman.currentZ - 6);
+                                    UpdateLocation(fireman.currentX, fireman.currentZ - 6, fireman.name);
+                                    fireman.currentZ = fireman.currentZ - 6;
+                                }
+                                else if (rightDodgeDown)
+                                {
+                                    Debug.Log("Moving right");
+                                    tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX + 6, 0.2f, fireman.currentZ);
+                                    UpdateLocation(fireman.currentX + 6, fireman.currentZ, fireman.name);
+                                    fireman.currentX = fireman.currentX + 6;
+
+                                }
+                                else if (upDodgeDown)
+                                {
+                                    Debug.Log("Moving up");
+                                    tileMap.selectedUnit.s.transform.position = new Vector3(fireman.currentX, 0.2f, fireman.currentZ + 6);
+                                    UpdateLocation(fireman.currentX, fireman.currentZ + 6, fireman.name);
+                                    fireman.currentZ = fireman.currentZ + 6;
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("    VET (1.5) You have decided to not dodge. " + Time.time);
+                                knockDown(x_elem, z_elem, currentPlayer, names[p_elem]);
+                            }
+
+                            toggleActiveDodge.deactivateGUI();
+                        }
+                        // Player is unable to dodge:
+                        else
+                        {
+                            Debug.Log("Unable to dodge");
+                            knockDown(x_elem, z_elem, currentPlayer, names[p_elem]);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Reset for later use
+        Debug.Log("Resetting dodge");
+        resetDodge();
+
+        // Update vicinity check if player is playing a Veteran currently
+        if (fireman.role == Role.Veteran) {
+            vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
+        }
+
+        Debug.Log("");
+        Debug.Log("");
+
+        // Kill the thread
+        yield return 0;
+    }
+
+    // Function to end/pass the turn - launches a coroutine to check for knockdowns
+    public void EndTurn()
+    {
+        Debug.Log("Ending Turn");
 
         checkTurn();
         if(isMyTurn){
@@ -1597,12 +1606,12 @@ public class GameManager: MonoBehaviour
             }
 
 
-            //System.Random rand=new System.Random();
-            //int x=rand.Next(1,8);
-            //int z=rand.Next(1,6);
+            System.Random rand=new System.Random();
+            int x=rand.Next(1,8);
+            int z=rand.Next(1,6);
 
             // Change the below 'true' to false if you want random. true is used to test specific values
-            fireManager.advanceFire(1, 3, true);
+            fireManager.advanceFire(x, z, true);
             //fireman.usedVetAP = false;
 
             // Update firefighter's current locations
@@ -1631,38 +1640,38 @@ public class GameManager: MonoBehaviour
 
         }
 
-		// BEGIN OF WIP
+        // BEGIN OF WIP
 
-		// Veteran-given AP cannot be saved:
-		// if (fireman.inVetZone && !fireman.usedVetAP)
-		// {
-		// 	Debug.Log("Unable to save AP from 'experience'");
-		// 	fireman.setAP(fireman.FreeAP - 1);
-		// }
+        // Veteran-given AP cannot be saved:
+        // if (fireman.inVetZone && !fireman.usedVetAP)
+        // {
+        //  Debug.Log("Unable to save AP from 'experience'");
+        //  fireman.setAP(fireman.FreeAP - 1);
+        // }
 
 
-		// //System.Random rand=new System.Random();
-		// //int x=rand.Next(1,8);
-		// //int z=rand.Next(1,6);
+        // //System.Random rand=new System.Random();
+        // //int x=rand.Next(1,8);
+        // //int z=rand.Next(1,6);
 
-		// // Change the below 'true' to false if you want random. true is used to test specific values
-		// fireManager.advanceFire(1, 3, true);
-		// //fireman.usedVetAP = false;
+        // // Change the below 'true' to false if you want random. true is used to test specific values
+        // fireManager.advanceFire(1, 3, true);
+        // //fireman.usedVetAP = false;
 
-		// // Update firefighter's current locations
-		// fetchLocations();
+        // // Update firefighter's current locations
+        // fetchLocations();
 
-		// // Check if someone is knocked down
-		// StartCoroutine(knockDown());
+        // // Check if someone is knocked down
+        // StartCoroutine(knockDown());
 
-		// // Re-check:
-		// fetchLocations();
+        // // Re-check:
+        // fetchLocations();
 
-		// Debug.Log("Finished advFire, redistributing AP");
+        // Debug.Log("Finished advFire, redistributing AP");
 
-		// // END OF WIP
+        // // END OF WIP
 
-		// operationManager.commandMoves = 1;
+        // operationManager.commandMoves = 1;
         // operationManager.controlled = null;
         // operationManager.inCommand = false;
 
@@ -1671,14 +1680,14 @@ public class GameManager: MonoBehaviour
 
         // endOfTurn=true;
 
-		// checkTurn();
+        // checkTurn();
         // //do stuff here...
 
         // if (isMyTurn)
         // {
-		//     changeTurn();
+        //     changeTurn();
         // }
-	    
+        
         // else
         // {
         //     Debug.Log("This not your turn! Don't click end turn!");
@@ -1766,8 +1775,8 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> treat = new Dictionary<string, string>();
         treat["x"] = x.ToString();
         treat["z"] = z.ToString();
-	    treat["room"] = StaticInfo.roomNumber;
-	    
+        treat["room"] = StaticInfo.roomNumber;
+        
         socket.Emit("TreatV", new JSONObject(treat));
     }
 
@@ -1811,7 +1820,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
-	    location["room"] = StaticInfo.roomNumber;
+        location["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateTreatedLocation", new JSONObject(location));
     }
@@ -1833,7 +1842,7 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> hazmat = new Dictionary<string, string>();
         hazmat["x"] = x.ToString();
         hazmat["z"] = z.ToString();
-	    hazmat["room"] = StaticInfo.roomNumber;
+        hazmat["room"] = StaticInfo.roomNumber;
 
         socket.Emit("RemoveH", new JSONObject(hazmat));
     }
@@ -1854,7 +1863,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
-	    location["room"] = StaticInfo.roomNumber;
+        location["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateHazmatLocation", new JSONObject(location));
     }
@@ -1987,7 +1996,7 @@ public class GameManager: MonoBehaviour
         carry["name"]=StaticInfo.name;
         carry["x"]=x.ToString();
         carry["z"]=z.ToString();
-	    carry["room"] = StaticInfo.roomNumber;
+        carry["room"] = StaticInfo.roomNumber;
         socket.Emit("StopCarry",new JSONObject(carry));
     }
 
@@ -2260,15 +2269,15 @@ public class GameManager: MonoBehaviour
                 fireman.setRole((Role)i);
                 StaticInfo.role=(Role)i;
                 fireman.setAP(fireman.FreeAP - 2);
-                if(fireman.carriedHazmat!=null){
+                if(fireman.carryingVictim){
                     pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarry(fireman.currentX/6,fireman.currentZ/6);
                 }
-                if(fireman.ledPOI!=null){
+                if(fireman.leadingVictim){
                     pOIManager.dropPOI(fireman.currentX/6,fireman.currentZ/6);
                     this.StopLead(fireman.currentX/6,fireman.currentZ/6);
                 }
-                if(fireman.carriedHazmat!=null){
+                if(fireman.carryingHazmat){
                     hazmatManager.dropHazmat(fireman.currentX/6,fireman.currentZ/6);
                     this.StopCarryH(fireman.currentX/6,fireman.currentZ/6);
                 }
@@ -2334,8 +2343,8 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> rescue=new Dictionary<string, string>();
         rescue["x"]=x.ToString();
         rescue["z"]=z.ToString();
-	    rescue["room"] = StaticInfo.roomNumber;
-	    rescue["room"] = StaticInfo.roomNumber;
+        rescue["room"] = StaticInfo.roomNumber;
+        rescue["room"] = StaticInfo.roomNumber;
         socket.Emit("RescueCarried",new JSONObject(rescue));
     }
 
@@ -2343,7 +2352,7 @@ public class GameManager: MonoBehaviour
         Dictionary<string,string> rescue=new Dictionary<string, string>();
         rescue["x"]=x.ToString();
         rescue["z"]=z.ToString();
-	    rescue["room"] = StaticInfo.roomNumber;
+        rescue["room"] = StaticInfo.roomNumber;
         socket.Emit("RescueTreated",new JSONObject(rescue));
     }
 
@@ -2569,30 +2578,30 @@ public class GameManager: MonoBehaviour
             hazmatManager.explodeHazmat(x,z);
         }
     }
+    
+    public void saveGame()
+    {
+        Debug.Log("saveGame");
 
-	public void saveGame()
-	{
-		Debug.Log("saveGame");
+        Dictionary<string,string> data=new Dictionary<string, string>();
+        data["room"]=StaticInfo.roomNumber;
+        data["name"] = StaticInfo.name;
+        data["freeAP"] = fireman.FreeAP.ToString();
+        data["remainingSpecAp"] = fireman.remainingSpecAp.ToString();
+        data["damagedWall"] = wallManager.damagedWalls.ToString();
+        data["rescued"] = pOIManager.rescued.ToString();
+        data["killed"] = pOIManager.killed.ToString();
+        data["removedHazmat"] = hazmatManager.removedHazmat.ToString();
+        
+        data["riding"] = fireman.riding.ToString();
+        data["driving"] = fireman.driving.ToString();
+        data["carryingHazmat"] = fireman.carryingHazmat.ToString();
+        data["carryingVictim"] = fireman.carryingVictim.ToString();
+        data["leadingVictim"] = fireman.leadingVictim.ToString();
+        
+        socket.Emit("saveGame",new JSONObject(data));
 
-		Dictionary<string,string> data=new Dictionary<string, string>();
-		data["room"]=StaticInfo.roomNumber;
-		data["name"] = StaticInfo.name;
-		data["freeAP"] = fireman.FreeAP.ToString();
-		data["remainingSpecAp"] = fireman.remainingSpecAp.ToString();
-		data["damagedWall"] = wallManager.damagedWalls.ToString();
-		data["rescued"] = pOIManager.rescued.ToString();
-		data["killed"] = pOIManager.killed.ToString();
-		data["removedHazmat"] = hazmatManager.removedHazmat.ToString();
-		
-		data["riding"] = fireman.riding.ToString();
-		data["driving"] = fireman.driving.ToString();
-		data["carryingHazmat"] = fireman.carryingHazmat.ToString();
-		data["carryingVictim"] = fireman.carryingVictim.ToString();
-		data["leadingVictim"] = fireman.leadingVictim.ToString();
-		
-		socket.Emit("saveGame",new JSONObject(data));
-
-	}
+    }
 
 }
 
