@@ -71,6 +71,11 @@ public class LobbyManager : MonoBehaviour {
         var poi = obj.data[1][5];
         var treatedPOI = obj.data[1][6];
         var movingPOI = obj.data[1][7];
+        var movingTreatedMemo = obj.data[1][8];
+        var HazmatMemo = obj.data[1][9];
+        var hotSpotMemo = obj.data[1][10];
+        var movingHazmatMemo = obj.data[1][11];
+        
         //Debug.Log(poi);
         //Debug.Log(tiles);
         /*
@@ -202,6 +207,61 @@ public class LobbyManager : MonoBehaviour {
             }
         }
         StaticInfo.treatedPOI = tp;
+        
+        Dictionary<int[], int> mtp = new Dictionary<int[], int>();
+        foreach (var location in movingTreatedMemo.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                mtp[key] = value;
+            }
+        }
+        StaticInfo.movingTreatedMemo = mtp;
+        
+        //hazmat---------
+        Dictionary<int[], int> hz = new Dictionary<int[], int>();
+        foreach (var location in HazmatMemo.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                hz[key] = value;
+            }
+        }
+        StaticInfo.HazmatMemo = hz;
+        
+        
+        Dictionary<int[], int> hs = new Dictionary<int[], int>();
+        foreach (var location in hotSpotMemo.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                hs[key] = value;
+            }
+        }
+        StaticInfo.hotSpotMemo = hs;
+        
+        
+        Dictionary<int[], int> mhs = new Dictionary<int[], int>();
+        foreach (var location in movingHazmatMemo.list)
+        {
+            foreach (KeyValuePair<string, string> entry in location.ToDictionary())
+            {
+                var key = entry.Key.Split(',').Select(Int32.Parse).ToArray();
+                var value = Convert.ToInt32(entry.Value);
+                //Debug.Log(key[0] + " "+ key[1] + " "+value);
+                mhs[key] = value;
+            }
+        }
+        StaticInfo.movingHazmatMemo = mhs;
         
         //change StartingPosition
 

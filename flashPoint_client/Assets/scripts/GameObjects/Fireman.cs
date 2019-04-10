@@ -247,6 +247,10 @@ public class Fireman
                 return false;
             }
         }
+        if((this.role==Role.RescueSpec&&FreeAP>1)){
+            setAP(FreeAP-1);
+            return true;
+        }
         return false;
     }
 
@@ -536,7 +540,7 @@ public class Fireman
 
     public void removeHazmet(int x, int z)
     {
-
+        setAP(FreeAP-2);
         gm.hazmatManager.removeHazmat(x, z);
         gm.RemoveHazmat(x, z);
 

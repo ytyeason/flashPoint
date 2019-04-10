@@ -214,7 +214,7 @@ public class GameManager: MonoBehaviour
                 tileMap = new TileMap(tileTypes, this, fireman, enG, amB,0);
                 fireManager = new FireManager(this, tileMap, mapSizeX, mapSizeZ);
                 pOIManager = new POIManager(this,0);
-                hazmatManager = new HazmatManager(this);
+                hazmatManager = new HazmatManager(this,0);
 				// Next 3 are for dodging:
 				vicinityManager = new VicinityManager(this, tileMap.tiles);
 				toggleActiveDodge = new ToggleActiveDodge(this, backdropL, backdropS, leftDodgeButton, upDodgeButton, downDodgeButton, rightDodgeButton, confirmDodge, declineDodge);
@@ -297,31 +297,51 @@ public class GameManager: MonoBehaviour
 				//poi -- not done
 				pOIManager = new POIManager(this,1);
                 //hazmat -- not done
-                hazmatManager = new HazmatManager(this);
+                hazmatManager = new HazmatManager(this,1);
 
                 displayAP();
                 tileMap.GenerateFiremanVisual(players);
                 registerNewFireman(fireman);
                 checkTurn(); //initialize isMyTurn variable at start
-                if (!level.Equals("\"Family\""))
-                {
-                    displayRole();
-                }
-                else
-                {
-                    changeRoleButton.SetActive(false);
-                }
+	            if (!level.Equals("\"Family\""))
+	            {
+		            displayRole();
+		            if(StaticInfo.StartingPosition||StaticInfo.StartingAmbulancePosition||StaticInfo.StartingEnginePosition){
+			            changeRoleButton.SetActive(false);
+		            }
+                    
+		            // if(!StaticInfo.StartingPosition&&isMyTurn){
+		            //     changeRoleButton.SetActive(true);
+		            // }
+		            // if(!StaticInfo.StartingPosition&&!isMyTurn){
+		            //     changeRoleButton.SetActive(false);
+		            // }
+	            }
+	            else
+	            {
+		            changeRoleButton.SetActive(false);
+		            ambulance.SetActive(false);
+		            engine.SetActive(false);
+	            }
 
-                selectRolePanel.SetActive(false);
-                
-                Debug.Log("===============================");
-                Debug.Log(pOIManager.placedPOI);
-                Debug.Log(pOIManager.movingPOI);
-                Debug.Log(pOIManager.posY);
-                Debug.Log("===============================");
-                startingPositionPanel.SetActive(false);
-                startingAmbulancePositionPanel.SetActive(false);
-                startingEnginePositionPanel.SetActive(false);
+	            selectRolePanel.SetActive(false);
+	            if(StaticInfo.StartingPosition){
+		            startingPositionPanel.SetActive(true);
+	            }else{
+		            startingPositionPanel.SetActive(false);
+	            }
+
+	            if(StaticInfo.StartingAmbulancePosition){
+		            startingAmbulancePositionPanel.SetActive(true);
+	            }else{
+		            startingAmbulancePositionPanel.SetActive(false);
+	            }
+
+	            if(StaticInfo.StartingEnginePosition){
+		            startingEnginePositionPanel.SetActive(true);
+	            }else{
+		            startingEnginePositionPanel.SetActive(false);
+	            }
             }
 
         }
@@ -331,7 +351,7 @@ public class GameManager: MonoBehaviour
         if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
             changeRoleButton.SetActive(true);
         }
-        if(!StaticInfo.StartingPosition&&!isMyTurn||endOfTurn){
+        if(!StaticInfo.StartingPosition&&!isMyTurn){
             changeRoleButton.SetActive(false);
         }
 
@@ -1545,57 +1565,104 @@ public class GameManager: MonoBehaviour
     {
 		Debug.Log("Ending Turn");
 
+        checkTurn();
+        if(isMyTurn){
+            // BEGIN OF WIP
+
+            // Veteran-given AP cannot be saved:
+            if (fireman.inVetZone && !fireman.usedVetAP)
+            {
+                Debug.Log("Unable to save AP from 'experience'");
+                fireman.setAP(fireman.FreeAP - 1);
+            }
+
+
+            //System.Random rand=new System.Random();
+            //int x=rand.Next(1,8);
+            //int z=rand.Next(1,6);
+
+            // Change the below 'true' to false if you want random. true is used to test specific values
+            fireManager.advanceFire(1, 3, true);
+            //fireman.usedVetAP = false;
+
+            // Update firefighter's current locations
+            fetchLocations();
+
+            // Check if someone is knocked down
+            StartCoroutine(knockDown());
+
+            // Re-check:
+            fetchLocations();
+
+            Debug.Log("Finished advFire, redistributing AP");
+
+            // END OF WIP
+
+            operationManager.commandMoves = 1;
+            operationManager.controlled = null;
+            operationManager.inCommand = false;
+
+            pOIManager.replenishPOI();
+            operationManager.DestroyAll();
+
+            endOfTurn=true;
+
+            changeTurn();
+
+        }
+
 		// BEGIN OF WIP
 
 		// Veteran-given AP cannot be saved:
-		if (fireman.inVetZone && !fireman.usedVetAP)
-		{
-			Debug.Log("Unable to save AP from 'experience'");
-			fireman.setAP(fireman.FreeAP - 1);
-		}
+		// if (fireman.inVetZone && !fireman.usedVetAP)
+		// {
+		// 	Debug.Log("Unable to save AP from 'experience'");
+		// 	fireman.setAP(fireman.FreeAP - 1);
+		// }
 
 
-		//System.Random rand=new System.Random();
-		//int x=rand.Next(1,8);
-		//int z=rand.Next(1,6);
+		// //System.Random rand=new System.Random();
+		// //int x=rand.Next(1,8);
+		// //int z=rand.Next(1,6);
 
-		// Change the below 'true' to false if you want random. true is used to test specific values
-		fireManager.advanceFire(1, 3, true);
-		//fireman.usedVetAP = false;
+		// // Change the below 'true' to false if you want random. true is used to test specific values
+		// fireManager.advanceFire(1, 3, true);
+		// //fireman.usedVetAP = false;
 
-		// Update firefighter's current locations
-		fetchLocations();
+		// // Update firefighter's current locations
+		// fetchLocations();
 
-		// Check if someone is knocked down
-		StartCoroutine(knockDown());
+		// // Check if someone is knocked down
+		// StartCoroutine(knockDown());
 
-		// Re-check:
-		fetchLocations();
+		// // Re-check:
+		// fetchLocations();
 
-		Debug.Log("Finished advFire, redistributing AP");
+		// Debug.Log("Finished advFire, redistributing AP");
 
-		// END OF WIP
+		// // END OF WIP
 
-		operationManager.commandMoves = 1;
-        operationManager.controlled = null;
-        operationManager.inCommand = false;
+		// operationManager.commandMoves = 1;
+        // operationManager.controlled = null;
+        // operationManager.inCommand = false;
 
-        pOIManager.replenishPOI();
-        operationManager.DestroyAll();
+        // pOIManager.replenishPOI();
+        // operationManager.DestroyAll();
 
-        endOfTurn=true;
+        // endOfTurn=true;
 
-		checkTurn();
-        //do stuff here...
+		// checkTurn();
+        // //do stuff here...
 
-        if (isMyTurn)
-        {
-		    changeTurn();
-        }
-        else
-        {
-            Debug.Log("This not your turn! Don't click end turn!");
-        }
+        // if (isMyTurn)
+        // {
+		//     changeTurn();
+        // }
+	    
+        // else
+        // {
+        //     Debug.Log("This not your turn! Don't click end turn!");
+        // }
     }
 
     public void checkTurn()
@@ -1746,6 +1813,7 @@ public class GameManager: MonoBehaviour
         Dictionary<String, string> hazmat = new Dictionary<string, string>();
         hazmat["x"] = x.ToString();
         hazmat["z"] = z.ToString();
+	    hazmat["room"] = StaticInfo.roomNumber;
 
         socket.Emit("RemoveH", new JSONObject(hazmat));
     }
@@ -1766,6 +1834,7 @@ public class GameManager: MonoBehaviour
         location["origz"] = origz.ToString();
         location["newx"] = newx.ToString();
         location["newz"] = newz.ToString();
+	    location["room"] = StaticInfo.roomNumber;
 
         socket.Emit("UpdateHazmatLocation", new JSONObject(location));
     }
@@ -1898,6 +1967,7 @@ public class GameManager: MonoBehaviour
         carry["name"]=StaticInfo.name;
         carry["x"]=x.ToString();
         carry["z"]=z.ToString();
+	    carry["room"] = StaticInfo.roomNumber;
         socket.Emit("StopCarry",new JSONObject(carry));
     }
 
@@ -2369,8 +2439,8 @@ public class GameManager: MonoBehaviour
                 if(isOwner){
                     StaticInfo.StartingAmbulancePosition=true;
                     startingAmbulancePositionPanel.SetActive(true);
+                    changeRoleButton.SetActive(true);
                 }
-                changeRoleButton.SetActive(true);
             }
         }
     }

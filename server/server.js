@@ -57,16 +57,16 @@ function initialize_tile(room){//family version
 
 function initialize_hDoor(room){
     console.log("initializing hDoor");
-    room["hDoorMemo"].push({[[3,1]]:0});
-    room["hDoorMemo"].push({[[7,7]]:0});
+    room["hDoorMemo"].push({[[3,1]]:2});
+    room["hDoorMemo"].push({[[7,7]]:2});
     room["hDoorMemo"].push({[[4,3]]:0});
     room["hDoorMemo"].push({[[8,5]]:0});
 }
 
 function initialize_vDoor(room){
     console.log("initializing vDoor");
-    room["vDoorMemo"].push({[[1,4]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
+    room["vDoorMemo"].push({[[1,4]]:3});
+    room["vDoorMemo"].push({[[9,3]]:3});
     room["vDoorMemo"].push({[[3,4]]:1});
     room["vDoorMemo"].push({[[4,6]]:1});
     room["vDoorMemo"].push({[[6,5]]:1});
@@ -77,16 +77,16 @@ function initialize_vDoor(room){
 
 function initialize_r1_hDoor(room){
     console.log("initializing r1 hDoor");
-    room["hDoorMemo"].push({[[5,1]]:0});
-    room["hDoorMemo"].push({[[6,7]]:0});
+    room["hDoorMemo"].push({[[5,1]]:2});
+    room["hDoorMemo"].push({[[6,7]]:2});
     room["hDoorMemo"].push({[[2,4]]:0});
     room["hDoorMemo"].push({[[6,4]]:0});
 }
 
 function initialize_r1_vDoor(room){
     console.log("initializing r1 vDoor");
-    room["vDoorMemo"].push({[[1,3]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
+    room["vDoorMemo"].push({[[1,3]]:3});
+    room["vDoorMemo"].push({[[9,3]]:3});
 
     room["vDoorMemo"].push({[[5,2]]:1});
     room["vDoorMemo"].push({[[8,5]]:1});
@@ -94,16 +94,16 @@ function initialize_r1_vDoor(room){
 
 function initialize_r2_hDoor(room){
     console.log("initializing r2 hDoor");
-    room["hDoorMemo"].push({[[4,1]]:0});
-    room["hDoorMemo"].push({[[4,7]]:0});
+    room["hDoorMemo"].push({[[4,1]]:2});
+    room["hDoorMemo"].push({[[4,7]]:2});
     room["hDoorMemo"].push({[[4,4]]:0});
     room["hDoorMemo"].push({[[6,3]]:0});
 }
 
 function initialize_r2_vDoor(room){
     console.log("initializing r2 vDoor");
-    room["vDoorMemo"].push({[[1,5]]:1});
-    room["vDoorMemo"].push({[[9,5]]:1});
+    room["vDoorMemo"].push({[[1,5]]:3});
+    room["vDoorMemo"].push({[[9,5]]:3});
 
     room["vDoorMemo"].push({[[7,2]]:1});
 }
@@ -128,16 +128,16 @@ function initialize_r3_vDoor(room){
 
 function initialize_r4_hDoor(room){
     console.log("initializing r4 hDoor");
-    room["hDoorMemo"].push({[[5,1]]:0});
-    room["hDoorMemo"].push({[[6,7]]:0});
+    room["hDoorMemo"].push({[[5,1]]:2});
+    room["hDoorMemo"].push({[[6,7]]:2});
     room["hDoorMemo"].push({[[4,4]]:0});
     room["hDoorMemo"].push({[[3,3]]:0});
 }
 
 function initialize_r4_vDoor(room){
     console.log("initializing r4 vDoor");
-    room["vDoorMemo"].push({[[1,3]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
+    room["vDoorMemo"].push({[[1,3]]:3});
+    room["vDoorMemo"].push({[[9,3]]:3});
 
     room["vDoorMemo"].push({[[5,5]]:1});
     room["vDoorMemo"].push({[[7,2]]:1});
@@ -146,8 +146,8 @@ function initialize_r4_vDoor(room){
 
 function initialize_r5_hDoor(room){
     console.log("initializing r5 hDoor");
-    room["hDoorMemo"].push({[[5,1]]:0});
-    room["hDoorMemo"].push({[[6,7]]:0});
+    room["hDoorMemo"].push({[[5,1]]:2});
+    room["hDoorMemo"].push({[[6,7]]:2});
     room["hDoorMemo"].push({[[3,6]]:0});
     room["hDoorMemo"].push({[[3,4]]:0});
 
@@ -158,8 +158,8 @@ function initialize_r5_hDoor(room){
 
 function initialize_r5_vDoor(room){
     console.log("initializing r5 vDoor");
-    room["vDoorMemo"].push({[[1,3]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
+    room["vDoorMemo"].push({[[1,3]]:3});
+    room["vDoorMemo"].push({[[9,3]]:3});
 
     room["vDoorMemo"].push({[[3,1]]:1});
     room["vDoorMemo"].push({[[6,2]]:1});
@@ -531,8 +531,28 @@ function addMovingPOIMemo(room, x, z, type){
 }
 
 function addTreatedPOIMemo(room, x, z, type){
-    console.log("adding in moving POI");
+    console.log("adding in treated POI");
     room['treatedPOIMemo'].push({[[[x],[z]]]: type});
+}
+
+function addMovingTreatedMemo(room, x, z, type){
+    console.log("adding in moving treated POI");
+    room['movingTreatedMemo'].push({[[[x],[z]]]: type});
+}
+
+function addMovingHazmatMemo(room, x, z, type){
+    console.log("adding in moving hazmat memo");
+    room['movingHazmatMemo'].push({[[[x],[z]]]: type});
+}
+
+function addHazmat(room, x, z, type){
+    console.log("adding in placed hazmat memo");
+    room['HazmatMemo'].push({[[[x],[z]]]: type});
+}
+
+function addHotspot(room, x, z, type){
+    console.log("adding in placed hotspot memo");
+    room['hotSpotMemo'].push({[[[x],[z]]]: type});
 }
 
 // var selectRoles=[];
@@ -622,7 +642,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"False","Leading":"False"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
 
-      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[],"movingPOIMemo":[], "treatedPOIMemo":[]};
+      Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[],
+       "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[],
+       "movingPOIMemo":[], "treatedPOIMemo":[],
+       "movingTreatedMemo":[],"HazmatMemo":[],
+       "hotSpotMemo":[],"movingHazmatMemo":[]};
 
       // var s = [1,2];
       // Games_state[room_number]['hWallMemo'].push({[s]: 0});
@@ -972,7 +996,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('TreatV', function(data){
-        console.log("treat: moving -> treated");
+        console.log("treatV: placed -> treated");
         var x=data['x'];
         var z=data['z'];
         var room_number = data["room"];
@@ -980,20 +1004,24 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var location = x+','+z;
 
         //deleting poi from POIMemo
-        var p = Games_state[room_number]['movingPOIMemo'];
+        var p = Games_state[room_number]['POIMemo'];
         var i = p.findIndex(x => x[location]!= null);
         var type = p[i][location];
-        if (i !== -1) p.splice(i, 1);
-        Games_state[room_number]['movingPOIMemo'] = p;
-        console.log("deleting poi with location: " +location+ " and type "+type);
+        if (i !== -1){
+          p.splice(i, 1);
+          Games_state[room_number]['POIMemo'] = p;
+          console.log("deleting poi with location: " +location+ " and type "+type);
 
-        addTreatedPOIMemo(Games_state[room_number],x,z,type);
+          addTreatedPOIMemo(Games_state[room_number],x,z,type);
+        }else{
+          console.log("poi not found!")
+        }
 
       socket.broadcast.emit('TreatV_Success',{'x':x,'z':z});
     });
 
     socket.on('UpdatePOILocation', function(data){
-      console.log("in UpdatePOILocation");
+      console.log("in UpdatePOILocation: moving -> moving");
       var origx=data['origx'];
       var origz=data['origz'];
       var newx=data['newx'];
@@ -1128,6 +1156,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('UpdateTreatedLocation', function(data){
+      console.log("movingtreated -> movingtreated")
       var origx=data['origx'];
       var origz=data['origz'];
       var newx=data['newx'];
@@ -1139,17 +1168,17 @@ io.on('connection', function (socket) {//default event for client connect to ser
       console.log(Games_state[room_number]);
 
       //updating poi from treatedPOIMemo
-      var p = Games_state[room_number]['treatedPOIMemo'];
+      var p = Games_state[room_number]['movingTreatedMemo'];
       console.log("old poi moving Memo:");
       console.log(p);
       var i = p.findIndex(x => x[location]!= null);
 
       if (i !== -1) {
-          console.log("treatedPOIMemo found")
+          console.log("movingTreatedMemo found")
           var type = p[i][location];
           p.splice(i, 1);
           p.push({[[[newx],[newz]]]: type});
-          Games_state[room_number]['treatedPOIMemo'] = p;
+          Games_state[room_number]['movingTreatedMemo'] = p;
           console.log("new poi treatedPOI memo");
           console.log(p);
       }
@@ -1177,21 +1206,56 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('RemoveH',function(data){
+      console.log("remove from placedHazmat");
       var x = data['x'];
       var z = data['z'];
 
+      var room = data['room'];
+      var location =  x+','+z;
       console.log(x);
       console.log(z);
+
+      var hazmat = Games_state[room]['HazmatMemo'];
+      var i = hazmat.findIndex(x => x[location]!= null);
+      if (i !== -1){
+        hazmat.splice(i, 1);
+        Games_state[room]['HazmatMemo'] = hazmat;
+      }
 
       socket.broadcast.emit('RemoveHazmat_Success', {"x":x, "z":z});
 
     });
 
     socket.on('UpdateHazmatLocation', function(data){
+      console.log("movingHazmat -> movingHazmat");
       var origx=data['origx'];
       var origz=data['origz'];
       var newx=data['newx'];
       var newz=data['newz'];
+
+      var room_number = data['room'];
+
+      var location = origx+','+origz;
+
+      console.log(room_number);
+
+      console.log(Games_state[room_number]);
+
+      //update hazmat from moving hazmat
+
+      var p = Games_state[room_number]['movingHazmatMemo'];
+      console.log("old hazmet moving Memo:");
+      console.log(p);
+      var i = p.findIndex(x => x[location]!= null);
+      if (i !== -1) {
+        console.log("movinghazmat found")
+        var type = p[i][location];
+        p.splice(i, 1);
+        p.push({[[[newx],[newz]]]: type});
+        Games_state[room_number]['movingHazmatMemo'] = p;
+        console.log("new hazmat moving memo");
+        console.log(p);
+      }
 
       socket.broadcast.emit('UpdateHazmatLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
     });
@@ -1227,12 +1291,17 @@ io.on('connection', function (socket) {//default event for client connect to ser
         //deleting poi from POIMemo
         var p = Games_state[room_number]['POIMemo'];
         var i = p.findIndex(x => x[location]!= null);
-        var type = p[i][location];
-        if (i !== -1) p.splice(i, 1);
-        Games_state[room_number]['POIMemo'] = p;
-        console.log("deleting poi with location: " +location+ " and type "+type);
 
-        addMovingPOIMemo(Games_state[room_number],x,z,type);
+        if (i !== -1) {
+          var type = p[i][location];
+          p.splice(i, 1);
+          Games_state[room_number]['POIMemo'] = p;
+          console.log("deleting poi with location: " +location+ " and type "+type);
+
+          addMovingPOIMemo(Games_state[room_number],x,z,type);
+        }else{
+          console.log("Didn't find poi!");
+        }
 
         console.log(Games[room_number]);
         console.log(Games_state[room_number]['POIMemo']);
@@ -1241,7 +1310,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('StartLeadV',function(data){
-        console.log("load: treated -> moving")
+        console.log("load: treated -> movingtreated")
         var room_number = data['room'];
         var Location = data['Location'];
         var name = data['name'];
@@ -1258,20 +1327,24 @@ io.on('connection', function (socket) {//default event for client connect to ser
         //deleting poi from POIMemo
         var p = Games_state[room_number]['treatedPOIMemo'];
         var i = p.findIndex(x => x[location]!= null);
-        var type = p[i][location];
-        if (i !== -1) p.splice(i, 1);
-        Games_state[room_number]['treatedPOIMemo'] = p;
-        console.log("deleting poi with location: " +location+ " and type "+type);
 
-        addMovingPOIMemo(Games_state[room_number],x,z,type);
-
+        if (i !== -1){
+          var type = p[i][location];
+          p.splice(i, 1);
+          Games_state[room_number]['treatedPOIMemo'] = p;
+          console.log("deleting poi with location: " +location+ " and type "+type);
+          addMovingTreatedMemo(Games_state[room_number],x,z,type);
+        }else{
+          console.log("Didn't find poi!");
+        }
 
         // console.log(Games[room_number]);
         socket.broadcast.emit('StartLeadV_Success', {"Games":Games, "x":x, "z":z} );
     });
 
     socket.on('StartCarryHazmat',function(data){
-      var room_number = data['room'];
+        console.log("placedHazmat -> movingHazmat");
+        var room_number = data['room'];
         var Location = data['Location'];
         var name = data['name'];
         var carryV=data['carryV'];
@@ -1282,6 +1355,24 @@ io.on('connection', function (socket) {//default event for client connect to ser
         participants[name]["Location"] = Location;
         participants[name]['Carrying']=carryV;
         // console.log(Games[room_number]);
+
+        var location = x+','+z;
+
+        //deleting poi from placedHazmat
+        var p = Games_state[room_number]['HazmatMemo'];
+        var i = p.findIndex(x => x[location]!= null);
+
+        if (i !== -1){
+          var type = p[i][location];
+          p.splice(i, 1);
+          Games_state[room_number]['HazmatMemo'] = p;
+          console.log("deleting hazmat with location: " +location+ " and type "+type);
+          addMovingHazmatMemo(Games_state[room_number],x,z,type);
+        }else{
+          console.log("Didn't find poi!");
+        }
+
+
         socket.broadcast.emit('StartCarryHazmat_Success', {"Games":Games, "x":x, "z":z} );
     });
 
@@ -1302,6 +1393,13 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var x=data['x'];
       var z=data['z'];
       var type=data['type'];
+      var room = data['room'];
+
+      if(type === 0){//placedHazmat
+          addHazmat(Games_state[room],parseInt(x),parseInt(z),parseInt(type));
+      }else{//placedHotspot
+          addHotspot(Games_state[room],parseInt(x),parseInt(z),parseInt(type));
+      }
 
       socket.broadcast.emit('AddHazmat_Success',{'x':x,'z':z,'type':type});
     });
@@ -1331,29 +1429,92 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('StopCarry',function(data){
+      console.log("moving -> placed")
       var name=data['name'];
       var room=data['room'];
+      var room_number = data['room'];
       var x=data['x'];
       var z=data['z'];
       Games[room]["participants"][name]['Carrying']="false";
+
+      var location = x+','+z;
+
+      //deleting poi from movingPOIMemo
+      var p = Games_state[room_number]['movingPOIMemo'];
+      var i = p.findIndex(x => x[location]!= null);
+
+      if (i !== -1) {
+        var type = p[i][location];
+        p.splice(i, 1);
+        Games_state[room_number]['movingPOIMemo'] = p;
+        console.log("deleting poi with location: " +location+ " and type "+type);
+
+        addPOI(Games_state[room_number],x,z,type);
+      }else{
+        console.log("Didn't find poi!");
+      }
+
+
       io.sockets.emit('StopCarry_Success',{"Games":Games,"x":x,"z":z});
     });
 
     socket.on('StopCarryH',function(data){
+      console.log("moving hazmat -> placedHazmat")
       var name=data['name'];
       var room=data['room'];
+      var room_number = data["room"];
       var x=data['x'];
       var z=data['z'];
       Games[room]["participants"][name]['Carrying']="false";
+
+      var location = x+','+z;
+
+      //deleting poi from movingPOIMemo
+      var p = Games_state[room_number]['movingHazmatMemo'];
+      var i = p.findIndex(x => x[location]!= null);
+
+      if (i !== -1) {
+        var type = p[i][location];
+        p.splice(i, 1);
+        Games_state[room_number]['movingHazmatMemo'] = p;
+        console.log("deleting poi with location: " +location+ " and type "+type);
+
+        addHazmat(Games_state[room_number],x,z,type);
+      }else{
+        console.log("Didn't find hazmat!");
+      }
+
       io.sockets.emit('StopCarryH_Success',{"Games":Games,"x":x,"z":z});
     });
 
     socket.on('StopLead',function(data){
+      console.log("movingTreated -> treated")
+
       var name=data['name'];
       var room=data['room'];
+      var room_number = data['room'];
       var x=data['x'];
       var z=data['z'];
       Games[room]["participants"][name]['Leading']="false";
+
+      var location = x+','+z;
+
+      //deleting poi from movingPOIMemo
+      var p = Games_state[room_number]['movingTreatedMemo'];
+      var i = p.findIndex(x => x[location]!= null);
+
+      if (i !== -1) {
+        var type = p[i][location];
+        p.splice(i, 1);
+        Games_state[room_number]['movingTreatedMemo'] = p;
+        console.log("deleting poi with location: " +location+ " and type "+type);
+
+        addTreatedPOIMemo(Games_state[room_number],x,z,type);
+      }else{
+        console.log("Didn't find poi!");
+      }
+
+
       io.sockets.emit('StopLead_Success',{"Games":Games,"x":x,"z":z});
     })
 
@@ -1381,6 +1542,8 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on('RescueCarried',function(data){
+      console.log("remove from placed");
+
       var x=data['x'];
       var z=data['z'];
 
@@ -1388,17 +1551,18 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var location = x+','+z;
 
       var poi = Games_state[room]['POIMemo'];
-
       var i = poi.findIndex(x => x[location]!= null);
-
-      if (i !== -1) poi.splice(i, 1);
-
-      Games_state[room]['POIMemo'] = poi;
+      if (i !== -1){
+        poi.splice(i, 1);
+        Games_state[room]['POIMemo'] = poi;
+      }
 
       socket.broadcast.emit('RescueCarried_Success',{"x":x,"z":z});
     });
 
     socket.on('RescueTreated',function(data){
+      console.log("remove from treated ")
+
       var x=data['x'];
       var z=data['z'];
 
@@ -1433,6 +1597,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var i = mpoi.findIndex(x => x[location]!= null);
       if (i !== -1) mpoi.splice(i, 1);
       Games_state[room]['movingPOIMemo'] = mpoi;
+
+      var mtpoi = Games_state[room]['movingTreatedMemo'];
+      var i = mtpoi.findIndex(x => x[location]!= null);
+      if (i !== -1) mtpoi.splice(i, 1);
+      Games_state[room]['movingTreatedMemo'] = mtpoi;
 
       socket.broadcast.emit('KillPOI_Success',{"x":x,"z":z});
     });
@@ -1491,9 +1660,42 @@ io.on('connection', function (socket) {//default event for client connect to ser
     });
 
     socket.on("ExplodeHazmat",function(data){
+      console.log("placed hazmat/ moving hazmat -> placedhotspot")
       var x=data['x'];
       var z=data['z'];
       var room=data['room'];
+      var room_number = data['room'];
+
+      var location = x+','+z;
+
+      //deleting poi from movingPOIMemo
+      var p = Games_state[room_number]['movingHazmatMemo'];
+      var i = p.findIndex(x => x[location]!= null);
+
+      if (i !== -1) {
+        var type = p[i][location];
+        p.splice(i, 1);
+        Games_state[room_number]['movingHazmatMemo'] = p;
+        console.log("deleting moving hazmat with location: " +location+ " and type "+type);
+
+        addHotspot(Games_state[room_number],x,z,type);
+      }else{
+        console.log("Didn't find moving hazmat!");
+      }
+
+      var p = Games_state[room_number]['HazmatMemo'];
+      var i = p.findIndex(x => x[location]!= null);
+
+      if (i !== -1) {
+        var type = p[i][location];
+        p.splice(i, 1);
+        Games_state[room_number]['HazmatMemo'] = p;
+        console.log("deleting hazmat with location: " +location+ " and type "+type);
+
+        addHotspot(Games_state[room_number],x,z,type);
+      }else{
+        console.log("Didn't find hazmat!");
+      }
 
       socket.broadcast.emit("ExplodeHazmat_Success",{"x":x, "z":z, "room":room});
     });
