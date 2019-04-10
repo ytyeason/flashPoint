@@ -1375,7 +1375,7 @@ public class GameManager: MonoBehaviour
 	// Called from below in case Fireman chooses not to dodge or cannot: knock them out & send them to lower ambulance unit
 	public void knockDown(int x_elem, int z_elem, bool currentPlayer, String name)
 	{
-		Debug.Log("knockDown -> Looking at " + name + "is currentPlayer: " + currentPlayer);
+		Debug.Log("knockDown -> Looking at '" + name + "'. IsCurrentPlayer  => " + currentPlayer);
 
 		// Kill any POI the fireman is carrying:
 		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
@@ -1383,6 +1383,10 @@ public class GameManager: MonoBehaviour
 			pOIManager.kill(x_elem, z_elem);
 		}
 
+		int[] nearestAmbulance = vicinityManager.findAmbulanceSpot(x_elem, z_elem);
+		UpdateLocation(nearestAmbulance[0] * 6, nearestAmbulance[1] * 6, name);
+
+		/*
 		// Northern parking spot
 		if (z_elem <= 3)
 		{
@@ -1406,6 +1410,7 @@ public class GameManager: MonoBehaviour
 
 			UpdateLocation(9 * 6, 4 * 6, name);
 		}
+		*/
 	}
 
 	// Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)

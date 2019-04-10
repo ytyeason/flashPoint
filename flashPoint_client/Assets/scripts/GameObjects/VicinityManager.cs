@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class VicinityManager : MonoBehaviour {
 
 	public GameManager gm;
 	public int[,] tiles;
 	public VicinityTile[,] VeteranVicinity; // Used only for Veteran bookkeeping
+	public VicinityTile[,] distArr;	// Used to respawn at ambulances
 	public int f_x;
 	public int f_z;
 	public bool debugMode = false;
@@ -22,11 +24,14 @@ public class VicinityManager : MonoBehaviour {
 
 		// Initiliaze the 2D array
 		VeteranVicinity = new VicinityTile[gm.mapSizeX, gm.mapSizeZ];
+		distArr = new VicinityTile[gm.mapSizeX, gm.mapSizeZ];
 		for (int x = 0; x < gm.mapSizeX; x++)
 		{
 			for (int z = 0; z < gm.mapSizeZ; z++)
 			{
 				VeteranVicinity[x, z] = new VicinityTile(x, z);
+				distArr[x, z] = new VicinityTile(x, z);
+				//distArr[x, z].distFromVet = -100;
 			}
 		}
 	}
@@ -212,5 +217,143 @@ public class VicinityManager : MonoBehaviour {
 				}
 			}
 		}
+	}
+
+	public void fillDistTileArr(int x_loc, int z_loc, int numStepsTaken)
+	{
+		// Check right
+		if (x_loc <= 8)
+		{
+			if (distArr[x_loc + 1, z_loc].explored == false)
+			{
+				distArr[x_loc + 1, z_loc].explored = true;
+				distArr[x_loc + 1, z_loc].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc + 1, z_loc, numStepsTaken + 1);
+			}
+			else if (distArr[x_loc + 1, z_loc].distFromVet < numStepsTaken)
+			{
+				distArr[x_loc + 1, z_loc].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc + 1, z_loc, numStepsTaken + 1);
+			}
+		}
+
+		// Check left
+		if (x_loc >= 1)
+		{
+			if (distArr[x_loc - 1, z_loc].explored == false)
+			{
+				distArr[x_loc - 1, z_loc].explored = true;
+				distArr[x_loc - 1, z_loc].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc - 1, z_loc, numStepsTaken + 1);
+			}
+			else if (distArr[x_loc - 1, z_loc].distFromVet < numStepsTaken)
+			{
+				distArr[x_loc - 1, z_loc].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc - 1, z_loc, numStepsTaken + 1);
+			}
+		}
+
+		// Check tile above
+		if (z_loc <= 6)
+		{
+			if (distArr[x_loc, z_loc + 1].explored == false)
+			{
+				distArr[x_loc, z_loc + 1].explored = true;
+				distArr[x_loc, z_loc + 1].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc, z_loc + 1, numStepsTaken + 1);
+			}
+			else if (distArr[x_loc, z_loc + 1].distFromVet < numStepsTaken)
+			{
+				distArr[x_loc, z_loc + 1].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc, z_loc + 1, numStepsTaken + 1);
+			}
+		}
+
+		// Check tile below
+		if (z_loc >= 1)
+		{
+			if (distArr[x_loc, z_loc - 1].explored == false)
+			{
+				distArr[x_loc, z_loc - 1].explored = true;
+				distArr[x_loc, z_loc - 1].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc, z_loc - 1, numStepsTaken + 1);
+			}
+			else if (distArr[x_loc, z_loc - 1].distFromVet < numStepsTaken)
+			{
+				distArr[x_loc, z_loc - 1].distFromVet = numStepsTaken;
+				fillDistTileArr(x_loc, z_loc - 1, numStepsTaken + 1);
+			}
+		}
+	}
+
+	public void fillDistTileArrIter(int x_loc, int z_loc)
+	{
+		int limit = Math.Max(x_loc, gm.mapSizeX - x_loc - 1);
+		Debug.Log("Limit  ->  : "+ limit);
+
+		for (int x = 1; x < limit; x++)
+		{
+			int tmp = x;
+			while(tmp >= 0){
+				// South-West
+				if (x_loc + tmp < gm.mapSizeX && z_loc - (x - tmp) >= 0)
+					distArr[x_loc + tmp, z_loc - (x - tmp)].distFromVet = x;
+
+				// North-West
+				if (x_loc + tmp < gm.mapSizeX &&  z_loc + (x - tmp) < gm.mapSizeZ)
+					distArr[x_loc + tmp, z_loc + (x - tmp)].distFromVet = x;
+
+				// South-East
+				if (x_loc - tmp >= 0 && z_loc - (x - tmp) >= 0)
+					distArr[x_loc - tmp, z_loc - (x - tmp)].distFromVet = x;
+
+				// North-East
+				if(x_loc - tmp >= 0 && z_loc + (x - tmp) < gm.mapSizeZ)
+					distArr[x_loc - tmp, z_loc + (x - tmp)].distFromVet = x;
+				
+				// Decrement to continue filling out the array
+				tmp--;
+			}
+		}
+	}
+
+	public int[] findAmbulanceSpot(int in_x, int in_z){
+		// Used to gen distance
+		distArr[in_x, in_z].explored = true;
+		distArr[in_x, in_z].distFromVet = 0;
+		fillDistTileArrIter(in_x, in_z);
+
+		// Temp array to hold distance amounts:
+		//int[,] distance = new int[gm.mapSizeX, gm.mapSizeZ];
+		int minX = -1;
+		int minZ = -1;
+		int minCost = 100;
+
+
+		// Fetches min cost among all tiles (which represent an ambulance parking spot
+		for (int x = 0; x < gm.mapSizeX; x++)
+		{
+			for (int z = 0; z < gm.mapSizeZ; z++)
+			{
+				// If its an ambulance tile:
+				if(tiles[x, z] == 4)
+				{
+					Debug.Log("Found an ambulance with cost:  ->  (" + x + ", " + z + ", " + distArr[x, z].distFromVet + ")");
+
+					if(distArr[x,z].distFromVet < minCost)
+					{
+						Debug.Log("Found new min at:  ->  " + x + ", " + z);
+						Debug.Log("Cost is:  ->  " + distArr[x, z].distFromVet);
+
+						minX = x;
+						minZ = z;
+						minCost = distArr[x, z].distFromVet;
+					}
+				}
+			}
+		}
+
+		// Return the coordinates
+		return new int[] { minX, minZ };
 	}
 }
