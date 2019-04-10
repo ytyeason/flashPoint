@@ -9,6 +9,7 @@ public class VicinityManager : MonoBehaviour {
 	public VicinityTile[,] VeteranVicinity; // Used only for Veteran bookkeeping
 	public int f_x;
 	public int f_z;
+	public bool debugMode = false;
 
 	// Constructor
 	public VicinityManager( GameManager in_gm, int[,] tile_arr)
@@ -94,22 +95,22 @@ public class VicinityManager : MonoBehaviour {
 
 	
 	public void rec_markVicinity(int x_loc, int z_loc, int numStepsTaken){
-		Debug.Log("Looking at (x, z, num): " + x_loc + ", " + z_loc + ", " + numStepsTaken);
+		if (debugMode) Debug.Log("Looking at (x, z, num): " + x_loc + ", " + z_loc + ", " + numStepsTaken);
 
 		// Recursive calls to markVicinity
-		if(numStepsTaken < 3){
+		if(numStepsTaken <= 3){
 			// Check right
 			if (x_loc <= 8 && VeteranVicinity[x_loc + 1, z_loc].explored == false
 				&& (tiles[x_loc + 1, z_loc] != 1 && tiles[x_loc + 1, z_loc] != 2) && !gm.wallManager.checkIfVWall(x_loc + 1, z_loc))
 			{
-				Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): Not explored, normal tile, no vertical wall");
+				if (debugMode) Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): Not explored, normal tile, no vertical wall");
 				if (gm.doorManager.checkIfVDoor(x_loc + 1, z_loc))
 				{
-					Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): Found VDoor (" + (x_loc + 1) + ", " + z_loc + ")");
+					if (debugMode) Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): Found VDoor (" + (x_loc + 1) + ", " + z_loc + ")");
 
 					if (gm.doorManager.checkIfOpenVDoor(x_loc + 1, z_loc))
 					{
-						Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): VDoor was open, marking!");
+						if (debugMode) Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): VDoor was open, marking!");
 
 						VeteranVicinity[x_loc + 1, z_loc].explored = true;
 						VeteranVicinity[x_loc + 1, z_loc].distFromVet = numStepsTaken;
@@ -118,7 +119,7 @@ public class VicinityManager : MonoBehaviour {
 				}
 				else
 				{
-					Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): No door was found, marking!");
+					if (debugMode) Debug.Log("R: (" + (x_loc + 1) + ", " + z_loc + ", " + numStepsTaken + "): No door was found, marking!");
 
 					VeteranVicinity[x_loc + 1, z_loc].explored = true;
 					VeteranVicinity[x_loc + 1, z_loc].distFromVet = numStepsTaken;
@@ -130,14 +131,14 @@ public class VicinityManager : MonoBehaviour {
 			if (x_loc >= 1 && VeteranVicinity[x_loc - 1, z_loc].explored == false
 				&& (tiles[x_loc - 1, z_loc] != 1 && tiles[x_loc - 1, z_loc] != 2) && !gm.wallManager.checkIfVWall(x_loc, z_loc))
 			{
-				Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): Not explored, normal tile, no vertical wall");
+				if (debugMode) Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): Not explored, normal tile, no vertical wall");
 				if (gm.doorManager.checkIfVDoor(x_loc, z_loc))
 				{
-					Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): Found VDoor (" + x_loc + ", " + z_loc + ")");
+					if (debugMode) Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): Found VDoor (" + x_loc + ", " + z_loc + ")");
 					
 					if (gm.doorManager.checkIfOpenVDoor(x_loc, z_loc))
 					{
-						Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): VDoor was open, marking!");
+						if (debugMode) Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): VDoor was open, marking!");
 
 						VeteranVicinity[x_loc - 1, z_loc].explored = true;
 						VeteranVicinity[x_loc - 1, z_loc].distFromVet = numStepsTaken;
@@ -146,7 +147,7 @@ public class VicinityManager : MonoBehaviour {
 				}
 				else
 				{
-					Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): No door was found, marking!");
+					if (debugMode) Debug.Log("L: (" + (x_loc - 1) + ", " + z_loc + ", " + numStepsTaken + "): No door was found, marking!");
 
 					VeteranVicinity[x_loc - 1, z_loc].explored = true;
 					VeteranVicinity[x_loc - 1, z_loc].distFromVet = numStepsTaken;
@@ -159,15 +160,15 @@ public class VicinityManager : MonoBehaviour {
 				(tiles[x_loc, z_loc + 1] != 1 && tiles[x_loc, z_loc + 1] != 2) && !gm.wallManager.checkIfHWall(x_loc, z_loc + 1))
 			{
 				// Check that above us isn't an open door or a wall that is intact
-				Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): Not explored, normal tile, no horizontal wall");
+				if (debugMode) Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): Not explored, normal tile, no horizontal wall");
 
 				// If there's a door it has to be open to continue
 				if (gm.doorManager.checkIfHDoor(x_loc, z_loc + 1))
 				{
-					Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): Found HDoor (" + x_loc + ", " + (z_loc + 1) + ")");
+					if (debugMode) Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): Found HDoor (" + x_loc + ", " + (z_loc + 1) + ")");
 
 					if (gm.doorManager.checkIfOpenHDoor(x_loc, z_loc + 1)){
-						Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): HDoor was open, marking!");
+						if (debugMode) Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): HDoor was open, marking!");
 
 						VeteranVicinity[x_loc, z_loc + 1].explored = true;
 						VeteranVicinity[x_loc, z_loc + 1].distFromVet = numStepsTaken;
@@ -175,7 +176,7 @@ public class VicinityManager : MonoBehaviour {
 					}
 				}
 				else {
-					Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): No door was found, marking!");
+					if (debugMode) Debug.Log("U: (" + x_loc + ", " + (z_loc + 1) + ", " + numStepsTaken + "): No door was found, marking!");
 
 					VeteranVicinity[x_loc, z_loc + 1].explored = true;
 					VeteranVicinity[x_loc, z_loc + 1].distFromVet = numStepsTaken;
@@ -187,14 +188,14 @@ public class VicinityManager : MonoBehaviour {
 			if (z_loc >= 1 && VeteranVicinity[x_loc, z_loc - 1].explored == false &&
 				(tiles[x_loc, z_loc - 1] != 1 && tiles[x_loc, z_loc - 1] != 2) && !gm.wallManager.checkIfHWall(x_loc, z_loc))
 			{
-				Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): Not explored, normal tile, no horizontal wall");
+				if (debugMode) Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): Not explored, normal tile, no horizontal wall");
 				if (gm.doorManager.checkIfHDoor(x_loc, z_loc))
 				{
-					Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): Found HDoor (" + x_loc + ", " + z_loc + ")");
+					if (debugMode) Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): Found HDoor (" + x_loc + ", " + z_loc + ")");
 
 					if (gm.doorManager.checkIfOpenHDoor(x_loc, z_loc))
 					{
-						Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): HDoor was open, marking!");
+						if (debugMode) Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): HDoor was open, marking!");
 
 						VeteranVicinity[x_loc, z_loc - 1].explored = true;
 						VeteranVicinity[x_loc, z_loc - 1].distFromVet = numStepsTaken;
@@ -203,7 +204,7 @@ public class VicinityManager : MonoBehaviour {
 				}
 				else
 				{
-					Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): No door was found, marking!");
+					if (debugMode) Debug.Log("D: (" + x_loc + ", " + (z_loc - 1) + ", " + numStepsTaken + "): No door was found, marking!");
 
 					VeteranVicinity[x_loc, z_loc - 1].explored = true;
 					VeteranVicinity[x_loc, z_loc - 1].distFromVet = numStepsTaken;

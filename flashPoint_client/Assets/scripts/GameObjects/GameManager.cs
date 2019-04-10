@@ -905,6 +905,8 @@ public class GameManager: MonoBehaviour
             isMyTurn = true;
 			Debug.Log("It is now your turn! Refreshing AP");
 			fireman.refreshAP();
+			// Extinguish any fire that might be outside (should only trigger on first turn)
+			fireManager.extOutFire();
 
 			// Vicinity related checks until just after else:
 			if (vicinityManager.checkIfInVicinity(fireman.currentX / 6, fireman.currentZ / 6))
@@ -1348,50 +1350,68 @@ public class GameManager: MonoBehaviour
 			location = location.Substring(1, location.Length - 2);
 			var cord = location.Split(',');
 
+			// Update gm's global arry
+			playerLocations[i, 0] = Convert.ToInt32(cord[0]);
+			playerLocations[i, 1] = Convert.ToInt32(cord[1]);
+
 			// Parse name
 			names[i] = o;
 
 			// Parse role
 			rolesArr[i] = players[o]["Role"].ToString();
 			rolesArr[i] = rolesArr[i].Substring(1, rolesArr[i].Length - 2);
-			Debug.Log("roleArr[" + i + "]  ->  \"" + rolesArr[i] + "\"");
-
+			
+			//Debug.Log("roleArr[" + i + "]  ->  \"" + rolesArr[i] + "\"");
 			//Debug.Log("fetchLocations: (x, z)  ->  (" + playerLocations[i, 0] + ", " + playerLocations[i, 1] + ")");
+			
+			// Iterate
 			i++;
 		}
 	}
 
 
-	// Called from below in case Fireman chooses not to dodge or cannot
-	public void knockDown(int x_elem, int z_elem)
+	// Called from below in case Fireman chooses not to dodge or cannot: knock them out & send them to lower ambulance unit
+	public void knockDown(int x_elem, int z_elem, bool currentPlayer, String name)
 	{
-		// If firefighter is on the tile knock them out & send them to lower ambulance unit
+		Debug.Log("knockDown -> Looking at " + name + "is currentPlayer: " + currentPlayer);
+
+		// Kill any POI the fireman is carrying:
 		if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
 		{
 			pOIManager.kill(x_elem, z_elem);
 		}
 
-        // Northern parking spot
+		// Northern parking spot
 		if (z_elem <= 3)
 		{
-			tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
-			//tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 18);
-			UpdateLocation(0 * 6, 3 * 6, fireman.name);
-			fireman.currentX = 0;
-			fireman.currentZ = 18;
+			if (currentPlayer)
+			{
+				//tileMap.selectedUnit.s.transform.position = new Vector3(0 * 6, 0.2f, 3 * 6);
+				fireman.currentX = 0;
+				fireman.currentZ = 18;
+			}
+
+			UpdateLocation(0 * 6, 3 * 6, name);
 		}
 		else // Southern/second parking spot
 		{
-			tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
-            fireman.currentX = 54;
-            fireman.currentZ = 24;
-            UpdateLocation(54, 24, fireman.name);
+			if (currentPlayer)
+			{
+				//tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
+				fireman.currentX = 54;
+				fireman.currentZ = 24;
+			}
+
+			UpdateLocation(9 * 6, 4 * 6, name);
 		}
 	}
 
 	// Victims and POIs in spaces with Fire markers are 'Lost' (killed/destroyed)
 	public IEnumerator knockDown()
 	{
+		Debug.Log("");
+		Debug.Log("");
+
 		// Check the whole grid:
 		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
 		{
@@ -1399,18 +1419,23 @@ public class GameManager: MonoBehaviour
 			{
 				// Check each player:
 				for (int p_elem = 0; p_elem < numPlayers; p_elem++) {
-					// Sanity check:
-					//Debug.Log("p_elem.(x, z)  ->  " + p_elem + ".(" + playerLocations[p_elem, 0]  + ", " + playerLocations[p_elem, 1] +")");
-
 					// Setup local/temp variables to check all players:
 					int x_coord = playerLocations[p_elem, 0] / 6;
 					int z_coord = playerLocations[p_elem, 1] / 6;
 
+					// Sanity checks:
+					//Debug.Log("p_elem.(x, z)  ->  " + p_elem + ".(" + playerLocations[p_elem, 0]  + ", " + playerLocations[p_elem, 1] +")");
+					//Debug.Log("tileMap.tiles[" + x_elem + ", " + z_elem + "] -> " + tileMap.tiles[x_elem, z_elem]);
 					if (x_coord == x_elem && z_elem == z_coord) Debug.Log("Coordinates are the same: " + x_coord + ", " + z_coord);
 
 					if (x_coord == x_elem && z_elem == z_coord && tileMap.tiles[x_elem, z_elem] == 2)
-					//tileMap.selectedUnit.currentX == (x_elem * 6) && tileMap.selectedUnit.currentZ == (z_elem * 6))
-						{
+					{
+						// Used later to know which player to move:
+						bool currentPlayer = (x_coord == fireman.currentX / 6 && z_coord == fireman.currentZ / 6) ? true : false;
+						Debug.Log("currentPlayer -> " + currentPlayer);
+						Debug.Log("Can dodge  -> " + canDodge(x_elem, z_elem));
+						Debug.Log("In vicinity  -> " + vicinityManager.checkIfInVicinity(x_coord, z_coord));
+
 						// Check if the player is able to dodge:
 						if ((rolesArr[p_elem] == "9" || vicinityManager.checkIfInVicinity(x_coord, z_coord)) && canDodge(x_elem, z_elem) && Math.Min(fireman.FreeAP, 4) >= 1)
 						{
@@ -1476,15 +1501,16 @@ public class GameManager: MonoBehaviour
 							else
 							{
 								Debug.Log("    VET (1.5) You have decided to not dodge. " + Time.time);
-								knockDown(x_elem, z_elem);
+								knockDown(x_elem, z_elem, currentPlayer, names[p_elem]);
 							}
 
 							toggleActiveDodge.deactivateGUI();
 						}
-						// Player is unable to dodge or has chosen not to dodge:
+						// Player is unable to dodge:
 						else
 						{
-							knockDown(x_elem, z_elem);
+							Debug.Log("Unable to dodge");
+							knockDown(x_elem, z_elem, currentPlayer, names[p_elem]);
 						}
 					}
 				}
@@ -1497,9 +1523,11 @@ public class GameManager: MonoBehaviour
 
 		// Update vicinity check if player is playing a Veteran currently
 		if (fireman.role == Role.Veteran) {
-			//Debug.Log("TEST: x, z   " + fireman.currentX / 6 + ", " +  fireman.currentZ / 6);
 			vicinityManager.updateVicinityArr(fireman.currentX / 6, fireman.currentZ / 6);
 		}
+
+		Debug.Log("");
+		Debug.Log("");
 
 		// Kill the thread
 		yield return 0;
@@ -1557,7 +1585,6 @@ public class GameManager: MonoBehaviour
         {
 		    changeTurn();
         }
-	    
         else
         {
             Debug.Log("This not your turn! Don't click end turn!");
