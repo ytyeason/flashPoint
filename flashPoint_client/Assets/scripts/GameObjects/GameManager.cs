@@ -945,7 +945,7 @@ public class GameManager: MonoBehaviour
 			}
 			fireman.usedVetAP = false;
 
-			changeRoleButton.SetActive(true);
+			if(!StaticInfo.level.Equals("Family")) changeRoleButton.SetActive(true);
             endOfTurn=false;
 		}
         else
@@ -969,7 +969,10 @@ public class GameManager: MonoBehaviour
         {
             isMyTurn = true;
             sendNotification(". It's your turn.");
-            changeRoleButton.SetActive(true);
+            if(!StaticInfo.level.Equals("Family")){
+                changeRoleButton.SetActive(true);
+            }
+            
             // fireman.refreshAP();
         }
         else
