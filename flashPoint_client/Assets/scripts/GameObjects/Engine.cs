@@ -59,6 +59,9 @@ public class Engine : MonoBehaviour {
 			{
 				v.transform.Rotate(0, angle*2, 0);
 			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
+			}
 			else{
 			 v.transform.Rotate(0, angle, 0);
 			}
@@ -76,6 +79,9 @@ public class Engine : MonoBehaviour {
 			{
 				v.transform.Rotate(0, angle*2, 0);
 			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
+			}
 			else{
 			 v.transform.Rotate(0, angle, 0);
 			}
@@ -92,6 +98,9 @@ public class Engine : MonoBehaviour {
 			{
 				v.transform.Rotate(0, angle*2, 0);
 			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
+			}
 			else{
 			 v.transform.Rotate(0, angle, 0);
 			}
@@ -107,6 +116,9 @@ public class Engine : MonoBehaviour {
 			if (Math.Abs(dx-x/6)>8||Math.Abs(dz-z/6)>6)
 			{
 				v.transform.Rotate(0, angle*2, 0);
+			}
+			else if (Math.Abs(dx-x/6)<3&&Math.Abs(dz-z/6)<3){
+				
 			}
 			else{
 			 v.transform.Rotate(0, angle, 0);
