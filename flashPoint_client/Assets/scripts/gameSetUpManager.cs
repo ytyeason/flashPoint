@@ -125,6 +125,8 @@ public class gameSetUpManager : MonoBehaviour {
     void gameSetUpSucessful(SocketIOEvent obj)//change scene
     {
         var level = obj.data.ToDictionary()["level"];
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         Debug.Log("gameSetUp successful");
         if(level=="Family"){
             SceneManager.LoadScene("Room");

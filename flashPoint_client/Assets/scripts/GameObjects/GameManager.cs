@@ -500,22 +500,25 @@ public class GameManager: MonoBehaviour
         Debug.Log(g + "------------");
         */
         
-        Debug.Log(obj.data.ToString());
-        Debug.Log(JsonUtility.FromJson<POIManager>(obj.data.ToString()));
-        POIManager p = JsonUtility.FromJson<POIManager>(obj.data.ToString());
-        StaticInfo.poiManager = p;
-        Debug.Log(p.posY);
-        Debug.Log(p.placedPOI);
+        // Debug.Log(obj.data.ToString());
+        // Debug.Log(JsonUtility.FromJson<POIManager>(obj.data.ToString()));
+        // POIManager p = JsonUtility.FromJson<POIManager>(obj.data.ToString());
+        // StaticInfo.poiManager = p;
+        // Debug.Log(p.posY);
+        // Debug.Log(p.placedPOI);
 
     }
 
     void revealPOI_SUCCESS(SocketIOEvent obj)
     {
         Debug.Log("reveal POI successful");
+        var room=obj.data.ToDictionary()["room"];
         var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
         var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
-
-        pOIManager.reveal(x, z);
+        if(room.Equals(StaticInfo.roomNumber)){
+            pOIManager.reveal(x, z);
+        }
+        
     }
 
 
@@ -527,6 +530,7 @@ public class GameManager: MonoBehaviour
         int type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
         int horizontal = Convert.ToInt32(obj.data.ToDictionary()["horizontal"]);
         string fromExplosion=obj.data.ToDictionary()["fromExplosion"];
+        var room=obj.data.ToDictionary()["room"];
         bool from=true;
         Debug.Log("fromExplosion: "+fromExplosion);
         if(fromExplosion.Equals("True")){
@@ -545,7 +549,10 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["horizontal"]);
 
         // Bottom is temporarily commented out:
-        wallManager.BreakWall(x, z, type, horizontal, from);
+        if(room.Equals(StaticInfo.roomNumber)){
+            wallManager.BreakWall(x, z, type, horizontal, true);
+        }
+        // wallManager.BreakWall(x, z, type, horizontal, from);
     }
 
     void DoorUpdate_Success(SocketIOEvent obj)
@@ -556,6 +563,7 @@ public class GameManager: MonoBehaviour
         int type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
         int toType = Convert.ToInt32(obj.data.ToDictionary()["toType"]);
         string fromExplosion=obj.data.ToDictionary()["fromExplosion"];
+        var room=obj.data.ToDictionary()["room"];
         bool det=true;
         Debug.Log("fromExplosion:"+fromExplosion);
         if(fromExplosion.Equals("True")){
@@ -573,7 +581,7 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["type"]);
         Debug.Log(obj.data.ToDictionary()["toType"]);
 
-        doorManager.ChangeDoor(x, z, toType, type,det);
+        if(room.Equals(StaticInfo.roomNumber)) doorManager.ChangeDoor(x, z, toType, type,true);
     }
 
     void TileUpdate_Success(SocketIOEvent obj)
@@ -582,6 +590,7 @@ public class GameManager: MonoBehaviour
         var x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
         var z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
         var type = Convert.ToInt32(obj.data.ToDictionary()["type"]);
+        var room=obj.data.ToDictionary()["room"];
 
         //Debug.Log(x);
         //Debug.Log(z);
@@ -591,7 +600,7 @@ public class GameManager: MonoBehaviour
         Debug.Log(obj.data.ToDictionary()["type"]);
 
         // Bottom is temporarily commented out:
-        tileMap.buildNewTile(x, z,type);
+        if(room.Equals(StaticInfo.roomNumber)) tileMap.buildNewTile(x, z,type);
     }
 
     void LocationUpdate_SUCCESS(SocketIOEvent obj)
@@ -648,6 +657,8 @@ public class GameManager: MonoBehaviour
 
     public void AskForRide_Success(SocketIOEvent obj){
         string driver = obj.data.ToDictionary()["driver"];
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         Debug.Log(driver);
         Debug.Log(StaticInfo.name);
         operationManager.askingForRide=true;
@@ -722,6 +733,8 @@ public class GameManager: MonoBehaviour
     }
 
     public void ConfirmRide(SocketIOEvent obj){
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
             confirmed--;
             operationManager.askingForRide=false;
@@ -791,6 +804,8 @@ public class GameManager: MonoBehaviour
     }
 
     public void ResetConfirmed_Success(SocketIOEvent obj){
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         this.confirmed = 0;
         // tileMap.selectedUnit.driving=0;
         Debug.Log(StaticInfo.name + "is resetting confirmed to  " + this.confirmed);
@@ -801,6 +816,8 @@ public class GameManager: MonoBehaviour
         Debug.Log("hello,update ambulance");
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
 
         List<string> names=parseJsonArray(obj.data["names"]);
@@ -853,7 +870,8 @@ public class GameManager: MonoBehaviour
     {
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
-
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         List<string> names=parseJsonArray(obj.data["names"]);
         if(names.Count>0)
@@ -887,6 +905,8 @@ public class GameManager: MonoBehaviour
         //accept value here
         var result = obj.data.ToDictionary()["status"];
         Debug.Log(result);
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         if (result.Equals("True"))
         {
@@ -918,6 +938,9 @@ public class GameManager: MonoBehaviour
         Debug.Log("in changingTurn_Success");
         var name = obj.data.ToDictionary()["Turn"];
         Debug.Log(name);
+
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         if (name.Equals(StaticInfo.name))
         {
@@ -961,6 +984,8 @@ public class GameManager: MonoBehaviour
         Debug.Log("in isMyTurnUpdate");
         var name = obj.data.ToDictionary()["Turn"];
         Debug.Log(name);
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         if (name.Equals(StaticInfo.name))
         {
@@ -985,6 +1010,8 @@ public class GameManager: MonoBehaviour
 
         var name = obj.data.ToDictionary()["name"];
         var chat = obj.data.ToDictionary()["chat"];
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         var chatString = name + " : " + chat;
         if(chatLog.Count>10){
@@ -1430,6 +1457,7 @@ public class GameManager: MonoBehaviour
         if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.leadingVictim)
         {
             pOIManager.kill(x_elem, z_elem);
+            killPOI(x_elem,z_elem);
         }
 
         int[] nearestAmbulance = vicinityManager.findAmbulanceSpot(x_elem, z_elem);
@@ -1726,6 +1754,7 @@ public class GameManager: MonoBehaviour
         Dictionary<String, String> sendChat = new Dictionary<string, string>();
         sendChat["name"] = StaticInfo.name;
         sendChat["chat"] = chat.text;
+        sendChat["room"]=StaticInfo.roomNumber;
 
         var chatString = StaticInfo.name + " : " + chat.text;
         if(chatLog.Count>20){
@@ -1749,12 +1778,15 @@ public class GameManager: MonoBehaviour
         Dictionary<string, string> message = new Dictionary<string, string>();
         message["name"]=StaticInfo.name;
         message["text"]=msg;
+        message["room"]=StaticInfo.roomNumber;
         socket.Emit("sendNotification",new JSONObject(message));
     }
 
     void sendNotification_SUCCESS(SocketIOEvent obj){
         var name = obj.data.ToDictionary()["name"];
         var text = obj.data.ToDictionary()["text"];
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         var chatString = name + " " + text;
         if(chatLog.Count>20){
@@ -1787,7 +1819,9 @@ public class GameManager: MonoBehaviour
     {
         int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
-
+        
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         pOIManager.treat(x, z);
     }
 
@@ -1812,6 +1846,9 @@ public class GameManager: MonoBehaviour
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
 
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
+
         pOIManager.movePOI(origx, origz, newx, newz);
     }
 
@@ -1835,6 +1872,9 @@ public class GameManager: MonoBehaviour
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
 
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
+
         pOIManager.moveTreated(origx, origz, newx, newz);
     }
 
@@ -1854,6 +1894,9 @@ public class GameManager: MonoBehaviour
     {
         int x = Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z = Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         hazmatManager.removeHazmat(x, z);
     }
@@ -1877,6 +1920,9 @@ public class GameManager: MonoBehaviour
         int origz = Convert.ToInt32(obj.data.ToDictionary()["origz"]);
         int newx = Convert.ToInt32(obj.data.ToDictionary()["newx"]);
         int newz = Convert.ToInt32(obj.data.ToDictionary()["newz"]);
+
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         hazmatManager.moveHazmat(origx, origz, newx, newz);
     }
@@ -1935,6 +1981,8 @@ public class GameManager: MonoBehaviour
 
         int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
         pOIManager.carryPOI(x,z);
 
     }
@@ -1956,6 +2004,8 @@ public class GameManager: MonoBehaviour
 
         int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
         pOIManager.leadPOI(x,z);
 
     }
@@ -1989,6 +2039,8 @@ public class GameManager: MonoBehaviour
 
         int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
         hazmatManager.carryHazmat(x,z);
 
     }
@@ -2020,6 +2072,8 @@ public class GameManager: MonoBehaviour
             // Debug.Log(v);
             // Debug.Log(players[v]);
         }
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
         pOIManager.dropPOI(x,z);
     }
 
@@ -2049,6 +2103,8 @@ public class GameManager: MonoBehaviour
             // Debug.Log(v);
             // Debug.Log(players[v]);
         }
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
         hazmatManager.dropHazmat(x,z);
     }
 
@@ -2078,6 +2134,8 @@ public class GameManager: MonoBehaviour
             // Debug.Log(v);
             // Debug.Log(players[v]);
         }
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
         pOIManager.dropPOI(x,z);
     }
 
@@ -2099,6 +2157,8 @@ public class GameManager: MonoBehaviour
         int z = Convert.ToInt32(obj.data.ToDictionary()["z"].ToString());
         int type = Convert.ToInt32(obj.data.ToDictionary()["type"].ToString());
 
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         pOIManager.addPOI(x, z, type);
     }
 
@@ -2119,6 +2179,8 @@ public class GameManager: MonoBehaviour
         int z = Convert.ToInt32(obj.data.ToDictionary()["z"].ToString());
         int type = Convert.ToInt32(obj.data.ToDictionary()["type"].ToString());
 
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         hazmatManager.addHazmat(x, z, type);
     }
 
@@ -2163,6 +2225,9 @@ public class GameManager: MonoBehaviour
             // Debug.Log(v);
             // Debug.Log(players[v]);
         }
+
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
 
         List<string> names=parseJsonArray(obj.data["ToStop"]);
         foreach(string n in names){
@@ -2363,12 +2428,18 @@ public class GameManager: MonoBehaviour
         int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
 
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
+
         pOIManager.rescueCarried(x,z);
     }
 
     public void rescueTreated_Success(SocketIOEvent obj){
         int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         pOIManager.rescueTreated(x,z);
     }
@@ -2384,6 +2455,8 @@ public class GameManager: MonoBehaviour
     public void killPOI_Success(SocketIOEvent obj){
         int x=Convert.ToInt32(obj.data.ToDictionary()["x"]);
         int z=Convert.ToInt32(obj.data.ToDictionary()["z"]);
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         pOIManager.kill(x,z);
     }
 
@@ -2453,6 +2526,9 @@ public class GameManager: MonoBehaviour
         level = room["level"].ToString();
         numberOfPlayer = room["numberOfPlayer"].ToString();
 
+        var roomNumber=obj.data.ToDictionary()["room"];
+        if(!roomNumber.Equals(StaticInfo.roomNumber)) return;
+
         List<string> p = participants.keys;
         foreach (var v in p)
         {
@@ -2462,7 +2538,10 @@ public class GameManager: MonoBehaviour
             // Debug.Log(players[v]);
         }
         tileMap.UpdateFiremanVisual(players);
-        displayRole();
+        if(!StaticInfo.level.Equals("Family")){
+            displayRole();
+        }
+        
         if(obj.data.ToDictionary()["room"].Equals(StaticInfo.roomNumber)){
             StaticInfo.StartingPosition=false;
             startingPositionPanel.SetActive(false);
@@ -2514,6 +2593,9 @@ public class GameManager: MonoBehaviour
         //accept value here
         var result = obj.data.ToDictionary()["owner"];
         // Debug.Log(result);
+
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
 
         if (result.Equals("True"))
         {

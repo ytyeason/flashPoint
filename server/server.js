@@ -594,7 +594,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         }
         console.log(Games);
         socket.emit('LOAD_ROOM_SUCCESS',{"status": det, "level":Games[data['room']]["level"], "rand":Games[data['room']]["random"], 'numberOfPlayer':Games[data['room']]["numberOfPlayer"], "numberOfHazmat":Games[data['room']]["numberOfHazmat"],
-        "numberOfHotspot":Games[data['room']]["numberOfHotspot"]} );
+        "numberOfHotspot":Games[data['room']]["numberOfHotspot"], "room":data['room']} );
       }
     });
 
@@ -639,14 +639,14 @@ io.on('connection', function (socket) {//default event for client connect to ser
               "freeAP":freeAP, "remainingSpecAp":remainingSpecAp, "damagedWall":damagedWall,
               "rescued":rescued, "killed":killed, "removedHazmat":removedHazmat, "riding":riding,
               "driving": driving, "carryingHazmat":carryingHazmat, "carryingVictim":carryingVictim,
-              "leadingVictim":leadingVictim});
+              "leadingVictim":leadingVictim,"roomNumber":data['room']});
           }else{
             console.log("Didn't found your name!")
-            socket.emit("LOAD_GAME_SUCCESS", {'status':false});
+            socket.emit("LOAD_GAME_SUCCESS", {'status':false,"room":data['room']});
           }
       }else{
         console.log("Didn't found your room!")
-        socket.emit("LOAD_GAME_SUCCESS", {'status':false});
+        socket.emit("LOAD_GAME_SUCCESS", {'status':false,"room":data['room']});
       }
 
     });
@@ -680,7 +680,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       console.log(Games);
       console.log(Games_state);
-      socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
+      socket.emit('CREATE_ROOM_SUCCESS',{"status": "True", "room":data['room']} );
     });
 
     socket.on('gameSetUp', function(data){
@@ -745,12 +745,12 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
 
 
-      socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
+      socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level,"room":data['room']} );
     });
 
     socket.on('startGame', function(data){
       console.log("startGame");
-      socket.emit('startGame_SUCCESS',Games);
+      socket.emit('startGame_SUCCESS',{"Games":Games,"room":data['room']});
     });
 
     socket.on('PLAY', function (data){
@@ -814,7 +814,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var type = data['type'];
         var room = data['room'];
         var location = x+','+z;
-        socket.broadcast.emit('TileUpdate_Success', {"x":x, "z":z, "type":type});
+        socket.broadcast.emit('TileUpdate_Success', {"x":x, "z":z, "type":type,"room":room});
         console.log(x);
         console.log(z);
         console.log(type);
@@ -847,7 +847,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room = data['room'];
         var location = x+','+z;
         var fromExplosion=data["fromExplosion"];
-        socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal,"fromExplosion":fromExplosion});
+        socket.broadcast.emit('WallUpdate_Success', {"x":x, "z":z, "type":type, "horizontal":horizontal,"fromExplosion":fromExplosion,"room":room});
         console.log("update wall");
         console.log(x);
         console.log(z);
@@ -890,7 +890,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room = data['room'];
         var location = x+','+z;
         var fromExplosion=data['fromExplosion'];
-        socket.broadcast.emit('DoorUpdate_Success', {"x":x, "z":z, "type":type, "toType":toType, "fromExplosion":fromExplosion});
+        socket.broadcast.emit('DoorUpdate_Success', {"x":x, "z":z, "type":type, "toType":toType, "fromExplosion":fromExplosion,"room":room});
         console.log("update door");
         console.log(x);
         console.log(z);
@@ -932,9 +932,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
       // console.log(Games[room_number]['Turn']);
       var turn_name = Games[room_number]['Turn'];
       if(turn_name.localeCompare(name)==0){
-        socket.emit('checkingTurn_Success', {"status": "True"});
+        socket.emit('checkingTurn_Success', {"status": "True","room":room_number});
       }else{
-        socket.emit('checkingTurn_Success', {"status": "False"});
+        socket.emit('checkingTurn_Success', {"status": "False","room":room_number});
       }
 
     });
@@ -945,9 +945,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       var owner_name = Games[room_number]['Owner'];
       if(owner_name.localeCompare(name)==0){
-        socket.emit('checkOwner_Success', {"owner": "True"});
+        socket.emit('checkOwner_Success', {"owner": "True","room":room_number});
       }else{
-        socket.emit('checkOwner_Success', {"owner": "False"});
+        socket.emit('checkOwner_Success', {"owner": "False","room":room_number});
       }
 
     });
@@ -970,26 +970,28 @@ io.on('connection', function (socket) {//default event for client connect to ser
             }
             Games[room_number]['Turn'] = participants_in_order[index];
             console.log(Games[room_number]['Turn']);
-            socket.emit("changingTurn_Success", {"Turn": Games[room_number]['Turn']});//change isMyTurn to False in frontend
-            socket.broadcast.emit("isMyTurnUpdate", {"Turn": Games[room_number]['Turn']});
+            socket.emit("changingTurn_Success", {"Turn": Games[room_number]['Turn'],"room":room_number});//change isMyTurn to False in frontend
+            socket.broadcast.emit("isMyTurnUpdate", {"Turn": Games[room_number]['Turn'],"room":room_number});
         }else{
             console.log("name doesn't match in changing turn")
-            socket.emit('changingTurn_Success', {"status": "True"});//keep isMyTurn unchanged
+            socket.emit('changingTurn_Success', {"status": "True","room":room_number});//keep isMyTurn unchanged
         }
     });
 
     socket.on('sendChat', function(data){
       var name = data['name'];
       var chat = data['chat'];
+      var room=data['room'];
 
-      socket.broadcast.emit('sendChat_Success', {"name": name, "chat": chat});
+      socket.broadcast.emit('sendChat_Success', {"name": name, "chat": chat,"room":room});
     });
 
     socket.on('sendNotification',function(data){
       var name=data['name'];
       var text=data['text'];
+      var room=data['room'];
       console.log(name+" "+text);
-      io.sockets.emit('sendNotification_Success',{"name":name,"text":text});
+      io.sockets.emit('sendNotification_Success',{"name":name,"text":text,"room":room});
     });
 
     socket.on('RevealPOI',function(data){
@@ -1012,7 +1014,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           console.log(Games_state[room_number]['POIMemo']);
         }
 
-        socket.broadcast.emit('revealPOI_Success', {"x":x, "z":z});
+        socket.broadcast.emit('revealPOI_Success', {"x":x, "z":z,"room":room_number});
 
     });
 
@@ -1038,7 +1040,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           console.log("poi not found!")
         }
 
-      socket.broadcast.emit('TreatV_Success',{'x':x,'z':z});
+      socket.broadcast.emit('TreatV_Success',{'x':x,'z':z,"room":room_number});
     });
 
     socket.on('UpdatePOILocation', function(data){
@@ -1069,7 +1071,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           console.log(p);
       }
 
-      socket.broadcast.emit('UpdatePOILocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
+      socket.broadcast.emit('UpdatePOILocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz,"room":room_number});
     });
 
     socket.on('UpdateAmbulanceLocation', function(data){
@@ -1093,7 +1095,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       Games[room_number]["ambulance"] = {'x':parseInt(newx), 'z':parseInt(newz)};
 
-      io.sockets.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names});
+      io.sockets.emit('UpdateAmbulanceLocation_Success',{'newx':newx,'newz':newz,"names":names,"room":room_number});
     });
 
     socket.on('UpdateEngineLocation', function(data){
@@ -1117,7 +1119,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
       Games[room_number]["engine"] = {'x':parseInt(newx), 'z':parseInt(newz)};
 
-      io.sockets.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz,"names":names});
+      io.sockets.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz,"names":names,"room":room_number});
       // socket.broadcast.emit('UpdateEngineLocation_Success',{'newx':newx,'newz':newz});
 
     });
@@ -1157,7 +1159,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           // }
         }
         // console.log("sending");
-        io.sockets.emit('AskForRide_Success',{"targetNames":targetNames, "driver": name, "nRider": i});
+        io.sockets.emit('AskForRide_Success',{"targetNames":targetNames, "driver": name, "nRider": i, "room":room});
 
     });
 
@@ -1169,7 +1171,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var type=data['type'];
 
       Games[room]['participants'][name]["Riding"]=type;
-      io.sockets.emit('ConfirmRide', {'type': type});
+      io.sockets.emit('ConfirmRide', {'type': type,"room":room});
       console.log("im at startride in server.js" + " player" + name + " 's riding type is " + type);
     });
 
@@ -1181,7 +1183,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           participants[n]["Riding"]=0;
           participants[n]["Driving"]=0;
         }
-      io.sockets.emit('RescueTreated_Success', true);
+      io.sockets.emit('ResetConfirmed_Success', {"result":true,"room":room});
     });
 
     socket.on('UpdateTreatedLocation', function(data){
@@ -1212,7 +1214,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           console.log(p);
       }
 
-      socket.broadcast.emit('UpdateTreatedLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
+      socket.broadcast.emit('UpdateTreatedLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz,"room":room_number});
     });
 
     socket.on('SelectRole', function(data){
@@ -1230,7 +1232,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         selectRoles.push(role);
         Games[room_number]["participants"][name]["Role"]=role;
       }
-      socket.emit('selectRole_SUCCESS',{'result':result,'role':role});
+      socket.emit('selectRole_SUCCESS',{'result':result,'role':role,"room":room_number});
 
     });
 
@@ -1251,7 +1253,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         Games_state[room]['HazmatMemo'] = hazmat;
       }
 
-      socket.broadcast.emit('RemoveHazmat_Success', {"x":x, "z":z});
+      socket.broadcast.emit('RemoveHazmat_Success', {"x":x, "z":z,"room":room});
 
     });
 
@@ -1286,7 +1288,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(p);
       }
 
-      socket.broadcast.emit('UpdateHazmatLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz});
+      socket.broadcast.emit('UpdateHazmatLocation_Success',{'origx':origx,'origz':origz,'newx':newx,'newz':newz,"room":room_number});
     });
 
     socket.on('StartDrive',function(data){
@@ -1299,7 +1301,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         participants[name]["Location"] = Location;
         participants[name]['Driving']=drive;
         // console.log(Games[room_number]);
-        socket.broadcast.emit('LocationUpdate_SUCCESS',Games );
+        socket.broadcast.emit('StopDrive_Success',Games );
     });
 
     socket.on('StartCarryV',function(data){//delete from POIMemo and add in movingPOIMemo
@@ -1335,7 +1337,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log(Games[room_number]);
         console.log(Games_state[room_number]['POIMemo']);
         console.log(Games_state[room_number]['movingPOIMemo']);
-        socket.broadcast.emit('StartCarryV_Success', {"Games":Games, "x":x, "z":z} );
+        socket.broadcast.emit('StartCarryV_Success', {"Games":Games, "x":x, "z":z,"room":room_number} );
     });
 
     socket.on('StartLeadV',function(data){
@@ -1368,7 +1370,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         }
 
         // console.log(Games[room_number]);
-        socket.broadcast.emit('StartLeadV_Success', {"Games":Games, "x":x, "z":z} );
+        socket.broadcast.emit('StartLeadV_Success', {"Games":Games, "x":x, "z":z,"room":room_number} );
     });
 
     socket.on('StartCarryHazmat',function(data){
@@ -1402,7 +1404,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         }
 
 
-        socket.broadcast.emit('StartCarryHazmat_Success', {"Games":Games, "x":x, "z":z} );
+        socket.broadcast.emit('StartCarryHazmat_Success', {"Games":Games, "x":x, "z":z,"room":room_number} );
     });
 
     socket.on('AddPOI',function(data){
@@ -1415,7 +1417,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       addPOI(Games_state[room],parseInt(x),parseInt(z),parseInt(type));
       console.log(Games_state[room]['POIMemo']);
 
-      socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type});
+      socket.broadcast.emit('AddPOI_Success',{'x':x,'z':z,'type':type,"room":room});
     });
 
     socket.on('AddHazmat',function(data){
@@ -1430,7 +1432,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           addHotspot(Games_state[room],parseInt(x),parseInt(z),parseInt(type));
       }
 
-      socket.broadcast.emit('AddHazmat_Success',{'x':x,'z':z,'type':type});
+      socket.broadcast.emit('AddHazmat_Success',{'x':x,'z':z,'type':type,"room":room});
     });
 
     socket.on('StopDrive',function(data){
@@ -1445,7 +1447,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
           Games[room]['participants'][n]['Riding']="0";
         }
       }
-      io.sockets.emit('StopRide_Success',{"Games":Games,"ToStop":stopride});
+      io.sockets.emit('StopRide_Success',{"Games":Games,"ToStop":stopride,"room":room});
       io.sockets.emit('StopDrive_Success',Games);
     });
 
@@ -1484,7 +1486,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
 
 
-      io.sockets.emit('StopCarry_Success',{"Games":Games,"x":x,"z":z});
+      io.sockets.emit('StopCarry_Success',{"Games":Games,"x":x,"z":z,"room":room});
     });
 
     socket.on('StopCarryH',function(data){
@@ -1513,7 +1515,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         console.log("Didn't find hazmat!");
       }
 
-      io.sockets.emit('StopCarryH_Success',{"Games":Games,"x":x,"z":z});
+      io.sockets.emit('StopCarryH_Success',{"Games":Games,"x":x,"z":z,"room":room});
     });
 
     socket.on('StopLead',function(data){
@@ -1544,7 +1546,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
 
 
-      io.sockets.emit('StopLead_Success',{"Games":Games,"x":x,"z":z});
+      io.sockets.emit('StopLead_Success',{"Games":Games,"x":x,"z":z,"room":room_number});
     })
 
     socket.on('changeRole', function(data){
@@ -1586,7 +1588,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         Games_state[room]['POIMemo'] = poi;
       }
 
-      socket.broadcast.emit('RescueCarried_Success',{"x":x,"z":z});
+      socket.broadcast.emit('RescueCarried_Success',{"x":x,"z":z,"room":room});
     });
 
     socket.on('RescueTreated',function(data){
@@ -1603,7 +1605,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       if (i !== -1) poi.splice(i, 1);
       Games_state[room]['treatedPOIMemo'] = poi;
 
-      socket.broadcast.emit('RescueTreated_Success',{"x":x,"z":z});
+      socket.broadcast.emit('RescueTreated_Success',{"x":x,"z":z,"room":room});
     });
 
     socket.on('KillPOI',function(data){
@@ -1632,7 +1634,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
       if (i !== -1) mtpoi.splice(i, 1);
       Games_state[room]['movingTreatedMemo'] = mtpoi;
 
-      socket.broadcast.emit('KillPOI_Success',{"x":x,"z":z});
+      socket.broadcast.emit('KillPOI_Success',{"x":x,"z":z,"room":room});
     });
 
     socket.on('ConfirmPosition',function(data){

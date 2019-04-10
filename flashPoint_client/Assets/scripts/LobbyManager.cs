@@ -32,6 +32,8 @@ public class LobbyManager : MonoBehaviour {
     {
         Debug.Log("create room successful");
         //SceneManager.LoadScene("DragDrop"); skpped for now
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         SceneManager.LoadScene("gameSetUp");
     }
 
@@ -45,6 +47,8 @@ public class LobbyManager : MonoBehaviour {
         string numOfHazmat=obj.data.ToDictionary()["numberOfHazmat"];
         string numOfHotspot=obj.data.ToDictionary()["numberOfHotspot"];
         string numOfPlayer=obj.data.ToDictionary()["numberOfPlayer"];
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         if(level.Equals("Family")){
             SceneManager.LoadScene("Room");
 
@@ -83,6 +87,10 @@ public class LobbyManager : MonoBehaviour {
         var HazmatMemo = obj.data[1][9];
         var hotSpotMemo = obj.data[1][10];
         var movingHazmatMemo = obj.data[1][11];
+        var room=obj.data.ToDictionary()["roomNumber"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
+        var status=obj.data.ToDictionary()["status"];
+        if(status.Equals("false")) return;
         
         //Debug.Log(poi);
         //Debug.Log(tiles);

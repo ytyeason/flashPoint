@@ -26,7 +26,9 @@ public class RoomManager : MonoBehaviour {
     {
         Debug.Log("start Game successful");
         Debug.Log(obj.data);
-        StaticInfo.game_info = obj.data;
+        StaticInfo.game_info = obj.data[0];
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         SceneManager.LoadScene("FlashpointUIDemo");
     }
 

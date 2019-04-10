@@ -31,6 +31,8 @@ public class SelectRole : MonoBehaviour {
     {
         var result = obj.data.ToDictionary()["result"];
         var role = obj.data.ToDictionary()["role"];
+        var room=obj.data.ToDictionary()["room"];
+        if(!room.Equals(StaticInfo.roomNumber)) return;
         if(result=="false"){
             error.text="Role is NOT available!";
             return;
