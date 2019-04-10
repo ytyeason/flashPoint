@@ -1883,7 +1883,7 @@ public class GameManager: MonoBehaviour
         carry["name"]=StaticInfo.name;
         carry["x"]=x.ToString();
         carry["z"]=z.ToString();
-        socket.Emit("StopCarry",new JSONObject(carry));
+        socket.Emit("StopCarryH",new JSONObject(carry));
     }
 
     public void StopCarryH_Success(SocketIOEvent obj){

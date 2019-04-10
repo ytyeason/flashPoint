@@ -396,7 +396,7 @@ public class OperationManager
                 }
 
                 if (moveTo) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && commandMoves + fireman.FreeAP >= requiredAP) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -826,7 +826,7 @@ public class OperationManager
                 }
 
                 if (moveTo1) {
-                    if (controlled.role == Role.CAFS && this.commandMoves + gm.fireman.FreeAP >= requiredAP) {
+                    if (controlled.role == Role.CAFS && commandMoves + gm.fireman.FreeAP >= requiredAP) {
                         Operation op = new Operation(this, OperationType.Move);
                         possibleOp.Add(op);
                     } else {
@@ -1118,7 +1118,7 @@ public class OperationManager
                 if(commandMoves<=0){
                     fireman.setAP(fireman.FreeAP-requiredAP);
                 }else{
-                    commandMoves-=1;
+                    commandMoves=0;
                     if(fireman.remainingSpecAp>=1){
                         fireman.setSpecAP(fireman.remainingSpecAp-1);
                         fireman.setAP(fireman.FreeAP-requiredAP+1);
