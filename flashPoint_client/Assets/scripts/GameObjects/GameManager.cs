@@ -471,22 +471,22 @@ public class GameManager: MonoBehaviour
         return s;
     }
 
-    public void saveGame()
-    {
-        Debug.Log("saveGame");
+    // public void saveGame()
+    // {
+    //     Debug.Log("saveGame");
 
-        GameManager save = this;
+    //     GameManager save = this;
 
-        MyClass myObject = new MyClass();
-        myObject.level = 1;
-        myObject.timeElapsed = 47.5f;
-        myObject.playerName = "Dr Charles Francis";
-        myObject.placedPOI = pOIManager.placedPOI;
-        //myObject.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
-        //Debug.Log(wallManager.defaultHorizontalWallsMemo.Keys.Count);
+    //     MyClass myObject = new MyClass();
+    //     myObject.level = 1;
+    //     myObject.timeElapsed = 47.5f;
+    //     myObject.playerName = "Dr Charles Francis";
+    //     myObject.placedPOI = pOIManager.placedPOI;
+    //     //myObject.defaultHorizontalWallsMemo = wallManager.defaultHorizontalWallsMemo;
+    //     //Debug.Log(wallManager.defaultHorizontalWallsMemo.Keys.Count);
 
-        socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(myObject)));
-    }
+    //     socket.Emit("savedGame", new JSONObject(JsonUtility.ToJson(myObject)));
+    // }
 
     void SaveGame_Success(SocketIOEvent obj)
     {
