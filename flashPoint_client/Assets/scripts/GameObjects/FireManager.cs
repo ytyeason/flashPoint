@@ -59,14 +59,11 @@ public class FireManager : MonoBehaviour
 		
 		explosion();
 		
-		// Remove victims in fire & knockdown Firemen
-		//if (debugMode) Debug.Log("knockDown:");
-		//knockDown();
-		
 		// Final step
 		if (debugMode) Debug.Log("extOutFire:");
 		extOutFire();
 
+		// Recursively resolve flareups
 		if(gm.hazmatManager.containsKey(in_x,in_z,gm.hazmatManager.placedHotspot)){
 			System.Random rand=new System.Random();
 			int x=rand.Next(1,8);
@@ -75,48 +72,6 @@ public class FireManager : MonoBehaviour
 		}
 		
 	}
-
-
-	// Victims and POIs in spaces with Fire markers are 'Lost'
-	/*	A Firefighter is Knocked Down when Fire advances into their space; this could be from an explosion or being
-	 *	in a Smoke filled space that ignites. A Firefighter that is knocked down needs to go to the Ambulance to
-	 *	recover. When a Knock Down happens, take the Firefighter from its space and place it on the closest
-	 *	(as the crow flies) Ambulance Parking Spot outside the building. If two Parking Spots are equally distant,
-	 *	choose one.
-	 *	
-	 *	Ambulance coords are (mapSizeX - 1, 3) & (mapSizeX - 1, 4)
-	 */
-	/*
-	public void knockDown()
-	{
-		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
-		{
-			for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
-			{
-				if (tileMap.tiles[x_elem, z_elem] == 2 &&
-					tileMap.selectedUnit.currentX == (x_elem * 6) && tileMap.selectedUnit.currentZ == (z_elem * 6))
-				{
-					Debug.Log("Reached knockdown");
-
-                    // If firefighter is on the tile knock them out: send them to lower ambulance unit
-                    if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
-                    {
-                        gm.pOIManager.kill(x_elem, z_elem);
-                    }
-                    if (z_elem <= 3)
-					{
-						
-                        tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 18);
-					}
-					else
-					{
-						tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
-					}
-				}
-			}
-		}
-	}
-	*/
 
 
 	// Called to "Remove any Fire markers that were placed outside of the building"
@@ -128,31 +83,72 @@ public class FireManager : MonoBehaviour
 			if (tileMap.tiles[x_elem, 0] == 2)	// Bottom row is on Fire
 			{
 				Debug.Log("Extinguishing fire on (" + x_elem + ",0)");
-				tileMap.buildNewTile(x_elem, 0, 0);
-				tileMap.gm.UpdateTile(x_elem, 0, 0);
+                if(x_elem==3||x_elem==4){
+                    tileMap.buildNewTile(x_elem, 0, 3);
+                    tileMap.gm.UpdateTile(x_elem, 0, 3);
+                }
+                else if(x_elem==1||x_elem==2){
+                    tileMap.buildNewTile(x_elem, 0, 4);
+                    tileMap.gm.UpdateTile(x_elem, 0, 4);
+                }
+                else{
+                    tileMap.buildNewTile(x_elem, 0, 0);
+                    tileMap.gm.UpdateTile(x_elem, 0, 0);
+                }
 			}
 			if(tileMap.tiles[x_elem, mapSizeZ - 1] == 2) // Top row is on fire
 			{
 				Debug.Log("Extinguishing fire on (" + x_elem + "," + (mapSizeZ - 1) + ")");
-				tileMap.buildNewTile(x_elem, mapSizeZ - 1, 0);
-				tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 0);
+                if(x_elem==5||x_elem==6){
+                    tileMap.buildNewTile(x_elem, mapSizeZ - 1, 3);
+                    tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 3);
+                }
+                else if(x_elem==7||x_elem==8){
+                    tileMap.buildNewTile(x_elem, mapSizeZ - 1, 4);
+                    tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 4);
+                }
+                else{
+                    tileMap.buildNewTile(x_elem, mapSizeZ - 1, 0);
+                    tileMap.gm.UpdateTile(x_elem, mapSizeZ - 1, 0);
+                }
 			}
 		}
 
 		// Extinguish fires on the left and right of the house
 		for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
 		{
-			if (tileMap.tiles[0, z_elem] == 2)  // Bottom row is on Fire
+			if (tileMap.tiles[0, z_elem] == 2)  
 			{
 				Debug.Log("Extinguishing fire on (0," + z_elem + ")");
-				tileMap.buildNewTile(0, z_elem, 0);
-				tileMap.gm.UpdateTile(0, z_elem, 0);
+                if(z_elem==3||z_elem==4){
+                    tileMap.buildNewTile(0, z_elem, 3);
+                    tileMap.gm.UpdateTile(0, z_elem, 3);
+                }
+                else if(z_elem==5||z_elem==6){
+                    tileMap.buildNewTile(0, z_elem, 4);
+                    tileMap.gm.UpdateTile(0, z_elem, 4);
+                }
+                else{
+                    tileMap.buildNewTile(0, z_elem, 0);
+                    tileMap.gm.UpdateTile(0, z_elem, 0);
+                }
+
 			}
-			if (tileMap.tiles[mapSizeX - 1, z_elem] == 2) // Top row is on fire
+			if (tileMap.tiles[mapSizeX - 1, z_elem] == 2) 
 			{
 				Debug.Log("Extinguishing fire on (" + (mapSizeX - 1) + "," + z_elem + ")");
-				tileMap.buildNewTile(mapSizeX - 1, z_elem, 0);
-				tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 0);
+                if(z_elem==3||z_elem==4){
+                    tileMap.buildNewTile(mapSizeX - 1, z_elem, 3);
+                    tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 3);
+                }
+                else if(z_elem==1||z_elem==2){
+                    tileMap.buildNewTile(mapSizeX - 1, z_elem, 4);
+                    tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 4);
+                }
+                else{
+                    tileMap.buildNewTile(mapSizeX - 1, z_elem, 0);
+                    tileMap.gm.UpdateTile(mapSizeX - 1, z_elem, 0);
+                }
 			}
 		}
 	}
