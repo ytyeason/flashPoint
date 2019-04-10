@@ -3,7 +3,6 @@ var app				= express();
 var server			= require('http').createServer(app);
 var io 				= require('socket.io').listen(server);
 var shortId 		= require('shortid');
-var save = require('./server_save.js');
 
 
 app.set('port', process.env.PORT || 3000);
@@ -1051,11 +1050,7 @@ io.on('connection', function (socket) {//default event for client connect to ser
         //deleting poi from POIMemo
         var p = Games_state[room_number]['POIMemo'];
         var i = p.findIndex(x => x[location]!= null);
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 8539b54b334b0816c065f66bdcd8011d905ee56d
         if (i !== -1){
           var type = p[i][location];
           p.splice(i, 1);
