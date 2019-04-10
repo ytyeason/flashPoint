@@ -529,6 +529,7 @@ public class Fireman
 
         //setAP(AP + savedAP);
         FreeAP = AP + savedAP;
+        remainingSpecAp=specialtyAP;
         StaticInfo.role = role;
     }
 
