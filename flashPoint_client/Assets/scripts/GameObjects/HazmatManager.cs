@@ -234,25 +234,31 @@ public class HazmatManager{
     {
         Hazmat p = get(origx, origz, movingHazmat);
         GameObject obj = get(origx, origz, movingLookup);
-        Remove(origx, origz, movingHazmat);
-        Remove(origx, origz, movingLookup);
-        obj.transform.position = new Vector3((float)(newx*6-1.5), posY, (float)(newz*6-1.5));
-        int[] key = new int[] { newx, newz };
-        movingHazmat.Add(key, p);
-        movingLookup.Add(key, obj);
+        if(p!=null){
+            Remove(origx, origz, movingHazmat);
+            Remove(origx, origz, movingLookup);
+            obj.transform.position = new Vector3((float)(newx*6-1.5), posY, (float)(newz*6-1.5));
+            int[] key = new int[] { newx, newz };
+            movingHazmat.Add(key, p);
+            movingLookup.Add(key, obj);
+        }
+        
     }
 
     public void carryHazmat(int x, int z)
     {
         Hazmat p = get(x, z, placedHazmat);
         GameObject obj = get(x, z, lookUp);
-        Remove(x, z, placedHazmat);
-        Remove(x, z, lookUp);
+        if(p!=null){
+            Remove(x, z, placedHazmat);
+            Remove(x, z, lookUp);
 
-        int[] key = new int[] { x, z };
-        movingHazmat.Add(key, p);
-        movingLookup.Add(key, obj);
-        obj.transform.position = new Vector3((float)(x * 6 - 1.5), posY, (float)(z * 6 - 1.5));
+            int[] key = new int[] { x, z };
+            movingHazmat.Add(key, p);
+            movingLookup.Add(key, obj);
+            obj.transform.position = new Vector3((float)(x * 6 - 1.5), posY, (float)(z * 6 - 1.5));
+        }
+        
     }
 
     public void dropHazmat(int x, int z){

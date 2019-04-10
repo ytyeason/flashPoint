@@ -57,112 +57,19 @@ function initialize_tile(room){//family version
 
 function initialize_hDoor(room){
     console.log("initializing hDoor");
-    room["hDoorMemo"].push({[[3,1]]:0});
-    room["hDoorMemo"].push({[[7,7]]:0});
-    room["hDoorMemo"].push({[[4,3]]:0});
-    room["hDoorMemo"].push({[[8,5]]:0});
+    room["hDoorMemo"].push({[[5,1]]:2});
+    room["hDoorMemo"].push({[[3,3]]:0});
+    room["hDoorMemo"].push({[[6,3]]:0});
+    room["hDoorMemo"].push({[[5,4]]:0});
+    room["hDoorMemo"].push({[[6,7]]:2});
+    room["hDoorMemo"].push({[[3,5]]:0});
 }
 
 function initialize_vDoor(room){
     console.log("initializing vDoor");
-    room["vDoorMemo"].push({[[1,4]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
-    room["vDoorMemo"].push({[[3,4]]:1});
-    room["vDoorMemo"].push({[[4,6]]:1});
-    room["vDoorMemo"].push({[[6,5]]:1});
-    room["vDoorMemo"].push({[[6,1]]:1});
-    room["vDoorMemo"].push({[[7,3]]:1});
-    room["vDoorMemo"].push({[[8,1]]:1});
-}
-
-function initialize_r1_hDoor(room){
-    console.log("initializing r1 hDoor");
-    room["hDoorMemo"].push({[[5,1]]:0});
-    room["hDoorMemo"].push({[[6,7]]:0});
-    room["hDoorMemo"].push({[[2,4]]:0});
-    room["hDoorMemo"].push({[[6,4]]:0});
-}
-
-function initialize_r1_vDoor(room){
-    console.log("initializing r1 vDoor");
-    room["vDoorMemo"].push({[[1,3]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
-
-    room["vDoorMemo"].push({[[5,2]]:1});
-    room["vDoorMemo"].push({[[8,5]]:1});
-}
-
-function initialize_r2_hDoor(room){
-    console.log("initializing r2 hDoor");
-    room["hDoorMemo"].push({[[4,1]]:0});
-    room["hDoorMemo"].push({[[4,7]]:0});
-    room["hDoorMemo"].push({[[4,4]]:0});
-    room["hDoorMemo"].push({[[6,3]]:0});
-}
-
-function initialize_r2_vDoor(room){
-    console.log("initializing r2 vDoor");
-    room["vDoorMemo"].push({[[1,5]]:1});
-    room["vDoorMemo"].push({[[9,5]]:1});
-
-    room["vDoorMemo"].push({[[7,2]]:1});
-}
-
-function initialize_r3_hDoor(room){
-    console.log("initializing r3 hDoor");
-    room["hDoorMemo"].push({[[5,1]]:0});
-    room["hDoorMemo"].push({[[3,3]]:0});
-    room["hDoorMemo"].push({[[6,3]]:0});
-    room["hDoorMemo"].push({[[5,4]]:0});
-    room["hDoorMemo"].push({[[6,7]]:0});
-    room["hDoorMemo"].push({[[3,5]]:0});
-}
-
-function initialize_r3_vDoor(room){
-    console.log("initializing r3 vDoor");
-    room["vDoorMemo"].push({[[1,3]]:1});
+    room["vDoorMemo"].push({[[1,3]]:3});
     room["vDoorMemo"].push({[[6,4]]:1});
-
-    room["vDoorMemo"].push({[[9,3]]:1});
-}
-
-function initialize_r4_hDoor(room){
-    console.log("initializing r4 hDoor");
-    room["hDoorMemo"].push({[[5,1]]:0});
-    room["hDoorMemo"].push({[[6,7]]:0});
-    room["hDoorMemo"].push({[[4,4]]:0});
-    room["hDoorMemo"].push({[[3,3]]:0});
-}
-
-function initialize_r4_vDoor(room){
-    console.log("initializing r4 vDoor");
-    room["vDoorMemo"].push({[[1,3]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
-
-    room["vDoorMemo"].push({[[5,5]]:1});
-    room["vDoorMemo"].push({[[7,2]]:1});
-    room["vDoorMemo"].push({[[8,3]]:1});
-}
-
-function initialize_r5_hDoor(room){
-    console.log("initializing r5 hDoor");
-    room["hDoorMemo"].push({[[5,1]]:0});
-    room["hDoorMemo"].push({[[6,7]]:0});
-    room["hDoorMemo"].push({[[3,6]]:0});
-    room["hDoorMemo"].push({[[3,4]]:0});
-
-    room["hDoorMemo"].push({[[7,4]]:0});
-    room["hDoorMemo"].push({[[8,4]]:0});
-    room["hDoorMemo"].push({[[7,2]]:0});
-}
-
-function initialize_r5_vDoor(room){
-    console.log("initializing r5 vDoor");
-    room["vDoorMemo"].push({[[1,3]]:1});
-    room["vDoorMemo"].push({[[9,3]]:1});
-
-    room["vDoorMemo"].push({[[3,1]]:1});
-    room["vDoorMemo"].push({[[6,2]]:1});
+    room["vDoorMemo"].push({[[9,3]]:3});
 }
 
 function initialize_hWall(room){
@@ -217,7 +124,6 @@ function initialize_vWall(room){
     room['vWallMemo'].push({[[7,4]]: 1});
     room['vWallMemo'].push({[[6,2]]: 1});
     room['vWallMemo'].push({[[8,2]]: 1});
-
 }
 
 function initialize_r1_hWall(room){
@@ -277,247 +183,6 @@ function initialize_r1_vWall(room){
   room['vWallMemo'].push({[[8,6]]: 1});
   room['vWallMemo'].push({[[8,4]]: 1});
   room['vWallMemo'].push({[[8,3]]: 1});
-}
-
-function initialize_r2_hWall(room){
-  console.log("initializing random 2 hwall");
-  room['hWallMemo'].push({[[1,1]]: 0});
-  room['hWallMemo'].push({[[2,1]]: 0});
-  room['hWallMemo'].push({[[4,1]]: 0});
-  room['hWallMemo'].push({[[3,1]]: 0});
-  room['hWallMemo'].push({[[6,1]]: 0});
-  room['hWallMemo'].push({[[7,1]]: 0});
-  room['hWallMemo'].push({[[8,1]]: 0});
-
-  room['hWallMemo'].push({[[1,7]]: 0});
-  room['hWallMemo'].push({[[2,7]]: 0});
-  room['hWallMemo'].push({[[3,7]]: 0});
-  room['hWallMemo'].push({[[4,7]]: 0});
-  room['hWallMemo'].push({[[5,7]]: 0});
-  room['hWallMemo'].push({[[6,7]]: 0});
-  room['hWallMemo'].push({[[8,7]]: 0});
-
-  room['hWallMemo'].push({[[1,5]]: 0});
-  room['hWallMemo'].push({[[2,5]]: 0});
-  room['hWallMemo'].push({[[3,5]]: 0});
-  room['hWallMemo'].push({[[5,5]]: 0});
-  room['hWallMemo'].push({[[7,5]]: 0});
-  room['hWallMemo'].push({[[8,5]]: 0});
-  room['hWallMemo'].push({[[5,4]]: 0});
-  room['hWallMemo'].push({[[7,4]]: 0});
-  room['hWallMemo'].push({[[5,3]]: 0});
-  room['hWallMemo'].push({[[7,3]]: 0});
-  room['hWallMemo'].push({[[6,2]]: 0});
-}
-
-function initialize_r2_vWall(room){
-  console.log("initializing r2 vwall");
-  room['vWallMemo'].push({[[1,1]]: 1});
-  room['vWallMemo'].push({[[1,2]]: 1});
-  room['vWallMemo'].push({[[1,4]]: 1});
-  room['vWallMemo'].push({[[1,5]]: 1});
-  room['vWallMemo'].push({[[1,6]]: 1});
-
-  room['vWallMemo'].push({[[9,1]]: 1});
-  room['vWallMemo'].push({[[9,2]]: 1});
-  room['vWallMemo'].push({[[9,4]]: 1});
-  room['vWallMemo'].push({[[9,5]]: 1});
-  room['vWallMemo'].push({[[9,6]]: 1});
-
-  room['vWallMemo'].push({[[5,6]]: 1});
-  room['vWallMemo'].push({[[5,5]]: 1});
-  room['vWallMemo'].push({[[6,4]]: 1});
-  room['vWallMemo'].push({[[7,4]]: 1});
-  room['vWallMemo'].push({[[4,3]]: 1});
-  room['vWallMemo'].push({[[5,3]]: 1});
-  room['vWallMemo'].push({[[8,3]]: 1});
-  room['vWallMemo'].push({[[4,2]]: 1});
-  room['vWallMemo'].push({[[4,1]]: 1});
-  room['vWallMemo'].push({[[6,1]]: 1});
-  room['vWallMemo'].push({[[8,1]]: 1});
-}
-
-function initialize_r3_hWall(room){
-  console.log("initializing random 3 hwall");
-  room['hWallMemo'].push({[[1,1]]: 0});
-  room['hWallMemo'].push({[[2,1]]: 0});
-  room['hWallMemo'].push({[[4,1]]: 0});
-  room['hWallMemo'].push({[[3,1]]: 0});
-  room['hWallMemo'].push({[[6,1]]: 0});
-  room['hWallMemo'].push({[[7,1]]: 0});
-  room['hWallMemo'].push({[[8,1]]: 0});
-
-  room['hWallMemo'].push({[[1,3]]: 0});
-  room['hWallMemo'].push({[[2,3]]: 0});
-  room['hWallMemo'].push({[[4,3]]: 0});
-  room['hWallMemo'].push({[[5,3]]: 0});
-  room['hWallMemo'].push({[[4,4]]: 0});
-  room['hWallMemo'].push({[[6,4]]: 0});
-  room['hWallMemo'].push({[[7,4]]: 0});
-  room['hWallMemo'].push({[[8,4]]: 0});
-
-  room['hWallMemo'].push({[[1,5]]: 0});
-  room['hWallMemo'].push({[[2,5]]: 0});
-  room['hWallMemo'].push({[[4,6]]: 0});
-  room['hWallMemo'].push({[[5,6]]: 0});
-
-  room['hWallMemo'].push({[[1,7]]: 0});
-  room['hWallMemo'].push({[[2,7]]: 0});
-  room['hWallMemo'].push({[[3,7]]: 0});
-  room['hWallMemo'].push({[[4,7]]: 0});
-  room['hWallMemo'].push({[[5,7]]: 0});
-  room['hWallMemo'].push({[[7,7]]: 0});
-  room['hWallMemo'].push({[[8,7]]: 0});
-}
-
-function initialize_r3_vWall(room){
-  console.log("initializing r3 vwall");
-  room['vWallMemo'].push({[[1,1]]: 1});
-  room['vWallMemo'].push({[[1,2]]: 1});
-  room['vWallMemo'].push({[[1,4]]: 1});
-  room['vWallMemo'].push({[[1,5]]: 1});
-  room['vWallMemo'].push({[[1,6]]: 1});
-
-  room['vWallMemo'].push({[[4,1]]: 1});
-  room['vWallMemo'].push({[[4,2]]: 1});
-  room['vWallMemo'].push({[[4,4]]: 1});
-  room['vWallMemo'].push({[[4,5]]: 1});
-  room['vWallMemo'].push({[[4,6]]: 1});
-
-  room['vWallMemo'].push({[[6,5]]: 1});
-  room['vWallMemo'].push({[[6,6]]: 1});
-
-  room['vWallMemo'].push({[[7,1]]: 1});
-  room['vWallMemo'].push({[[7,2]]: 1});
-  room['vWallMemo'].push({[[7,3]]: 1});
-
-  room['vWallMemo'].push({[[9,1]]: 1});
-  room['vWallMemo'].push({[[9,2]]: 1});
-  room['vWallMemo'].push({[[9,4]]: 1});
-  room['vWallMemo'].push({[[9,5]]: 1});
-  room['vWallMemo'].push({[[9,6]]: 1});
-}
-
-function initialize_r4_hWall(room){
-  console.log("initializing random 4 hwall");
-  room['hWallMemo'].push({[[1,1]]: 0});
-  room['hWallMemo'].push({[[2,1]]: 0});
-  room['hWallMemo'].push({[[4,1]]: 0});
-  room['hWallMemo'].push({[[3,1]]: 0});
-  room['hWallMemo'].push({[[6,1]]: 0});
-  room['hWallMemo'].push({[[7,1]]: 0});
-  room['hWallMemo'].push({[[8,1]]: 0});
-
-  room['hWallMemo'].push({[[1,7]]: 0});
-  room['hWallMemo'].push({[[2,7]]: 0});
-  room['hWallMemo'].push({[[3,7]]: 0});
-  room['hWallMemo'].push({[[4,7]]: 0});
-  room['hWallMemo'].push({[[5,7]]: 0});
-  room['hWallMemo'].push({[[4,7]]: 0});
-  room['hWallMemo'].push({[[7,7]]: 0});
-  room['hWallMemo'].push({[[8,7]]: 0});
-
-  room['hWallMemo'].push({[[5,6]]: 0});
-  room['hWallMemo'].push({[[7,6]]: 0});
-  room['hWallMemo'].push({[[1,5]]: 0});
-  room['hWallMemo'].push({[[2,4]]: 0});
-  room['hWallMemo'].push({[[3,4]]: 0});
-  room['hWallMemo'].push({[[5,4]]: 0});
-  room['hWallMemo'].push({[[6,4]]: 0});
-  room['hWallMemo'].push({[[7,4]]: 0});
-  room['hWallMemo'].push({[[7,3]]: 0});
-  room['hWallMemo'].push({[[8,3]]: 0});
-  room['hWallMemo'].push({[[4,2]]: 0});
-  room['hWallMemo'].push({[[6,2]]: 0});
-}
-
-function initialize_r4_vWall(room){
-  console.log("initializing r4 vwall");
-  room['vWallMemo'].push({[[1,1]]: 1});
-  room['vWallMemo'].push({[[1,2]]: 1});
-  room['vWallMemo'].push({[[1,4]]: 1});
-  room['vWallMemo'].push({[[1,5]]: 1});
-  room['vWallMemo'].push({[[1,6]]: 1});
-
-  room['vWallMemo'].push({[[9,1]]: 1});
-  room['vWallMemo'].push({[[9,2]]: 1});
-  room['vWallMemo'].push({[[9,4]]: 1});
-  room['vWallMemo'].push({[[9,5]]: 1});
-  room['vWallMemo'].push({[[9,6]]: 1});
-
-  room['vWallMemo'].push({[[2,4]]: 1});
-  room['vWallMemo'].push({[[3,3]]: 1});
-
-  room['vWallMemo'].push({[[4,2]]: 1});
-  room['vWallMemo'].push({[[5,4]]: 1});
-  room['vWallMemo'].push({[[5,1]]: 1});
-
-  room['vWallMemo'].push({[[6,6]]: 1});
-  room['vWallMemo'].push({[[6,1]]: 1});
-
-  room['vWallMemo'].push({[[7,6]]: 1});
-  room['vWallMemo'].push({[[8,5]]: 1});
-  room['vWallMemo'].push({[[8,4]]: 1});
-}
-
-function initialize_r5_hWall(room){
-  console.log("initializing random 5 hwall");
-  room['hWallMemo'].push({[[1,1]]: 0});
-  room['hWallMemo'].push({[[2,1]]: 0});
-  room['hWallMemo'].push({[[4,1]]: 0});
-  room['hWallMemo'].push({[[3,1]]: 0});
-  room['hWallMemo'].push({[[6,1]]: 0});
-  room['hWallMemo'].push({[[7,1]]: 0});
-  room['hWallMemo'].push({[[8,1]]: 0});
-
-  room['hWallMemo'].push({[[1,7]]: 0});
-  room['hWallMemo'].push({[[2,7]]: 0});
-  room['hWallMemo'].push({[[3,7]]: 0});
-  room['hWallMemo'].push({[[4,7]]: 0});
-  room['hWallMemo'].push({[[5,7]]: 0});
-  room['hWallMemo'].push({[[4,7]]: 0});
-  room['hWallMemo'].push({[[7,7]]: 0});
-  room['hWallMemo'].push({[[8,7]]: 0});
-
-  room['hWallMemo'].push({[[2,6]]: 0});
-  room['hWallMemo'].push({[[1,4]]: 0});
-  room['hWallMemo'].push({[[2,4]]: 0});
-  room['hWallMemo'].push({[[4,4]]: 0});
-
-  room['hWallMemo'].push({[[5,4]]: 0});
-  room['hWallMemo'].push({[[6,4]]: 0});
-  room['hWallMemo'].push({[[8,2]]: 0});
-}
-
-function initialize_r5_vWall(room){
-  console.log("initializing r5 vwall");
-  room['vWallMemo'].push({[[1,1]]: 1});
-  room['vWallMemo'].push({[[1,2]]: 1});
-  room['vWallMemo'].push({[[1,4]]: 1});
-  room['vWallMemo'].push({[[1,5]]: 1});
-  room['vWallMemo'].push({[[1,6]]: 1});
-
-  room['vWallMemo'].push({[[9,1]]: 1});
-  room['vWallMemo'].push({[[9,2]]: 1});
-  room['vWallMemo'].push({[[9,4]]: 1});
-  room['vWallMemo'].push({[[9,5]]: 1});
-  room['vWallMemo'].push({[[9,6]]: 1});
-
-  room['vWallMemo'].push({[[2,6]]: 1});
-  room['vWallMemo'].push({[[3,3]]: 1});
-
-  room['vWallMemo'].push({[[3,2]]: 1});
-  room['vWallMemo'].push({[[5,6]]: 1});
-  room['vWallMemo'].push({[[5,5]]: 1});
-
-  room['vWallMemo'].push({[[5,4]]: 1});
-  room['vWallMemo'].push({[[6,3]]: 1});
-
-  room['vWallMemo'].push({[[6,1]]: 1});
-  room['vWallMemo'].push({[[7,1]]: 1});
-  room['vWallMemo'].push({[[8,6]]: 1});
-  room['vWallMemo'].push({[[8,4]]: 1});
-  room['vWallMemo'].push({[[8,5]]: 1});
 }
 
 function addPOI(room,x,z,type){
@@ -625,43 +290,23 @@ io.on('connection', function (socket) {//default event for client connect to ser
       // Games_state[room_number]['vWallMemo'].push({[s1]: 0});
 
       initialize_tile(Games_state[room_number]);
-      if(level!=="random"){
+      if(!level.Equals("random")){
         initialize_hWall(Games_state[room_number]);
         initialize_vWall(Games_state[room_number]);
 
         initialize_hDoor(Games_state[room_number]);
         initialize_vDoor(Games_state[room_number]);
       }else{
-        if(random==="1"){
-          initialize_r1_hWall(Games_state[room_number]);
-          initialize_r1_vWall(Games_state[room_number]);
+        if(random.Equals(1)){
 
-          initialize_r1_hDoor(Games_state[room_number]);
-          initialize_r1_vDoor(Games_state[room_number]);
-        }else if(random==="2"){
-          initialize_r2_hWall(Games_state[room_number]);
-          initialize_r2_vWall(Games_state[room_number]);
+        }else if(random.Equals(2)){
 
-          initialize_r2_hDoor(Games_state[room_number]);
-          initialize_r2_vDoor(Games_state[room_number]);
-        }else if(random==="3"){
-          initialize_r3_hWall(Games_state[room_number]);
-          initialize_r3_vWall(Games_state[room_number]);
+        }else if(random.Equals(3)){
 
-          initialize_r3_hDoor(Games_state[room_number]);
-          initialize_r3_vDoor(Games_state[room_number]);
-        }else if(random==="4"){
-          initialize_r4_hWall(Games_state[room_number]);
-          initialize_r4_vWall(Games_state[room_number]);
+        }else if(random.Equals(4)){
 
-          initialize_r4_hDoor(Games_state[room_number]);
-          initialize_r4_vDoor(Games_state[room_number]);
-        }else if(random==="5"){
-          initialize_r5_hWall(Games_state[room_number]);
-          initialize_r5_vWall(Games_state[room_number]);
+        }else if(random.Equals(5)){
 
-          initialize_r5_hDoor(Games_state[room_number]);
-          initialize_r5_vDoor(Games_state[room_number]);
         }
       }
 
@@ -876,19 +521,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
         socket.emit('checkingTurn_Success', {"status": "True"});
       }else{
         socket.emit('checkingTurn_Success', {"status": "False"});
-      }
-
-    });
-
-    socket.on('checkingOwner',function(data){
-      var room_number = data['room'];
-      var name = data['name'];
-
-      var owner_name = Games[room_number]['Owner'];
-      if(owner_name.localeCompare(name)==0){
-        socket.emit('checkOwner_Success', {"owner": "True"});
-      }else{
-        socket.emit('checkOwner_Success', {"owner": "False"});
       }
 
     });
@@ -1437,21 +1069,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
     });
 
-<<<<<<< HEAD
-    // socket.on('ConfirmAmbulancePosition',function(data){
-    //   // var x=data['x'];
-    //   // var z=data['z'];
-    //   // var room=data['room'];
-    //   // // var name=data['name'];
-    //   // Games[room]["participants"][name]["Location"]=x+","+z;
-    //   // if(!Games[room]["confirmedPosition"].includes(name)){
-    //   //   Games[room]["confirmedPosition"].push(name);
-    //   // }
-    //   if(Games[room]["confirmedPosition"].length==parseInt(Games[room]["numberOfPlayer"])){
-    //     io.sockets.emit("ConfirmPosition_Success",{"set": true});
-    //   }
-    // });
-=======
     socket.on('savedGame',function(data){
         console.log("saved game");
         console.log(data);
@@ -1459,7 +1076,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
 
         socket.emit('SaveGame_Success',data);
       });
->>>>>>> 392df01bb7be6dbfd00dd5befd9bc9c73602d372
 
     socket.on('victory',function(data){
       var room=data['room'];

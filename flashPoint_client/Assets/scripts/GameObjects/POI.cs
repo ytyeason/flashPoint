@@ -6,11 +6,15 @@ using System;
 [Serializable]
 public class POI : GameUnit
 {
+    [SerializeField]
     public POIType type;
+    [SerializeField]
     public POIStatus status;
 
+    [SerializeField]
     public POIManager pm;
 
+    [NonSerialized]
     public GameObject Prefab;
 
     public POI(POIType type,POIManager pm)

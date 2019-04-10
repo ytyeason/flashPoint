@@ -98,7 +98,7 @@ public class gameSetUpManager : MonoBehaviour {
         int result = 0;
         if (Int32.TryParse(numberOfPlayer.text, out result))
         {
-            if (result < 2 || result > 6)
+            if (result < 1 || result > 6)
             {
                 errorP.SetActive(true);
                 readyP = false;

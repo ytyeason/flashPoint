@@ -22,7 +22,6 @@ public static class StaticInfo
     public static bool StartingPosition=true;//change to false after wards
     public static bool StartingAmbulancePosition=false;
     public static bool StartingEnginePosition=false;
-
     public static Boolean LoadGame = false;
     public static Dictionary<int[], int> hWallMemo;
     public static Dictionary<int[], int> vWallMemo;
@@ -30,4 +29,9 @@ public static class StaticInfo
     public static Dictionary<int[], int> defaultHorizontalDoors;
     public static Dictionary<int[], int> defaultVerticalDoors;
     public static Dictionary<int[], int> poi;
+    public static Dictionary<int[], int> movingPOI;
+    public static Dictionary<int[], int> treatedPOI;
+    public static int random;
+
+    public static POIManager poiManager;
 }
