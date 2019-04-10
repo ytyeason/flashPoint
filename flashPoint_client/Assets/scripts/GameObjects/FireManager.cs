@@ -59,14 +59,11 @@ public class FireManager : MonoBehaviour
 		
 		explosion();
 		
-		// Remove victims in fire & knockdown Firemen
-		//if (debugMode) Debug.Log("knockDown:");
-		//knockDown();
-		
 		// Final step
 		if (debugMode) Debug.Log("extOutFire:");
 		extOutFire();
 
+		// Recursively resolve flareups
 		if(gm.hazmatManager.containsKey(in_x,in_z,gm.hazmatManager.placedHotspot)){
 			System.Random rand=new System.Random();
 			int x=rand.Next(1,8);
@@ -75,48 +72,6 @@ public class FireManager : MonoBehaviour
 		}
 		
 	}
-
-
-	// Victims and POIs in spaces with Fire markers are 'Lost'
-	/*	A Firefighter is Knocked Down when Fire advances into their space; this could be from an explosion or being
-	 *	in a Smoke filled space that ignites. A Firefighter that is knocked down needs to go to the Ambulance to
-	 *	recover. When a Knock Down happens, take the Firefighter from its space and place it on the closest
-	 *	(as the crow flies) Ambulance Parking Spot outside the building. If two Parking Spots are equally distant,
-	 *	choose one.
-	 *	
-	 *	Ambulance coords are (mapSizeX - 1, 3) & (mapSizeX - 1, 4)
-	 */
-	/*
-	public void knockDown()
-	{
-		for (int x_elem = 0; x_elem < mapSizeX; x_elem++)
-		{
-			for (int z_elem = 0; z_elem < mapSizeZ; z_elem++)
-			{
-				if (tileMap.tiles[x_elem, z_elem] == 2 &&
-					tileMap.selectedUnit.currentX == (x_elem * 6) && tileMap.selectedUnit.currentZ == (z_elem * 6))
-				{
-					Debug.Log("Reached knockdown");
-
-                    // If firefighter is on the tile knock them out: send them to lower ambulance unit
-                    if (tileMap.selectedUnit.carryingVictim || tileMap.selectedUnit.ledPOI != null)
-                    {
-                        gm.pOIManager.kill(x_elem, z_elem);
-                    }
-                    if (z_elem <= 3)
-					{
-						
-                        tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 18);
-					}
-					else
-					{
-						tileMap.selectedUnit.s.transform.position = new Vector3(54, 0.2f, 24);
-					}
-				}
-			}
-		}
-	}
-	*/
 
 
 	// Called to "Remove any Fire markers that were placed outside of the building"
