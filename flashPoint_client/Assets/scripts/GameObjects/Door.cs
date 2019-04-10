@@ -41,17 +41,7 @@ public class Door : MonoBehaviour
                     {
                         canDo = false;
                     }else{
-                        if(doorMap.gm.operationManager.commandMoves<=0){
-                            doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
-                        }else{
-                            doorMap.gm.operationManager.commandMoves-=1;
-                            if(doorMap.gm.fireman.remainingSpecAp>=1){
-                                doorMap.gm.fireman.setSpecAP(doorMap.gm.fireman.remainingSpecAp-1);
-                                
-                            }else{
-                                doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
-                            }
-                        }
+                        
                     }
                 }else
                 if (doorMap.gm.fireman.remainingSpecAp+doorMap.gm.fireman.FreeAP < 1)
@@ -99,6 +89,26 @@ public class Door : MonoBehaviour
                     doorMap.ChangeDoor(doorX, doorZ, 1, 3,det);
                     doorMap.gm.UpdateDoor(doorX, doorZ, 1, 3,det);
                 }
+
+                if(doorMap.gm.operationManager.controlled.role==Role.CAFS){
+                    if(doorMap.gm.operationManager.commandMoves<=0){
+                        doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
+                    }else{
+                        doorMap.gm.operationManager.commandMoves-=1;
+                        if(doorMap.gm.fireman.remainingSpecAp>=1){
+                            doorMap.gm.fireman.setSpecAP(doorMap.gm.fireman.remainingSpecAp-1);
+                        }else{
+                            doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
+                        }
+                    }
+                }else{
+                    if(doorMap.gm.fireman.remainingSpecAp>=1){
+                        doorMap.gm.fireman.setSpecAP(doorMap.gm.fireman.remainingSpecAp-1);
+                    }else{
+                        doorMap.gm.fireman.setAP(doorMap.gm.fireman.FreeAP-1);
+                    }
+                }
+                
             }
 
 
