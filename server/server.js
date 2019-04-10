@@ -588,8 +588,19 @@ io.on('connection', function (socket) {//default event for client connect to ser
               console.log("found participant's saved game!!!")
               var room_state = Games_state[room_num];
               console.log(room_state);
+              var numberOfHazmat = Games[data['room']]["numberOfHazmat"];
+              var numberOfPlayer = Games[data['room']]["numberOfPlayer"]
+              var level = Games[data['room']]["level"];
+              var numberOfHotspot = Games[data['room']]["numberOfHotspot"];
+              var selectedRoles = Games[data['room']]["selectedRoles"];
+              var confirmedPosition = Games[data['room']]["confirmedPosition"];
+              //var joinedPlayers = Games[data['room']]["joinedPlayers"];
+
               socket.emit("LOAD_GAME_SUCCESS",
-              {'room':Games, 'state': room_state, 'name':name, 'roomNumber':room_num, 'level':Games[data['room']]["level"], 'numberOfPlayer':Games[data['room']]["numberOfPlayer"],'poiM':poiM });
+              {'room':Games, 'state': room_state, 'name':name, 'roomNumber':room_num, 'level':level,
+              'numberOfPlayer':numberOfPlayer, "numberOfHazmat":numberOfHazmat,
+              "numberOfHotspot":numberOfHotspot, "selectedRoles":selectedRoles,
+              "confirmedPosition":confirmedPosition});
           }else{
             console.log("Didn't found your name!")
             socket.emit("LOAD_GAME_SUCCESS", {'status':false});
@@ -607,10 +618,9 @@ io.on('connection', function (socket) {//default event for client connect to ser
       var room_number = data['room'];
       var name = data['name'];
       var level = data['level'];
-      var random = data["random"];
-      console.log(name);
+      console.log(level);
 
-      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"False","Leading":"False"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name], "random":[random]}//participants need to be changed to a list
+      Games[room_number] = {"participants":  {[name] :{"Location": "0,0", "AP":4, "Role":"10", "Driving":"0", "Riding":"0","Carrying":"False","Leading":"False"}} , "Owner": data['name'], "Turn": data['name'], "participants_in_order" : [name]}//participants need to be changed to a list
 
       Games_state[room_number] = {"hWallMemo":[], "vWallMemo":[], "tileMemo":[], "hDoorMemo":[], "vDoorMemo":[], "POIMemo":[],"movingPOIMemo":[], "treatedPOIMemo":[]};
 
@@ -624,8 +634,32 @@ io.on('connection', function (socket) {//default event for client connect to ser
       // var s1 = [20,20];
       // Games_state[room_number]['vWallMemo'].push({[s1]: 0});
 
+
+      console.log(Games);
+      console.log(Games_state);
+      socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
+    });
+
+    socket.on('gameSetUp', function(data){
+      console.log("gameSetUp");
+      var room_number = data['room'];
+      var level = data['level'];
+      var numberOfPlayer = data['numberOfPlayer'];
+      var numberOfHazmat=data['numberOfHazmat'];
+      var numberOfHotspot=data['numberOfHotspot'];
+      var random = data['random'];
+      Games[room_number]["level"] = level;
+      Games[room_number]["numberOfPlayer"] = numberOfPlayer;
+      Games[room_number]["numberOfHazmat"]=numberOfHazmat;
+      Games[room_number]["numberOfHotspot"]=numberOfHotspot;
+      Games[room_number]["selectedRoles"]=[];
+      Games[room_number]["confirmedPosition"]=[];
+      Games[room_number]["joinedPlayers"]=[];
+      Games[room_number]["random"]=random;
+      console.log(Games[room_number]);
+
       initialize_tile(Games_state[room_number]);
-      if(level!=="random"){
+      if(level!=="Random"){
         initialize_hWall(Games_state[room_number]);
         initialize_vWall(Games_state[room_number]);
 
@@ -666,26 +700,6 @@ io.on('connection', function (socket) {//default event for client connect to ser
       }
 
 
-      console.log(Games);
-      console.log(Games_state);
-      socket.emit('CREATE_ROOM_SUCCESS',{status: "True"} );
-    });
-
-    socket.on('gameSetUp', function(data){
-      console.log("gameSetUp");
-      var room_number = data['room'];
-      var level = data['level'];
-      var numberOfPlayer = data['numberOfPlayer'];
-      var numberOfHazmat=data['numberOfHazmat'];
-      var numberOfHotspot=data['numberOfHotspot'];
-      Games[room_number]["level"] = level;
-      Games[room_number]["numberOfPlayer"] = numberOfPlayer;
-      Games[room_number]["numberOfHazmat"]=numberOfHazmat;
-      Games[room_number]["numberOfHotspot"]=numberOfHotspot;
-      Games[room_number]["selectedRoles"]=[];
-      Games[room_number]["confirmedPosition"]=[];
-      Games[room_number]["joinedPlayers"]=[];
-      console.log(Games[room_number]+level);
       socket.emit('gameSetUp_SUCCESS',{"status": "True", "level":level} );
     });
 

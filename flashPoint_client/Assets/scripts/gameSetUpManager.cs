@@ -153,11 +153,13 @@ public class gameSetUpManager : MonoBehaviour {
 
     public void Next()
     {
+        int rand = UnityEngine.Random.Range(1, 6);
         StaticInfo.level = level.text;
         StaticInfo.numberOfPlayer = numberOfPlayer.text;
         StaticInfo.numOfHazmat = numOfHazmat.text;
         StaticInfo.numOfHotspot = numOfHotspot.text;
         StaticInfo.StartingPosition = true;
+        StaticInfo.random = rand;
         
         Debug.Log(StaticInfo.level);
         Debug.Log(StaticInfo.numberOfPlayer);
@@ -169,6 +171,7 @@ public class gameSetUpManager : MonoBehaviour {
         gameSetUp["numberOfPlayer"] = StaticInfo.numberOfPlayer;
         gameSetUp["numberOfHazmat"] = StaticInfo.numOfHazmat;
         gameSetUp["numberOfHotspot"] = StaticInfo.numOfHotspot;
+        gameSetUp["random"] = rand.ToString();
 
         socket.Emit("gameSetUp",new JSONObject(gameSetUp));
     }
