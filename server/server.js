@@ -737,11 +737,11 @@ io.on('connection', function (socket) {//default event for client connect to ser
         var room_number = data['room'];
         var Location = data['Location'];
         var name = data['name'];
-        var role=data['role'];
+        // var role=data['role'];
 
         var participants = Games[room_number]["participants"];
         participants[name]["Location"] = Location;
-        participants[name]["Role"]=role;
+        // participants[name]["Role"]=role;
         // console.log(Games[room_number]);
         socket.emit('LocationSetUp_SUCCESS',{status: "True"} );
 
