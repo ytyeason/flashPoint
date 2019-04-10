@@ -224,7 +224,7 @@ public class GameManager: MonoBehaviour
 				rolesArr = new String[numPlayers];
 
 				//displayAP(Convert.ToInt32(players[StaticInfo.name]["AP"].ToString()),fireman.remainingSpecAp);
-				displayAP();
+				
                 //   vehicleManager.StartvehicleManager();
 
                 tileMap.GenerateFiremanVisual(players);
@@ -299,7 +299,7 @@ public class GameManager: MonoBehaviour
                 //hazmat -- not done
                 hazmatManager = new HazmatManager(this,1);
 
-                displayAP();
+                
                 tileMap.GenerateFiremanVisual(players);
                 registerNewFireman(fireman);
                 checkTurn(); //initialize isMyTurn variable at start
@@ -346,7 +346,7 @@ public class GameManager: MonoBehaviour
 
         }
 
-        
+        displayAP();
         displayStats();
         if(!StaticInfo.StartingPosition&&isMyTurn&&!endOfTurn){
             changeRoleButton.SetActive(true);

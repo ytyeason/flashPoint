@@ -76,6 +76,7 @@ public class Fireman
         this.currentZ = in_z;
         this.gm = gm;
         setRole(role);
+        Debug.Log("FreeAP: "+FreeAP);
         this.FreeAP = AP + savedAP;
         this.remainingSpecAp = this.specialtyAP;
 
